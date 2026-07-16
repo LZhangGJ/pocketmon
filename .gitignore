@@ -1,0 +1,32 @@
+# Secrets
+.env
+kaggle_token
+kaggle.json
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Downloaded and generated data
+data/raw/
+data/processed/
+tmp/
+
+# Training artifacts
+checkpoints/
+runs/
+wandb/
+*.pt
+*.pth
+*.ckpt
+*.tar.gz
+
+# Editors and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
