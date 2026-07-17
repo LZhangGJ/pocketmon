@@ -1,5 +1,25 @@
 # PTCG AI Battle Challenge Simulation 本地环境
 
+## 可提交的规则 Agent
+
+仓库包含一个牌组感知的 Mega Lucario 规则 Agent：`agents/lucario_rule/`。
+它根据场面、奖赏卡价值、能量进度和对局类型为合法选项打分，并保留 Hariyama
+作为对抗 Crustle wall 的非 ex 路线。
+
+取得官方 `cg` 目录后构建提交包：
+
+```powershell
+python scripts/build_submission.py --cg-dir path/to/sample_submission/cg
+```
+
+输出为 `dist/lucario_rule_submission.tar.gz`。
+
+使用官方引擎进行一场本地自对弈：
+
+```powershell
+python scripts/run_local_match.py --cg-dir path/to/sample_submission/cg
+```
+
 已配置内容：
 - Python 3.12 环境
 - 依赖安装（`kaggle`、`pandas` 等）
