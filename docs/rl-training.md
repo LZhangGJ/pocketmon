@@ -12,7 +12,15 @@ The first training stage is deliberately an offline, candidate-scoring actor-cri
 ```powershell
 python -m pip install -r requirements-train.txt
 python scripts/collect_rl_trajectories.py --cg-dir tmp/official_cg --episodes 10000
-python scripts/train_rl_policy.py --epochs 20
+python scripts/train_rl_policy.py --epochs 20 --device auto --validation-fraction 0.1
+```
+
+`auto` selects CUDA when available. Episodes, rather than individual decisions, are assigned to the validation split so decisions from the same game cannot leak into both sets. The run writes both the last checkpoint and a `.best.pt` checkpoint selected by validation loss; logs include policy accuracy and value loss.
+
+Evaluate a checkpoint against a separate trajectory file:
+
+```powershell
+python scripts/evaluate_rl_checkpoint.py --checkpoint artifacts/rl/candidate_actor_critic.best.pt --input data/rl/held_out.jsonl --device auto
 ```
 
 The collector alternates seats and samples opponents from `configs/opponent_pool.json`. JSONL is used initially so trajectories are inspectable; large runs should later be sharded into compressed Parquet files.
