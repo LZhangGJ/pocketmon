@@ -45,6 +45,21 @@ class C:
     LILLIES_PEARL = 1172
     LEGACY_ENERGY = 12
 
+    ABRA = 741
+    KADABRA = 742
+    ALAKAZAM = 743
+    DUNSPARCE = 305
+    DUDUNSPARCE = 66
+
+    DURALUDON = 169
+    ARCHALUDON_EX = 190
+    CINDERACE = 666
+
+    GREAT_TUSK = 58
+    DWEBBLE = 344
+    CRUSTLE = 345
+    TERRAKION = 607
+
 
 MEGA_BRAVE = 983
 LOW_DECK_COUNT = 10
@@ -69,12 +84,16 @@ class AttackPlan:
         attack_index: int = -1,
         remain_hp: int = -1,
         needs_energy: bool = False,
+        prize_gain: int = 0,
+        wins_game: bool = False,
     ):
         self.attacker = attacker
         self.target = target
         self.attack_index = attack_index
         self.remain_hp = remain_hp
         self.needs_energy = needs_energy
+        self.prize_gain = prize_gain
+        self.wins_game = wins_game
 
 
 plan = AttackPlan()
@@ -165,6 +184,7 @@ class LucarioPolicy:
         self.can_attack = False
         self.can_use_mega_brave = False
         self.stadium_id = self.state.stadium[0].id if self.state.stadium else 0
+        self.matchup = self._detect_matchup()
 
         self._count_cards()
         self._scan_main_options()
@@ -176,7 +196,7 @@ class LucarioPolicy:
         if self.context == SelectContext.MAIN:
             self._plan_attack()
 
-        scores = [self._score_option(option) for option in self.select.option]
+        scores = [self._apply_matchup_override(option, self._score_option(option)) for option in self.select.option]
         ranked = [i for i, _ in sorted(enumerate(scores), key=lambda item: item[1], reverse=True)]
         self._remember_lunatone_ability(ranked)
         return ranked[: self.select.maxCount]
@@ -231,6 +251,39 @@ class LucarioPolicy:
 
     def _opponent_is_crustle_wall(self) -> bool:
         return self._opponent_has({344, 345})
+
+    def _detect_matchup(self) -> str:
+        visible = [pokemon for pokemon in self._opponent_board() if pokemon is not None]
+        ids = {pokemon.id for pokemon in visible}
+        names = {card_table[pokemon.id].name.lower() for pokemon in visible}
+        if ids & {C.ABRA, C.KADABRA, C.ALAKAZAM, C.DUNSPARCE, C.DUDUNSPARCE}:
+            return "alakazam"
+        if ids & {C.DURALUDON, C.ARCHALUDON_EX, C.CINDERACE}:
+            return "archaludon"
+        if ids & {C.GREAT_TUSK, C.DWEBBLE, C.CRUSTLE, C.TERRAKION}:
+            return "library_out"
+        if any("starmie" in name or "froslass" in name for name in names):
+            return "starmie"
+        if self._opponent_is_water_deck():
+            return "water"
+        return "unknown"
+
+    def _matchup_target_bonus(self, pokemon: Pokemon) -> int:
+        if self.matchup == "alakazam":
+            return {
+                C.ALAKAZAM: 1800,
+                C.KADABRA: 1100,
+                C.ABRA: 700,
+                C.DUDUNSPARCE: 500,
+                C.DUNSPARCE: 250,
+            }.get(pokemon.id, 0)
+        if self.matchup == "archaludon":
+            return {C.ARCHALUDON_EX: 1300, C.DURALUDON: 900, C.CINDERACE: 450}.get(pokemon.id, 0)
+        if self.matchup == "library_out":
+            return {C.GREAT_TUSK: 1700, C.DWEBBLE: 700, C.CRUSTLE: 300, C.TERRAKION: 400}.get(
+                pokemon.id, 0
+            )
+        return 0
 
     def _can_evolve_board_index(self, board_index: int) -> bool:
         for option in self.select.option:
@@ -331,6 +384,7 @@ class LucarioPolicy:
 
                     score = target_score(op_pokemon)
                     prize = prize_count(op_pokemon) if op_pokemon.hp <= damage else 0
+                    score += self._matchup_target_bonus(op_pokemon)
                     if prize == 0:
                         score *= damage / op_pokemon.hp
                     if len(self.opponent.prize) <= prize:
@@ -349,6 +403,8 @@ class LucarioPolicy:
                             attack_index=attack_index,
                             remain_hp=op_pokemon.hp - damage,
                             needs_energy=needs_energy,
+                            prize_gain=prize,
+                            wins_game=len(self.opponent.prize) <= prize,
                         )
 
     def _energy_target_score(self, pokemon: Pokemon, active: bool) -> int:
@@ -403,6 +459,48 @@ class LucarioPolicy:
                 return -1
             return 1100 if (option.attackId == MEGA_BRAVE) == (plan.attack_index == 1) else 1000
         return 0
+
+    def _apply_matchup_override(self, option, score: float) -> float:
+        """Apply narrow, visible-state rules after the generic option scorer."""
+        if plan.wins_game:
+            if option.type == OptionType.ATTACH and plan.needs_energy:
+                pokemon = get_card(self.obs, option.inPlayArea, option.inPlayIndex, self.my_index)
+                board_index = option.inPlayIndex if option.inPlayArea == AreaType.ACTIVE else option.inPlayIndex + 1
+                if pokemon is not None and board_index == plan.attacker:
+                    return 65000
+            if option.type == OptionType.EVOLVE:
+                target_index = option.inPlayIndex if option.inPlayArea == AreaType.ACTIVE else option.inPlayIndex + 1
+                if target_index == plan.attacker:
+                    return 64000
+            if option.type == OptionType.PLAY:
+                card = get_card(self.obs, AreaType.HAND, option.index, self.my_index)
+                if card.id == C.BOSS_ORDERS and plan.target >= 1:
+                    return 63000
+                if card.id == C.SWITCH and plan.attacker >= 1:
+                    return 62000
+            if option.type == OptionType.RETREAT and plan.attacker >= 1:
+                return 61000
+            if option.type == OptionType.ATTACK:
+                return 60000 if (option.attackId == MEGA_BRAVE) == (plan.attack_index == 1) else 59000
+
+        if self.matchup == "library_out":
+            if option.type == OptionType.PLAY:
+                card = get_card(self.obs, AreaType.HAND, option.index, self.my_index)
+                if card.id in {C.CARMINE, C.LILLIE_DETERMINATION} and not self._deck_safe(5):
+                    return -1
+            if option.type == OptionType.ATTACK:
+                return score + 700
+
+        if self.matchup == "alakazam" and option.type == OptionType.ATTACH:
+            card = get_card(self.obs, AreaType.HAND, option.index, self.my_index)
+            pokemon = get_card(self.obs, option.inPlayArea, option.inPlayIndex, self.my_index)
+            if card.id == C.HERO_CAPE and pokemon is not None and pokemon.id in {C.RIOLU, C.MEGA_LUCARIO_EX}:
+                return score + 1600
+
+        if self.matchup in {"archaludon", "starmie"} and option.type == OptionType.ATTACK:
+            if option.attackId == MEGA_BRAVE:
+                return score + 500
+        return score
 
     def _score_card_choice(self, option) -> float:
         card = get_card(self.obs, option.area, option.index, option.playerIndex)
@@ -524,7 +622,12 @@ class LucarioPolicy:
         return 1200 if self.stadium_id else -1
 
     def _low_deck(self) -> bool:
-        return self.me.deckCount <= LOW_DECK_COUNT
+        return not self._deck_safe(5)
+
+    def _deck_safe(self, draws: int) -> bool:
+        if plan.wins_game:
+            return True
+        return self.me.deckCount - draws > self.my_prizes_left
 
     def _score_attach(self, option) -> float:
         card = get_card(self.obs, AreaType.HAND, option.index, self.my_index)

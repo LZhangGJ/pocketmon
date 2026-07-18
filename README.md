@@ -20,6 +20,16 @@ python scripts/build_submission.py --cg-dir path/to/sample_submission/cg
 python scripts/run_local_match.py --cg-dir path/to/sample_submission/cg
 ```
 
+使用本地公开对手池进行批量评测（默认每个对手 20 局并交替先后手）：
+
+```powershell
+python scripts/run_opponent_pool.py --cg-dir path/to/sample_submission/cg --games 20
+```
+
+## RL warm start
+
+The initial RL pipeline records teacher/self-play trajectories and trains a variable-candidate actor-critic. See [`docs/rl-training.md`](docs/rl-training.md) for the design and commands. Training stays local; a model is only added to the submission after it beats the rule fallback across the opponent pool.
+
 已配置内容：
 - Python 3.12 环境
 - 依赖安装（`kaggle`、`pandas` 等）
