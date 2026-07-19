@@ -2,7 +2,18 @@
 
 The first training stage is deliberately an offline, candidate-scoring actor-critic rather than end-to-end DQN. Option indices are temporary: their meaning changes at every engine selection. The model therefore combines a public-state encoding with features of every currently legal option.
 
-## Pipeline
+## Public replay gate
+
+Before using downloaded episodes, run DATA-001 and DATA-002:
+
+```powershell
+python scripts/audit_replay_alignment.py --date YYYY-MM-DD --max-files 100 --strict
+python scripts/convert_public_replays.py --date YYYY-MM-DD --alignment previous --policy-source winners
+```
+
+The converter blocks promotion of its temporary output when any invalid decision, load error, or conflicting episode hash remains under the default zero-tolerance gate. It stores only the acting player's observation and removes `observation.logs` by default. See [`PUBLIC_REPLAY_RL_PROPOSAL.md`](PUBLIC_REPLAY_RL_PROPOSAL.md) for the staged BC, offline-RL, PPO, and league proposal.
+
+## Existing local-simulation pipeline
 
 1. Collect teacher games against the configured opponent pool.
 2. Warm-start the actor with behavior cloning and train the value head on final outcomes.
@@ -23,8 +34,8 @@ Evaluate a checkpoint against a separate trajectory file:
 python scripts/evaluate_rl_checkpoint.py --checkpoint artifacts/rl/candidate_actor_critic.best.pt --input data/rl/held_out.jsonl --device auto
 ```
 
-The collector alternates seats and samples opponents from `configs/opponent_pool.json`. JSONL is used initially so trajectories are inspectable; large runs should later be sharded into compressed Parquet files.
+The current local collector alternates seats and samples opponents from `configs/opponent_pool.json`. It is separate from the public replay converter and still requires teacher/outcome filtering before being used as policy supervision.
 
 ## Current scope and next stage
 
-The warm start trains decisions where exactly one option is selected. Multi-option decisions are collected but excluded until a sequential masked decoder is implemented. PPO should use the same encoder, clipped policy objective, GAE, entropy regularization, and a frozen-opponent mixture. A checkpoint must beat the rule baseline over several hundred paired-seat games before it is wired into the submission.
+The current warm start trains decisions where exactly one option is selected. Multi-option decisions are collected but excluded until a sequential masked decoder is implemented. PPO should use the same encoder, clipped policy objective, GAE, entropy regularization, and a frozen-opponent mixture. A checkpoint must beat the rule baseline over several hundred paired-seat games before it is wired into the submission.
