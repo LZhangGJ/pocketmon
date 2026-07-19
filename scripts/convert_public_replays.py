@@ -18,6 +18,29 @@ if str(ROOT) not in sys.path:
 from rl.public_replay import canonical_rows, json_dumps, replay_episode_id, replay_sha256
 
 
+REPORT_COUNTERS = (
+    "episodes",
+    "rows",
+    "policy_rows",
+    "value_rows",
+    "empty_action_rows",
+    "invalid_decisions",
+    "setup_actions",
+    "initial_actions_skipped",
+    "non_acting_actions_skipped",
+    "unknown_submission_status_skipped",
+    "episodes_terminal_reward",
+    "episodes_result_fallback",
+    "episodes_unresolved_terminal_reward",
+    "episodes_missing_winner",
+    "top_level_reward_episodes",
+    "reward_mismatches",
+    "duplicate_episode_ids",
+    "conflicting_episode_ids",
+    "load_errors",
+)
+
+
 def replay_files(input_root: Path, date: str | None, max_files: int) -> list[Path]:
     roots = [input_root / date] if date else [path for path in sorted(input_root.iterdir()) if path.is_dir() and path.name != "_index"]
     files = [path for root in roots if root.exists() for path in sorted(root.glob("*.json"))]
@@ -66,6 +89,8 @@ def main() -> None:
     manifests: dict[Path, dict[str, dict[str, str]]] = {}
     seen: dict[str, str] = {}
     counters: Counter[str] = Counter()
+    for key in REPORT_COUNTERS:
+        counters[key] = 0
     errors: list[dict[str, object]] = []
 
     try:
@@ -105,6 +130,24 @@ def main() -> None:
                     counters["unknown_submission_status_skipped"] += episode_report.get(
                         "unknown_submission_status_skipped", 0
                     )
+                    winner_source = episode_report.get("winner_source")
+                    if winner_source == "terminal_reward":
+                        counters["episodes_terminal_reward"] += 1
+                    elif winner_source == "observation_result":
+                        counters["episodes_result_fallback"] += 1
+                    elif winner_source == "unresolved_terminal_reward":
+                        counters["episodes_unresolved_terminal_reward"] += 1
+                    if episode_report.get("top_level_reward_present"):
+                        counters["top_level_reward_episodes"] += 1
+                    if episode_report.get("reward_mismatch"):
+                        counters["reward_mismatches"] += 1
+                        errors.append(
+                            {
+                                "path": str(path),
+                                "episode_id": episode_id,
+                                "reason": "terminal rewards disagree with top-level rewards",
+                            }
+                        )
                     if episode_report["winner"] is None:
                         counters["episodes_missing_winner"] += 1
                         errors.append({"path": str(path), "episode_id": episode_id, "reason": "terminal winner was not found"})
@@ -124,6 +167,7 @@ def main() -> None:
             and counters["load_errors"] == 0
             and counters["conflicting_episode_ids"] == 0
             and counters["episodes_missing_winner"] == 0
+            and counters["reward_mismatches"] == 0
             and counters["unknown_submission_status_skipped"] == 0
             and (args.policy_source == "all" or counters["policy_rows"] > 0)
         )
