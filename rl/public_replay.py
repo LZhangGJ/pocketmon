@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import math
 from collections import Counter
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -197,44 +198,101 @@ def validate_transition(transition: ReplayTransition) -> ActionValidation:
     return ActionValidation(True, "decision", "valid", option_count, min_count, max_count)
 
 
-def _terminal_winner_from_reward(steps: list[Any]) -> int | None:
-    """Resolve the winner from terminal (``status == "DONE"``) per-player rewards.
+def _numeric_reward(value: Any) -> float | None:
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        return None
+    reward = float(value)
+    return reward if math.isfinite(reward) else None
 
-    Real replays never populate ``observation.current.result`` with anything but
-    ``-1``; the actual outcome is each player's ``reward`` at the step where their
-    status becomes ``DONE``. Returns ``None`` rather than guessing when the terminal
-    step is missing, incomplete, or has an unrecognized reward pattern.
+
+def _terminal_reward_mapping(steps: list[Any]) -> tuple[bool, dict[int, float] | None]:
+    """Return whether terminal rewards exist and their validated player mapping.
+
+    ``(False, None)`` means no terminal ``reward`` field was supplied, so legacy
+    ``observation.current.result`` fallback is allowed. ``(True, None)`` means a
+    terminal reward was supplied but was incomplete or malformed; callers must not
+    fall back and silently override that ambiguous evidence.
     """
 
     for step in reversed(steps):
         if not isinstance(step, list):
             continue
-        rewards: dict[int, float] = {}
-        for player, view in enumerate(step):
-            if not isinstance(view, dict) or view.get("status") != "DONE":
-                continue
-            reward = view.get("reward")
-            if isinstance(reward, (int, float)) and not isinstance(reward, bool):
-                rewards[player] = float(reward)
-        if not rewards:
+        done_views = [
+            (player, view)
+            for player, view in enumerate(step)
+            if isinstance(view, dict) and view.get("status") == "DONE"
+        ]
+        if not done_views or not any("reward" in view for _, view in done_views):
             continue
-        if len(rewards) < 2:
-            return None
-        winners = [player for player, reward in rewards.items() if reward > 0]
-        losers = [player for player, reward in rewards.items() if reward < 0]
-        if len(winners) == 1 and len(losers) == len(rewards) - 1:
-            return winners[0]
-        if all(reward == 0 for reward in rewards.values()):
-            return 2
+        if len(done_views) < 2:
+            return True, None
+        rewards: dict[int, float] = {}
+        for player, view in done_views:
+            reward = _numeric_reward(view.get("reward"))
+            if reward is None:
+                return True, None
+            rewards[player] = reward
+        return True, rewards
+    return False, None
+
+
+def _top_level_reward_mapping(replay: dict[str, Any]) -> tuple[bool, dict[int, float] | None]:
+    if "rewards" not in replay:
+        return False, None
+    values = replay.get("rewards")
+    if not isinstance(values, list) or len(values) < 2:
+        return True, None
+    rewards: dict[int, float] = {}
+    for player, value in enumerate(values):
+        reward = _numeric_reward(value)
+        if reward is None:
+            return True, None
+        rewards[player] = reward
+    return True, rewards
+
+
+def _winner_from_rewards(rewards: dict[int, float] | None) -> int | None:
+    if not rewards or len(rewards) < 2:
         return None
+    winners = [player for player, reward in rewards.items() if reward > 0]
+    losers = [player for player, reward in rewards.items() if reward < 0]
+    if len(winners) == 1 and len(losers) == len(rewards) - 1:
+        return winners[0]
+    if all(reward == 0 for reward in rewards.values()):
+        return 2
     return None
 
 
-def terminal_winner(replay: dict[str, Any]) -> int | None:
+def _reward_mappings_match(left: dict[int, float] | None, right: dict[int, float] | None) -> bool:
+    if left is None or right is None or left.keys() != right.keys():
+        return False
+    return all(math.isclose(left[player], right[player], rel_tol=0.0, abs_tol=1e-12) for player in left)
+
+
+def terminal_outcome(replay: dict[str, Any]) -> dict[str, Any]:
+    """Resolve terminal outcome and retain auditable reward-source metadata."""
+
     steps = replay.get("steps") or []
-    reward_winner = _terminal_winner_from_reward(steps)
-    if reward_winner is not None:
-        return reward_winner
+    terminal_reward_present, terminal_rewards = _terminal_reward_mapping(steps)
+    top_level_reward_present, top_level_rewards = _top_level_reward_mapping(replay)
+    reward_mismatch = (
+        terminal_reward_present
+        and top_level_reward_present
+        and not _reward_mappings_match(terminal_rewards, top_level_rewards)
+    )
+
+    if terminal_reward_present:
+        winner = _winner_from_rewards(terminal_rewards)
+        return {
+            "winner": winner,
+            "winner_source": "terminal_reward" if winner is not None else "unresolved_terminal_reward",
+            "terminal_reward_present": True,
+            "terminal_reward_valid": terminal_rewards is not None,
+            "top_level_reward_present": top_level_reward_present,
+            "top_level_reward_valid": top_level_rewards is not None,
+            "reward_mismatch": reward_mismatch,
+        }
+
     for step in reversed(steps):
         if not isinstance(step, list):
             continue
@@ -244,9 +302,29 @@ def terminal_winner(replay: dict[str, Any]) -> int | None:
             observation = view.get("observation") or {}
             current = observation.get("current") or {}
             result = current.get("result")
-            if isinstance(result, int) and result != -1:
-                return result
-    return None
+            if isinstance(result, int) and not isinstance(result, bool) and result != -1:
+                return {
+                    "winner": result,
+                    "winner_source": "observation_result",
+                    "terminal_reward_present": False,
+                    "terminal_reward_valid": False,
+                    "top_level_reward_present": top_level_reward_present,
+                    "top_level_reward_valid": top_level_rewards is not None,
+                    "reward_mismatch": False,
+                }
+    return {
+        "winner": None,
+        "winner_source": "unresolved",
+        "terminal_reward_present": False,
+        "terminal_reward_valid": False,
+        "top_level_reward_present": top_level_reward_present,
+        "top_level_reward_valid": top_level_rewards is not None,
+        "reward_mismatch": False,
+    }
+
+
+def terminal_winner(replay: dict[str, Any]) -> int | None:
+    return terminal_outcome(replay)["winner"]
 
 
 def player_outcome(winner: int | None, player: int) -> float | None:
@@ -620,7 +698,8 @@ def canonical_rows(
     policy_source: Literal["winners", "all"] = "winners",
     keep_logs: bool = False,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    winner = terminal_winner(replay)
+    terminal = terminal_outcome(replay)
+    winner = terminal["winner"]
     rows: list[dict[str, Any]] = []
     invalid: list[dict[str, Any]] = []
     setup_actions = 0
@@ -685,7 +764,7 @@ def canonical_rows(
         )
     return rows, {
         "episode_id": episode_id,
-        "winner": winner,
+        **terminal,
         "rows": len(rows),
         "setup_actions": setup_actions,
         **dict(skipped),
