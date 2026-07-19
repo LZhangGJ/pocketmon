@@ -42,16 +42,32 @@ def main() -> None:
             reports[alignment].append(audit_replay(replay, alignment))
 
     merged = {alignment: merge_audits(values, alignment) for alignment, values in reports.items()}
-    recommended = max(merged, key=lambda name: (merged[name]["valid_rate"], merged[name]["valid_decisions"])) if files else None
-    gate_passed = bool(recommended) and merged[recommended]["valid_rate"] >= args.min_valid_rate and not load_errors
+    files_loaded = len(files) - len(load_errors)
+    recommended = (
+        max(merged, key=lambda name: (merged[name]["valid_rate"], merged[name]["valid_decisions"]))
+        if files_loaded
+        else None
+    )
+    gate_passed = (
+        bool(recommended)
+        and merged[recommended]["valid_rate"] >= args.min_valid_rate
+        and merged[recommended]["unknown_submission_status_skipped"] == 0
+        and not load_errors
+    )
     report = {
         "experiment_id": "DATA-001",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "input_root": str(Path(args.input_root)),
         "date": args.date,
         "files_selected": len(files),
-        "files_loaded": len(files) - len(load_errors),
+        "files_loaded": files_loaded,
         "load_errors": load_errors[:20],
+        "action_storage_model": {
+            "action": "steps[t].action",
+            "paired_observation": "steps[t-1].observation",
+            "submission_status": "steps[t-1].status",
+            "post_action_status": "steps[t].status",
+        },
         "alignments": merged,
         "recommended_alignment": recommended,
         "min_valid_rate": args.min_valid_rate,
