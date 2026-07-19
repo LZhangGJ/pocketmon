@@ -1,0 +1,23 @@
+{
+  "experiment_id": "DATA-002",
+  "generated_at": "2026-07-19T15:33:02.471779+00:00",
+  "alignment": "previous",
+  "policy_source": "winners",
+  "keep_logs": false,
+  "files_selected": 100,
+  "episodes": 100,
+  "rows": 16111,
+  "policy_rows": 8397,
+  "value_rows": 16111,
+  "empty_action_rows": 24,
+  "invalid_decisions": 0,
+  "setup_actions": 200,
+  "initial_actions_skipped": 200,
+  "non_acting_actions_skipped": 16111,
+  "unknown_submission_status_skipped": 0,
+  "invalid_rate": 0.0,
+  "max_invalid_rate": 0.0,
+  "gate_passed": true,
+  "output": "data\\processed\\public_replay_v1.jsonl.gz",
+  "errors": []
+}
