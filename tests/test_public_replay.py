@@ -7,6 +7,7 @@ from rl.public_replay import (
     audit_replay,
     canonical_rows,
     iter_transitions,
+    terminal_outcome,
     terminal_winner,
     validate_transition,
 )
@@ -82,8 +83,7 @@ def delayed_action_replay() -> dict:
 
 
 def reward_only_replay(rewards: tuple[float, float]) -> dict:
-    """Mimics real replays: `observation.current.result` never leaves -1, but the
-    terminal step's `reward` resolves the winner."""
+    """Mimics real replays: result stays -1 while terminal reward resolves it."""
 
     return {
         "info": {"EpisodeId": 45},
@@ -193,11 +193,29 @@ class PublicReplayTests(unittest.TestCase):
         self.assertEqual(terminal_winner(reward_only_replay((0, 0))), 2)
 
     def test_terminal_winner_falls_back_to_result_when_no_reward(self) -> None:
-        # Existing synthetic fixtures carry no "reward" key at all.
         self.assertEqual(terminal_winner(shifted_replay()), 0)
 
     def test_terminal_winner_none_for_unrecognized_reward_pattern(self) -> None:
-        self.assertIsNone(terminal_winner(reward_only_replay((1, 1))))
+        replay = reward_only_replay((1, 1))
+        for view in replay["steps"][-1]:
+            view["observation"]["current"]["result"] = 0
+        outcome = terminal_outcome(replay)
+        self.assertIsNone(outcome["winner"])
+        self.assertEqual(outcome["winner_source"], "unresolved_terminal_reward")
+
+    def test_terminal_outcome_audits_top_level_reward_mismatch(self) -> None:
+        replay = reward_only_replay((1, -1))
+        replay["rewards"] = [-1, 1]
+        rows, report = canonical_rows(
+            replay,
+            alignment="previous",
+            source_path="45.json",
+            source_sha256="ghi",
+        )
+        self.assertTrue(rows)
+        self.assertEqual(report["winner"], 0)
+        self.assertEqual(report["winner_source"], "terminal_reward")
+        self.assertTrue(report["reward_mismatch"])
 
 
 if __name__ == "__main__":
