@@ -20,7 +20,15 @@ class ReplayTransition:
     observation_step: int
     action: Any
     observation: dict[str, Any] | None
-    status: Any
+    action_status: Any
+    observation_status: Any
+    submission_status: Any
+
+    @property
+    def status(self) -> Any:
+        """Backward-compatible alias for the status when the action was requested."""
+
+        return self.submission_status
 
 
 @dataclass(frozen=True)
@@ -59,12 +67,47 @@ def _player_view(steps: list[Any], step_index: int, player: int) -> dict[str, An
     return step[player]
 
 
-def iter_transitions(replay: dict[str, Any], alignment: Alignment) -> Iterator[ReplayTransition]:
-    """Yield every recorded non-null action with one candidate observation alignment.
+def _transition_at(
+    steps: list[Any],
+    *,
+    episode_id: str,
+    player: int,
+    action_step: int,
+    observation_step: int,
+) -> ReplayTransition:
+    action_view = _player_view(steps, action_step, player)
+    observation_view = _player_view(steps, observation_step, player)
+    submission_view = _player_view(steps, action_step - 1, player)
+    observation = None if observation_view is None else observation_view.get("observation")
+    if not isinstance(observation, dict):
+        observation = None
+    return ReplayTransition(
+        episode_id=episode_id,
+        player=player,
+        action_step=action_step,
+        observation_step=observation_step,
+        action=None if action_view is None else action_view.get("action"),
+        observation=observation,
+        action_status=None if action_view is None else action_view.get("status"),
+        observation_status=None if observation_view is None else observation_view.get("status"),
+        submission_status=None if submission_view is None else submission_view.get("status"),
+    )
 
-    Kaggle simulation replays commonly store the action that produced a step next to
-    the post-action observation. DATA-001 compares that ``previous`` interpretation
-    against the naïve ``same``-step interpretation instead of assuming either one.
+
+def iter_transitions(
+    replay: dict[str, Any],
+    alignment: Alignment,
+    *,
+    acting_only: bool = True,
+) -> Iterator[ReplayTransition]:
+    """Yield recorded actions with one candidate observation alignment.
+
+    Kaggle Environments requests actions from ``steps[t - 1]`` and appends the
+    interpreter's resulting state, including those actions, as ``steps[t]``.  The
+    action eligibility status is therefore also the status at ``t - 1``; the status
+    stored beside the action is post-interpreter state and must not be used to decide
+    whether the player acted.  ``acting_only=False`` is intended for diagnostics that
+    need to count reset and inactive placeholders explicitly.
     """
 
     steps = replay.get("steps") or []
@@ -76,24 +119,21 @@ def iter_transitions(replay: dict[str, Any], alignment: Alignment) -> Iterator[R
             if not isinstance(action_view, dict) or action_view.get("action") is None:
                 continue
             observation_step = action_step - 1 if alignment == "previous" else action_step
-            observation_view = _player_view(steps, observation_step, player)
-            observation = None if observation_view is None else observation_view.get("observation")
-            if not isinstance(observation, dict):
-                observation = None
-            yield ReplayTransition(
+            transition = _transition_at(
+                steps,
                 episode_id=episode_id,
                 player=player,
                 action_step=action_step,
                 observation_step=observation_step,
-                action=action_view.get("action"),
-                observation=observation,
-                status=action_view.get("status"),
             )
+            if acting_only and transition.submission_status != "ACTIVE":
+                continue
+            yield transition
 
 
 def validate_transition(transition: ReplayTransition) -> ActionValidation:
     action = transition.action
-    if not isinstance(action, list) or any(not isinstance(index, int) for index in action):
+    if not isinstance(action, list) or any(not isinstance(index, int) or isinstance(index, bool) for index in action):
         return ActionValidation(False, "invalid", "action_not_integer_list")
 
     observation = transition.observation
@@ -198,11 +238,24 @@ def audit_replay(
     counts: Counter[str] = Counter()
     reasons: Counter[str] = Counter()
     examples: list[dict[str, Any]] = []
-    for transition in iter_transitions(replay, alignment):
+    for transition in iter_transitions(replay, alignment, acting_only=False):
+        counts["recorded_actions"] += 1
+        if transition.action_step == 0:
+            counts["initial_actions_skipped"] += 1
+            continue
+        if transition.submission_status is None:
+            counts["unknown_submission_status_skipped"] += 1
+            continue
+        if transition.submission_status != "ACTIVE":
+            counts["non_acting_actions_skipped"] += 1
+            continue
         counts["actions"] += 1
         validation = validate_transition(transition)
         counts[validation.kind] += 1
         reasons[validation.reason] += 1
+        if transition.action == []:
+            counts["empty_actions"] += 1
+            counts["valid_empty_decisions" if validation.valid else "invalid_empty_decisions"] += 1
         if not validation.valid and len(examples) < max_examples:
             examples.append(
                 {
@@ -211,13 +264,24 @@ def audit_replay(
                     "action_step": transition.action_step,
                     "observation_step": transition.observation_step,
                     "action": transition.action,
+                    "submission_status": transition.submission_status,
+                    "action_status": transition.action_status,
+                    "observation_status": transition.observation_status,
                     **asdict(validation),
                 }
             )
     decisions = counts["decision"] + counts["invalid"]
     return {
         "alignment": alignment,
+        "status_source": "steps[action_step-1].status",
+        "recorded_actions": counts["recorded_actions"],
         "actions": counts["actions"],
+        "initial_actions_skipped": counts["initial_actions_skipped"],
+        "non_acting_actions_skipped": counts["non_acting_actions_skipped"],
+        "unknown_submission_status_skipped": counts["unknown_submission_status_skipped"],
+        "empty_actions": counts["empty_actions"],
+        "valid_empty_decisions": counts["valid_empty_decisions"],
+        "invalid_empty_decisions": counts["invalid_empty_decisions"],
         "valid_decisions": counts["decision"],
         "setup_actions": counts["setup"],
         "invalid_decisions": counts["invalid"],
@@ -232,16 +296,279 @@ def merge_audits(reports: list[dict[str, Any]], alignment: Alignment, max_exampl
     reasons: Counter[str] = Counter()
     examples: list[dict[str, Any]] = []
     for report in reports:
-        for key in ("actions", "valid_decisions", "setup_actions", "invalid_decisions"):
+        for key in (
+            "recorded_actions",
+            "actions",
+            "initial_actions_skipped",
+            "non_acting_actions_skipped",
+            "unknown_submission_status_skipped",
+            "empty_actions",
+            "valid_empty_decisions",
+            "invalid_empty_decisions",
+            "valid_decisions",
+            "setup_actions",
+            "invalid_decisions",
+        ):
             totals[key] += int(report.get(key, 0))
         reasons.update(report.get("reasons") or {})
         examples.extend((report.get("examples") or [])[: max_examples - len(examples)])
     decisions = totals["valid_decisions"] + totals["invalid_decisions"]
     return {
         "alignment": alignment,
-        **{key: totals[key] for key in ("actions", "valid_decisions", "setup_actions", "invalid_decisions")},
+        "status_source": "steps[action_step-1].status",
+        **{
+            key: totals[key]
+            for key in (
+                "recorded_actions",
+                "actions",
+                "initial_actions_skipped",
+                "non_acting_actions_skipped",
+                "unknown_submission_status_skipped",
+                "empty_actions",
+                "valid_empty_decisions",
+                "invalid_empty_decisions",
+                "valid_decisions",
+                "setup_actions",
+                "invalid_decisions",
+            )
+        },
         "valid_rate": totals["valid_decisions"] / decisions if decisions else 0.0,
         "reasons": dict(sorted(reasons.items())),
+        "examples": examples,
+    }
+
+
+def _select_summary(observation: dict[str, Any] | None) -> dict[str, Any]:
+    select = None if observation is None else observation.get("select")
+    if not isinstance(select, dict):
+        return {"present": False}
+    options = select.get("option")
+    option_list = options if isinstance(options, list) else []
+    option_types = Counter(
+        str(option.get("type"))
+        for option in option_list
+        if isinstance(option, dict) and option.get("type") is not None
+    )
+    fingerprint = hashlib.sha256(json_dumps(select).encode("utf-8")).hexdigest()[:16]
+    return {
+        "present": True,
+        "fingerprint": fingerprint,
+        "type": select.get("type"),
+        "context": select.get("context"),
+        "option_count": len(option_list),
+        "option_types": dict(sorted(option_types.items())),
+        "min_count": select.get("minCount"),
+        "max_count": select.get("maxCount"),
+    }
+
+
+def _empty_required_selection(transition: ReplayTransition) -> bool:
+    if transition.action != [] or transition.observation is None:
+        return False
+    select = transition.observation.get("select")
+    if not isinstance(select, dict):
+        return False
+    try:
+        return int(select.get("minCount", 0)) > 0
+    except (TypeError, ValueError):
+        return False
+
+
+def audit_action_positions(
+    replay: dict[str, Any],
+    *,
+    lags: tuple[int, ...] = (-1, 0, 1, 2, 3, 4),
+    expected_lag: int = 1,
+    max_examples: int = 20,
+) -> dict[str, Any]:
+    """Compare where actions appear relative to ACTIVE observations.
+
+    ``lag`` is ``action_step - observation_step``.  Kaggle Environments' core
+    execution model predicts lag 1.  Other lags are reported only to diagnose a
+    competition-specific wrapper or repeated/auto-resolved selection; they are not
+    automatically accepted for DATA-001 or DATA-002.
+    """
+
+    if expected_lag not in lags:
+        raise ValueError("expected_lag must be included in lags")
+    steps = replay.get("steps") or []
+    episode_id = replay_episode_id(replay)
+    lag_counts: dict[int, Counter[str]] = {lag: Counter() for lag in lags}
+    lag_reasons: dict[int, Counter[str]] = {lag: Counter() for lag in lags}
+    totals: Counter[str] = Counter()
+    examples: list[dict[str, Any]] = []
+
+    for observation_step, step in enumerate(steps):
+        if not isinstance(step, list):
+            continue
+        for player, observation_view in enumerate(step):
+            if not isinstance(observation_view, dict) or observation_view.get("status") != "ACTIVE":
+                continue
+            observation = observation_view.get("observation")
+            if not isinstance(observation, dict):
+                totals["active_missing_observation"] += 1
+                continue
+            totals["active_observations"] += 1
+            candidates: list[dict[str, Any]] = []
+            expected_transition: ReplayTransition | None = None
+            expected_validation: ActionValidation | None = None
+            valid_other_lags: list[int] = []
+
+            for lag in lags:
+                action_step = observation_step + lag
+                transition = _transition_at(
+                    steps,
+                    episode_id=episode_id,
+                    player=player,
+                    action_step=action_step,
+                    observation_step=observation_step,
+                )
+                validation = validate_transition(transition)
+                counter = lag_counts[lag]
+                counter["observations"] += 1
+                counter[validation.kind] += 1
+                lag_reasons[lag][validation.reason] += 1
+                if transition.action is None:
+                    counter["missing_actions"] += 1
+                elif transition.action == []:
+                    counter["empty_actions"] += 1
+                if lag == expected_lag:
+                    expected_transition = transition
+                    expected_validation = validation
+                elif validation.valid:
+                    valid_other_lags.append(lag)
+                candidates.append(
+                    {
+                        "lag": lag,
+                        "action_step": action_step,
+                        "action": transition.action,
+                        "submission_status": transition.submission_status,
+                        "action_status": transition.action_status,
+                        "valid": validation.valid,
+                        "kind": validation.kind,
+                        "reason": validation.reason,
+                    }
+                )
+
+            assert expected_transition is not None and expected_validation is not None
+            if expected_transition.action == []:
+                totals["empty_expected_actions"] += 1
+            if _empty_required_selection(expected_transition):
+                totals["empty_required_expected_actions"] += 1
+                if valid_other_lags:
+                    totals["empty_required_with_valid_other_lag"] += 1
+                    for lag in valid_other_lags:
+                        totals[f"valid_other_lag_{lag}"] += 1
+                else:
+                    totals["empty_required_unresolved"] += 1
+                if len(examples) < max_examples:
+                    examples.append(
+                        {
+                            "episode_id": episode_id,
+                            "player": player,
+                            "observation_step": observation_step,
+                            "observation_status": observation_view.get("status"),
+                            "select": _select_summary(observation),
+                            "expected_lag": expected_lag,
+                            "expected_reason": expected_validation.reason,
+                            "valid_other_lags": valid_other_lags,
+                            "candidates": candidates,
+                        }
+                    )
+
+    lag_reports: dict[str, dict[str, Any]] = {}
+    for lag in lags:
+        counter = lag_counts[lag]
+        decisions = counter["decision"] + counter["invalid"]
+        lag_reports[str(lag)] = {
+            "lag": lag,
+            "observations": counter["observations"],
+            "valid_decisions": counter["decision"],
+            "setup_actions": counter["setup"],
+            "invalid_decisions": counter["invalid"],
+            "valid_rate": counter["decision"] / decisions if decisions else 0.0,
+            "empty_actions": counter["empty_actions"],
+            "missing_actions": counter["missing_actions"],
+            "reasons": dict(sorted(lag_reasons[lag].items())),
+        }
+    return {
+        "episode_id": episode_id,
+        "expected_lag": expected_lag,
+        "active_observations": totals["active_observations"],
+        "active_missing_observation": totals["active_missing_observation"],
+        "empty_expected_actions": totals["empty_expected_actions"],
+        "empty_required_expected_actions": totals["empty_required_expected_actions"],
+        "empty_required_with_valid_other_lag": totals["empty_required_with_valid_other_lag"],
+        "empty_required_unresolved": totals["empty_required_unresolved"],
+        "valid_other_lags": {
+            str(lag): totals[f"valid_other_lag_{lag}"] for lag in lags if lag != expected_lag
+        },
+        "lags": lag_reports,
+        "examples": examples,
+    }
+
+
+def merge_position_audits(
+    reports: list[dict[str, Any]],
+    *,
+    lags: tuple[int, ...],
+    expected_lag: int,
+    max_examples: int = 50,
+) -> dict[str, Any]:
+    totals: Counter[str] = Counter()
+    lag_totals: dict[int, Counter[str]] = {lag: Counter() for lag in lags}
+    lag_reasons: dict[int, Counter[str]] = {lag: Counter() for lag in lags}
+    other_lags: Counter[str] = Counter()
+    examples: list[dict[str, Any]] = []
+    for report in reports:
+        for key in (
+            "active_observations",
+            "active_missing_observation",
+            "empty_expected_actions",
+            "empty_required_expected_actions",
+            "empty_required_with_valid_other_lag",
+            "empty_required_unresolved",
+        ):
+            totals[key] += int(report.get(key, 0))
+        other_lags.update(report.get("valid_other_lags") or {})
+        examples.extend((report.get("examples") or [])[: max_examples - len(examples)])
+        for lag in lags:
+            lag_report = (report.get("lags") or {}).get(str(lag), {})
+            for key in (
+                "observations",
+                "valid_decisions",
+                "setup_actions",
+                "invalid_decisions",
+                "empty_actions",
+                "missing_actions",
+            ):
+                lag_totals[lag][key] += int(lag_report.get(key, 0))
+            lag_reasons[lag].update(lag_report.get("reasons") or {})
+
+    lag_reports: dict[str, dict[str, Any]] = {}
+    for lag in lags:
+        counter = lag_totals[lag]
+        decisions = counter["valid_decisions"] + counter["invalid_decisions"]
+        lag_reports[str(lag)] = {
+            "lag": lag,
+            **{key: counter[key] for key in (
+                "observations",
+                "valid_decisions",
+                "setup_actions",
+                "invalid_decisions",
+                "empty_actions",
+                "missing_actions",
+            )},
+            "valid_rate": counter["valid_decisions"] / decisions if decisions else 0.0,
+            "reasons": dict(sorted(lag_reasons[lag].items())),
+        }
+    best_lag = max(lags, key=lambda lag: (lag_reports[str(lag)]["valid_rate"], lag_reports[str(lag)]["valid_decisions"])) if reports else None
+    return {
+        "expected_lag": expected_lag,
+        "best_observed_lag": best_lag,
+        **dict(totals),
+        "valid_other_lags": dict(sorted(other_lags.items(), key=lambda item: int(item[0]))),
+        "lags": lag_reports,
         "examples": examples,
     }
 
@@ -261,7 +588,17 @@ def canonical_rows(
     invalid: list[dict[str, Any]] = []
     setup_actions = 0
     episode_id = replay_episode_id(replay, Path(source_path).stem)
-    for transition in iter_transitions(replay, alignment):
+    skipped: Counter[str] = Counter()
+    for transition in iter_transitions(replay, alignment, acting_only=False):
+        if transition.action_step == 0:
+            skipped["initial_actions_skipped"] += 1
+            continue
+        if transition.submission_status is None:
+            skipped["unknown_submission_status_skipped"] += 1
+            continue
+        if transition.submission_status != "ACTIVE":
+            skipped["non_acting_actions_skipped"] += 1
+            continue
         validation = validate_transition(transition)
         if validation.kind == "setup":
             setup_actions += 1
@@ -273,6 +610,9 @@ def canonical_rows(
                     "action_step": transition.action_step,
                     "observation_step": transition.observation_step,
                     "action": transition.action,
+                    "submission_status": transition.submission_status,
+                    "action_status": transition.action_status,
+                    "observation_status": transition.observation_status,
                     **asdict(validation),
                 }
             )
@@ -285,14 +625,17 @@ def canonical_rows(
         policy_weight = 1.0 if policy_source == "all" or outcome == 1.0 else 0.0
         rows.append(
             {
-                "schema_version": 1,
+                "schema_version": 2,
                 "episode_id": episode_id,
                 "source_path": source_path,
                 "source_sha256": source_sha256,
                 "player": transition.player,
                 "action_step": transition.action_step,
                 "observation_step": transition.observation_step,
-                "status": transition.status,
+                "status": transition.submission_status,
+                "submission_status": transition.submission_status,
+                "observation_status": transition.observation_status,
+                "action_status": transition.action_status,
                 "winner": winner,
                 "outcome": outcome,
                 "policy_weight": policy_weight,
@@ -308,6 +651,7 @@ def canonical_rows(
         "winner": winner,
         "rows": len(rows),
         "setup_actions": setup_actions,
+        **dict(skipped),
         "invalid_decisions": len(invalid),
         "invalid_examples": invalid[:20],
     }
