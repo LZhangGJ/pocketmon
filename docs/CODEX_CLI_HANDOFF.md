@@ -50,21 +50,23 @@ The output is promoted from its temporary file only when all of the following ho
 - replay load errors are `0`;
 - conflicting duplicate episode IDs are `0`;
 - episodes missing a terminal winner are `0`;
+- non-initial actions with unknown submission status are `0`;
 - with `--policy-source winners`, at least one winner policy row exists.
 
 Exact duplicate episode IDs with the same SHA-256 are skipped. Top-level `observation.logs` is removed by default to reduce event-log leakage. Winner decisions receive policy weight; both winner and loser decisions with known outcomes receive value weight.
 
 ## Progress already on `exp/league-v1`
 
-- DATA-001: `scripts/audit_replay_alignment.py` compares `previous` and `same`, writes a JSON report, and supports a strict exit gate.
+- DATA-001: `scripts/audit_replay_alignment.py` compares `previous` and `same`, uses the previous-step submission status, reports skipped placeholders, and supports a strict exit gate.
+- Action-position diagnosis: `scripts/diagnose_replay_action_positions.py` traces empty required actions across configurable lags without changing the gate.
 - DATA-002: `scripts/convert_public_replays.py` validates, deduplicates, converts, and atomically promotes canonical JSONL/JSONL.GZ trajectories.
 - Shared replay logic: `rl/public_replay.py` implements temporal pairing, validation, terminal outcomes, policy/value weights, hashes, and log stripping.
 - The majority baseline now uses previous-step labels. Legacy unvalidated majority models and unseen signatures are rejected instead of using an unsafe global default.
 - RL proposal: `docs/PUBLIC_REPLAY_RL_PROPOSAL.md` recommends masked behavior cloning, then AWR or IQL with BC regularization, followed by recurrent PPO self-play and league evaluation.
 - Experiment log: `results/experiments.csv` marks DATA-001 and DATA-002 as `implemented_pending_server`.
-- Local verification: four unit tests pass; compile checks pass; the synthetic DATA-002 conversion produced four rows, two policy rows, four value rows, zero invalid decisions, and a readable gzip output.
+- Local verification: seven unit tests pass; compile checks pass; the synthetic DATA-002 conversion produced four schema-v2 rows, two policy rows, four value rows, zero invalid decisions, and a readable gzip output.
 
-Verified limitation: no real Kaggle replay was available in the implementation environment. Real replay alignment, manifest variants, terminal-result variants, throughput, memory, and downstream model quality remain unverified.
+Verified real-data history: the original 100-episode DATA-001 run failed (`previous=0.5040`, `same=0.3975`). Code review then found that the diagnostic and converter used `steps[t].status`, although Kaggle requests `steps[t].action` from the state at `t-1`. The fix is synthetic-tested but has not yet been rerun on the server; real corrected rates, DATA-002, throughput, memory, and downstream model quality remain unverified.
 
 ## Immediate server task for local Codex CLI
 
@@ -88,6 +90,14 @@ python scripts/download_ptcg_data.py --max-episodes 100
 find data/raw/replays -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort
 
 DATE=YYYY-MM-DD
+python scripts/diagnose_replay_action_positions.py \
+  --date "$DATE" \
+  --max-files 100 \
+  --min-lag -1 \
+  --max-lag 4 \
+  --expected-lag 1 \
+  --output results/data001_action_positions.json
+
 python scripts/audit_replay_alignment.py \
   --date "$DATE" \
   --max-files 100 \
@@ -96,7 +106,7 @@ python scripts/audit_replay_alignment.py \
   --output results/data001_replay_alignment.json
 ```
 
-Inspect the report before DATA-002. Expected evidence is that `recommended_alignment` is `previous`, `gate_passed` is `true`, and load errors are zero. If `same` wins, the valid rate is below `0.999`, or errors cluster by a reason, stop and diagnose representative replay steps. Do not hide bad rows, relax the threshold, or start training.
+Inspect both reports before DATA-002. Expected evidence is that lag 1 and `previous` dominate, `gate_passed` is `true`, unknown submission statuses are zero, and load errors are zero. Review `empty_required_expected_actions`, `empty_required_unresolved`, and the trace examples even when the aggregate rate passes. If another lag wins, the valid rate is below `0.999`, or errors cluster by a reason, stop and inspect representative replay steps. Do not hide bad rows, relax the threshold, or start training.
 
 Only after DATA-001 passes, convert all validated replays for that date:
 
@@ -124,7 +134,7 @@ print({"readable_rows": rows, "bytes": path.stat().st_size})
 PY
 ```
 
-Record the exact input date/snapshot, replay and row counts, both alignment rates, invalid-reason counts, duplicate/conflict counts, missing-winner counts, policy/value row counts, elapsed time, peak memory, failures, commands, and commit SHA. Update:
+Record the exact input date/snapshot, replay and row counts, per-lag and both alignment rates, empty-action traces, skip/status counts, invalid-reason counts, duplicate/conflict counts, missing-winner counts, policy/value row counts, elapsed time, peak memory, failures, commands, and commit SHA. Update:
 
 - `results/experiments.csv`;
 - `docs/DECISION_LOG.md`;
