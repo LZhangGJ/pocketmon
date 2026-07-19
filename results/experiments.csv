@@ -1,0 +1,2 @@
+experiment_id,status,hypothesis,candidate_commit,champion_commit,seeds,games,win_rate,ci_lower,main_metric,latency_ms,memory_mb,failures,opponent_snapshot,recommendation,risks
+league-v1-bootstrap,planned,"Ten diverse learners trained against a fixed daily public snapshot can all exceed the public pool gate",TBD,4762ba17fc01ca95b8f4f2207a0277782d9027f4,TBD,0,TBD,TBD,min_matchup_wilson_lower,TBD,TBD,TBD,TBD,run_on_server,"No gameplay result yet; notebook code is untrusted"
