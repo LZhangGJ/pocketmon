@@ -44,8 +44,13 @@ def main() -> None:
         record = {"name": item["name"], "source": item["source"], "status": "rejected"}
         try:
             with tempfile.TemporaryDirectory() as tmp:
-                subprocess.run(["kaggle", "kernels", "pull", item["source"], "-p", tmp, "-m"], check=True, timeout=300)
-                root = Path(tmp)
+                # A runnable agent must be a published notebook output. Pulling the
+                # notebook source alone usually yields only an ipynb file.
+                subprocess.run(["kaggle", "kernels", "output", item["source"], "-p", tmp], check=True, timeout=300)
+                candidates = sorted({p.parent for p in Path(tmp).rglob("main.py")} & {p.parent for p in Path(tmp).rglob("deck.csv")})
+                if len(candidates) != 1:
+                    raise ValueError(f"expected exactly one materialized agent output, found {len(candidates)}")
+                root = candidates[0]
                 validate_agent(root)
                 sha = digest_tree(root)
                 destination = snapshot_dir / f"{item['name']}--{sha[:12]}"
