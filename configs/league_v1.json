@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "learners": 10,
+  "base_seed": 20260719,
+  "opponent_snapshot": "data/opponents/snapshots/current.json",
+  "sampling": {
+    "public": 0.35,
+    "champion": 0.25,
+    "historical": 0.20,
+    "hard_counter": 0.20
+  },
+  "evaluation": {
+    "games_per_pair": 400,
+    "min_public_win_rate": 0.60,
+    "min_lower_wilson_bound": 0.55,
+    "max_failure_rate": 0.0
+  },
+  "promotion": {
+    "required_qualified_learners": 10,
+    "next_generation_from": "qualified_learners"
+  }
+}
