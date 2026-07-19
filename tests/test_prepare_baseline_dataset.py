@@ -14,12 +14,12 @@ class BaselineDatasetTests(unittest.TestCase):
             "info": {"EpisodeId": 9},
             "steps": [
                 [
-                    {"action": None, "observation": {"current": {"result": -1}, "select": {"option": [{}, {}, {}], "minCount": 1, "maxCount": 1}}},
-                    {"action": None, "observation": {"current": {"result": -1}, "select": {"option": [{}, {}], "minCount": 1, "maxCount": 1}}},
+                    {"action": None, "status": "ACTIVE", "observation": {"current": {"result": -1}, "select": {"option": [{}, {}, {}], "minCount": 1, "maxCount": 1}}},
+                    {"action": None, "status": "ACTIVE", "observation": {"current": {"result": -1}, "select": {"option": [{}, {}], "minCount": 1, "maxCount": 1}}},
                 ],
                 [
-                    {"action": [2], "observation": {"current": {"result": 0}, "select": {"option": [{}], "minCount": 1, "maxCount": 1}}},
-                    {"action": [1], "observation": {"current": {"result": 0}, "select": {"option": [{}], "minCount": 1, "maxCount": 1}}},
+                    {"action": [2], "status": "DONE", "observation": {"current": {"result": 0}, "select": {"option": [{}], "minCount": 1, "maxCount": 1}}},
+                    {"action": [1], "status": "DONE", "observation": {"current": {"result": 0}, "select": {"option": [{}], "minCount": 1, "maxCount": 1}}},
                 ],
             ],
         }
