@@ -7,6 +7,7 @@ from rl.public_replay import (
     audit_replay,
     canonical_rows,
     iter_transitions,
+    terminal_winner,
     validate_transition,
 )
 
@@ -76,6 +77,36 @@ def delayed_action_replay() -> dict:
             [{"action": None, "status": "ACTIVE", "observation": observation(2)}],
             [{"action": [], "status": "ACTIVE", "observation": observation(2)}],
             [{"action": [1], "status": "DONE", "observation": observation(None, result=0)}],
+        ],
+    }
+
+
+def reward_only_replay(rewards: tuple[float, float]) -> dict:
+    """Mimics real replays: `observation.current.result` never leaves -1, but the
+    terminal step's `reward` resolves the winner."""
+
+    return {
+        "info": {"EpisodeId": 45},
+        "rewards": list(rewards),
+        "steps": [
+            [
+                {"action": None, "status": "ACTIVE", "observation": observation(2), "reward": 0},
+                {"action": None, "status": "ACTIVE", "observation": observation(2), "reward": 0},
+            ],
+            [
+                {
+                    "action": [0],
+                    "status": "DONE",
+                    "observation": observation(None, result=-1),
+                    "reward": rewards[0],
+                },
+                {
+                    "action": [1],
+                    "status": "DONE",
+                    "observation": observation(None, result=-1),
+                    "reward": rewards[1],
+                },
+            ],
         ],
     }
 
@@ -153,6 +184,20 @@ class PublicReplayTests(unittest.TestCase):
         self.assertTrue(all(row["policy_weight"] == 1.0 for row in winner_rows))
         self.assertTrue(all(row["policy_weight"] == 0.0 for row in loser_rows))
         self.assertTrue(all(row["value_weight"] == 1.0 for row in rows))
+
+    def test_terminal_winner_uses_reward_when_result_stays_negative_one(self) -> None:
+        self.assertEqual(terminal_winner(reward_only_replay((1, -1))), 0)
+        self.assertEqual(terminal_winner(reward_only_replay((-1, 1))), 1)
+
+    def test_terminal_winner_draw_from_zero_rewards(self) -> None:
+        self.assertEqual(terminal_winner(reward_only_replay((0, 0))), 2)
+
+    def test_terminal_winner_falls_back_to_result_when_no_reward(self) -> None:
+        # Existing synthetic fixtures carry no "reward" key at all.
+        self.assertEqual(terminal_winner(shifted_replay()), 0)
+
+    def test_terminal_winner_none_for_unrecognized_reward_pattern(self) -> None:
+        self.assertIsNone(terminal_winner(reward_only_replay((1, 1))))
 
 
 if __name__ == "__main__":

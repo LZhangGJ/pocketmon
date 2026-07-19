@@ -197,8 +197,45 @@ def validate_transition(transition: ReplayTransition) -> ActionValidation:
     return ActionValidation(True, "decision", "valid", option_count, min_count, max_count)
 
 
+def _terminal_winner_from_reward(steps: list[Any]) -> int | None:
+    """Resolve the winner from terminal (``status == "DONE"``) per-player rewards.
+
+    Real replays never populate ``observation.current.result`` with anything but
+    ``-1``; the actual outcome is each player's ``reward`` at the step where their
+    status becomes ``DONE``. Returns ``None`` rather than guessing when the terminal
+    step is missing, incomplete, or has an unrecognized reward pattern.
+    """
+
+    for step in reversed(steps):
+        if not isinstance(step, list):
+            continue
+        rewards: dict[int, float] = {}
+        for player, view in enumerate(step):
+            if not isinstance(view, dict) or view.get("status") != "DONE":
+                continue
+            reward = view.get("reward")
+            if isinstance(reward, (int, float)) and not isinstance(reward, bool):
+                rewards[player] = float(reward)
+        if not rewards:
+            continue
+        if len(rewards) < 2:
+            return None
+        winners = [player for player, reward in rewards.items() if reward > 0]
+        losers = [player for player, reward in rewards.items() if reward < 0]
+        if len(winners) == 1 and len(losers) == len(rewards) - 1:
+            return winners[0]
+        if all(reward == 0 for reward in rewards.values()):
+            return 2
+        return None
+    return None
+
+
 def terminal_winner(replay: dict[str, Any]) -> int | None:
-    for step in reversed(replay.get("steps") or []):
+    steps = replay.get("steps") or []
+    reward_winner = _terminal_winner_from_reward(steps)
+    if reward_winner is not None:
+        return reward_winner
+    for step in reversed(steps):
         if not isinstance(step, list):
             continue
         for view in step:
