@@ -56,16 +56,47 @@ Copy-Item .env.example .env
 下载最新日期的前 50 条 replay：
 
 ```powershell
-C:/Users/DHU_Z/AppData/Local/Programs/Python/Python312/python.exe scripts/download_ptcg_data.py --max-episodes 50
+python scripts/download_ptcg_data.py --max-episodes 50
 ```
 
-下载指定日期（例如 2026-07-05）的前 200 条 replay：
+下载指定日期的前 200 条 replay：
 
 ```powershell
-C:/Users/DHU_Z/AppData/Local/Programs/Python/Python312/python.exe scripts/download_ptcg_data.py --date 2026-07-05 --max-episodes 200
+python scripts/download_ptcg_data.py --date 2026-07-16 --max-episodes 200
 ```
 
-## 3) 目录结构
+## 3) DATA-001：验证 replay 动作对齐
+
+禁止直接假设同一 step 内的 `action` 和 `observation` 属于同一个决策。先比较
+`action[t] → observation[t-1]` 与 `action[t] → observation[t]`：
+
+```powershell
+python scripts/audit_replay_alignment.py --date 2026-07-16 --max-files 100 --strict
+```
+
+真实 replay 必须达到合法动作率至少 99.9%，否则不能进入训练。
+
+## 4) DATA-002：生成标准离线 RL 轨迹
+
+```powershell
+python scripts/convert_public_replays.py --date 2026-07-16 --alignment previous --policy-source winners
+```
+
+输出默认写入 `data/processed/public_replay_v1.jsonl.gz`。每条样本仅保存行动玩家当时
+可见的 observation、完整合法选项、已选动作、最终胜负、manifest 元数据和源文件哈希；
+默认移除 `observation.logs`。胜方轨迹具有 policy 权重，双方合法轨迹都可用于 value 学习。
+
+## 5) 诊断性 majority baseline
+
+```powershell
+python scripts/prepare_baseline_dataset.py --date 2026-07-16
+python scripts/train_majority_baseline.py
+```
+
+仓库中旧的 `models/majority_baseline.json` 来自未校验的同-step 标签，不能用于 Agent。
+预测脚本会拒绝该旧模型；重新训练后的 majority 表也仅用于数据诊断，未见状态必须回退到规则 Agent。
+
+## 6) 目录结构
 
 ```text
 pocketmon/
@@ -74,25 +105,7 @@ pocketmon/
     YYYY-MM-DD/
       manifest.csv
       <episode_id>.json
-  scripts/download_ptcg_data.py
-```
-
-## 4) 训练一个最小 baseline（多数投票）
-
-先把 replay 提取成训练表：
-
-```powershell
-C:/Users/DHU_Z/AppData/Local/Programs/Python/Python312/python.exe scripts/prepare_baseline_dataset.py --date 2026-07-15
-```
-
-训练 baseline 模型：
-
-```powershell
-C:/Users/DHU_Z/AppData/Local/Programs/Python/Python312/python.exe scripts/train_majority_baseline.py
-```
-
-对单条 `select` 做预测（推荐文件输入，避免 shell 转义问题）：
-
-```powershell
-C:/Users/DHU_Z/AppData/Local/Programs/Python/Python312/python.exe scripts/predict_with_majority_baseline.py --model models/majority_baseline.json --select-file data/processed/sample_select.json
+  data/processed/public_replay_v1.jsonl.gz
+  results/data001_replay_alignment.json
+  results/data002_public_replay_conversion.json
 ```
