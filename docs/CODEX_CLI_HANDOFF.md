@@ -50,6 +50,7 @@ The output is promoted from its temporary file only when all of the following ho
 - replay load errors are `0`;
 - conflicting duplicate episode IDs are `0`;
 - episodes missing a terminal winner are `0`;
+- terminal and top-level reward mismatches are `0`;
 - non-initial actions with unknown submission status are `0`;
 - with `--policy-source winners`, at least one winner policy row exists.
 
@@ -63,10 +64,10 @@ Exact duplicate episode IDs with the same SHA-256 are skipped. Top-level `observ
 - Shared replay logic: `rl/public_replay.py` implements temporal pairing, validation, terminal outcomes, policy/value weights, hashes, and log stripping.
 - The majority baseline now uses previous-step labels. Legacy unvalidated majority models and unseen signatures are rejected instead of using an unsafe global default.
 - RL proposal: `docs/PUBLIC_REPLAY_RL_PROPOSAL.md` recommends masked behavior cloning, then AWR or IQL with BC regularization, followed by recurrent PPO self-play and league evaluation.
-- Experiment log: `results/experiments.csv` marks DATA-001 and DATA-002 as `implemented_pending_server`.
-- Local verification: seven unit tests pass; compile checks pass; the synthetic DATA-002 conversion produced four schema-v2 rows, two policy rows, four value rows, zero invalid decisions, and a readable gzip output.
+- Experiment log: the first real DATA-001/002 pass is recorded; terminal-outcome hardening is marked `implemented_pending_server` until an independent snapshot passes.
+- Local verification: 13 unit tests and compile checks pass. Tests cover reward win/loss, draw, result fallback only when reward is absent, ambiguous reward with a populated result, top-level reward mismatch, and failure to promote mismatched output.
 
-Verified real-data history: the original 100-episode DATA-001 run failed (`previous=0.5040`, `same=0.3975`). Code review then found that the diagnostic and converter used `steps[t].status`, although Kaggle requests `steps[t].action` from the state at `t-1`. The fix is synthetic-tested but has not yet been rerun on the server; real corrected rates, DATA-002, throughput, memory, and downstream model quality remain unverified.
+Verified real-data history: the original 100-episode DATA-001 run failed (`previous=0.5040`, `same=0.3975`). After correcting the submission-status position, the same `2026-07-18` sample passed with `previous=1.0`, 16,111/16,111 valid decisions, 24 legal optional empty actions, and zero invalid decisions. DATA-002 then passed after resolving terminal winners from reward: 16,111 rows, 8,397 winner-policy rows, zero missing winners, and zero invalid decisions. Because all fixes were validated on the same sample, a different-date pass is still required.
 
 ## Immediate server task for local Codex CLI
 
@@ -83,16 +84,16 @@ python -m compileall -q rl scripts tests
 
 Do not continue if the current branch is `main` or if unrelated local changes would be overwritten. Preserve all user changes.
 
-Download a bounded real replay sample, identify the resulting date directory, and run DATA-001:
+Download a bounded real replay sample from a date other than `2026-07-18`, identify the resulting date directory, and run DATA-001. Prefer 100–500 episodes; do not reuse the prior files under a new directory name:
 
 ```bash
-python scripts/download_ptcg_data.py --max-episodes 100
+python scripts/download_ptcg_data.py --max-episodes 500
 find data/raw/replays -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort
 
 DATE=YYYY-MM-DD
 python scripts/diagnose_replay_action_positions.py \
   --date "$DATE" \
-  --max-files 100 \
+  --max-files 500 \
   --min-lag -1 \
   --max-lag 4 \
   --expected-lag 1 \
@@ -100,7 +101,7 @@ python scripts/diagnose_replay_action_positions.py \
 
 python scripts/audit_replay_alignment.py \
   --date "$DATE" \
-  --max-files 100 \
+  --max-files 500 \
   --min-valid-rate 0.999 \
   --strict \
   --output results/data001_replay_alignment.json
@@ -134,6 +135,8 @@ print({"readable_rows": rows, "bytes": path.stat().st_size})
 PY
 ```
 
+Before accepting DATA-002, require `episodes_missing_winner=0`, `episodes_unresolved_terminal_reward=0`, `reward_mismatches=0`, `unknown_submission_status_skipped=0`, `conflicting_episode_ids=0`, and `load_errors=0`. For current real replay schema, also expect `episodes_terminal_reward == episodes`, `top_level_reward_episodes == episodes`, and `episodes_result_fallback=0`; any deviation must be explained from representative raw episodes.
+
 Record the exact input date/snapshot, replay and row counts, per-lag and both alignment rates, empty-action traces, skip/status counts, invalid-reason counts, duplicate/conflict counts, missing-winner counts, policy/value row counts, elapsed time, peak memory, failures, commands, and commit SHA. Update:
 
 - `results/experiments.csv`;
@@ -143,6 +146,8 @@ Record the exact input date/snapshot, replay and row counts, per-lag and both al
 Clearly label facts, evidence-based inferences, unverified hypotheses, and the next experiment. Commit and push only to `exp/league-v1`; do not create a PR.
 
 ## Next modeling experiments after real DATA-001/002 pass
+
+Only start these experiments after the second independent real DATA-001/002 pass.
 
 1. **RL-BC-001: masked behavior cloning baseline.** Resolve selectable options semantically, encode categorical state, use a recurrent history encoder and variable-candidate pointer, and decode multi-select actions autoregressively with a stop action. Train policy loss on winner rows; train a value head on both sides. Always apply the legal mask and retain the rule fallback.
 2. **RL-OFFLINE-001: conservative replay RL.** Compare AWR and IQL against RL-BC-001 using the same train/validation episode split. Keep a BC regularizer and cap advantage weights. Do not use unconstrained DQN on this heterogeneous logged dataset.
@@ -154,4 +159,4 @@ League promotion remains separate from DATA-001/002: use 10 learners, 400 games 
 
 ## Definition of done for this handoff
 
-The local Codex CLI should finish by pushing a server-evidence commit on `exp/league-v1` that contains real DATA-001 and DATA-002 reports plus updated logs. If either gate fails, push the failure evidence and diagnosis instead of producing or training on a silently filtered dataset.
+The local Codex CLI should finish by pushing a different-date server-evidence commit on `exp/league-v1` that contains real DATA-001 and DATA-002 reports plus updated logs. If either gate fails, push the failure evidence and diagnosis instead of producing or training on a silently filtered dataset. Do not start RL-BC-001 in the same run unless both independent gates pass.
