@@ -1,0 +1,13 @@
+[
+  {"name": "official_random", "agent_dir": "agents/official_random", "source": "official sample"},
+  {"name": "alakazam_5th", "agent_dir": "tmp/benchmark_agents/alakazam", "source": "ryotasueyoshi/rule-based-not-psychic-alakazam-best-5th"},
+  {"name": "archaludon", "agent_dir": "tmp/benchmark_agents/archaludon", "source": "masamikobayashi/a-sample-archaludon-75-wr-vs-my-1300-starmie"},
+  {"name": "library_out_1208", "agent_dir": "tmp/benchmark_agents/library_out", "source": "soutasakurai/max-elo-1208-libraryout-w-crustle-great-tusk"},
+  {"name": "dragapult", "agent_dir": "tmp/benchmark_agents/dragapult", "source": "kiyotah/a-sample-rule-based-agent-dragapult-ex-deck"},
+  {"name": "iono", "agent_dir": "tmp/benchmark_agents/iono", "source": "kiyotah/a-sample-rule-based-agent-iono-s-deck"},
+  {"name": "lucario_sample", "agent_dir": "tmp/benchmark_agents/lucario_sample", "source": "kiyotah/a-sample-rule-based-agent-mega-lucario-ex-deck"},
+  {"name": "lucario_1084", "agent_dir": "tmp/benchmark_agents/lucario_original", "source": "makthanithin/pokemon-tcg-ai-battle-1084-5-baseline"},
+  {"name": "probabilistic", "agent_dir": "tmp/benchmark_agents/probabilistic", "source": "aristophanivan/improved-probabilistic-agent"},
+  {"name": "beam_search_940", "agent_dir": "tmp/benchmark_agents/beam_search_940", "source": "aristophanivan/multiply-agent-best-940-lb"},
+  {"name": "simple_matchup", "agent_dir": "tmp/benchmark_agents/simple_matchup", "source": "kojimar/simple-baseline-matchup-tests"}
+]

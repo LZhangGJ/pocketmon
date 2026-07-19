@@ -1,5 +1,35 @@
 # PTCG AI Battle Challenge Simulation 本地环境
 
+## 可提交的规则 Agent
+
+仓库包含一个牌组感知的 Mega Lucario 规则 Agent：`agents/lucario_rule/`。
+它根据场面、奖赏卡价值、能量进度和对局类型为合法选项打分，并保留 Hariyama
+作为对抗 Crustle wall 的非 ex 路线。
+
+取得官方 `cg` 目录后构建提交包：
+
+```powershell
+python scripts/build_submission.py --cg-dir path/to/sample_submission/cg
+```
+
+输出为 `dist/lucario_rule_submission.tar.gz`。
+
+使用官方引擎进行一场本地自对弈：
+
+```powershell
+python scripts/run_local_match.py --cg-dir path/to/sample_submission/cg
+```
+
+使用本地公开对手池进行批量评测（默认每个对手 20 局并交替先后手）：
+
+```powershell
+python scripts/run_opponent_pool.py --cg-dir path/to/sample_submission/cg --games 20
+```
+
+## RL warm start
+
+The initial RL pipeline records teacher/self-play trajectories and trains a variable-candidate actor-critic. See [`docs/rl-training.md`](docs/rl-training.md) for the design and commands. Training stays local; a model is only added to the submission after it beats the rule fallback across the opponent pool.
+
 已配置内容：
 - Python 3.12 环境
 - 依赖安装（`kaggle`、`pandas` 等）
