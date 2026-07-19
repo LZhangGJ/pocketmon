@@ -97,8 +97,14 @@ def main() -> None:
                     counters["rows"] += len(rows)
                     counters["policy_rows"] += sum(row["policy_weight"] > 0 for row in rows)
                     counters["value_rows"] += sum(row["value_weight"] > 0 for row in rows)
+                    counters["empty_action_rows"] += sum(row["action"] == [] for row in rows)
                     counters["invalid_decisions"] += episode_report["invalid_decisions"]
                     counters["setup_actions"] += episode_report["setup_actions"]
+                    counters["initial_actions_skipped"] += episode_report.get("initial_actions_skipped", 0)
+                    counters["non_acting_actions_skipped"] += episode_report.get("non_acting_actions_skipped", 0)
+                    counters["unknown_submission_status_skipped"] += episode_report.get(
+                        "unknown_submission_status_skipped", 0
+                    )
                     if episode_report["winner"] is None:
                         counters["episodes_missing_winner"] += 1
                         errors.append({"path": str(path), "episode_id": episode_id, "reason": "terminal winner was not found"})
@@ -118,6 +124,7 @@ def main() -> None:
             and counters["load_errors"] == 0
             and counters["conflicting_episode_ids"] == 0
             and counters["episodes_missing_winner"] == 0
+            and counters["unknown_submission_status_skipped"] == 0
             and (args.policy_source == "all" or counters["policy_rows"] > 0)
         )
         report = {
