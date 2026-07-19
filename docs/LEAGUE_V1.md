@@ -5,7 +5,7 @@ League-v1 starts ten independently seeded learners against a versioned pool of s
 ## Daily opponent refresh
 
 1. Export a curated JSON list of current high-scoring notebook slugs (`name`, `source`). Leaderboard association must be reviewed because Kaggle's notebook listing is not a reliable score oracle.
-2. On the training server run `python scripts/refresh_opponent_pool.py --candidates configs/public_candidates.json`.
+2. On the training server run `python scripts/refresh_opponent_pool.py --candidates configs/public_candidates.json`. It downloads published kernel outputs, not notebook source, and accepts exactly one directory containing both agent files.
 3. Quarantined downloads must contain `main.py` and `deck.csv`, compile, satisfy the size guard, then pass smoke games before `current.json` is advanced manually.
 4. Never overwrite a dated snapshot. Record the snapshot manifest and hashes with every experiment.
 
