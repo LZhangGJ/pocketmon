@@ -3,6 +3,7 @@ from __future__ import annotations
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import torch
 
@@ -19,6 +20,8 @@ from rl.bc import (
 )
 from rl.features import ACTION_DIM, STATE_DIM
 from rl.model import MaskedPointerActorCritic, legal_choice_mask
+from scripts.evaluate_rl_checkpoint import validate_input_sha
+from scripts.train_rl_policy import assert_formal_worktree_clean, new_training_state, restore_training_state, update_training_state
 
 
 def compact(action: list[int], min_count: int, max_count: int, policy_weight: float = 1.0, episode: str = "1") -> dict:
@@ -125,6 +128,46 @@ class RLBehaviorCloningTests(unittest.TestCase):
         after = restored(states, options)
         self.assertTrue(torch.equal(before[0], after[0]))
         self.assertTrue(torch.equal(before[1], after[1]))
+
+    def test_resume_restores_best_history_and_early_stopping_state(self) -> None:
+        state = new_training_state()
+        state.update({"best_loss": 0.4, "best_epoch": 3, "stale": 2, "completed_epochs": 5, "optimizer_steps": 77, "best_checkpoint_path": "best.pt"})
+        state["history"] = [{"epoch": 1}, {"epoch": 2}, {"epoch": 3}, {"epoch": 4}, {"epoch": 5}]
+        restored = restore_training_state({"training_state": state})
+        self.assertEqual(restored, state)
+        restored["history"].append({"epoch": 6})
+        self.assertEqual(len(state["history"]), 5)
+
+    def test_worse_resumed_epoch_does_not_replace_best(self) -> None:
+        state = new_training_state()
+        state.update({"best_loss": 0.4, "best_epoch": 2, "completed_epochs": 2, "best_checkpoint_path": "original_best.pt"})
+        record = {"epoch": 3, "validation": {"loss": 0.6}}
+        improved = update_training_state(state, record, full_epoch=True, optimizer_steps=10, best_path=Path("new_best.pt"))
+        self.assertFalse(improved)
+        self.assertEqual(state["best_checkpoint_path"], "original_best.pt")
+        self.assertEqual(state["best_loss"], 0.4)
+        self.assertEqual(state["stale"], 1)
+
+    def test_smoke_batch_does_not_complete_epoch(self) -> None:
+        state = new_training_state()
+        record = {"epoch": 1, "full_epoch": False, "validation": {"loss": 1.0}}
+        improved = update_training_state(state, record, full_epoch=False, optimizer_steps=1, best_path=Path("best.pt"))
+        self.assertFalse(improved)
+        self.assertEqual(state["completed_epochs"], 0)
+        self.assertEqual(state["history"], [])
+        self.assertEqual(len(state["partial_history"]), 1)
+        self.assertEqual(state["optimizer_steps"], 1)
+
+    def test_evaluation_input_sha_mismatch_fails_by_default(self) -> None:
+        with self.assertRaises(ValueError):
+            validate_input_sha({"input_sha256": "expected"}, "actual")
+        validate_input_sha({"input_sha256": "expected"}, "actual", allow_mismatch=True)
+
+    def test_dirty_worktree_blocks_formal_but_not_smoke(self) -> None:
+        with patch("scripts.train_rl_policy.git_status_porcelain", return_value=" M results/file.json\n"):
+            with self.assertRaises(RuntimeError):
+                assert_formal_worktree_clean(0)
+            self.assertIn("results/file.json", assert_formal_worktree_clean(1))
 
 
 if __name__ == "__main__":
