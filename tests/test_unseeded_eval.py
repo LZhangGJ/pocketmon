@@ -4,6 +4,8 @@ import ast
 import socket
 import sys
 import tempfile
+import json
+import os
 import types
 import unittest
 from pathlib import Path
@@ -16,6 +18,7 @@ from rl.unseeded_eval import (
     install_agent_cg_alias,
     outcome_from_rewards,
     require_sha256,
+    run_game_subprocess,
     sha256_file,
     summarize_stage_a,
 )
@@ -121,6 +124,46 @@ class UnseededEvaluationTests(unittest.TestCase):
         self.assertEqual(summary["invalid_actions"], 1)
         self.assertEqual(summary["exceptions"], 0)
         self.assertFalse(summary["gate_passed"])
+
+    @unittest.skipUnless(os.name == "posix", "POSIX signal return codes are Linux-specific")
+    def test_subprocess_records_signal_without_retry(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            result = Path(directory) / "missing.json"
+            row = run_game_subprocess(
+                [sys.executable, "-c", "import os, signal; os.kill(os.getpid(), signal.SIGTERM)"],
+                result,
+                5,
+            )
+        self.assertTrue(row["process_crash"])
+        self.assertEqual(row["child_signal"], 15)
+        self.assertEqual(row["retry_count"], 0)
+
+    def test_subprocess_hard_timeout_retains_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            row = run_game_subprocess(
+                [sys.executable, "-c", "import time; time.sleep(30)"],
+                Path(directory) / "missing.json",
+                0.05,
+            )
+        self.assertTrue(row["hard_timeout"])
+        self.assertFalse(row["normal_terminal"])
+        self.assertEqual(row["retry_count"], 0)
+
+    def test_subprocess_preserves_partial_child_evidence_on_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            result = Path(directory) / "partial.json"
+            code = (
+                "import json,sys; "
+                f"open({str(result)!r},'w').write(json.dumps({{'game_id': 7, 'phase': 'loaded'}})); "
+                "sys.exit(3)"
+            )
+            row = run_game_subprocess([sys.executable, "-c", code], result, 5)
+        self.assertEqual(row["game_id"], 7)
+        self.assertEqual(row["phase"], "loaded")
+        self.assertEqual(row["child_exit_code"], 3)
+        self.assertFalse(row["process_crash"])
+        self.assertTrue(row["abnormal_exit"])
+        self.assertEqual(row["retry_count"], 0)
 
 
 if __name__ == "__main__":

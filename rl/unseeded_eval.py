@@ -5,6 +5,7 @@ import importlib.abc
 import importlib.util
 import math
 import socket
+import subprocess
 import sys
 import types
 from pathlib import Path
@@ -130,6 +131,8 @@ def outcome_from_rewards(rewards: list[int | float]) -> str | None:
 def summarize_stage_a(records: list[dict[str, Any]], expected_games: int, network_attempts: int) -> dict[str, Any]:
     normal = sum(bool(row.get("normal_terminal")) for row in records)
     crashes = sum(bool(row.get("process_crash")) for row in records)
+    hard_timeouts = sum(bool(row.get("hard_timeout")) for row in records)
+    abnormal_exits = sum(bool(row.get("abnormal_exit")) for row in records)
     timeouts = sum("TIMEOUT" in row.get("statuses", []) for row in records)
     invalid = sum("INVALID" in row.get("statuses", []) for row in records)
     agent_errors = sum("ERROR" in row.get("statuses", []) for row in records)
@@ -139,6 +142,8 @@ def summarize_stage_a(records: list[dict[str, Any]], expected_games: int, networ
         "game_count_complete": len(records) == expected_games,
         "normal_terminals": normal == expected_games,
         "crash_zero": crashes == 0,
+        "hard_timeout_zero": hard_timeouts == 0,
+        "abnormal_exit_zero": abnormal_exits == 0,
         "timeout_zero": timeouts == 0,
         "invalid_action_zero": invalid == 0,
         "agent_error_zero": agent_errors == 0,
@@ -150,6 +155,8 @@ def summarize_stage_a(records: list[dict[str, Any]], expected_games: int, networ
         "games": len(records),
         "normal_terminals": normal,
         "crashes": crashes,
+        "hard_timeouts": hard_timeouts,
+        "abnormal_exits": abnormal_exits,
         "timeouts": timeouts,
         "invalid_actions": invalid,
         "agent_errors": agent_errors,
@@ -170,3 +177,53 @@ def loaded_native_libraries() -> list[Path]:
         if candidate.startswith("/") and Path(candidate).name == "libcg.so":
             paths.add(Path(candidate).resolve())
     return sorted(paths)
+
+
+def run_game_subprocess(
+    command: list[str], result_path: Path, hard_timeout_seconds: float
+) -> dict[str, Any]:
+    """Run exactly one game and retain its process-level outcome without retrying."""
+
+    started = __import__("time").perf_counter()
+    process = subprocess.Popen(command)
+    timed_out = False
+    try:
+        exit_code = process.wait(timeout=hard_timeout_seconds)
+    except subprocess.TimeoutExpired:
+        timed_out = True
+        process.kill()
+        exit_code = process.wait()
+    elapsed = __import__("time").perf_counter() - started
+    signal_number = -exit_code if exit_code < 0 else None
+    payload: dict[str, Any] = {}
+    if result_path.is_file():
+        try:
+            import json
+
+            value = json.loads(result_path.read_text(encoding="utf-8"))
+            if isinstance(value, dict):
+                payload = value
+        except Exception as exc:
+            payload = {"exception": f"invalid child evidence: {type(exc).__name__}: {exc}"}
+    elif not timed_out and exit_code == 0:
+        payload = {"exception": "child exited successfully without evidence"}
+    payload.update({
+        "child_command": command,
+        "child_exit_code": exit_code,
+        "child_signal": signal_number,
+        "hard_timeout": timed_out,
+        "process_crash": signal_number is not None,
+        "abnormal_exit": exit_code != 0 and not timed_out,
+        "parent_elapsed_seconds": elapsed,
+        "child_evidence_present": result_path.is_file(),
+        "retry_count": 0,
+    })
+    if timed_out:
+        payload["returned_normally"] = False
+        payload["normal_terminal"] = False
+        payload["exception"] = f"hard timeout after {hard_timeout_seconds} seconds"
+    elif exit_code != 0:
+        payload["returned_normally"] = False
+        payload["normal_terminal"] = False
+        payload.setdefault("exception", f"child process exited with code {exit_code}")
+    return payload
