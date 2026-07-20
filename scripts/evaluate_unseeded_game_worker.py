@@ -29,7 +29,27 @@ def load_agent(agent_dir: Path, name: str):
             return module.agent(observation)
         finally:
             os.chdir(previous)
+    wrapped.module = module
     return wrapped
+
+
+def diagnostics(agent) -> dict:
+    callback = getattr(agent.module, "diagnostics", None)
+    if not callable(callback):
+        return {}
+    try:
+        value = callback()
+        return value if isinstance(value, dict) else {"invalid_diagnostics": True}
+    except Exception as exc:
+        return {"diagnostics_error": f"{type(exc).__name__}: {exc}"}
+
+
+def current_turn_and_result(final_states) -> tuple[int | None, int | None]:
+    for state in reversed(final_states):
+        current = (state.observation or {}).get("current")
+        if isinstance(current, dict):
+            return current.get("turn"), current.get("result")
+    return None, None
 
 
 def write_result(path: Path, row: dict) -> None:
@@ -44,7 +64,9 @@ def main() -> int:
     spec = json.loads(args.spec.read_text(encoding="utf-8"))
     row = {key: spec[key] for key in ("game_id", "schedule_position", "seat0", "seat1")}
     row.update({"phase": "starting", "returned_normally": False, "normal_terminal": False,
-                "process_crash": False, "exception": None, "network_attempts": 0})
+                "process_crash": False, "exception": None, "network_attempts": 0,
+                "turn": None, "stale_current_result": None, "agent_diagnostics": [],
+                "agent_module_paths": [], "hashes": spec["hashes"]})
     write_result(args.result, row)
     started = time.perf_counter()
     try:
@@ -73,9 +95,11 @@ def main() -> int:
         second = load_agent(ROOT / "agents/official_random", f"official_random_second_{spec['game_id']}")
         by_name = {"official_random_first": first, "official_random_second": second}
         agents = [by_name[spec["seat0"]], by_name[spec["seat1"]]]
+        agent_module_paths = [str(Path(agent.module.__file__).resolve()) for agent in agents]
         blocker = NetworkBlocker()
         row.update({"phase": "runtime_loaded", "module_paths": actual, "mapped_native_libraries": mapped_hashes,
-                    "native_sha256": native_hash, "native_hash_verified": True})
+                    "native_sha256": native_hash, "native_hash_verified": True,
+                    "agent_module_paths": agent_module_paths})
         write_result(args.result, row)
         with blocker:
             env = make("cabt", configuration={"actTimeout": spec["act_timeout"],
@@ -85,11 +109,14 @@ def main() -> int:
         statuses = [state.status for state in final]
         rewards = [state.reward for state in final]
         normal = approved_terminal(statuses, rewards, True)
+        turn, stale_result = current_turn_and_result(final)
         row.update({"phase": "finished", "returned_normally": True, "normal_terminal": normal,
             "statuses": statuses, "rewards": rewards, "outcome": outcome_from_rewards(rewards),
             "terminal_class": "status_reward_terminal" if normal else None,
             "step_count": len(env.steps), "decision_count": max(0, len(env.steps) - 2),
-            "network_attempts": blocker.attempts})
+            "network_attempts": blocker.attempts, "turn": turn,
+            "stale_current_result": stale_result,
+            "agent_diagnostics": [diagnostics(agent) for agent in agents]})
     except Exception as exc:
         row["exception"] = f"{type(exc).__name__}: {exc}"
     row["elapsed_seconds"] = time.perf_counter() - started

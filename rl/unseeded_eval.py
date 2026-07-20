@@ -185,14 +185,16 @@ def run_game_subprocess(
     """Run exactly one game and retain its process-level outcome without retrying."""
 
     started = __import__("time").perf_counter()
-    process = subprocess.Popen(command)
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     timed_out = False
     try:
-        exit_code = process.wait(timeout=hard_timeout_seconds)
+        stdout, stderr = process.communicate(timeout=hard_timeout_seconds)
+        exit_code = process.returncode
     except subprocess.TimeoutExpired:
         timed_out = True
         process.kill()
-        exit_code = process.wait()
+        stdout, stderr = process.communicate()
+        exit_code = process.returncode
     elapsed = __import__("time").perf_counter() - started
     signal_number = -exit_code if exit_code < 0 else None
     payload: dict[str, Any] = {}
@@ -207,13 +209,24 @@ def run_game_subprocess(
             payload = {"exception": f"invalid child evidence: {type(exc).__name__}: {exc}"}
     elif not timed_out and exit_code == 0:
         payload = {"exception": "child exited successfully without evidence"}
+    if timed_out:
+        process_outcome = "hard_timeout"
+    elif signal_number is not None:
+        process_outcome = "signal_crash"
+    elif exit_code != 0:
+        process_outcome = "abnormal_exit"
+    else:
+        process_outcome = "normal_exit"
     payload.update({
         "child_command": command,
         "child_exit_code": exit_code,
         "child_signal": signal_number,
-        "hard_timeout": timed_out,
-        "process_crash": signal_number is not None,
-        "abnormal_exit": exit_code != 0 and not timed_out,
+        "child_stdout": stdout.decode("utf-8", errors="replace"),
+        "child_stderr": stderr.decode("utf-8", errors="replace"),
+        "process_outcome": process_outcome,
+        "hard_timeout": process_outcome == "hard_timeout",
+        "process_crash": process_outcome == "signal_crash",
+        "abnormal_exit": process_outcome == "abnormal_exit",
         "parent_elapsed_seconds": elapsed,
         "child_evidence_present": result_path.is_file(),
         "retry_count": 0,

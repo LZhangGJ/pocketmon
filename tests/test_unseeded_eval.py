@@ -52,6 +52,12 @@ class UnseededEvaluationTests(unittest.TestCase):
         invalid = sorted({node.id for node in ast.walk(tree) if isinstance(node, ast.Name) and node.id in {"true", "false", "null"}})
         self.assertEqual(invalid, [])
 
+    def test_worker_retains_required_per_game_evidence_fields(self) -> None:
+        worker = Path(__file__).resolve().parents[1] / "scripts/evaluate_unseeded_game_worker.py"
+        source = worker.read_text(encoding="utf-8")
+        for field in ("turn", "stale_current_result", "agent_diagnostics", "agent_module_paths", "hashes"):
+            self.assertIn(f'"{field}"', source)
+
     def test_sha_verification_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "artifact"
@@ -136,6 +142,9 @@ class UnseededEvaluationTests(unittest.TestCase):
             )
         self.assertTrue(row["process_crash"])
         self.assertEqual(row["child_signal"], 15)
+        self.assertEqual(row["process_outcome"], "signal_crash")
+        self.assertFalse(row["abnormal_exit"])
+        self.assertFalse(row["hard_timeout"])
         self.assertEqual(row["retry_count"], 0)
 
     def test_subprocess_hard_timeout_retains_failure(self) -> None:
@@ -146,6 +155,9 @@ class UnseededEvaluationTests(unittest.TestCase):
                 0.05,
             )
         self.assertTrue(row["hard_timeout"])
+        self.assertEqual(row["process_outcome"], "hard_timeout")
+        self.assertFalse(row["process_crash"])
+        self.assertFalse(row["abnormal_exit"])
         self.assertFalse(row["normal_terminal"])
         self.assertEqual(row["retry_count"], 0)
 
@@ -153,7 +165,7 @@ class UnseededEvaluationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             result = Path(directory) / "partial.json"
             code = (
-                "import json,sys; "
+                "import json,sys; print('partial-out'); print('partial-err', file=sys.stderr); "
                 f"open({str(result)!r},'w').write(json.dumps({{'game_id': 7, 'phase': 'loaded'}})); "
                 "sys.exit(3)"
             )
@@ -163,6 +175,9 @@ class UnseededEvaluationTests(unittest.TestCase):
         self.assertEqual(row["child_exit_code"], 3)
         self.assertFalse(row["process_crash"])
         self.assertTrue(row["abnormal_exit"])
+        self.assertEqual(row["process_outcome"], "abnormal_exit")
+        self.assertIn("partial-out", row["child_stdout"])
+        self.assertIn("partial-err", row["child_stderr"])
         self.assertEqual(row["retry_count"], 0)
 
 
