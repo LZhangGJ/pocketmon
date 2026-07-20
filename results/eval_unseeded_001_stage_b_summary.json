@@ -1,0 +1,65 @@
+{
+  "candidate_diagnostics": {
+    "emergency_legal_actions": 0,
+    "fallback_actions": 0,
+    "illegal_fallback_actions": 0,
+    "illegal_model_actions": 0,
+    "inference_errors": 0,
+    "load_errors": 0,
+    "model_actions": 0
+  },
+  "code_commit": "d0db91efc616bdca3c0003339527d03b3eadcbab",
+  "decision_latency_ms": {
+    "max": null,
+    "p50": null,
+    "p95": null
+  },
+  "elapsed_seconds": 12.069482367485762,
+  "experiment_id": "EVAL-UNSEEDED-001",
+  "games": 4,
+  "gate_passed": false,
+  "gates": {
+    "abnormal_exit_zero": false,
+    "checkpoint_hash_matches": false,
+    "crash_zero": true,
+    "emergency_legal_action_zero": true,
+    "exception_zero": false,
+    "framework_failure_zero": true,
+    "game_count_complete": true,
+    "hard_timeout_zero": true,
+    "illegal_fallback_action_zero": true,
+    "illegal_model_action_zero": true,
+    "inference_error_zero": true,
+    "model_load_error_zero": true,
+    "network_attempt_zero": true,
+    "no_games_dropped": true,
+    "normal_terminals": false
+  },
+  "hashes": {
+    "archive_api": "593f1298e52a635f90f8f505a52113e9af114f444c293404e37906f18ee06ced",
+    "archive_game": "3bd3d4f4a369a11e6d2f5da9094cf15ebc410a2221835e6417b7cff4883f1fc2",
+    "archive_native": "feafd4046b2f688bdb33a4972c139b78e13e243ab5707ece52c43cf39a34b887",
+    "archive_sim": "1555f57f5d22bf4c09d70e0e667a916e575e68c9dd1de9ead34ba5e7e4968655",
+    "archive_zip": "09ad210b15476f5064c1509addb32a459c777d92d4e4e7db470f9d0c039c3282",
+    "checkpoint": "2faac94de9e937dee77cd6d5d44036d7f45bb2dc4cc6491c1c97c0091f4fb216",
+    "runtime_bundled_native": "7acbfc7bc61d4f8233515c63debcfa454b8f804f138a6c395c599decc3dd17d0",
+    "runtime_wheel": "359226741a04fbe1dbbc10121aef140fd96ec4fa31bace2037d05e7ef2bbf4e8"
+  },
+  "model_decisions": 0,
+  "model_games": 4,
+  "normal_terminals": 0,
+  "os_network_isolation": {
+    "prefix": [
+      "/usr/bin/bwrap",
+      "--unshare-net",
+      "--bind",
+      "/",
+      "/",
+      "--"
+    ],
+    "python_network_blocker_is_secondary": true
+  },
+  "peak_rss_kb": 510136,
+  "peak_vram_mb": 0,
+  "stage": "B"
+}

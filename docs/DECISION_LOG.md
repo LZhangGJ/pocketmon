@@ -115,3 +115,13 @@
 - **Decision:** Engine validation fails the requested reproducibility and interface gates. Stop before checkpoint integration and model games; do not reinterpret the 8 engine-validation games as RL-BC-002 gameplay evidence. Require a pinned official runtime, an official seedable interface (or explicitly approved unseeded protocol), and a termination-reason definition before continuing.
 - No training, model changes, AWR, IQL, PPO, self-play, or league work was performed.
 - Final repository verification passed 62 unit tests and `python -m compileall -q rl scripts tests`. No official-game runner was added after the gate failed, so no unavailable gameplay behavior was represented as tested.
+# 2026-07-21 - EVAL-UNSEEDED-001 isolated runtime validation
+
+- Verified fact: implementation commits `1853cd8`, `1c03932`, and `d0db91e` run every scheduled game in its own child process. The parent records normal/abnormal exit, exit code, signal, hard timeout, stdout/stderr, partial child evidence, and `retry_count=0`.
+- Verified fact: formal games used `/usr/bin/bwrap --unshare-net --bind / / --` as OS-level network isolation; the Python socket blocker remained a second layer. A preflight namespace check confirmed no `eth0`.
+- Verified fact: Stage A ran once from clean commit `1c03932` and passed 20/20 official-random games. Native hash matched `feafd404...`; crash, abnormal exit, hard/framework timeout, invalid, agent error, exception, and network attempt were all zero. No game was dropped or rerun. Internal elapsed was 54.67s; external wall time 56.61s; peak RSS 128544 KB; VRAM 0.
+- Decision: Stage A authorized the four-game Stage B operational smoke. Stage B then ran exactly games 21-24 once from clean commit `d0db91e`.
+- Verified failure: all four Stage B children exited with code 2 before model load, with `RuntimeError: Unable to open /dev/urandom`. Signals, hard timeouts, and network attempts were zero; every record has `retry_count=0`. Consequently normal terminals and model decisions were both zero, and Stage B failed.
+- Experiment-supported inference: the failure is in the isolated model-process startup path, not evidence about checkpoint action quality or gameplay strength.
+- Unverified hypothesis: Torch initialization needs a different explicit `/dev` mapping inside bubblewrap while preserving `--unshare-net`. Do not rerun these four game IDs; any fix requires a separately authorized smoke with new IDs.
+- Decision: do not merge or start the 40-game pilot, AWR, IQL, PPO, self-play, or league work.
