@@ -107,6 +107,26 @@ def alternating_schedule(games: int) -> list[dict[str, Any]]:
     return schedule
 
 
+def stage_b_schedule() -> list[dict[str, Any]]:
+    matchups = [
+        ("rl_bc_002_a", "official_random"),
+        ("official_random", "rl_bc_002_a"),
+        ("rl_bc_002_a", "lucario_rule"),
+        ("lucario_rule", "rl_bc_002_a"),
+    ]
+    return [{"game_id": 21 + i, "schedule_position": i, "seat0": a, "seat1": b}
+            for i, (a, b) in enumerate(matchups)]
+
+
+def percentile(values: list[float], q: float) -> float | None:
+    if not values:
+        return None
+    ordered = sorted(values)
+    index = (len(ordered) - 1) * q
+    low, high = math.floor(index), math.ceil(index)
+    return ordered[low] if low == high else ordered[low] + (ordered[high] - ordered[low]) * (index - low)
+
+
 def approved_terminal(statuses: list[Any], rewards: list[Any], returned_normally: bool) -> bool:
     if not returned_normally or statuses != ["DONE", "DONE"]:
         return False
@@ -152,21 +172,42 @@ def summarize_stage_a(records: list[dict[str, Any]], expected_games: int, networ
         "no_games_dropped": [row.get("game_id") for row in records] == list(range(1, expected_games + 1)),
     }
     return {
-        "games": len(records),
-        "normal_terminals": normal,
-        "crashes": crashes,
-        "hard_timeouts": hard_timeouts,
-        "abnormal_exits": abnormal_exits,
-        "timeouts": timeouts,
-        "invalid_actions": invalid,
-        "agent_errors": agent_errors,
-        "exceptions": exceptions,
-        "network_attempts": network_attempts,
-        "gates": gates,
-        "gate_passed": all(gates.values()),
+        "games": len(records), "normal_terminals": normal, "crashes": crashes,
+        "hard_timeouts": hard_timeouts, "abnormal_exits": abnormal_exits,
+        "timeouts": timeouts, "invalid_actions": invalid, "agent_errors": agent_errors,
+        "exceptions": exceptions, "network_attempts": network_attempts,
+        "gates": gates, "gate_passed": all(gates.values()),
     }
 
 
+def summarize_stage_b(records: list[dict[str, Any]]) -> dict[str, Any]:
+    diagnostics_keys = ("model_actions", "fallback_actions", "load_errors", "inference_errors",
+                        "illegal_model_actions", "illegal_fallback_actions", "emergency_legal_actions")
+    totals = {key: sum(int(row.get("candidate_diagnostics", {}).get(key, 0)) for row in records)
+              for key in diagnostics_keys}
+    latencies = [float(value) for row in records for value in row.get("model_decision_latency_ms", [])]
+    gates = {
+        "game_count_complete": len(records) == 4,
+        "normal_terminals": sum(bool(row.get("normal_terminal")) for row in records) == 4,
+        "checkpoint_hash_matches": all(row.get("checkpoint_hash_verified") is True for row in records),
+        "model_load_error_zero": totals["load_errors"] == 0,
+        "inference_error_zero": totals["inference_errors"] == 0,
+        "illegal_model_action_zero": totals["illegal_model_actions"] == 0,
+        "illegal_fallback_action_zero": totals["illegal_fallback_actions"] == 0,
+        "emergency_legal_action_zero": totals["emergency_legal_actions"] == 0,
+        "crash_zero": not any(row.get("process_crash") for row in records),
+        "hard_timeout_zero": not any(row.get("hard_timeout") for row in records),
+        "abnormal_exit_zero": not any(row.get("abnormal_exit") for row in records),
+        "framework_failure_zero": not any(set(row.get("statuses", [])) & {"TIMEOUT", "INVALID", "ERROR"} for row in records),
+        "exception_zero": not any(row.get("exception") for row in records),
+        "network_attempt_zero": sum(int(row.get("network_attempts", 0)) for row in records) == 0,
+        "no_games_dropped": [row.get("game_id") for row in records] == [21, 22, 23, 24],
+    }
+    return {"games": len(records), "normal_terminals": sum(bool(r.get("normal_terminal")) for r in records),
+            "candidate_diagnostics": totals, "model_decisions": len(latencies),
+            "decision_latency_ms": {"p50": percentile(latencies, .5), "p95": percentile(latencies, .95),
+                                    "max": max(latencies) if latencies else None},
+            "gates": gates, "gate_passed": all(gates.values())}
 def loaded_native_libraries() -> list[Path]:
     maps = Path("/proc/self/maps")
     if not maps.is_file():

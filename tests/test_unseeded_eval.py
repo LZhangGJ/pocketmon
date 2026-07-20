@@ -21,6 +21,8 @@ from rl.unseeded_eval import (
     run_game_subprocess,
     sha256_file,
     summarize_stage_a,
+    stage_b_schedule,
+    summarize_stage_b,
 )
 
 
@@ -130,6 +132,20 @@ class UnseededEvaluationTests(unittest.TestCase):
         self.assertEqual(summary["invalid_actions"], 1)
         self.assertEqual(summary["exceptions"], 0)
         self.assertFalse(summary["gate_passed"])
+
+    def test_stage_b_schedule_and_gate(self) -> None:
+        schedule = stage_b_schedule()
+        self.assertEqual([(r["seat0"], r["seat1"]) for r in schedule], [
+            ("rl_bc_002_a", "official_random"), ("official_random", "rl_bc_002_a"),
+            ("rl_bc_002_a", "lucario_rule"), ("lucario_rule", "rl_bc_002_a")])
+        rows=[]
+        for item in schedule:
+            rows.append({**item,"normal_terminal":True,"checkpoint_hash_verified":True,
+                "statuses":["DONE","DONE"],"candidate_diagnostics":{"model_actions":2},
+                "model_decision_latency_ms":[1.0],"retry_count":0})
+        self.assertTrue(summarize_stage_b(rows)["gate_passed"])
+        rows[0]["process_crash"] = True
+        self.assertFalse(summarize_stage_b(rows)["gate_passed"])
 
     @unittest.skipUnless(os.name == "posix", "POSIX signal return codes are Linux-specific")
     def test_subprocess_records_signal_without_retry(self) -> None:

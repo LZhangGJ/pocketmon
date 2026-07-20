@@ -6,6 +6,7 @@ import json
 import os
 import sys
 import time
+import resource
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,6 +43,20 @@ def diagnostics(agent) -> dict:
         return value if isinstance(value, dict) else {"invalid_diagnostics": True}
     except Exception as exc:
         return {"diagnostics_error": f"{type(exc).__name__}: {exc}"}
+
+
+class TimedCandidate:
+    def __init__(self, agent) -> None:
+        self.agent = agent
+        self.module = agent.module
+        self.latencies_ms: list[float] = []
+
+    def __call__(self, observation):
+        started = time.perf_counter()
+        action = self.agent(observation)
+        if isinstance(observation.get("select"), dict):
+            self.latencies_ms.append((time.perf_counter() - started) * 1000)
+        return action
 
 
 def current_turn_and_result(final_states) -> tuple[int | None, int | None]:
@@ -91,9 +106,17 @@ def main() -> int:
         if actual != expected or not mapped:
             raise RuntimeError(f"official runtime resolution mismatch: {actual}")
         install_agent_cg_alias(archive_cg, loaded_sim)
-        first = load_agent(ROOT / "agents/official_random", f"official_random_first_{spec['game_id']}")
-        second = load_agent(ROOT / "agents/official_random", f"official_random_second_{spec['game_id']}")
-        by_name = {"official_random_first": first, "official_random_second": second}
+        if spec.get("stage") == "B":
+            os.environ["POCKETMON_RL_CHECKPOINT"] = spec["checkpoint"]
+            os.environ["POCKETMON_RL_DEVICE"] = "cpu"
+            candidate = TimedCandidate(load_agent(ROOT / "agents/rl_bc_adapter", f"candidate_{spec['game_id']}"))
+            by_name = {"rl_bc_002_a": candidate,
+                "official_random": load_agent(ROOT / "agents/official_random", f"random_{spec['game_id']}"),
+                "lucario_rule": load_agent(ROOT / "agents/lucario_rule", f"lucario_{spec['game_id']}")}
+        else:
+            first = load_agent(ROOT / "agents/official_random", f"official_random_first_{spec['game_id']}")
+            second = load_agent(ROOT / "agents/official_random", f"official_random_second_{spec['game_id']}")
+            by_name = {"official_random_first": first, "official_random_second": second}
         agents = [by_name[spec["seat0"]], by_name[spec["seat1"]]]
         agent_module_paths = [str(Path(agent.module.__file__).resolve()) for agent in agents]
         blocker = NetworkBlocker()
@@ -117,9 +140,15 @@ def main() -> int:
             "network_attempts": blocker.attempts, "turn": turn,
             "stale_current_result": stale_result,
             "agent_diagnostics": [diagnostics(agent) for agent in agents]})
+        if spec.get("stage") == "B":
+            row.update({"checkpoint_sha256": spec["hashes"]["checkpoint"],
+                "checkpoint_hash_verified": True, "candidate_diagnostics": diagnostics(candidate),
+                "model_decision_latency_ms": candidate.latencies_ms})
     except Exception as exc:
         row["exception"] = f"{type(exc).__name__}: {exc}"
     row["elapsed_seconds"] = time.perf_counter() - started
+    row["peak_rss_kb"] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    row["peak_vram_mb"] = 0
     write_result(args.result, row)
     return 0 if row.get("normal_terminal") else 2
 
