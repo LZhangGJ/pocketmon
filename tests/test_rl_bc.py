@@ -21,7 +21,18 @@ from rl.bc import (
 from rl.features import ACTION_DIM, STATE_DIM
 from rl.model import MaskedPointerActorCritic, legal_choice_mask
 from scripts.evaluate_rl_checkpoint import validate_input_sha
-from scripts.train_rl_policy import assert_formal_worktree_clean, new_training_state, restore_training_state, update_training_state
+from scripts.train_rl_policy import (
+    ARCHITECTURE,
+    achieved_seeds_for_fingerprint,
+    actual_fingerprint_payload,
+    assert_formal_worktree_clean,
+    current_config_matches,
+    experiment_fingerprint,
+    new_training_state,
+    restore_training_state,
+    update_training_state,
+    validate_resume_compatibility,
+)
 
 
 def compact(action: list[int], min_count: int, max_count: int, policy_weight: float = 1.0, episode: str = "1") -> dict:
@@ -168,6 +179,62 @@ class RLBehaviorCloningTests(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 assert_formal_worktree_clean(0)
             self.assertIn("results/file.json", assert_formal_worktree_clean(1))
+
+    @staticmethod
+    def planned_config() -> dict:
+        return {
+            "input_sha256": "input-sha",
+            "architecture": ARCHITECTURE,
+            "split": {"seed": 20260720, "validation_fraction": 0.2},
+            "training": {
+                "formal_seeds": [17, 42, 20260720], "epochs": 30, "batch_size": 256,
+                "learning_rate": 3e-4, "hidden_dim": 128, "early_stopping_patience": 5,
+                "value_loss_weight": 0.25, "gradient_clip_norm": 1.0,
+            },
+        }
+
+    def test_full_planned_config_match_and_batch_mismatch(self) -> None:
+        actual = actual_fingerprint_payload(
+            code_commit="code-a", input_sha256="input-sha", split_seed=20260720,
+            validation_fraction=0.2, epochs=30, batch_size=256, learning_rate=3e-4,
+            hidden_dim=128, patience=5, value_loss_weight=0.25, gradient_clip_norm=1.0,
+        )
+        self.assertEqual(current_config_matches(self.planned_config(), actual), (True, []))
+        actual["training"]["batch_size"] = 512
+        matched, mismatches = current_config_matches(self.planned_config(), actual)
+        self.assertFalse(matched)
+        self.assertEqual(mismatches, ["batch_size"])
+
+    def test_cross_commit_or_config_seeds_are_not_merged(self) -> None:
+        base = actual_fingerprint_payload(
+            code_commit="code-a", input_sha256="input-sha", split_seed=20260720,
+            validation_fraction=0.2, epochs=30, batch_size=256, learning_rate=3e-4,
+            hidden_dim=128, patience=5, value_loss_weight=0.25, gradient_clip_norm=1.0,
+        )
+        wanted = experiment_fingerprint(base)
+        other_commit = dict(base); other_commit["code_commit"] = "code-b"
+        other_config = actual_fingerprint_payload(**{
+            "code_commit": "code-a", "input_sha256": "input-sha", "split_seed": 20260720,
+            "validation_fraction": 0.2, "epochs": 30, "batch_size": 512, "learning_rate": 3e-4,
+            "hidden_dim": 128, "patience": 5, "value_loss_weight": 0.25, "gradient_clip_norm": 1.0,
+        })
+        rows = [
+            {"seed": "17", "experiment_fingerprint": wanted, "config_matched": "True"},
+            {"seed": "42", "experiment_fingerprint": experiment_fingerprint(other_commit), "config_matched": "True"},
+            {"seed": "20260720", "experiment_fingerprint": experiment_fingerprint(other_config), "config_matched": "False"},
+        ]
+        self.assertEqual(achieved_seeds_for_fingerprint(rows, wanted), {17})
+
+    def test_resume_checks_commit_input_and_fingerprint(self) -> None:
+        checkpoint = {"git_sha": "code", "input_sha256": "input", "experiment_fingerprint": "fingerprint"}
+        validate_resume_compatibility(checkpoint, code_commit="code", input_sha256="input", fingerprint="fingerprint")
+        for key, kwargs in (
+            ("git", {"code_commit": "other", "input_sha256": "input", "fingerprint": "fingerprint"}),
+            ("input", {"code_commit": "code", "input_sha256": "other", "fingerprint": "fingerprint"}),
+            ("fingerprint", {"code_commit": "code", "input_sha256": "input", "fingerprint": "other"}),
+        ):
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                validate_resume_compatibility(checkpoint, **kwargs)
 
 
 if __name__ == "__main__":

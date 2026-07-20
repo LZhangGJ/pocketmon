@@ -5,6 +5,7 @@ import copy
 import csv
 import hashlib
 import json
+import math
 import os
 import random
 import resource
@@ -22,6 +23,9 @@ if str(ROOT) not in sys.path:
 
 from rl.bc import SPLIT_SEED, TrajectoryDataset, build_split_manifest, evaluate_decoding, load_replay_dataset, make_loader, run_epoch
 from rl.model import MaskedPointerActorCritic
+
+
+ARCHITECTURE = "stateless_masked_autoregressive_candidate_pointer_with_stop"
 
 
 def choose_device(value: str) -> torch.device:
@@ -64,6 +68,69 @@ def checkpoint_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def actual_fingerprint_payload(
+    *, code_commit: str, input_sha256: str, split_seed: int, validation_fraction: float,
+    epochs: int, batch_size: int, learning_rate: float, hidden_dim: int, patience: int,
+    value_loss_weight: float, gradient_clip_norm: float, architecture: str = ARCHITECTURE,
+) -> dict[str, Any]:
+    return {
+        "code_commit": code_commit,
+        "input_sha256": input_sha256,
+        "split": {"seed": split_seed, "validation_fraction": validation_fraction},
+        "training": {
+            "epochs": epochs, "batch_size": batch_size, "learning_rate": learning_rate,
+            "hidden_dim": hidden_dim, "patience": patience, "value_loss_weight": value_loss_weight,
+            "gradient_clip_norm": gradient_clip_norm,
+        },
+        "architecture": architecture,
+    }
+
+
+def experiment_fingerprint(payload: dict[str, Any]) -> str:
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def current_config_matches(planned: dict[str, Any], actual: dict[str, Any]) -> tuple[bool, list[str]]:
+    checks = {
+        "input_sha256": actual["input_sha256"] == planned["input_sha256"],
+        "split_seed": actual["split"]["seed"] == planned["split"]["seed"],
+        "validation_fraction": math.isclose(actual["split"]["validation_fraction"], planned["split"]["validation_fraction"], rel_tol=0.0, abs_tol=1e-12),
+        "epochs": actual["training"]["epochs"] == planned["training"]["epochs"],
+        "batch_size": actual["training"]["batch_size"] == planned["training"]["batch_size"],
+        "learning_rate": math.isclose(actual["training"]["learning_rate"], planned["training"]["learning_rate"], rel_tol=0.0, abs_tol=1e-15),
+        "hidden_dim": actual["training"]["hidden_dim"] == planned["training"]["hidden_dim"],
+        "patience": actual["training"]["patience"] == planned["training"]["early_stopping_patience"],
+        "value_loss_weight": math.isclose(actual["training"]["value_loss_weight"], planned["training"]["value_loss_weight"], rel_tol=0.0, abs_tol=1e-15),
+        "gradient_clip_norm": math.isclose(actual["training"]["gradient_clip_norm"], planned["training"]["gradient_clip_norm"], rel_tol=0.0, abs_tol=1e-15),
+        "architecture": actual["architecture"] == planned["architecture"],
+    }
+    mismatches = [name for name, matched in checks.items() if not matched]
+    return not mismatches, mismatches
+
+
+def achieved_seeds_for_fingerprint(rows: list[dict[str, str]], fingerprint: str) -> set[int]:
+    return {
+        int(row["seed"])
+        for row in rows
+        if row.get("experiment_fingerprint") == fingerprint
+        and row.get("config_matched", "").lower() == "true"
+        and row.get("seed", "").isdigit()
+    }
+
+
+def validate_resume_compatibility(checkpoint: dict[str, Any], *, code_commit: str, input_sha256: str, fingerprint: str) -> None:
+    mismatches = []
+    if checkpoint.get("git_sha") != code_commit:
+        mismatches.append("git_sha")
+    if checkpoint.get("input_sha256") != input_sha256:
+        mismatches.append("input_sha256")
+    if checkpoint.get("experiment_fingerprint") != fingerprint:
+        mismatches.append("experiment_fingerprint")
+    if mismatches:
+        raise ValueError(f"resume checkpoint mismatch: {', '.join(mismatches)}")
+
+
 def new_training_state() -> dict[str, Any]:
     return {
         "best_loss": float("inf"), "best_epoch": 0, "stale": 0,
@@ -104,12 +171,13 @@ def update_training_state(state: dict[str, Any], record: dict[str, Any], *, full
     return False
 
 
-def save_checkpoint(path: Path, model: MaskedPointerActorCritic, optimizer: torch.optim.Optimizer, training_state: dict[str, Any], config: dict[str, Any], metrics: dict[str, Any], input_sha256: str, code_commit: str) -> None:
+def save_checkpoint(path: Path, model: MaskedPointerActorCritic, optimizer: torch.optim.Optimizer, training_state: dict[str, Any], config: dict[str, Any], metrics: dict[str, Any], input_sha256: str, code_commit: str, fingerprint: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     torch.save({
         "model": model.state_dict(), "optimizer": optimizer.state_dict(),
         "training_state": copy.deepcopy(training_state), "config": config, "metrics": metrics,
         "input_sha256": input_sha256, "hidden_dim": model.hidden_dim, "git_sha": code_commit,
+        "experiment_fingerprint": fingerprint,
     }, path)
 
 
@@ -124,6 +192,7 @@ RUN_FIELDS = [
     "decode_legal_rate", "invalid_actions", "unsupported_rows", "skipped_rows", "checkpoint",
     "checkpoint_sha256", "runtime_seconds", "peak_ram_mb", "peak_vram_mb", "git_sha", "dirty",
     "planned_seeds", "missing_seeds", "planned_epochs", "actual_epochs",
+    "experiment_fingerprint", "config_matched", "config_mismatches",
 ]
 
 
@@ -155,6 +224,8 @@ def main() -> None:
     parser.add_argument("--learning-rate", type=float, default=3e-4)
     parser.add_argument("--hidden-dim", type=int, default=128)
     parser.add_argument("--patience", type=int, default=5)
+    parser.add_argument("--value-loss-weight", type=float, default=0.25)
+    parser.add_argument("--gradient-clip-norm", type=float, default=1.0)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--checkpoint-dir", default="checkpoints/rl_bc_001")
     parser.add_argument("--metrics-output", default="results/rl_bc_001_metrics.json")
@@ -176,6 +247,14 @@ def main() -> None:
         torch.cuda.set_device(device); torch.cuda.reset_peak_memory_stats()
 
     rows, audit = load_replay_dataset(Path(args.input))
+    fingerprint_payload = actual_fingerprint_payload(
+        code_commit=code_commit, input_sha256=audit["input_sha256"], split_seed=args.split_seed,
+        validation_fraction=args.validation_fraction, epochs=args.epochs, batch_size=args.batch_size,
+        learning_rate=args.learning_rate, hidden_dim=args.hidden_dim, patience=args.patience,
+        value_loss_weight=args.value_loss_weight, gradient_clip_norm=args.gradient_clip_norm,
+    )
+    fingerprint = experiment_fingerprint(fingerprint_payload)
+    config_matched, config_mismatches = current_config_matches(planned_config, fingerprint_payload)
     manifest, train_ids, validation_ids = build_split_manifest(rows, args.validation_fraction, args.split_seed)
     if train_ids & validation_ids or manifest["episode_overlap"]:
         raise AssertionError("episode leakage detected")
@@ -192,16 +271,20 @@ def main() -> None:
     state = new_training_state()
     if args.resume:
         checkpoint = torch.load(args.resume, map_location=device, weights_only=False)
-        if checkpoint.get("input_sha256") != audit["input_sha256"]:
-            raise ValueError("resume input SHA does not match checkpoint")
+        validate_resume_compatibility(
+            checkpoint, code_commit=code_commit, input_sha256=audit["input_sha256"], fingerprint=fingerprint
+        )
         model.load_state_dict(checkpoint["model"]); optimizer.load_state_dict(checkpoint["optimizer"])
         state = restore_training_state(checkpoint)
 
     actual_config = vars(args).copy()
     actual_config.update({
         "code_commit": code_commit, "dirty_at_start": bool(initial_dirty), "input_sha256": audit["input_sha256"],
-        "device_resolved": str(device), "stateless": True, "decoder": "masked_autoregressive_pointer_with_stop",
+        "device_resolved": str(device), "stateless": True, "architecture": ARCHITECTURE,
         "policy_rows": "winner_only", "value_rows": "both_players",
+        "value_loss_weight": args.value_loss_weight, "gradient_clip_norm": args.gradient_clip_norm,
+        "experiment_fingerprint": fingerprint, "config_matched": config_matched,
+        "config_mismatches": config_mismatches,
     })
     checkpoint_dir = Path(args.checkpoint_dir)
     best_path = checkpoint_dir / f"seed_{args.seed}_best.pt"
@@ -211,23 +294,23 @@ def main() -> None:
 
     if args.max_batches:
         epoch = int(state["completed_epochs"]) + 1
-        train_metrics = run_epoch(model, train_loader, device, optimizer, args.max_batches)
-        validation_metrics = run_epoch(model, validation_loader, device, None, args.max_batches)
+        train_metrics = run_epoch(model, train_loader, device, optimizer, args.max_batches, args.value_loss_weight, args.gradient_clip_norm)
+        validation_metrics = run_epoch(model, validation_loader, device, None, args.max_batches, args.value_loss_weight, args.gradient_clip_norm)
         last_record = {"epoch": epoch, "full_epoch": False, "max_batches": args.max_batches, "train": train_metrics, "validation": validation_metrics}
         update_training_state(state, last_record, full_epoch=False, optimizer_steps=train_metrics["batches"], best_path=best_path)
-        save_checkpoint(last_path, model, optimizer, state, actual_config, last_record, audit["input_sha256"], code_commit)
+        save_checkpoint(last_path, model, optimizer, state, actual_config, last_record, audit["input_sha256"], code_commit, fingerprint)
         print(json.dumps(last_record), flush=True)
     else:
         while int(state["completed_epochs"]) < args.epochs and int(state["stale"]) < args.patience:
             epoch = int(state["completed_epochs"]) + 1
-            train_metrics = run_epoch(model, train_loader, device, optimizer)
-            validation_metrics = run_epoch(model, validation_loader, device)
+            train_metrics = run_epoch(model, train_loader, device, optimizer, value_loss_weight=args.value_loss_weight, gradient_clip_norm=args.gradient_clip_norm)
+            validation_metrics = run_epoch(model, validation_loader, device, value_loss_weight=args.value_loss_weight, gradient_clip_norm=args.gradient_clip_norm)
             last_record = {"epoch": epoch, "full_epoch": True, "max_batches": 0, "train": train_metrics, "validation": validation_metrics}
             improved = update_training_state(state, last_record, full_epoch=True, optimizer_steps=train_metrics["batches"], best_path=best_path)
             full_epochs_this_run += 1
             if improved:
-                save_checkpoint(best_path, model, optimizer, state, actual_config, last_record, audit["input_sha256"], code_commit)
-            save_checkpoint(last_path, model, optimizer, state, actual_config, last_record, audit["input_sha256"], code_commit)
+                save_checkpoint(best_path, model, optimizer, state, actual_config, last_record, audit["input_sha256"], code_commit, fingerprint)
+            save_checkpoint(last_path, model, optimizer, state, actual_config, last_record, audit["input_sha256"], code_commit, fingerprint)
             print(json.dumps(last_record), flush=True)
     if last_record is None:
         raise RuntimeError("no training epoch or partial epoch was executed")
@@ -236,31 +319,32 @@ def main() -> None:
     chosen = torch.load(chosen_path, map_location=device, weights_only=False)
     model.load_state_dict(chosen["model"])
     final_limit = args.max_batches if args.max_batches else 0
-    final_loss = run_epoch(model, validation_loader, device, max_batches=final_limit)
+    final_loss = run_epoch(model, validation_loader, device, max_batches=final_limit, value_loss_weight=args.value_loss_weight, gradient_clip_norm=args.gradient_clip_norm)
     decoding = evaluate_decoding(model, validation_loader, device, max_batches=final_limit)
     if decoding["decode_legal_rate"] != 1.0 or decoding["invalid_actions"] != 0:
         raise RuntimeError("validation decode legality gate failed")
 
     prior_rows = read_run_rows(Path(args.runs_output))
-    prior_formal_seeds = {int(row["seed"]) for row in prior_rows if row.get("status") in {"partial_formal", "completed_formal"} and row.get("seed", "").isdigit()}
-    current_config_matches = not args.max_batches and args.seed in planned_seeds and args.epochs == planned_epochs and args.split_seed == int(planned_config["split"]["seed"])
-    achieved_seeds = prior_formal_seeds | ({args.seed} if current_config_matches else set())
+    prior_formal_seeds = achieved_seeds_for_fingerprint(prior_rows, fingerprint)
+    current_run_matches = not args.max_batches and config_matched and args.seed in planned_seeds
+    achieved_seeds = prior_formal_seeds | ({args.seed} if current_run_matches else set())
     missing_seeds = sorted(set(planned_seeds) - achieved_seeds)
     if args.max_batches:
         status = "smoke"
     else:
-        status = "completed_formal" if not missing_seeds and current_config_matches else "partial_formal"
+        status = "exploratory_config_mismatch" if not config_matched else ("completed_formal" if not missing_seeds else "partial_formal")
     actual_config.update({
         "full_epochs_this_run": full_epochs_this_run, "completed_epochs": state["completed_epochs"],
         "optimizer_steps": state["optimizer_steps"], "early_stopped": state["stale"] >= args.patience,
-        "missing_seeds": missing_seeds,
+        "missing_seeds": missing_seeds, "achieved_seeds": sorted(achieved_seeds),
     })
     runtime = time.perf_counter() - start
     checkpoint_hash = checkpoint_sha256(chosen_path)
     result = {
         "experiment_id": args.experiment_id, "status": status, "partial_run": bool(args.max_batches),
         "planned_config": planned_config, "actual_config": actual_config,
-        "provenance": {"git_sha": code_commit, "dirty": bool(initial_dirty), "input_sha256": audit["input_sha256"]},
+        "provenance": {"git_sha": code_commit, "dirty": bool(initial_dirty), "input_sha256": audit["input_sha256"], "experiment_fingerprint": fingerprint},
+        "experiment_fingerprint_payload": fingerprint_payload,
         "dataset_audit": audit,
         "split": {key: manifest[key] for key in ("split_seed", "validation_fraction", "train_episodes", "validation_episodes", "episode_overlap", "rows", "policy_rows", "value_rows")},
         "train_rows": len(train), "validation_rows": len(validation),
@@ -285,6 +369,8 @@ def main() -> None:
             "peak_ram_mb": result["peak_ram_mb"], "peak_vram_mb": result["peak_vram_mb"], "git_sha": code_commit,
             "dirty": bool(initial_dirty), "planned_seeds": json.dumps(planned_seeds), "missing_seeds": json.dumps(missing_seeds),
             "planned_epochs": planned_epochs, "actual_epochs": state["completed_epochs"],
+            "experiment_fingerprint": fingerprint, "config_matched": config_matched,
+            "config_mismatches": json.dumps(config_mismatches),
         })
     print(json.dumps({key: result[key] for key in ("status", "epochs_completed", "best_epoch", "missing_seeds", "runtime_seconds", "checkpoint")}), flush=True)
 

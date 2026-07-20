@@ -46,7 +46,12 @@ def main() -> None:
     result = {
         "checkpoint": args.checkpoint, "checkpoint_git_sha": checkpoint["git_sha"], "device": str(device),
         "dataset_sha256": audit["input_sha256"], "validation_rows": len(validation),
-        "loss": run_epoch(model, loader, device), "validation": evaluate_decoding(model, loader, device),
+        "loss": run_epoch(
+            model, loader, device,
+            value_loss_weight=float(config.get("value_loss_weight", 0.25)),
+            gradient_clip_norm=float(config.get("gradient_clip_norm", 1.0)),
+        ),
+        "validation": evaluate_decoding(model, loader, device),
     }
     print(json.dumps(result, indent=2, sort_keys=True))
 

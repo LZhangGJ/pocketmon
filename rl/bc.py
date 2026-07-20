@@ -312,7 +312,15 @@ def action_is_legal(action: list[int], option_count: int, min_count: int, max_co
     return min_count <= len(action) <= max_count and len(action) == len(set(action)) and all(0 <= index < option_count for index in action)
 
 
-def run_epoch(model: MaskedPointerActorCritic, loader: DataLoader, device: torch.device, optimizer: torch.optim.Optimizer | None = None, max_batches: int = 0) -> dict[str, float]:
+def run_epoch(
+    model: MaskedPointerActorCritic,
+    loader: DataLoader,
+    device: torch.device,
+    optimizer: torch.optim.Optimizer | None = None,
+    max_batches: int = 0,
+    value_loss_weight: float = 0.25,
+    gradient_clip_norm: float = 1.0,
+) -> dict[str, float]:
     training = optimizer is not None
     model.train(training)
     totals = Counter()
@@ -322,13 +330,13 @@ def run_epoch(model: MaskedPointerActorCritic, loader: DataLoader, device: torch
             if max_batches and batch_index >= max_batches:
                 break
             batch = _to_device(batch, device)
-            loss, parts = batch_loss(model, batch)
+            loss, parts = batch_loss(model, batch, value_loss_weight=value_loss_weight)
             if not torch.isfinite(loss):
                 raise FloatingPointError("non-finite RL-BC loss")
             if training:
                 optimizer.zero_grad(set_to_none=True)
                 loss.backward()
-                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                torch.nn.utils.clip_grad_norm_(model.parameters(), gradient_clip_norm)
                 optimizer.step()
             totals.update(parts)
             totals["batches"] += 1
@@ -336,7 +344,7 @@ def run_epoch(model: MaskedPointerActorCritic, loader: DataLoader, device: torch
         raise ValueError("no batches processed")
     policy_loss = totals["policy_sum"] / max(1.0, totals["policy_count"])
     value_loss = totals["value_sum"] / max(1.0, totals["value_count"])
-    return {"loss": policy_loss + 0.25 * value_loss, "policy_loss": policy_loss, "value_loss": value_loss, "policy_steps": int(totals["policy_count"]), "value_rows": int(totals["value_count"]), "batches": int(totals["batches"])}
+    return {"loss": policy_loss + value_loss_weight * value_loss, "policy_loss": policy_loss, "value_loss": value_loss, "policy_steps": int(totals["policy_count"]), "value_rows": int(totals["value_count"]), "batches": int(totals["batches"])}
 
 
 @torch.inference_mode()
