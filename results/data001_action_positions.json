@@ -1,10 +1,10 @@
 {
   "experiment_id": "DATA-001-ACTION-POSITION",
-  "generated_at": "2026-07-19T15:23:55.504546+00:00",
-  "input_root": "data\\raw\\replays",
-  "date": "2026-07-18",
-  "files_selected": 100,
-  "files_loaded": 100,
+  "generated_at": "2026-07-20T12:14:35.137930+00:00",
+  "input_root": "data/raw/replays",
+  "date": "2026-07-19",
+  "files_selected": 500,
+  "files_loaded": 500,
   "load_errors": [],
   "lag_definition": "action_step - observation_step",
   "framework_expected_lag": 1,
@@ -17,9 +17,9 @@
   "result": {
     "expected_lag": 1,
     "best_observed_lag": 1,
-    "active_observations": 16311,
+    "active_observations": 79776,
     "active_missing_observation": 0,
-    "empty_expected_actions": 24,
+    "empty_expected_actions": 569,
     "empty_required_expected_actions": 0,
     "empty_required_with_valid_other_lag": 0,
     "empty_required_unresolved": 0,
@@ -33,99 +33,99 @@
     "lags": {
       "-1": {
         "lag": -1,
-        "observations": 16311,
-        "valid_decisions": 10402,
+        "observations": 79776,
+        "valid_decisions": 49984,
         "setup_actions": 0,
-        "invalid_decisions": 5909,
-        "empty_actions": 2729,
-        "missing_actions": 200,
-        "valid_rate": 0.6377291398442768,
+        "invalid_decisions": 29792,
+        "empty_actions": 14408,
+        "missing_actions": 1000,
+        "valid_rate": 0.6265543521861211,
         "reasons": {
-          "action_not_integer_list": 200,
-          "option_index_out_of_range": 2442,
-          "selection_count_out_of_bounds": 3267,
-          "valid": 10402
+          "action_not_integer_list": 1000,
+          "option_index_out_of_range": 12199,
+          "selection_count_out_of_bounds": 16593,
+          "valid": 49984
         }
       },
       "0": {
         "lag": 0,
-        "observations": 16311,
-        "valid_decisions": 11043,
+        "observations": 79776,
+        "valid_decisions": 53686,
         "setup_actions": 0,
-        "invalid_decisions": 5268,
-        "empty_actions": 1830,
+        "invalid_decisions": 26090,
+        "empty_actions": 10028,
         "missing_actions": 0,
-        "valid_rate": 0.6770277726687511,
+        "valid_rate": 0.6729592860008022,
         "reasons": {
-          "missing_select": 200,
-          "option_index_out_of_range": 2630,
-          "selection_count_out_of_bounds": 2438,
-          "valid": 11043
+          "missing_select": 1000,
+          "option_index_out_of_range": 12383,
+          "selection_count_out_of_bounds": 12707,
+          "valid": 53686
         }
       },
       "1": {
         "lag": 1,
-        "observations": 16311,
-        "valid_decisions": 16111,
-        "setup_actions": 200,
+        "observations": 79776,
+        "valid_decisions": 78776,
+        "setup_actions": 1000,
         "invalid_decisions": 0,
-        "empty_actions": 24,
+        "empty_actions": 569,
         "missing_actions": 0,
         "valid_rate": 1.0,
         "reasons": {
-          "deck_submission": 200,
-          "valid": 16111
+          "deck_submission": 1000,
+          "valid": 78776
         }
       },
       "2": {
         "lag": 2,
-        "observations": 16311,
-        "valid_decisions": 10886,
+        "observations": 79776,
+        "valid_decisions": 53903,
         "setup_actions": 0,
-        "invalid_decisions": 5425,
-        "empty_actions": 1736,
-        "missing_actions": 100,
-        "valid_rate": 0.6674023665011342,
+        "invalid_decisions": 25873,
+        "empty_actions": 9551,
+        "missing_actions": 500,
+        "valid_rate": 0.6756794023265142,
         "reasons": {
-          "action_not_integer_list": 100,
-          "missing_select": 200,
-          "option_index_out_of_range": 2799,
-          "selection_count_out_of_bounds": 2326,
-          "valid": 10886
+          "action_not_integer_list": 500,
+          "missing_select": 1000,
+          "option_index_out_of_range": 12194,
+          "selection_count_out_of_bounds": 12179,
+          "valid": 53903
         }
       },
       "3": {
         "lag": 3,
-        "observations": 16311,
-        "valid_decisions": 10790,
+        "observations": 79776,
+        "valid_decisions": 52981,
         "setup_actions": 0,
-        "invalid_decisions": 5521,
-        "empty_actions": 2731,
-        "missing_actions": 200,
-        "valid_rate": 0.6615167678253939,
+        "invalid_decisions": 26795,
+        "empty_actions": 14505,
+        "missing_actions": 1000,
+        "valid_rate": 0.6641220417168071,
         "reasons": {
-          "action_not_integer_list": 200,
-          "missing_select": 200,
-          "option_index_out_of_range": 2080,
-          "selection_count_out_of_bounds": 3041,
-          "valid": 10790
+          "action_not_integer_list": 1000,
+          "missing_select": 1000,
+          "option_index_out_of_range": 9363,
+          "selection_count_out_of_bounds": 15432,
+          "valid": 52981
         }
       },
       "4": {
         "lag": 4,
-        "observations": 16311,
-        "valid_decisions": 9887,
+        "observations": 79776,
+        "valid_decisions": 48942,
         "setup_actions": 0,
-        "invalid_decisions": 6424,
-        "empty_actions": 3654,
-        "missing_actions": 300,
-        "valid_rate": 0.6061553552817117,
+        "invalid_decisions": 30834,
+        "empty_actions": 19490,
+        "missing_actions": 1500,
+        "valid_rate": 0.6134927797833934,
         "reasons": {
-          "action_not_integer_list": 300,
-          "missing_select": 200,
-          "option_index_out_of_range": 2046,
-          "selection_count_out_of_bounds": 3878,
-          "valid": 9887
+          "action_not_integer_list": 1500,
+          "missing_select": 1000,
+          "option_index_out_of_range": 8613,
+          "selection_count_out_of_bounds": 19721,
+          "valid": 48942
         }
       }
     },

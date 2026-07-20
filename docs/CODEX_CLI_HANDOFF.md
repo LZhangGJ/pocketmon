@@ -1,6 +1,6 @@
 # Local Codex CLI handoff: public replay experiments
 
-Last updated: 2026-07-19
+Last updated: 2026-07-20
 
 ## Mission and non-negotiable constraints
 
@@ -69,7 +69,17 @@ Exact duplicate episode IDs with the same SHA-256 are skipped. Top-level `observ
 
 Verified real-data history: the original 100-episode DATA-001 run failed (`previous=0.5040`, `same=0.3975`). After correcting the submission-status position, the same `2026-07-18` sample passed with `previous=1.0`, 16,111/16,111 valid decisions, 24 legal optional empty actions, and zero invalid decisions. DATA-002 then passed after resolving terminal winners from reward: 16,111 rows, 8,397 winner-policy rows, zero missing winners, and zero invalid decisions. Because all fixes were validated on the same sample, a different-date pass is still required.
 
-## Immediate server task for local Codex CLI
+The required independent pass is now complete on the different-date `2026-07-19` snapshot. The download produced 500 episode JSON files plus `manifest.csv`; no `2026-07-18` directory was copied or renamed. An initial attempt read the directory while the downloader was still writing and produced inconsistent 112/118/126-file reports plus one transient JSON load error. Those reports were rejected and overwritten only after the downloader exited and the directory stabilized at 500 JSON files.
+
+At code commit `ce10e356a2135ec5cfc1b58f212f48e41d4acf51`, the stable 500-episode rerun passed all gates: action-position lag 1 was uniquely best at `1.0` (78,776/78,776, zero invalid, 569 optional empty actions, zero unresolved required-empty actions), and strict DATA-001 reported `previous=1.0`, `same=0.7853322569`, zero unknown statuses, and zero load errors. DATA-002 produced 78,776 schema-v2 rows, including 41,598 winner-policy rows and 78,776 value rows, with zero invalid decisions, missing/unresolved winners, reward mismatches, duplicate/conflicting IDs, unknown statuses, or load errors. All 500 outcomes came from terminal reward, all 500 agreed with top-level reward, and result fallback was never used. An independent streaming gzip read parsed all 78,776 rows, found no `observation.logs`, and confirmed all 569 empty actions had `minCount=0`; episode winners were player 0 in 276 episodes and player 1 in 224.
+
+Current verification: 26 unit tests pass and compile checks pass. Timed stable runs were action-position 2:42.65 / 79,416 KB max RSS, DATA-001 0:58.66 / 86,624 KB, DATA-002 1:46.48 / 91,596 KB, tests 0:50.98 / 643,516 KB, and compileall 0:00.34 / 12,348 KB. Download timing and memory were not captured because the downloader had already been started before this continuation; the resulting race was detected rather than hidden.
+
+## Completed server task and current handoff state
+
+The second independent real DATA-001/002 validation is complete and evidence-backed on `exp/league-v1`. The reports under `results/` now describe the stable 500-episode rerun, not the rejected partial-directory attempt. RL-BC-001 is eligible as the next experiment, but was intentionally not started during this validation run.
+
+For provenance, the commands used for the completed validation are retained below.
 
 First synchronize and verify scope:
 
@@ -159,4 +169,4 @@ League promotion remains separate from DATA-001/002: use 10 learners, 400 games 
 
 ## Definition of done for this handoff
 
-The local Codex CLI should finish by pushing a different-date server-evidence commit on `exp/league-v1` that contains real DATA-001 and DATA-002 reports plus updated logs. If either gate fails, push the failure evidence and diagnosis instead of producing or training on a silently filtered dataset. Do not start RL-BC-001 in the same run unless both independent gates pass.
+Satisfied: the different-date server evidence covers a stable 500-episode snapshot, both real DATA-001 and DATA-002 gates pass without relaxed thresholds or filtered failures, and the reports plus logs are ready to commit on `exp/league-v1`. RL-BC-001 was not started in this run.
