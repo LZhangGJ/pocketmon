@@ -1,66 +1,34 @@
 from __future__ import annotations
 
 import argparse
+import csv
+import hashlib
 import json
 import os
 import random
+import resource
+import subprocess
 import sys
+import time
 from pathlib import Path
+from typing import Any
 
 import torch
-from torch.nn import functional as F
-from torch.utils.data import DataLoader, Dataset
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from rl.features import ACTION_DIM, STATE_DIM
-from rl.model import CandidateActorCritic
-
-
-class TrajectoryDataset(Dataset):
-    def __init__(self, rows: list[dict]) -> None:
-        self.rows = [row for row in rows if len(row["chosen"]) == 1 and row["options"]]
-
-    @classmethod
-    def from_path(cls, path: Path) -> "TrajectoryDataset":
-        rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
-        return cls(rows)
-
-    def __len__(self) -> int:
-        return len(self.rows)
-
-    def __getitem__(self, index: int):
-        row = self.rows[index]
-        return row["state"], row["options"], row["chosen"][0], row["reward"]
-
-
-def split_by_episode(dataset: TrajectoryDataset, validation_fraction: float, seed: int):
-    """Keep every decision from an episode in one split to prevent leakage."""
-    episodes = sorted({int(row["episode"]) for row in dataset.rows})
-    if validation_fraction <= 0 or len(episodes) < 2:
-        return dataset, TrajectoryDataset([])
-    rng = random.Random(seed)
-    rng.shuffle(episodes)
-    validation_count = max(1, min(len(episodes) - 1, round(len(episodes) * validation_fraction)))
-    validation_episodes = set(episodes[:validation_count])
-    train = [row for row in dataset.rows if int(row["episode"]) not in validation_episodes]
-    validation = [row for row in dataset.rows if int(row["episode"]) in validation_episodes]
-    return TrajectoryDataset(train), TrajectoryDataset(validation)
-
-
-def collate(rows):
-    max_options = max(len(row[1]) for row in rows)
-    states, options, chosen, rewards, masks = [], [], [], [], []
-    for state, row_options, action, reward in rows:
-        padding = [[0.0] * ACTION_DIM] * (max_options - len(row_options))
-        states.append(state)
-        options.append(row_options + padding)
-        chosen.append(action)
-        rewards.append(reward)
-        masks.append([True] * len(row_options) + [False] * len(padding))
-    return tuple(torch.tensor(value) for value in (states, options, chosen, rewards, masks))
+from rl.bc import (
+    SPLIT_SEED,
+    TrajectoryDataset,
+    build_split_manifest,
+    evaluate_decoding,
+    load_replay_dataset,
+    make_loader,
+    run_epoch,
+)
+from rl.model import MaskedPointerActorCritic
 
 
 def choose_device(value: str) -> torch.device:
@@ -68,7 +36,7 @@ def choose_device(value: str) -> torch.device:
         return torch.device("cuda" if torch.cuda.is_available() else "cpu")
     device = torch.device(value)
     if device.type == "cuda" and not torch.cuda.is_available():
-        raise RuntimeError("CUDA was requested but torch.cuda.is_available() is false")
+        raise RuntimeError("CUDA requested but unavailable")
     return device
 
 
@@ -81,104 +49,156 @@ def seed_everything(seed: int) -> None:
     torch.use_deterministic_algorithms(True, warn_only=True)
 
 
-def make_loader(dataset: TrajectoryDataset, batch_size: int, shuffle: bool, seed: int) -> DataLoader:
-    generator = torch.Generator().manual_seed(seed)
-    return DataLoader(
-        dataset,
-        batch_size=batch_size,
-        shuffle=shuffle,
-        collate_fn=collate,
-        generator=generator,
-        pin_memory=torch.cuda.is_available(),
-    )
+def git_sha() -> str:
+    return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
 
 
-def run_epoch(model, loader, device, optimizer=None) -> dict[str, float]:
-    training = optimizer is not None
-    model.train(training)
-    totals = {"loss": 0.0, "policy_loss": 0.0, "value_loss": 0.0, "correct": 0.0, "samples": 0.0}
-    context = torch.enable_grad() if training else torch.inference_mode()
-    with context:
-        for states, options, chosen, rewards, mask in loader:
-            states = states.to(device, dtype=torch.float32, non_blocking=True)
-            options = options.to(device, dtype=torch.float32, non_blocking=True)
-            chosen = chosen.to(device, dtype=torch.long, non_blocking=True)
-            rewards = rewards.to(device, dtype=torch.float32, non_blocking=True)
-            mask = mask.to(device, dtype=torch.bool, non_blocking=True)
-            logits, values = model(states, options)
-            logits = logits.masked_fill(~mask, -torch.inf)
-            policy_loss = F.cross_entropy(logits, chosen)
-            value_loss = F.mse_loss(values, rewards)
-            loss = policy_loss + 0.25 * value_loss
-            if training:
-                optimizer.zero_grad(set_to_none=True)
-                loss.backward()
-                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-                optimizer.step()
-            count = len(states)
-            totals["loss"] += float(loss.detach()) * count
-            totals["policy_loss"] += float(policy_loss.detach()) * count
-            totals["value_loss"] += float(value_loss.detach()) * count
-            totals["correct"] += float((logits.argmax(dim=1) == chosen).sum())
-            totals["samples"] += count
-    samples = totals.pop("samples")
-    correct = totals.pop("correct")
-    return {**{name: value / samples for name, value in totals.items()}, "accuracy": correct / samples, "samples": int(samples)}
+def checkpoint_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
-def save_checkpoint(path: Path, model, optimizer, epoch: int, metrics: dict, args) -> None:
+def save_checkpoint(path: Path, model: MaskedPointerActorCritic, optimizer: torch.optim.Optimizer, epoch: int, config: dict[str, Any], metrics: dict[str, Any], input_sha256: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    torch.save(
-        {
-            "model": model.state_dict(),
-            "optimizer": optimizer.state_dict(),
-            "epoch": epoch,
-            "metrics": metrics,
-            "state_dim": STATE_DIM,
-            "action_dim": ACTION_DIM,
-            "config": vars(args),
-        },
-        path,
-    )
+    torch.save({
+        "model": model.state_dict(), "optimizer": optimizer.state_dict(), "epoch": epoch,
+        "config": config, "metrics": metrics, "input_sha256": input_sha256,
+        "hidden_dim": model.hidden_dim, "git_sha": git_sha(),
+    }, path)
+
+
+def write_json(path: Path, value: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def append_run_csv(path: Path, record: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fields = [
+        "experiment_id", "seed", "status", "epochs_completed", "best_epoch", "best_validation_loss",
+        "sequence_exact_match", "set_exact_match", "empty_action_accuracy", "multi_select_accuracy",
+        "decode_legal_rate", "invalid_actions", "unsupported_rows", "skipped_rows", "checkpoint",
+        "checkpoint_sha256", "runtime_seconds", "peak_ram_mb", "peak_vram_mb", "git_sha",
+    ]
+    existing: list[dict[str, str]] = []
+    if path.exists():
+        with path.open(newline="", encoding="utf-8") as handle:
+            existing = [row for row in csv.DictReader(handle) if not (row["experiment_id"] == str(record["experiment_id"]) and row["seed"] == str(record["seed"]))]
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
+        writer.writeheader(); writer.writerows(existing); writer.writerow({key: record.get(key) for key in fields})
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Behavior-clone a candidate policy with outcome value learning")
-    parser.add_argument("--input", default="data/rl/trajectories.jsonl")
-    parser.add_argument("--output", default="artifacts/rl/candidate_actor_critic.pt")
-    parser.add_argument("--epochs", type=int, default=10)
+    parser = argparse.ArgumentParser(description="RL-BC-001 stateless masked behavior cloning")
+    parser.add_argument("--input", default="data/processed/public_replay_v1.jsonl.gz")
+    parser.add_argument("--experiment-id", default="RL-BC-001")
+    parser.add_argument("--seed", type=int, default=17)
+    parser.add_argument("--split-seed", type=int, default=SPLIT_SEED)
+    parser.add_argument("--validation-fraction", type=float, default=0.2)
+    parser.add_argument("--epochs", type=int, default=30)
     parser.add_argument("--batch-size", type=int, default=256)
     parser.add_argument("--learning-rate", type=float, default=3e-4)
-    parser.add_argument("--validation-fraction", type=float, default=0.1)
-    parser.add_argument("--seed", type=int, default=20260718)
-    parser.add_argument("--device", default="auto", help="auto, cpu, cuda, or cuda:N")
+    parser.add_argument("--hidden-dim", type=int, default=128)
+    parser.add_argument("--patience", type=int, default=5)
+    parser.add_argument("--device", default="auto")
+    parser.add_argument("--checkpoint-dir", default="checkpoints/rl_bc_001")
+    parser.add_argument("--metrics-output", default="results/rl_bc_001_metrics.json")
+    parser.add_argument("--split-output", default="results/rl_bc_001_split.json")
+    parser.add_argument("--runs-output", default="results/rl_bc_001_runs.csv")
+    parser.add_argument("--resume", default=None)
+    parser.add_argument("--max-batches", type=int, default=0, help="Smoke-only batch limit; marks the run partial")
     args = parser.parse_args()
-    if not 0 <= args.validation_fraction < 1:
-        raise ValueError("validation-fraction must be in [0, 1)")
+    start = time.perf_counter()
     seed_everything(args.seed)
     device = choose_device(args.device)
-    dataset = TrajectoryDataset.from_path(Path(args.input))
-    train, validation = split_by_episode(dataset, args.validation_fraction, args.seed)
-    if not train:
-        raise ValueError("no single-option training decisions found")
+    if device.type == "cuda":
+        torch.cuda.set_device(device)
+        torch.cuda.reset_peak_memory_stats()
+    rows, audit = load_replay_dataset(Path(args.input))
+    manifest, train_ids, validation_ids = build_split_manifest(rows, args.validation_fraction, args.split_seed)
+    if train_ids & validation_ids or manifest["episode_overlap"]:
+        raise AssertionError("episode leakage detected")
+    if manifest["rows"] != audit["readable_rows"]:
+        raise AssertionError("split row total mismatch")
+    manifest.update({"input_sha256": audit["input_sha256"], "input_bytes": audit["input_bytes"]})
+    write_json(Path(args.split_output), manifest)
+    train = TrajectoryDataset([row for row in rows if row["episode_id"] in train_ids])
+    validation = TrajectoryDataset([row for row in rows if row["episode_id"] in validation_ids])
     train_loader = make_loader(train, args.batch_size, True, args.seed)
-    validation_loader = make_loader(validation, args.batch_size, False, args.seed) if validation else None
-    model = CandidateActorCritic().to(device)
+    validation_loader = make_loader(validation, args.batch_size, False, args.seed)
+    model = MaskedPointerActorCritic(args.hidden_dim).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
-    output = Path(args.output)
-    best_output = output.with_name(f"{output.stem}.best{output.suffix}")
-    best_loss = float("inf")
-    print(json.dumps({"device": str(device), "train_samples": len(train), "validation_samples": len(validation)}))
-    for epoch in range(1, args.epochs + 1):
-        train_metrics = run_epoch(model, train_loader, device, optimizer)
-        validation_metrics = run_epoch(model, validation_loader, device) if validation_loader else train_metrics
+    start_epoch = 1
+    if args.resume:
+        checkpoint = torch.load(args.resume, map_location=device, weights_only=False)
+        model.load_state_dict(checkpoint["model"]); optimizer.load_state_dict(checkpoint["optimizer"])
+        start_epoch = int(checkpoint["epoch"]) + 1
+    config = vars(args).copy()
+    config.update({"git_sha": git_sha(), "device_resolved": str(device), "stateless": True, "decoder": "masked_autoregressive_pointer_with_stop", "policy_rows": "winner_only", "value_rows": "both_players"})
+    checkpoint_dir = Path(args.checkpoint_dir)
+    best_path = checkpoint_dir / f"seed_{args.seed}_best.pt"
+    last_path = checkpoint_dir / f"seed_{args.seed}_last.pt"
+    history = []
+    best_loss = float("inf"); best_epoch = 0; stale = 0
+    for epoch in range(start_epoch, args.epochs + 1):
+        train_metrics = run_epoch(model, train_loader, device, optimizer, args.max_batches)
+        validation_metrics = run_epoch(model, validation_loader, device, None, args.max_batches)
         record = {"epoch": epoch, "train": train_metrics, "validation": validation_metrics}
-        print(json.dumps(record))
+        history.append(record); print(json.dumps(record), flush=True)
         if validation_metrics["loss"] < best_loss:
-            best_loss = validation_metrics["loss"]
-            save_checkpoint(best_output, model, optimizer, epoch, record, args)
-    save_checkpoint(output, model, optimizer, args.epochs, record, args)
-    print(json.dumps({"last": str(output), "best": str(best_output), "best_validation_loss": best_loss}))
+            best_loss = validation_metrics["loss"]; best_epoch = epoch; stale = 0
+            save_checkpoint(best_path, model, optimizer, epoch, config, record, audit["input_sha256"])
+        else:
+            stale += 1
+        save_checkpoint(last_path, model, optimizer, epoch, config, record, audit["input_sha256"])
+        if not args.max_batches and stale >= args.patience:
+            break
+    best = torch.load(best_path, map_location=device, weights_only=False)
+    model.load_state_dict(best["model"])
+    final_loss = run_epoch(model, validation_loader, device, max_batches=args.max_batches)
+    decoding = evaluate_decoding(model, validation_loader, device, max_batches=args.max_batches)
+    if decoding["decode_legal_rate"] != 1.0 or decoding["invalid_actions"] != 0:
+        raise RuntimeError("validation decode legality gate failed")
+    runtime = time.perf_counter() - start
+    checkpoint_hash = checkpoint_sha256(best_path)
+    result = {
+        "experiment_id": args.experiment_id,
+        "status": "partial" if args.max_batches else "completed",
+        "partial_run": bool(args.max_batches),
+        "config": config,
+        "dataset_audit": audit,
+        "split": {key: manifest[key] for key in ("split_seed", "validation_fraction", "train_episodes", "validation_episodes", "episode_overlap", "rows", "policy_rows", "value_rows")},
+        "train_rows": len(train), "validation_rows": len(validation),
+        "epochs_completed": history[-1]["epoch"], "best_epoch": best_epoch,
+        "best_validation_loss": best_loss, "validation_loss": final_loss,
+        "validation": decoding, "history": history,
+        "checkpoint": {"path": str(best_path), "sha256": checkpoint_hash, "bytes": best_path.stat().st_size},
+        "runtime_seconds": runtime,
+        "peak_ram_mb": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024.0,
+        "peak_vram_mb": torch.cuda.max_memory_allocated() / (1024 ** 2) if device.type == "cuda" else 0.0,
+        "failures": [],
+    }
+    write_json(Path(args.metrics_output), result)
+    if not args.max_batches:
+        append_run_csv(Path(args.runs_output), {
+            "experiment_id": args.experiment_id, "seed": args.seed, "status": result["status"],
+            "epochs_completed": result["epochs_completed"], "best_epoch": best_epoch, "best_validation_loss": best_loss,
+            "sequence_exact_match": decoding["sequence_exact_match"], "set_exact_match": decoding["set_exact_match"],
+            "empty_action_accuracy": decoding["empty_action_accuracy"], "multi_select_accuracy": decoding["multi_select_accuracy"],
+            "decode_legal_rate": decoding["decode_legal_rate"], "invalid_actions": decoding["invalid_actions"],
+            "unsupported_rows": audit["unsupported_rows"], "skipped_rows": audit["skipped_rows"],
+            "checkpoint": best_path, "checkpoint_sha256": checkpoint_hash, "runtime_seconds": runtime,
+            "peak_ram_mb": result["peak_ram_mb"], "peak_vram_mb": result["peak_vram_mb"], "git_sha": config["git_sha"],
+        })
+    print(json.dumps({key: result[key] for key in ("status", "train_rows", "validation_rows", "best_epoch", "runtime_seconds", "checkpoint")}), flush=True)
+
+
+# Backward-compatible imports used by existing tests.
+from rl.bc import TrajectoryDataset, split_by_episode  # noqa: E402,F401
 
 
 if __name__ == "__main__":

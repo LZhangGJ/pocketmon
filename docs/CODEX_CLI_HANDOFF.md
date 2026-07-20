@@ -170,3 +170,7 @@ League promotion remains separate from DATA-001/002: use 10 learners, 400 games 
 ## Definition of done for this handoff
 
 Satisfied: the different-date server evidence covers a stable 500-episode snapshot, both real DATA-001 and DATA-002 gates pass without relaxed thresholds or filtered failures, and the reports plus logs are ready to commit on `exp/league-v1`. RL-BC-001 was not started in this run.
+
+## RL-BC-001 update (2026-07-20)
+
+The minimal stateless masked BC baseline is implemented and one formal seed (20260720) is complete. See `results/rl_bc_001_metrics.json`, `results/rl_bc_001_split.json`, and `results/rl_bc_001_runs.csv`. Episode leakage, invalid decoding, unsupported rows, skipped rows, NaN, and final runtime failures are all zero. Validation sequence/set exact are 0.342558/0.356335, multi-select accuracy is 0.208995, and optional-empty accuracy is 0. The best checkpoint is gitignored and fingerprinted in the metrics report. Do not enter AWR/IQL yet; first improve STOP learning and run the missing formal seeds, then evaluate a separately scoped history encoder.
