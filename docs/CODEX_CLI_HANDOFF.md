@@ -210,3 +210,11 @@ The clean-commit functional smoke loaded checkpoint SHA `2faac94de9e937dee77cd6d
 Two preceding temporary harness attempts failed before model import: the first lost Python string quoting through SSH, and the second ran a `/tmp` script without the repository on `PYTHONPATH`. Both are retained in the adapter report; neither executed checkpoint inference. The explicit-PYTHONPATH rerun from clean adapter commit passed.
 
 Actual gameplay remains explicitly blocked: no official `cg/api.py` was found in repository `tmp` or a bounded `/homes/lzhang` depth-six search. `results/rl_bc_002_adapter_smoke.json` records games=0 and no gameplay claim. Once a valid engine path is available, run a separate small, fixed-seed, seat-swapped smoke against `official_random` and `lucario_rule`, retaining fallback diagnostics. This does not authorize AWR, IQL, PPO, self-play, or league work.
+
+## RL-BC-002 official engine recovery audit (2026-07-21)
+
+The missing engine was recovered directly from the official Kaggle competition download. The 315883380-byte archive SHA is `09ad210b...c3282`; sample-submission `api.py/game.py/sim.py/libcg.so` hashes and the isolated `kaggle-environments==1.32.0` wheel/runtime hashes are recorded in `results/rl_bc_002_engine_audit.json`. No engine files or large archives are committed.
+
+Do not start model matches yet. Official-random validation produced 8/8 normal terminations with zero crash/timeout/invalid/network use, but every one of four repeated Python-seed pairs produced a different full trace and step count, and two pairs changed winner. The supplied native source explains this: `BattleStart` accepts no seed and uses `std::random_device()` internally. In addition, the competition archive and CABT runtime `libcg.so` hashes differ, and CABT exposes no explicit termination reason even though rewards/status and turn are readable. `results/rl_bc_002_engine_blocker.json` is authoritative. Unblock only with a pinned official runtime plus an official seedable interface or explicitly approved unseeded protocol and termination definition. The frozen Arm A checkpoint remains unchanged and has not played a real game.
+
+Final verification passed 62 unit tests (11.93 seconds, 696784 KB max RSS) and compileall (0.11 seconds, 12920 KB max RSS). No production game-runner code was added after the engine gate failed.

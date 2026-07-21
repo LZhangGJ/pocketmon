@@ -1,5 +1,11 @@
 # Failure modes
 
+## Official CABT engine cannot satisfy a Python-seeded paired protocol
+
+The competition `BattleStart` API has no seed parameter and initializes its native RNG from `std::random_device()` on every battle. Calling `random.seed()` therefore fixes the sample policy's option sampling but not deck shuffle or other engine randomness. In the 2026-07-21 audit, 0/4 same-seed `official_random` replay pairs matched their full trace or step count, and two pairs changed winner. Never label Python-seeded CABT games deterministic or overwrite a failed pair with a rerun. Stop any protocol that requires exact same-seed reproduction unless an official seedable engine is supplied.
+
+The same audit found that the current competition archive and `kaggle-environments==1.32.0` contain non-identical `libcg.so` hashes. Pin and record both archive and runtime hashes; do not infer runtime equivalence from matching module names. CABT exposes terminal rewards/status but no explicit termination reason in this version, so do not fabricate one from a stale `current.result=-1`.
+
 - **Opponent drift:** mutable notebooks invalidate comparisons. Mitigation: dated content-hashed snapshots.
 - **Malicious notebook code:** public code may access secrets or damage the host. Mitigation: secretless, network-disabled container and resource limits before execution.
 - **Leaderboard-selection bias:** public score may be noisy or stale. Mitigation: local smoke gate and fixed payoff-matrix evaluation.

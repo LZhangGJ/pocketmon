@@ -1,0 +1,124 @@
+{
+  "experiment_id": "RL-BC-002-engine-audit",
+  "status": "official_engine_recovered_validation_failed",
+  "branch": "exp/league-v1",
+  "baseline_commit": "5970478fc45793c02319545ac0b3c579cc833d46",
+  "worktree_clean_before_audit": true,
+  "engine_source": {
+    "authority": "Kaggle competition download endpoint",
+    "competition_slug": "pokemon-tcg-ai-battle",
+    "retrieval_date": "2026-07-21",
+    "archive_name": "pokemon-tcg-ai-battle.zip",
+    "archive_size_bytes": 315883380,
+    "archive_sha256": "09ad210b15476f5064c1509addb32a459c777d92d4e4e7db470f9d0c039c3282",
+    "sample_submission": {
+      "cg_api_sha256": "593f1298e52a635f90f8f505a52113e9af114f444c293404e37906f18ee06ced",
+      "cg_game_sha256": "3bd3d4f4a369a11e6d2f5da9094cf15ebc410a2221835e6417b7cff4883f1fc2",
+      "cg_sim_sha256": "1555f57f5d22bf4c09d70e0e667a916e575e68c9dd1de9ead34ba5e7e4968655",
+      "linux_libcg_sha256": "feafd4046b2f688bdb33a4972c139b78e13e243ab5707ece52c43cf39a34b887"
+    },
+    "source_api_h_sha256": "786acae884631bdcbab0311471316bc75d62acb465b8011bf09dad05628bcafd",
+    "local_uncommitted_engine_changes": false
+  },
+  "runtime": {
+    "kaggle_environments_version": "1.32.0",
+    "wheel_sha256": "359226741a04fbe1dbbc10121aef140fd96ec4fa31bace2037d05e7ef2bbf4e8",
+    "cabt_spec_version": "1.0.0",
+    "cabt_py_sha256": "83966930d12da5d8f725ac70314bf1b58b842180277437dc4ea7dc6ceea0d176",
+    "cabt_linux_libcg_sha256": "7acbfc7bc61d4f8233515c63debcfa454b8f804f138a6c395c599decc3dd17d0",
+    "competition_archive_lib_matches_runtime_lib": false,
+    "installation": "wheel unpacked into an isolated temporary PYTHONPATH; shared conda environment was not modified",
+    "python": "3.11.14 (conda-forge, GCC 14.3.0)",
+    "kaggle_cli": "2.2.3",
+    "host": "doraemon04",
+    "cpu": "Intel Xeon E5-1680 v4, 8 cores/16 threads",
+    "ram_gib": 125,
+    "gpu_available": "4 x NVIDIA GeForce GTX 1080 Ti 11264 MiB",
+    "gpu_used": false,
+    "peak_vram_mb": 0
+  },
+  "source_search": {
+    "tracked_repository_cg_found": false,
+    "git_history_cg_found": false,
+    "remote_branch_or_tag_cg_found": false,
+    "submodule_cg_found": false,
+    "conda_environment_cg_found": false,
+    "server_cache_cg_found": false,
+    "container_with_verified_competition_engine_found": false,
+    "public_notebook_evidence": "guregu321/basics-build-a-local-battle-environment documents competition download and sample_submission/cg loading",
+    "recovery_method": "kaggle competitions download -c pokemon-tcg-ai-battle"
+  },
+  "seed_interface_audit": {
+    "python_battle_start_accepts_seed": false,
+    "native_battle_start_accepts_seed": false,
+    "cabt_configuration_accepts_seed": false,
+    "source_behavior": "ApiBattleStart constructs std::random_device and assigns config.seed from it for every battle",
+    "python_seed_controls_agent_sampling_only": true
+  },
+  "validation_protocol": {
+    "agents": ["official_random", "official_random"],
+    "seeds": [17, 42, 20260720, 20260721],
+    "repeats_per_seed": 2,
+    "games": 8,
+    "act_timeout_seconds": 5,
+    "run_timeout_seconds": 120,
+    "episode_steps": 100000,
+    "network_disabled": true,
+    "command": "PYTHONPATH=<isolated-kaggle-environments>:<competition-sample-submission> python /tmp/pocketmon_engine_repro_audit.py"
+  },
+  "games": [
+    {"seed": 17, "repeat": 1, "winner": 0, "rewards": [1, -1], "steps": 22, "turn": 5, "elapsed_seconds": 0.2072354034, "trace_sha256": "b379ba7ba022041155ff20b599973d4683633a6c699c0249df4f98235f9fc9de"},
+    {"seed": 42, "repeat": 1, "winner": 0, "rewards": [1, -1], "steps": 67, "turn": 16, "elapsed_seconds": 0.4364864230, "trace_sha256": "753a2ba8373a9ad781303db99b9ee62cf4792fb845aefef6bb01576cbd1a1b09"},
+    {"seed": 20260720, "repeat": 1, "winner": 0, "rewards": [1, -1], "steps": 50, "turn": 10, "elapsed_seconds": 0.2909817211, "trace_sha256": "caf300983e590cf8d512bffdb39a4d8187d12c7273c1200e4b751eccfa76b166"},
+    {"seed": 20260721, "repeat": 1, "winner": 0, "rewards": [1, -1], "steps": 28, "turn": 6, "elapsed_seconds": 0.1792384312, "trace_sha256": "95392e1c6af929b7a851c5a3f832bd6f3e00874213a156f69e4ab892b2429a73"},
+    {"seed": 17, "repeat": 2, "winner": 1, "rewards": [-1, 1], "steps": 23, "turn": 5, "elapsed_seconds": 0.1771783940, "trace_sha256": "ffa27967e3b8af939019801c750eb467120cb8f75ee2626e1625ef9c29f32189"},
+    {"seed": 42, "repeat": 2, "winner": 0, "rewards": [1, -1], "steps": 88, "turn": 22, "elapsed_seconds": 0.5793111734, "trace_sha256": "2022e00f4c2a979cfebcc8687e7659f78ef961ea424794f2689007548e09cca2"},
+    {"seed": 20260720, "repeat": 2, "winner": 1, "rewards": [-1, 1], "steps": 31, "turn": 8, "elapsed_seconds": 0.1804112196, "trace_sha256": "c2ea5515e35a4ad6688729005a662a8066b49a64d2691f0d085d26a7041e1bcf"},
+    {"seed": 20260721, "repeat": 2, "winner": 0, "rewards": [1, -1], "steps": 26, "turn": 6, "elapsed_seconds": 0.1605596729, "trace_sha256": "357862ffb7debfefa0093a1dfdd986306d6afd3f70231d052aea79cab5b71fd6"}
+  ],
+  "validation_summary": {
+    "normally_terminated_games": 8,
+    "crashes": 0,
+    "timeouts": 0,
+    "invalid_actions": 0,
+    "errors": 0,
+    "trace_reproducible_pairs": 0,
+    "trace_pairs": 4,
+    "winner_reproducible_pairs": 2,
+    "step_count_reproducible_pairs": 0,
+    "elapsed_seconds_mean": 0.2764251730,
+    "elapsed_seconds_median": 0.1938233115,
+    "elapsed_seconds_min": 0.1605596729,
+    "elapsed_seconds_max": 0.5793111734,
+    "audit_wall_seconds": 6.63,
+    "peak_rss_kb": 115068,
+    "socket_messages_sent": 0,
+    "winner_readable_from_rewards": true,
+    "turn_readable": true,
+    "termination_reason_readable": false,
+    "final_observation_result_values": [-1]
+  },
+  "operational_failures": [
+    "first public-notebook pull command failed before download because PowerShell expanded the remote shell variable",
+    "first inline Python import check failed locally because PowerShell parsed Python syntax",
+    "pip --target attempt did not populate the isolated directory; the already-hashed pure-Python wheel was unpacked directly instead"
+  ],
+  "verification": {
+    "unit_tests": 62,
+    "unit_test_status": "passed",
+    "unit_test_wall_seconds": 11.93,
+    "unit_test_peak_rss_kb": 696784,
+    "compileall": "passed",
+    "compileall_wall_seconds": 0.11,
+    "compileall_peak_rss_kb": 12920,
+    "production_game_runner_added": false,
+    "reason_no_new_runner_tests": "engine validation stopped before model integration"
+  },
+  "decision": {
+    "engine_validation_passed": false,
+    "model_integration_started": false,
+    "model_games": 0,
+    "reason": "same-seed traces are not reproducible, the runtime/competition native binaries are not hash-identical, and a termination reason is not exposed",
+    "awr_iql_ppo_self_play_started": false
+  }
+}
