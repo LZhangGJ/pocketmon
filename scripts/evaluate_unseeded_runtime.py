@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from rl.unseeded_eval import alternating_schedule, require_sha256, run_game_subprocess, summarize_stage_a
+from rl.unseeded_eval import alternating_schedule, require_sha256, resource_peak_fields, run_game_subprocess, summarize_stage_a
 
 ARCHIVE_SHA = "09ad210b15476f5064c1509addb32a459c777d92d4e4e7db470f9d0c039c3282"
 API_SHA = "593f1298e52a635f90f8f505a52113e9af114f444c293404e37906f18ee06ced"
@@ -119,10 +119,12 @@ def main() -> int:
             append_jsonl(args.games_output, row)
     network_attempts = sum(int(row.get("network_attempts", 0)) for row in records)
     summary = summarize_stage_a(records, 20, network_attempts)
+    resources = resource_peak_fields(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+                                     [row.get("peak_rss_kb", 0) for row in records])
     summary.update({
         "experiment_id": "EVAL-UNSEEDED-001", "stage": "A", "code_commit": commit,
         "elapsed_seconds": time.perf_counter() - started,
-        "peak_rss_kb": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+        **resources,
         "peak_vram_mb": 0, "model_games": 0,
         "stage_b_authorized": summary["gate_passed"], "hashes": hashes,
         "os_network_isolation": gate["os_network_isolation"],

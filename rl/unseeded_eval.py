@@ -7,6 +7,7 @@ import math
 import socket
 import subprocess
 import sys
+import time
 import types
 from pathlib import Path
 from typing import Any
@@ -203,7 +204,12 @@ def summarize_stage_b(records: list[dict[str, Any]]) -> dict[str, Any]:
         "network_attempt_zero": sum(int(row.get("network_attempts", 0)) for row in records) == 0,
         "no_games_dropped": [row.get("game_id") for row in records] == [21, 22, 23, 24],
     }
-    return {"games": len(records), "normal_terminals": sum(bool(r.get("normal_terminal")) for r in records),
+    return {"games": len(records), "scheduled_model_attempts": len(records),
+            "started_model_processes": sum(row.get("child_evidence_present") is True for row in records),
+            "checkpoint_loaded_games": sum(row.get("checkpoint_hash_verified") is True for row in records),
+            "model_action_games": sum(int(row.get("candidate_diagnostics", {}).get("model_actions", 0)) > 0 for row in records),
+            "completed_model_games": sum(bool(r.get("normal_terminal")) for r in records),
+            "normal_terminals": sum(bool(r.get("normal_terminal")) for r in records),
             "candidate_diagnostics": totals, "model_decisions": len(latencies),
             "decision_latency_ms": {"p50": percentile(latencies, .5), "p95": percentile(latencies, .95),
                                     "max": max(latencies) if latencies else None},
@@ -281,3 +287,94 @@ def run_game_subprocess(
         payload["normal_terminal"] = False
         payload.setdefault("exception", f"child process exited with code {exit_code}")
     return payload
+
+
+def require_isolation_prefix(tokens: list[str]) -> None:
+    if "--unshare-net" not in tokens:
+        raise ValueError("OS isolation must include --unshare-net")
+    try:
+        dev_index = tokens.index("--dev-bind")
+    except ValueError as exc:
+        raise ValueError("OS isolation must explicitly dev-bind /dev") from exc
+    if tokens[dev_index + 1:dev_index + 3] != ["/dev", "/dev"]:
+        raise ValueError("--dev-bind must map /dev to /dev")
+
+
+def resource_peak_fields(parent_peak_rss_kb: int, child_peaks: list[int], tree_peaks: list[int] | None = None) -> dict[str, Any]:
+    max_child = max(child_peaks, default=0)
+    max_tree = max(tree_peaks if tree_peaks is not None else child_peaks, default=0)
+    return {"parent_peak_rss_kb": parent_peak_rss_kb, "max_child_peak_rss_kb": max_child,
+            "max_process_tree_peak_rss_kb": max_tree, "overall_peak_rss_kb": max(parent_peak_rss_kb, max_tree),
+            "overall_peak_rss_definition": "maximum of parent peak RSS and process-tree peak RSS; sequential attempts are not summed"}
+
+
+def preflight_gates(child: dict[str, Any], process: dict[str, Any]) -> dict[str, bool]:
+    true_fields = ("urandom_readable", "os_urandom_successful", "torch_import_successful",
+        "torch_cpu_tensor_successful", "checkpoint_loaded", "checkpoint_hash_verified", "native_loaded",
+        "native_hash_verified", "eth0_absent", "tcp_unavailable", "dns_unavailable")
+    gates = {field: child.get(field) is True for field in true_fields}
+    gates.update({"exit_code_zero": process.get("exit_code") == 0, "no_signal": process.get("signal") is None,
+                  "no_timeout": process.get("hard_timeout") is False, "no_exception": child.get("exception") is None})
+    return gates
+
+
+def _rss_kb(pid: int) -> int:
+    try:
+        for line in Path(f"/proc/{pid}/status").read_text(encoding="utf-8").splitlines():
+            if line.startswith("VmRSS:"):
+                return int(line.split()[1])
+    except (FileNotFoundError, ProcessLookupError, PermissionError):
+        pass
+    return 0
+
+
+def _descendant_pids(root_pid: int) -> set[int]:
+    parents: dict[int, int] = {}
+    for entry in Path("/proc").iterdir():
+        if not entry.name.isdigit():
+            continue
+        try:
+            text = (entry / "stat").read_text(encoding="utf-8")
+            after_name = text[text.rfind(")") + 2:].split()
+            parents[int(entry.name)] = int(after_name[1])
+        except (FileNotFoundError, ProcessLookupError, PermissionError, ValueError, IndexError):
+            continue
+    descendants = {root_pid}
+    changed = True
+    while changed:
+        changed = False
+        for pid, parent in parents.items():
+            if parent in descendants and pid not in descendants:
+                descendants.add(pid)
+                changed = True
+    return descendants
+
+
+def run_monitored_subprocess(command: list[str], timeout_seconds: float) -> dict[str, Any]:
+    """Run once while sampling child and process-tree RSS from procfs."""
+
+    started = time.perf_counter()
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    max_child = 0
+    max_tree = 0
+    timed_out = False
+    while process.poll() is None:
+        pids = _descendant_pids(process.pid)
+        rss = {pid: _rss_kb(pid) for pid in pids}
+        max_child = max(max_child, rss.get(process.pid, 0))
+        max_tree = max(max_tree, sum(rss.values()))
+        if time.perf_counter() - started > timeout_seconds:
+            timed_out = True
+            process.kill()
+            break
+        time.sleep(0.01)
+    stdout, stderr = process.communicate()
+    exit_code = process.returncode
+    signal_number = -exit_code if exit_code < 0 else None
+    return {
+        "command": command, "exit_code": exit_code, "signal": signal_number,
+        "hard_timeout": timed_out, "stdout": stdout.decode("utf-8", errors="replace"),
+        "stderr": stderr.decode("utf-8", errors="replace"), "elapsed_seconds": time.perf_counter() - started,
+        "max_child_peak_rss_kb": max_child, "max_process_tree_peak_rss_kb": max_tree,
+        "retry_count": 0,
+    }

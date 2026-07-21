@@ -19,6 +19,9 @@ from rl.unseeded_eval import (
     outcome_from_rewards,
     require_sha256,
     run_game_subprocess,
+    preflight_gates,
+    require_isolation_prefix,
+    resource_peak_fields,
     sha256_file,
     summarize_stage_a,
     stage_b_schedule,
@@ -146,6 +149,52 @@ class UnseededEvaluationTests(unittest.TestCase):
         self.assertTrue(summarize_stage_b(rows)["gate_passed"])
         rows[0]["process_crash"] = True
         self.assertFalse(summarize_stage_b(rows)["gate_passed"])
+
+    def test_isolation_requires_network_and_dev_mapping(self) -> None:
+        valid = ["/usr/bin/bwrap", "--unshare-net", "--bind", "/", "/", "--dev-bind", "/dev", "/dev", "--"]
+        require_isolation_prefix(valid)
+        with self.assertRaisesRegex(ValueError, "unshare-net"):
+            require_isolation_prefix(["bwrap", "--dev-bind", "/dev", "/dev", "--"])
+        with self.assertRaisesRegex(ValueError, "dev-bind"):
+            require_isolation_prefix(["bwrap", "--unshare-net", "--"])
+
+    def test_preflight_network_and_hash_load_gates(self) -> None:
+        child = {key: True for key in ("urandom_readable", "os_urandom_successful", "torch_import_successful",
+            "torch_cpu_tensor_successful", "checkpoint_loaded", "checkpoint_hash_verified", "native_loaded",
+            "native_hash_verified", "eth0_absent", "tcp_unavailable", "dns_unavailable")}
+        child["exception"] = None
+        process = {"exit_code": 0, "signal": None, "hard_timeout": False}
+        self.assertTrue(all(preflight_gates(child, process).values()))
+        child["tcp_unavailable"] = False
+        self.assertFalse(preflight_gates(child, process)["tcp_unavailable"])
+
+    def test_resource_fields_and_stage_b_semantics_are_explicit(self) -> None:
+        fields = resource_peak_fields(100, [250, 200], [300, 220])
+        self.assertEqual(fields["parent_peak_rss_kb"], 100)
+        self.assertEqual(fields["max_child_peak_rss_kb"], 250)
+        self.assertEqual(fields["max_process_tree_peak_rss_kb"], 300)
+        self.assertEqual(fields["overall_peak_rss_kb"], 300)
+        rows = [{"game_id": 21+i, "child_evidence_present": True, "checkpoint_hash_verified": False,
+                 "normal_terminal": False, "candidate_diagnostics": {}, "exception": "failed"} for i in range(4)]
+        summary = summarize_stage_b(rows)
+        self.assertEqual(summary["scheduled_model_attempts"], 4)
+        self.assertEqual(summary["started_model_processes"], 4)
+        self.assertEqual(summary["checkpoint_loaded_games"], 0)
+        self.assertEqual(summary["model_action_games"], 0)
+        self.assertEqual(summary["completed_model_games"], 0)
+
+    @unittest.skipUnless(Path("/dev/urandom").exists(), "Linux preflight device")
+    def test_dev_urandom_is_readable(self) -> None:
+        with Path("/dev/urandom").open("rb") as handle:
+            self.assertEqual(len(handle.read(1)), 1)
+
+    def test_historical_evidence_is_preserved_by_companion_correction(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        source = (root / "scripts/correct_eval_unseeded_001_summary.py").read_text(encoding="utf-8")
+        self.assertIn("refusing to overwrite correction evidence", source)
+        for name in ("eval_unseeded_001_games.jsonl", "eval_unseeded_001_summary.json",
+                     "eval_unseeded_001_stage_b_games.jsonl", "eval_unseeded_001_stage_b_summary.json"):
+            self.assertTrue((root / "results" / name).is_file())
 
     @unittest.skipUnless(os.name == "posix", "POSIX signal return codes are Linux-specific")
     def test_subprocess_records_signal_without_retry(self) -> None:
