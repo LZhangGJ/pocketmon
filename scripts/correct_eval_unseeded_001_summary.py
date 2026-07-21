@@ -24,15 +24,16 @@ def main() -> int:
     stage_b = json.loads(args.stage_b_summary.read_text())
     rows_b = [json.loads(line) for line in args.stage_b_games.read_text().splitlines()]
     parent = int(stage_a["peak_rss_kb"])
-    max_child = max(int(row.get("peak_rss_kb", 0)) for row in rows_a)
+    child_peaks = [int(row["peak_rss_kb"]) for row in rows_a if row.get("peak_rss_kb") is not None]
+    max_child = max(child_peaks) if child_peaks else None
     correction = {"experiment_id":"EVAL-UNSEEDED-001","correction_only":True,
         "historical_files_unchanged":True,
         "historical_sha256":{str(path):sha256_file(path) for path in
             (args.stage_a_summary,args.stage_a_games,args.stage_b_summary,args.stage_b_games)},
         "stage_a":{"parent_peak_rss_kb":parent,"max_child_peak_rss_kb":max_child,
-            "max_process_tree_peak_rss_kb":max(max_child,args.external_stage_a_peak_rss_kb),
-            "overall_peak_rss_kb":max(parent,max_child,args.external_stage_a_peak_rss_kb),
-            "overall_peak_rss_definition":"maximum of historical parent ru_maxrss, per-child ru_maxrss, and external GNU time maximum; historical run did not sample descendant RSS sums",
+            "max_process_tree_peak_rss_kb":None,
+            "overall_peak_rss_kb":max(parent,args.external_stage_a_peak_rss_kb,*(child_peaks or [0])),
+            "overall_peak_rss_definition":"maximum of available historical parent/child RSS and external GNU time maximum; child and process-tree peaks are null when the historical run did not record them",
             "external_gnu_time_peak_rss_kb":args.external_stage_a_peak_rss_kb},
         "stage_b":{"legacy_model_games":stage_b.get("model_games"),
             "legacy_model_games_meaning":"scheduled attempts, not completed model games",
