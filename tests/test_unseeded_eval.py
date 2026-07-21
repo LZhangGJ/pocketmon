@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import socket
 import tempfile
 import unittest
@@ -18,6 +19,12 @@ from rl.unseeded_eval import (
 
 
 class UnseededEvaluationTests(unittest.TestCase):
+    def test_runner_has_no_json_boolean_identifiers(self) -> None:
+        runner = Path(__file__).resolve().parents[1] / "scripts/evaluate_unseeded_runtime.py"
+        tree = ast.parse(runner.read_text(encoding="utf-8"))
+        invalid = sorted({node.id for node in ast.walk(tree) if isinstance(node, ast.Name) and node.id in {"true", "false", "null"}})
+        self.assertEqual(invalid, [])
+
     def test_sha_verification_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "artifact"

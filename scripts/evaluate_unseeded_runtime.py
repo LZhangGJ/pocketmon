@@ -187,8 +187,8 @@ def main() -> int:
         "host": os.uname().nodename,
         "python": sys.version.replace("\n", " "),
         "commands": [[sys.executable, *sys.argv]],
-        "nominal_python_seed_used_as_engine_seed": false,
-        "pairing_key_used": false,
+        "nominal_python_seed_used_as_engine_seed": False,
+        "pairing_key_used": False,
     }
     schedule = alternating_schedule(args.games)
     agent_dir = ROOT / "agents/official_random"
