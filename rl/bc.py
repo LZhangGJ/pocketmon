@@ -13,7 +13,7 @@ import torch
 from torch.nn import functional as F
 from torch.utils.data import DataLoader, Dataset
 
-from .features import ACTION_DIM, STATE_DIM, action_features, state_features
+from .features import ACTION_DIM, HISTORY_DIM, STATE_DIM, action_features, history_features, state_features
 from .model import MaskedPointerActorCritic, legal_choice_mask
 
 
@@ -29,6 +29,10 @@ MODEL_INPUT_FIELDS = {
     "observation.select.minCount",
     "observation.select.maxCount",
     "observation.select.option",
+}
+HISTORY_MODEL_INPUT_FIELDS = MODEL_INPUT_FIELDS | {
+    "history.prior_pre_action_observation.current.visible_state",
+    "history.prior_selected_options",
 }
 
 
@@ -83,6 +87,9 @@ def compact_replay_row(raw: dict[str, Any]) -> dict[str, Any]:
     encoded_options = [action_features(option if isinstance(option, dict) else {}, index) for index, option in enumerate(options)]
     return {
         "episode_id": str(raw.get("episode_id")),
+        "player": raw.get("player"),
+        "action_step": raw.get("action_step"),
+        "observation_step": raw.get("observation_step"),
         "state": state_features(observation),
         "options": encoded_options,
         "action": list(action),
@@ -97,7 +104,60 @@ def compact_replay_row(raw: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def load_replay_dataset(path: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+def build_causal_histories(rows: list[dict[str, Any]], max_history: int) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Attach prior same-player decisions using explicit replay keys, never file order."""
+
+    if max_history <= 0:
+        raise ValueError("history max length must be positive")
+    prepared = [dict(row) for row in rows]
+    groups: dict[tuple[str, int], list[dict[str, Any]]] = defaultdict(list)
+    for row in prepared:
+        player = row.get("player")
+        action_step = row.get("action_step")
+        observation_step = row.get("observation_step")
+        if not isinstance(player, int) or isinstance(player, bool):
+            raise ValueError("history requires integer player identity")
+        if not isinstance(action_step, int) or isinstance(action_step, bool):
+            raise ValueError("history requires integer action_step")
+        if not isinstance(observation_step, int) or isinstance(observation_step, bool):
+            raise ValueError("history requires integer observation_step")
+        if observation_step >= action_step:
+            raise ValueError("history requires a pre-action observation_step")
+        groups[(row["episode_id"], player)].append(row)
+
+    history_rows = history_tokens = truncated_rows = 0
+    for key, group in groups.items():
+        group.sort(key=lambda row: row["action_step"])
+        steps = [row["action_step"] for row in group]
+        if len(steps) != len(set(steps)):
+            raise ValueError(f"duplicate history action_step for episode/player {key}")
+        prior: list[tuple[int, list[float]]] = []
+        for row in group:
+            visible = prior[-max_history:]
+            row["history"] = [token for _, token in visible]
+            row["history_steps"] = [step for step, _ in visible]
+            if any(step >= row["action_step"] for step in row["history_steps"]):
+                raise AssertionError("non-causal history token")
+            history_rows += int(bool(visible))
+            history_tokens += len(visible)
+            truncated_rows += int(len(prior) > max_history)
+            prior.append((row["action_step"], history_features(row["state"], row["options"], row["action"])))
+    audit = {
+        "enabled": True,
+        "max_length": max_history,
+        "group_by": ["episode_id", "player"],
+        "order_by": "action_step",
+        "groups": len(groups),
+        "rows_with_history": history_rows,
+        "history_tokens": history_tokens,
+        "truncated_rows": truncated_rows,
+        "current_or_future_steps_used": 0,
+        "physical_row_order_used": False,
+    }
+    return prepared, audit
+
+
+def load_replay_dataset(path: Path, history_length: int = 0) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     empty = multi = 0
     with gzip.open(path, "rt", encoding="utf-8") as handle:
@@ -109,7 +169,15 @@ def load_replay_dataset(path: Path) -> tuple[list[dict[str, Any]], dict[str, Any
             rows.append(row)
             empty += int(len(row["action"]) == 0)
             multi += int(len(row["action"]) > 1)
+    history_audit: dict[str, Any] = {"enabled": False, "max_length": 0}
+    if history_length:
+        rows, history_audit = build_causal_histories(rows, history_length)
+    else:
+        for row in rows:
+            row["history"] = []
+            row["history_steps"] = []
     episodes = {row["episode_id"] for row in rows}
+    model_input_fields = HISTORY_MODEL_INPUT_FIELDS if history_length else MODEL_INPUT_FIELDS
     audit = {
         "input": str(path),
         "input_sha256": sha256_file(path),
@@ -125,8 +193,9 @@ def load_replay_dataset(path: Path) -> tuple[list[dict[str, Any]], dict[str, Any
         "invalid_rows": 0,
         "schema_version": 2,
         "observation_logs_rows": 0,
-        "model_input_fields": sorted(MODEL_INPUT_FIELDS),
-        "forbidden_model_fields_used": sorted(MODEL_INPUT_FIELDS & FORBIDDEN_MODEL_FIELDS),
+        "model_input_fields": sorted(model_input_fields),
+        "forbidden_model_fields_used": sorted(model_input_fields & FORBIDDEN_MODEL_FIELDS),
+        "history": history_audit,
     }
     return rows, audit
 
@@ -203,11 +272,14 @@ def build_split_manifest(rows: list[dict[str, Any]], validation_fraction: float 
 def collate_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
     max_options = max(len(row["options"]) for row in rows)
     max_actions = max(len(row["action"]) for row in rows)
+    max_history = max(1, max(len(row.get("history") or []) for row in rows))
     batch = len(rows)
     states = torch.tensor([row["state"] for row in rows], dtype=torch.float32)
     options = torch.zeros((batch, max_options, ACTION_DIM), dtype=torch.float32)
     option_mask = torch.zeros((batch, max_options), dtype=torch.bool)
     actions = torch.zeros((batch, max_actions), dtype=torch.long)
+    histories = torch.zeros((batch, max_history, HISTORY_DIM), dtype=torch.float32)
+    history_mask = torch.zeros((batch, max_history), dtype=torch.bool)
     for index, row in enumerate(rows):
         count = len(row["options"])
         if count:
@@ -215,12 +287,19 @@ def collate_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
             option_mask[index, :count] = True
         if row["action"]:
             actions[index, :len(row["action"])] = torch.tensor(row["action"], dtype=torch.long)
+        history = row.get("history") or []
+        if history:
+            histories[index, :len(history)] = torch.tensor(history, dtype=torch.float32)
+            history_mask[index, :len(history)] = True
     return {
         "states": states,
         "options": options,
         "option_mask": option_mask,
         "actions": actions,
         "action_lengths": torch.tensor([len(row["action"]) for row in rows], dtype=torch.long),
+        "histories": histories,
+        "history_lengths": torch.tensor([len(row.get("history") or []) for row in rows], dtype=torch.long),
+        "history_mask": history_mask,
         "min_count": torch.tensor([row["min_count"] for row in rows], dtype=torch.long),
         "max_count": torch.tensor([row["max_count"] for row in rows], dtype=torch.long),
         "outcome": torch.tensor([row["outcome"] for row in rows], dtype=torch.float32),
@@ -240,7 +319,9 @@ def _to_device(batch: dict[str, Any], device: torch.device) -> dict[str, Any]:
 
 def batch_loss(model: MaskedPointerActorCritic, batch: dict[str, Any], value_loss_weight: float = 0.25) -> tuple[torch.Tensor, dict[str, float]]:
     states, options = batch["states"], batch["options"]
-    state, encoded_options, values = model.encode(states, options)
+    state, encoded_options, values = model.encode(
+        states, options, batch["histories"], batch["history_lengths"]
+    )
     batch_size, max_options = batch["option_mask"].shape
     selected = torch.zeros_like(batch["option_mask"])
     policy_sum = values.sum() * 0.0
@@ -281,7 +362,9 @@ def batch_loss(model: MaskedPointerActorCritic, batch: dict[str, Any], value_los
 
 @torch.inference_mode()
 def greedy_decode(model: MaskedPointerActorCritic, batch: dict[str, Any]) -> list[list[int]]:
-    state, encoded_options, _ = model.encode(batch["states"], batch["options"])
+    state, encoded_options, _ = model.encode(
+        batch["states"], batch["options"], batch["histories"], batch["history_lengths"]
+    )
     batch_size, max_options = batch["option_mask"].shape
     selected = torch.zeros_like(batch["option_mask"])
     finished = torch.zeros(batch_size, dtype=torch.bool, device=state.device)

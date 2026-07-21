@@ -26,6 +26,10 @@ from rl.model import MaskedPointerActorCritic
 
 
 ARCHITECTURE = "stateless_masked_autoregressive_candidate_pointer_with_stop"
+HISTORY_ARCHITECTURE = "causal_gru_history_masked_autoregressive_candidate_pointer_with_stop"
+HISTORY_GROUP_BY = ["episode_id", "player"]
+HISTORY_ORDER_BY = "action_step"
+HISTORY_TOKEN = "prior pre-action state plus that prior selected-option summary"
 
 
 def choose_device(value: str) -> torch.device:
@@ -72,8 +76,10 @@ def actual_fingerprint_payload(
     *, code_commit: str, input_sha256: str, split_seed: int, validation_fraction: float,
     epochs: int, batch_size: int, learning_rate: float, hidden_dim: int, patience: int,
     value_loss_weight: float, gradient_clip_norm: float, architecture: str = ARCHITECTURE,
+    history_length: int = 0, experiment_id: str | None = None,
 ) -> dict[str, Any]:
-    return {
+    history_enabled = architecture == HISTORY_ARCHITECTURE
+    payload = {
         "code_commit": code_commit,
         "input_sha256": input_sha256,
         "split": {"seed": split_seed, "validation_fraction": validation_fraction},
@@ -83,7 +89,23 @@ def actual_fingerprint_payload(
             "gradient_clip_norm": gradient_clip_norm,
         },
         "architecture": architecture,
+        "history": {
+            "enabled": history_enabled,
+            "encoder": "gru" if history_enabled else "none",
+            "max_length": history_length if history_enabled else 0,
+        },
+        "initialization": "random",
+        "offline_rl": False,
     }
+    if history_enabled:
+        payload["history"].update({
+            "group_by": HISTORY_GROUP_BY,
+            "order_by": HISTORY_ORDER_BY,
+            "token": HISTORY_TOKEN,
+        })
+    if experiment_id is not None:
+        payload["experiment_id"] = experiment_id
+    return payload
 
 
 def experiment_fingerprint(payload: dict[str, Any]) -> str:
@@ -105,6 +127,21 @@ def current_config_matches(planned: dict[str, Any], actual: dict[str, Any]) -> t
         "gradient_clip_norm": math.isclose(actual["training"]["gradient_clip_norm"], planned["training"]["gradient_clip_norm"], rel_tol=0.0, abs_tol=1e-15),
         "architecture": actual["architecture"] == planned["architecture"],
     }
+    if "history" in planned:
+        checks.update({
+            "history_enabled": actual["history"]["enabled"] == planned["history"]["enabled"],
+            "history_encoder": actual["history"]["encoder"] == planned["history"]["encoder"],
+            "history_max_length": actual["history"]["max_length"] == planned["history"]["max_length"],
+        })
+        for field in ("group_by", "order_by", "token"):
+            if field in planned["history"]:
+                checks[f"history_{field}"] = actual["history"].get(field) == planned["history"][field]
+    if "experiment_id" in planned:
+        checks["experiment_id"] = actual.get("experiment_id") == planned["experiment_id"]
+    if "random_initialization" in planned:
+        checks["random_initialization"] = actual["initialization"] == ("random" if planned["random_initialization"] else "resume")
+    if "offline_rl" in planned:
+        checks["offline_rl"] = actual["offline_rl"] == planned["offline_rl"]
     mismatches = [name for name, matched in checks.items() if not matched]
     return not mismatches, mismatches
 
@@ -226,6 +263,8 @@ def main() -> None:
     parser.add_argument("--patience", type=int, default=5)
     parser.add_argument("--value-loss-weight", type=float, default=0.25)
     parser.add_argument("--gradient-clip-norm", type=float, default=1.0)
+    parser.add_argument("--architecture", choices=(ARCHITECTURE, HISTORY_ARCHITECTURE), default=ARCHITECTURE)
+    parser.add_argument("--history-length", type=int, default=0)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--checkpoint-dir", default="checkpoints/rl_bc_001")
     parser.add_argument("--metrics-output", default="results/rl_bc_001_metrics.json")
@@ -246,12 +285,19 @@ def main() -> None:
     if device.type == "cuda":
         torch.cuda.set_device(device); torch.cuda.reset_peak_memory_stats()
 
-    rows, audit = load_replay_dataset(Path(args.input))
+    history_enabled = args.architecture == HISTORY_ARCHITECTURE
+    if history_enabled and args.history_length <= 0:
+        raise ValueError("history architecture requires --history-length > 0")
+    if not history_enabled and args.history_length != 0:
+        raise ValueError("stateless architecture requires --history-length 0")
+    rows, audit = load_replay_dataset(Path(args.input), history_length=args.history_length)
     fingerprint_payload = actual_fingerprint_payload(
         code_commit=code_commit, input_sha256=audit["input_sha256"], split_seed=args.split_seed,
         validation_fraction=args.validation_fraction, epochs=args.epochs, batch_size=args.batch_size,
         learning_rate=args.learning_rate, hidden_dim=args.hidden_dim, patience=args.patience,
         value_loss_weight=args.value_loss_weight, gradient_clip_norm=args.gradient_clip_norm,
+        architecture=args.architecture, history_length=args.history_length,
+        experiment_id=args.experiment_id,
     )
     fingerprint = experiment_fingerprint(fingerprint_payload)
     config_matched, config_mismatches = current_config_matches(planned_config, fingerprint_payload)
@@ -266,7 +312,7 @@ def main() -> None:
     validation = TrajectoryDataset([row for row in rows if row["episode_id"] in validation_ids])
     train_loader = make_loader(train, args.batch_size, True, args.seed)
     validation_loader = make_loader(validation, args.batch_size, False, args.seed)
-    model = MaskedPointerActorCritic(args.hidden_dim).to(device)
+    model = MaskedPointerActorCritic(args.hidden_dim, history_encoder=history_enabled).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     state = new_training_state()
     if args.resume:
@@ -280,7 +326,8 @@ def main() -> None:
     actual_config = vars(args).copy()
     actual_config.update({
         "code_commit": code_commit, "dirty_at_start": bool(initial_dirty), "input_sha256": audit["input_sha256"],
-        "device_resolved": str(device), "stateless": True, "architecture": ARCHITECTURE,
+        "device_resolved": str(device), "stateless": not history_enabled, "architecture": args.architecture,
+        "history_encoder": history_enabled, "history_length": args.history_length,
         "policy_rows": "winner_only", "value_rows": "both_players",
         "value_loss_weight": args.value_loss_weight, "gradient_clip_norm": args.gradient_clip_norm,
         "experiment_fingerprint": fingerprint, "config_matched": config_matched,

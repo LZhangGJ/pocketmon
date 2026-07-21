@@ -5,6 +5,7 @@ from typing import Any
 
 STATE_DIM = 32
 ACTION_DIM = 18
+HISTORY_DIM = STATE_DIM + ACTION_DIM + 2
 
 
 def _num(value: Any, default: float = 0.0) -> float:
@@ -77,4 +78,17 @@ def action_features(option: dict[str, Any], option_index: int, selection_size: i
         1.0,
     ]
     assert len(vector) == ACTION_DIM
+    return vector
+
+
+def history_features(state: list[float], options: list[list[float]], action: list[int]) -> list[float]:
+    """Encode one completed prior decision without using any later-row information."""
+
+    selected = [options[index] for index in action]
+    if selected:
+        option_summary = [sum(values) / len(selected) for values in zip(*selected)]
+    else:
+        option_summary = [0.0] * ACTION_DIM
+    vector = list(state) + option_summary + [len(action) / 10.0, float(not action)]
+    assert len(vector) == HISTORY_DIM
     return vector

@@ -13,7 +13,7 @@ if str(ROOT) not in sys.path:
 
 from rl.bc import TrajectoryDataset, build_split_manifest, evaluate_decoding, load_replay_dataset, make_loader, run_epoch
 from rl.model import MaskedPointerActorCritic
-from scripts.train_rl_policy import choose_device
+from scripts.train_rl_policy import HISTORY_ARCHITECTURE, choose_device
 
 
 def validate_input_sha(checkpoint: dict, actual_sha256: str, allow_mismatch: bool = False) -> None:
@@ -35,13 +35,15 @@ def main() -> None:
     args = parser.parse_args()
     device = choose_device(args.device)
     checkpoint = torch.load(args.checkpoint, map_location=device, weights_only=False)
-    rows, audit = load_replay_dataset(Path(args.input))
-    validate_input_sha(checkpoint, audit["input_sha256"], args.allow_input_mismatch)
     config = checkpoint["config"]
+    history_enabled = config.get("architecture") == HISTORY_ARCHITECTURE
+    history_length = int(config.get("history_length", 0)) if history_enabled else 0
+    rows, audit = load_replay_dataset(Path(args.input), history_length=history_length)
+    validate_input_sha(checkpoint, audit["input_sha256"], args.allow_input_mismatch)
     _, _, validation_ids = build_split_manifest(rows, config["validation_fraction"], config["split_seed"])
     validation = TrajectoryDataset([row for row in rows if row["episode_id"] in validation_ids])
     loader = make_loader(validation, args.batch_size, False, config["seed"])
-    model = MaskedPointerActorCritic(checkpoint["hidden_dim"]).to(device)
+    model = MaskedPointerActorCritic(checkpoint["hidden_dim"], history_encoder=history_enabled).to(device)
     model.load_state_dict(checkpoint["model"])
     result = {
         "checkpoint": args.checkpoint, "checkpoint_git_sha": checkpoint["git_sha"], "device": str(device),

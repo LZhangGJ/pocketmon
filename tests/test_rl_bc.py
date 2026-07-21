@@ -9,20 +9,23 @@ import torch
 
 from rl.bc import (
     FORBIDDEN_MODEL_FIELDS,
+    HISTORY_MODEL_INPUT_FIELDS,
     MODEL_INPUT_FIELDS,
     TrajectoryDataset,
     action_is_legal,
     batch_loss,
+    build_causal_histories,
     collate_rows,
     compact_replay_row,
     greedy_decode,
     split_by_episode,
 )
-from rl.features import ACTION_DIM, STATE_DIM
+from rl.features import ACTION_DIM, HISTORY_DIM, STATE_DIM, history_features
 from rl.model import MaskedPointerActorCritic, legal_choice_mask
 from scripts.evaluate_rl_checkpoint import validate_input_sha
 from scripts.train_rl_policy import (
     ARCHITECTURE,
+    HISTORY_ARCHITECTURE,
     achieved_seeds_for_fingerprint,
     actual_fingerprint_payload,
     assert_formal_worktree_clean,
@@ -33,11 +36,15 @@ from scripts.train_rl_policy import (
     update_training_state,
     validate_resume_compatibility,
 )
+from scripts.summarize_rl_bc_experiment import aggregate_reports
 
 
 def compact(action: list[int], min_count: int, max_count: int, policy_weight: float = 1.0, episode: str = "1") -> dict:
     return {
         "episode_id": episode,
+        "player": 0,
+        "action_step": 2,
+        "observation_step": 1,
         "state": [0.0] * STATE_DIM,
         "options": [[0.0] * ACTION_DIM for _ in range(4)],
         "action": action,
@@ -139,6 +146,128 @@ class RLBehaviorCloningTests(unittest.TestCase):
         after = restored(states, options)
         self.assertTrue(torch.equal(before[0], after[0]))
         self.assertTrue(torch.equal(before[1], after[1]))
+
+    def test_causal_history_uses_explicit_order_not_input_order(self) -> None:
+        rows = []
+        for step, action in ((6, [2]), (2, [0]), (4, [1])):
+            row = compact(action, 1, 1)
+            row.update({"action_step": step, "observation_step": step - 1})
+            row["state"][0] = float(step)
+            rows.append(row)
+        prepared, audit = build_causal_histories(rows, max_history=2)
+        by_step = {row["action_step"]: row for row in prepared}
+        self.assertEqual(by_step[2]["history_steps"], [])
+        self.assertEqual(by_step[4]["history_steps"], [2])
+        self.assertEqual(by_step[6]["history_steps"], [2, 4])
+        self.assertEqual(audit["physical_row_order_used"], False)
+        self.assertEqual(audit["current_or_future_steps_used"], 0)
+
+    def test_history_never_crosses_episode_or_player(self) -> None:
+        rows = []
+        for episode, player, step in (("a", 0, 2), ("a", 1, 3), ("a", 0, 4), ("b", 0, 5)):
+            row = compact([0], 1, 1, episode=episode)
+            row.update({"player": player, "action_step": step, "observation_step": step - 1})
+            rows.append(row)
+        prepared, audit = build_causal_histories(rows, max_history=8)
+        lookup = {(row["episode_id"], row["player"], row["action_step"]): row for row in prepared}
+        self.assertEqual(lookup[("a", 0, 4)]["history_steps"], [2])
+        self.assertEqual(lookup[("a", 1, 3)]["history_steps"], [])
+        self.assertEqual(lookup[("b", 0, 5)]["history_steps"], [])
+        self.assertEqual(audit["groups"], 3)
+
+    def test_history_token_excludes_current_action_future_and_outcome(self) -> None:
+        previous = compact([1], 1, 1)
+        previous.update({"action_step": 2, "observation_step": 1, "outcome": -99.0})
+        current = compact([3], 1, 1)
+        current.update({"action_step": 4, "observation_step": 3, "outcome": 99.0})
+        future = compact([2], 1, 1)
+        future.update({"action_step": 6, "observation_step": 5, "outcome": 123.0})
+        prepared, _ = build_causal_histories([future, current, previous], max_history=4)
+        current_prepared = next(row for row in prepared if row["action_step"] == 4)
+        self.assertEqual(
+            current_prepared["history"],
+            [history_features(previous["state"], previous["options"], previous["action"])],
+        )
+        self.assertFalse(HISTORY_MODEL_INPUT_FIELDS & FORBIDDEN_MODEL_FIELDS)
+        for forbidden in ("winner", "outcome", "action", "observation.logs"):
+            self.assertNotIn(forbidden, HISTORY_MODEL_INPUT_FIELDS)
+
+    def test_history_padding_and_length_mask(self) -> None:
+        first = compact([0], 1, 1)
+        second = compact([1], 1, 1)
+        first["history"] = [[0.1] * HISTORY_DIM]
+        second["history"] = [[0.2] * HISTORY_DIM, [0.3] * HISTORY_DIM]
+        batch = collate_rows([first, second])
+        self.assertEqual(batch["history_lengths"].tolist(), [1, 2])
+        self.assertEqual(batch["history_mask"].tolist(), [[True, False], [True, True]])
+        model = MaskedPointerActorCritic(16, history_encoder=True).eval()
+        before = model.encode_history(batch["histories"], batch["history_lengths"])
+        changed = batch["histories"].clone()
+        changed[0, 1] = 1000.0
+        after = model.encode_history(changed, batch["history_lengths"])
+        self.assertTrue(torch.equal(before[0], after[0]))
+
+    def test_stateless_default_remains_backward_compatible(self) -> None:
+        torch.manual_seed(123)
+        default = MaskedPointerActorCritic(16).eval()
+        torch.manual_seed(123)
+        explicit = MaskedPointerActorCritic(16, history_encoder=False).eval()
+        self.assertEqual(default.state_dict().keys(), explicit.state_dict().keys())
+        states = torch.randn(2, STATE_DIM)
+        options = torch.randn(2, 3, ACTION_DIM)
+        before = default(states, options)
+        after = explicit(states, options)
+        self.assertTrue(torch.equal(before[0], after[0]))
+        self.assertTrue(torch.equal(before[1], after[1]))
+
+    def test_two_arms_have_distinct_fingerprints_and_do_not_aggregate(self) -> None:
+        common = dict(
+            code_commit="code", input_sha256="input", split_seed=20260720,
+            validation_fraction=0.2, epochs=60, batch_size=256, learning_rate=3e-4,
+            hidden_dim=128, patience=10, value_loss_weight=0.25, gradient_clip_norm=1.0,
+        )
+        stateless = experiment_fingerprint(actual_fingerprint_payload(**common, architecture=ARCHITECTURE))
+        history = experiment_fingerprint(actual_fingerprint_payload(
+            **common, architecture=HISTORY_ARCHITECTURE, history_length=16
+        ))
+        self.assertNotEqual(stateless, history)
+        rows = [
+            {"seed": "17", "experiment_fingerprint": stateless, "config_matched": "True"},
+            {"seed": "42", "experiment_fingerprint": history, "config_matched": "True"},
+        ]
+        self.assertEqual(achieved_seeds_for_fingerprint(rows, stateless), {17})
+        reports = [
+            {"experiment_id": "RL-BC-002-A", "provenance": {"experiment_fingerprint": stateless, "git_sha": "code", "input_sha256": "input"}},
+            {"experiment_id": "RL-BC-002-B", "provenance": {"experiment_fingerprint": history, "git_sha": "code", "input_sha256": "input"}},
+        ]
+        with self.assertRaises(ValueError):
+            aggregate_reports(reports, [17, 42])
+
+    def test_history_checkpoint_reload_has_identical_output(self) -> None:
+        torch.manual_seed(19)
+        model = MaskedPointerActorCritic(16, history_encoder=True).eval()
+        states = torch.randn(2, STATE_DIM)
+        options = torch.randn(2, 3, ACTION_DIM)
+        histories = torch.randn(2, 4, HISTORY_DIM)
+        lengths = torch.tensor([2, 4])
+        before = model(states, options, histories, lengths)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "history.pt"
+            torch.save({"model": model.state_dict()}, path)
+            restored = MaskedPointerActorCritic(16, history_encoder=True).eval()
+            restored.load_state_dict(torch.load(path, weights_only=False)["model"])
+        after = restored(states, options, histories, lengths)
+        self.assertTrue(torch.equal(before[0], after[0]))
+        self.assertTrue(torch.equal(before[1], after[1]))
+
+    def test_history_decode_is_always_legal(self) -> None:
+        rows = [compact([], 0, 3), compact([1], 1, 1), compact([0, 2], 2, 3)]
+        for index, row in enumerate(rows):
+            row["history"] = [[float(index)] * HISTORY_DIM]
+        batch = collate_rows(rows)
+        predictions = greedy_decode(MaskedPointerActorCritic(16, history_encoder=True), batch)
+        for row, prediction in zip(rows, predictions):
+            self.assertTrue(action_is_legal(prediction, len(row["options"]), row["min_count"], row["max_count"]))
 
     def test_resume_restores_best_history_and_early_stopping_state(self) -> None:
         state = new_training_state()
