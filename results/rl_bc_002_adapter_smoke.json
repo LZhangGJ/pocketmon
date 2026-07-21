@@ -9,6 +9,24 @@
     "checkpoint_sha256": "2faac94de9e937dee77cd6d5d44036d7f45bb2dc4cc6491c1c97c0091f4fb216",
     "checkpoint_committed": false
   },
+  "operational_attempts": [
+    {
+      "attempt": 1,
+      "status": "harness_failed_before_model_import",
+      "reason": "SSH inline Python quoting stripped string literals and produced SyntaxError"
+    },
+    {
+      "attempt": 2,
+      "status": "harness_failed_before_model_import",
+      "reason": "temporary script under /tmp lacked repository root on PYTHONPATH"
+    },
+    {
+      "attempt": 3,
+      "status": "passed",
+      "code_commit": "00d116bdb63549dfa8807ea0ef939761fcf327f7",
+      "reason": "temporary script rerun with explicit repository PYTHONPATH"
+    }
+  ],
   "functional_smoke": {
     "input": {
       "option_count": 2,

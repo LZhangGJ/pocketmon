@@ -207,4 +207,6 @@ Adapter code is now committed as `00d116bdb63549dfa8807ea0ef939761fcf327f7` unde
 
 The clean-commit functional smoke loaded checkpoint SHA `2faac94de9e937dee77cd6d5d44036d7f45bb2dc4cc6491c1c97c0091f4fb216` and returned legal action `[0]` for a `minCount=maxCount=1` selection. Model actions were 1; fallback, load, inference, illegal-model, illegal-fallback, and emergency counts were all zero. The final full suite passes 62 tests and compileall.
 
+Two preceding temporary harness attempts failed before model import: the first lost Python string quoting through SSH, and the second ran a `/tmp` script without the repository on `PYTHONPATH`. Both are retained in the adapter report; neither executed checkpoint inference. The explicit-PYTHONPATH rerun from clean adapter commit passed.
+
 Actual gameplay remains explicitly blocked: no official `cg/api.py` was found in repository `tmp` or a bounded `/homes/lzhang` depth-six search. `results/rl_bc_002_adapter_smoke.json` records games=0 and no gameplay claim. Once a valid engine path is available, run a separate small, fixed-seed, seat-swapped smoke against `official_random` and `lucario_rule`, retaining fallback diagnostics. This does not authorize AWR, IQL, PPO, self-play, or league work.
