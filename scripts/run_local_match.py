@@ -34,6 +34,21 @@ def load_agent(path: Path, module_name: str):
     return module
 
 
+def agent_diagnostics(agents: list[object]) -> list[dict]:
+    diagnostics = []
+    for module in agents:
+        callback = getattr(module, "diagnostics", None)
+        if not callable(callback):
+            diagnostics.append({})
+            continue
+        try:
+            value = callback()
+            diagnostics.append(value if isinstance(value, dict) else {"invalid_diagnostics": True})
+        except Exception as exc:
+            diagnostics.append({"diagnostics_error": f"{type(exc).__name__}: {exc}"})
+    return diagnostics
+
+
 def play(agent0_dir: Path, agent1_dir: Path, cg_dir: Path, max_decisions: int) -> dict:
     install_cg_package(cg_dir)
     from cg.game import battle_finish, battle_select, battle_start
@@ -55,7 +70,12 @@ def play(agent0_dir: Path, agent1_dir: Path, cg_dir: Path, max_decisions: int) -
         while decisions < max_decisions:
             current = observation.get("current")
             if current is not None and current.get("result", -1) != -1:
-                return {"result": current["result"], "decisions": decisions, "turn": current.get("turn")}
+                return {
+                    "result": current["result"],
+                    "decisions": decisions,
+                    "turn": current.get("turn"),
+                    "agent_diagnostics": agent_diagnostics(agents),
+                }
             if current is None:
                 player = decisions % 2
             else:
