@@ -226,3 +226,15 @@ The evaluator now runs each game in an independent child and preserves exit code
 Stage A passed once from clean `1c03932`: 20/20 interleaved, seat-balanced official-random games were normal status/reward terminals using the archive native SHA `feafd404...`. Crash, abnormal exit, hard/framework timeout, invalid, agent error, exception, and network attempt were zero. Wall time was 56.61s, maximum RSS 128544 KB, and VRAM zero. Raw records and gates are under `results/eval_unseeded_001_*`.
 
 Stage B was therefore authorized and ran exactly games 21-24 once from clean `d0db91e`. All four were retained failures: child exit code 2, no signal or timeout, `retry_count=0`, and `RuntimeError: Unable to open /dev/urandom` before model load. Model decisions and completed model games were zero; the four scheduled integration attempts must not be rerun or described as gameplay. The unverified next step is a separately authorized OS-isolation device-mapping preflight with new game IDs. Do not begin the 40-game pilot, AWR, IQL, PPO, self-play, or league.
+
+## EVAL-ISOLATION-001 passed preflight (2026-07-21)
+
+The authorized no-game preflight ran once from clean commit `3978cef` using `/usr/bin/bwrap --unshare-net --bind / / --dev-bind /dev /dev --`. All initialization and isolation gates passed: urandom and `os.urandom`, Torch import/CPU tensor, checkpoint load and SHA `2faac94d...`, archive native load and SHA `feafd404...`, no `eth0`, failed TCP/DNS, exit zero, and no signal/timeout/exception. It ran no CABT game.
+
+Structured resource peaks are parent 20920 KB, max child 573636 KB, process tree and overall 703144 KB. Internal elapsed was 10.007 seconds; external GNU time was 10.79 seconds with 704600 KB maximum RSS. Full child stdout contains only optional kaggle-environment import warnings; stderr is empty.
+
+`results/eval_unseeded_001_correction.json` preserves hashes of the old files and corrects semantics without overwriting them. The old `model_games=4` means scheduled attempts; checkpoint-loaded, model-action, and completed model games are zero. Historical Stage A child/tree RSS are null because they were not sampled, not zero.
+
+EVAL-ISOLATION-001 permits proposing an EVAL-UNSEEDED-002 specification only. Do not run it without separate authorization; it must use new IDs and rerun a resource-complete 20-game Stage A before any four-game Stage B. The 40-game pilot, AWR, IQL, PPO, self-play, league, PR, main merge, and Kaggle submission remain prohibited.
+
+Final validation from clean `5ab8bd8` passed 81 unit tests (5.895s internal, 14.08s wall, 697240 KB peak RSS) and compileall (0.08s, 13964 KB peak RSS).

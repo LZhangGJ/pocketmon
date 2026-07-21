@@ -125,3 +125,14 @@
 - Experiment-supported inference: the failure is in the isolated model-process startup path, not evidence about checkpoint action quality or gameplay strength.
 - Unverified hypothesis: Torch initialization needs a different explicit `/dev` mapping inside bubblewrap while preserving `--unshare-net`. Do not rerun these four game IDs; any fix requires a separately authorized smoke with new IDs.
 - Decision: do not merge or start the 40-game pilot, AWR, IQL, PPO, self-play, or league work.
+
+# 2026-07-21 - EVAL-ISOLATION-001 no-game preflight passes
+
+- Implementation commits `3978cef` and `5ab8bd8` add a one-shot child preflight, `/proc` process-tree RSS sampling, explicit Stage A resource fields, corrected Stage B attempt/completion semantics, and a non-destructive EVAL-UNSEEDED-001 companion correction.
+- Formal command used `/usr/bin/bwrap --unshare-net --bind / / --dev-bind /dev /dev --`. It ran once from clean `3978cef` on doraemon04 and did not construct or run a CABT game.
+- All gates passed: `/dev/urandom`, `os.urandom`, Torch import, CPU tensor, frozen checkpoint load/hash, official archive sim/native load/hash, no `eth0`, failed TCP/DNS access, exit code zero, no signal/timeout/exception.
+- Checkpoint SHA is `2faac94de9e937dee77cd6d5d44036d7f45bb2dc4cc6491c1c97c0091f4fb216`; mapped archive native SHA is `feafd4046b2f688bdb33a4972c139b78e13e243ab5707ece52c43cf39a34b887`.
+- Structured RSS is parent 20920 KB, max child 573636 KB, sampled process tree 703144 KB, overall 703144 KB; internal elapsed is 10.007s. External GNU time was 10.79s / 704600 KB.
+- EVAL-UNSEEDED-001 historical evidence remains byte-identifiable by SHA. Its parent RSS is 21924 KB and external maximum 128544 KB; child and process-tree peaks are explicitly null because they were not historically sampled. Legacy Stage B `model_games=4` means scheduled attempts; completed model games, checkpoint-loaded games, model-action games, and model decisions are all zero.
+- Decision: an EVAL-UNSEEDED-002 specification may now be proposed with new game IDs and complete resource sampling, but no new game is authorized by this preflight alone.
+- Final verification at clean `5ab8bd8`: 81 tests passed in 5.895s (14.08s external wall, 697240 KB peak RSS); compileall passed in 0.08s with 13964 KB peak RSS.

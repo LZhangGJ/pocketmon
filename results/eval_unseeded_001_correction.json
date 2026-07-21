@@ -1,0 +1,29 @@
+{
+  "correction_only": true,
+  "experiment_id": "EVAL-UNSEEDED-001",
+  "historical_files_unchanged": true,
+  "historical_sha256": {
+    "results/eval_unseeded_001_games.jsonl": "c2697d8d3d2ca4da5befabf14bf34b862b7878428ca6ef7208d8cedb82cba0a7",
+    "results/eval_unseeded_001_stage_b_games.jsonl": "bf418c428dbea53b68709047103b955167d938cff224d09a6a6341724c1684e1",
+    "results/eval_unseeded_001_stage_b_summary.json": "97e3adf5c55ae1c9fa76df90397f1cc0273bcba1e897ef67c21c14b98ed79219",
+    "results/eval_unseeded_001_summary.json": "8008bf312f66405bc3c2a1a19c858fee67eada3146d66c87dbcfbdd4fc9028e4"
+  },
+  "stage_a": {
+    "external_gnu_time_peak_rss_kb": 128544,
+    "max_child_peak_rss_kb": null,
+    "max_process_tree_peak_rss_kb": null,
+    "overall_peak_rss_definition": "maximum of available historical parent/child RSS and external GNU time maximum; child and process-tree peaks are null when the historical run did not record them",
+    "overall_peak_rss_kb": 128544,
+    "parent_peak_rss_kb": 21924
+  },
+  "stage_b": {
+    "checkpoint_loaded_games": 0,
+    "completed_model_games": 0,
+    "legacy_model_games": 4,
+    "legacy_model_games_meaning": "scheduled attempts, not completed model games",
+    "model_action_games": 0,
+    "model_decisions": 0,
+    "scheduled_model_attempts": 4,
+    "started_model_processes": 4
+  }
+}
