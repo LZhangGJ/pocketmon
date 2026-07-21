@@ -1,0 +1,35 @@
+{
+  "experiment_id": "RL-BC-002-B",
+  "arm": "history-encoder",
+  "architecture": "causal_gru_history_masked_autoregressive_candidate_pointer_with_stop",
+  "input": "data/processed/public_replay_v1.jsonl.gz",
+  "input_sha256": "2768c08ae2451f50b5382ad8eed0f3db2cc1facab53d8b25b19aeed39850b694",
+  "split": {
+    "kind": "episode_id",
+    "seed": 20260720,
+    "train_fraction": 0.8,
+    "validation_fraction": 0.2
+  },
+  "training": {
+    "formal_seeds": [17, 42, 20260720],
+    "epochs": 60,
+    "batch_size": 256,
+    "learning_rate": 0.0003,
+    "hidden_dim": 128,
+    "early_stopping_patience": 10,
+    "value_loss_weight": 0.25,
+    "gradient_clip_norm": 1.0
+  },
+  "history": {
+    "enabled": true,
+    "encoder": "gru",
+    "max_length": 16,
+    "group_by": ["episode_id", "player"],
+    "order_by": "action_step",
+    "token": "prior pre-action state plus that prior selected-option summary"
+  },
+  "policy_loss_rows": "policy_weight == 1 only",
+  "value_loss_rows": "value_weight == 1 for both players",
+  "random_initialization": true,
+  "offline_rl": false
+}
