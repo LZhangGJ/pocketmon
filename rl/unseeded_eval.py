@@ -5,6 +5,8 @@ import importlib.abc
 import importlib.util
 import math
 import socket
+import sys
+import types
 from pathlib import Path
 from typing import Any
 
@@ -74,6 +76,19 @@ class NetworkBlocker:
         socket.create_connection = self._originals["create_connection"]
         socket.socket.connect = self._originals["connect"]
         socket.socket.connect_ex = self._originals["connect_ex"]
+
+
+def install_agent_cg_alias(archive_cg: Path, loaded_sim: Any) -> types.ModuleType:
+    """Expose the verified CABT sim to sample agents without reinitializing libcg."""
+
+    archive_cg = Path(archive_cg).resolve()
+    package = types.ModuleType("cg")
+    package.__path__ = [str(archive_cg)]
+    package.__package__ = "cg"
+    package.__file__ = str(archive_cg / "__init__.py")
+    sys.modules["cg"] = package
+    sys.modules["cg.sim"] = loaded_sim
+    return package
 
 
 def alternating_schedule(games: int) -> list[dict[str, Any]]:

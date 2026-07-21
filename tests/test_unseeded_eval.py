@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import ast
 import socket
+import sys
 import tempfile
+import types
 import unittest
 from pathlib import Path
 
@@ -11,6 +13,7 @@ from rl.unseeded_eval import (
     OfficialCabtModuleFinder,
     alternating_schedule,
     approved_terminal,
+    install_agent_cg_alias,
     outcome_from_rewards,
     require_sha256,
     sha256_file,
@@ -19,6 +22,27 @@ from rl.unseeded_eval import (
 
 
 class UnseededEvaluationTests(unittest.TestCase):
+    def test_agent_cg_alias_reuses_verified_sim_module(self) -> None:
+        previous_cg = sys.modules.get("cg")
+        previous_sim = sys.modules.get("cg.sim")
+        try:
+            with tempfile.TemporaryDirectory() as directory:
+                cg = Path(directory)
+                (cg / "__init__.py").write_text("", encoding="utf-8")
+                verified_sim = types.ModuleType("verified_sim")
+                package = install_agent_cg_alias(cg, verified_sim)
+                self.assertEqual(package.__path__, [str(cg.resolve())])
+                self.assertIs(sys.modules["cg.sim"], verified_sim)
+        finally:
+            if previous_cg is None:
+                sys.modules.pop("cg", None)
+            else:
+                sys.modules["cg"] = previous_cg
+            if previous_sim is None:
+                sys.modules.pop("cg.sim", None)
+            else:
+                sys.modules["cg.sim"] = previous_sim
+
     def test_runner_has_no_json_boolean_identifiers(self) -> None:
         runner = Path(__file__).resolve().parents[1] / "scripts/evaluate_unseeded_runtime.py"
         tree = ast.parse(runner.read_text(encoding="utf-8"))

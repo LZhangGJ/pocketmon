@@ -21,6 +21,7 @@ from rl.unseeded_eval import (
     alternating_schedule,
     approved_terminal,
     loaded_native_libraries,
+    install_agent_cg_alias,
     outcome_from_rewards,
     require_sha256,
     summarize_stage_a,
@@ -166,6 +167,7 @@ def main() -> int:
     }
     if module_paths != expected_modules:
         raise RuntimeError(f"official wrapper resolution mismatch: {module_paths}")
+    install_agent_cg_alias(archive_cg, loaded_sim)
 
     gate = {
         "experiment_id": "EVAL-UNSEEDED-001",
@@ -183,6 +185,7 @@ def main() -> int:
         },
         "module_paths": module_paths,
         "mapped_native_libraries": mapped_hashes,
+        "agent_cg_sim_reuses_framework_sim": sys.modules.get("cg.sim") is loaded_sim,
         "loaded_native_sha256": native_hash,
         "host": os.uname().nodename,
         "python": sys.version.replace("\n", " "),
