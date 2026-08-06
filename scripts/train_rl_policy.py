@@ -89,6 +89,7 @@ def actual_fingerprint_payload(
     value_loss_weight: float, gradient_clip_norm: float, architecture: str = ARCHITECTURE,
     history_length: int = 0, experiment_id: str | None = None,
     structured: dict[str, Any] | None = None,
+    initialization: str = "random",
 ) -> dict[str, Any]:
     history_enabled = architecture == HISTORY_ARCHITECTURE
     payload = {
@@ -106,7 +107,7 @@ def actual_fingerprint_payload(
             "encoder": "gru" if history_enabled else "none",
             "max_length": history_length if history_enabled else 0,
         },
-        "initialization": "random",
+        "initialization": initialization,
         "offline_rl": False,
     }
     if history_enabled:
@@ -156,7 +157,13 @@ def current_config_matches(planned: dict[str, Any], actual: dict[str, Any]) -> t
     if "experiment_id" in planned:
         checks["experiment_id"] = actual.get("experiment_id") == planned["experiment_id"]
     if "random_initialization" in planned:
-        checks["random_initialization"] = actual["initialization"] == ("random" if planned["random_initialization"] else "resume")
+        checks["random_initialization"] = (
+            actual["initialization"] == "random"
+            if planned["random_initialization"]
+            else actual["initialization"] in {"resume", "warm_start"}
+        )
+    if "initialization" in planned:
+        checks["initialization"] = actual["initialization"] == planned["initialization"]
     if "offline_rl" in planned:
         checks["offline_rl"] = actual["offline_rl"] == planned["offline_rl"]
     mismatches = [name for name, matched in checks.items() if not matched]
@@ -295,8 +302,16 @@ def main() -> None:
     parser.add_argument("--split-output", default="results/rl_bc_001_split.json")
     parser.add_argument("--runs-output", default="results/rl_bc_001_runs.csv")
     parser.add_argument("--resume", default=None)
+    parser.add_argument(
+        "--initialize-from",
+        default=None,
+        help="Warm-start model weights from a checkpoint while resetting optimizer and epoch state",
+    )
     parser.add_argument("--max-batches", type=int, default=0, help="Smoke-only limit; never completes an epoch")
     args = parser.parse_args()
+
+    if args.resume and args.initialize_from:
+        raise ValueError("--resume and --initialize-from are mutually exclusive")
 
     start = time.perf_counter()
     initial_dirty = assert_formal_worktree_clean(args.max_batches)
@@ -333,6 +348,7 @@ def main() -> None:
             "attack_database_sha256": sha256_file(Path(args.attack_database)),
             "confidence_threshold": args.confidence_threshold,
         }
+    initialization = "resume" if args.resume else ("warm_start" if args.initialize_from else "random")
     fingerprint_payload = actual_fingerprint_payload(
         code_commit=code_commit, input_sha256=audit["input_sha256"], split_seed=args.split_seed,
         validation_fraction=args.validation_fraction, epochs=args.epochs, batch_size=args.batch_size,
@@ -341,6 +357,7 @@ def main() -> None:
         architecture=args.architecture, history_length=args.history_length,
         experiment_id=args.experiment_id,
         structured=structured_assets,
+        initialization=initialization,
     )
     fingerprint = experiment_fingerprint(fingerprint_payload)
     config_matched, config_mismatches = current_config_matches(planned_config, fingerprint_payload)
@@ -365,6 +382,22 @@ def main() -> None:
         model = MaskedPointerActorCritic(args.hidden_dim, history_encoder=history_enabled).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     state = new_training_state()
+    warm_start: dict[str, Any] | None = None
+    if args.initialize_from:
+        source_path = Path(args.initialize_from).resolve()
+        checkpoint = torch.load(source_path, map_location=device, weights_only=False)
+        source_hidden_dim = int(checkpoint.get("hidden_dim", -1))
+        if source_hidden_dim != args.hidden_dim:
+            raise ValueError(
+                f"warm-start hidden_dim mismatch: checkpoint={source_hidden_dim}, requested={args.hidden_dim}"
+            )
+        model.load_state_dict(checkpoint["model"], strict=True)
+        warm_start = {
+            "path": str(source_path),
+            "sha256": checkpoint_sha256(source_path),
+            "git_sha": checkpoint.get("git_sha"),
+            "experiment_fingerprint": checkpoint.get("experiment_fingerprint"),
+        }
     if args.resume:
         checkpoint = torch.load(args.resume, map_location=device, weights_only=False)
         validate_resume_compatibility(
@@ -379,6 +412,7 @@ def main() -> None:
         "device_resolved": str(device), "stateless": not history_enabled, "architecture": args.architecture,
         "history_encoder": history_enabled, "history_length": args.history_length,
         "structured": structured_assets,
+        "initialization": initialization, "warm_start": warm_start,
         "policy_rows": "winner_only", "value_rows": "both_players",
         "value_loss_weight": args.value_loss_weight, "gradient_clip_norm": args.gradient_clip_norm,
         "experiment_fingerprint": fingerprint, "config_matched": config_matched,
