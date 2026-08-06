@@ -86,6 +86,19 @@ def wait_processes(processes: list[tuple[str, subprocess.Popen, Any]]) -> None:
         raise RuntimeError(f"pipeline child processes failed: {failures}")
 
 
+def wait_for_files(paths: list[Path], timeout_seconds: float = 60.0) -> None:
+    """Wait for shared-disk metadata to become visible after remote exit."""
+
+    deadline = time.monotonic() + timeout_seconds
+    while True:
+        missing = [path for path in paths if not path.is_file()]
+        if not missing:
+            return
+        if time.monotonic() >= deadline:
+            raise RuntimeError(f"shared-disk artifacts did not become visible: {missing}")
+        time.sleep(1.0)
+
+
 def run_process(
     *,
     host: str,
@@ -214,9 +227,11 @@ def ensure_rollouts(
         )
         processes.append((f"rollout:{host}:{shard}", process, handle))
     wait_processes(processes)
-    for output in outputs:
-        if not output.is_file() or not output.with_name(output.name + ".summary.json").is_file():
-            raise RuntimeError(f"rollout shard incomplete: {output}")
+    wait_for_files([
+        path
+        for output in outputs
+        for path in (output, output.with_name(output.name + ".summary.json"))
+    ])
     return outputs
 
 
@@ -258,8 +273,7 @@ def ensure_candidate_checkpoint(
         log_path=paths["train"] / "train.log",
         environment={"CUDA_VISIBLE_DEVICES": str(gpu)},
     )
-    if not output.is_file() or not metrics.is_file():
-        raise RuntimeError("PPO trainer returned without complete outputs")
+    wait_for_files([output, metrics])
     return output
 
 
@@ -343,6 +357,7 @@ def ensure_gate(
         )
         processes.append((f"gate:{host}:{shard}", process, handle))
     wait_processes(processes)
+    wait_for_files(result_paths)
     rows = load_results(result_paths)
     if len(rows) != len(schedule):
         raise RuntimeError(f"promotion gate incomplete: {len(rows)}/{len(schedule)}")
