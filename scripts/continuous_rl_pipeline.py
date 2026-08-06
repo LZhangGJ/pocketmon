@@ -113,9 +113,10 @@ def run_process(
     wait_processes([(host, process, handle)])
 
 
-def free_gpu(host: str, local_host: str) -> tuple[int, int]:
+def free_gpu(host: str, local_host: str) -> tuple[int, int, int, int]:
     command = [
-        "nvidia-smi", "--query-gpu=memory.free", "--format=csv,noheader,nounits",
+        "nvidia-smi", "--query-gpu=memory.free,memory.total,utilization.gpu",
+        "--format=csv,noheader,nounits",
     ]
     completed = subprocess.run(
         command if host == local_host or host == socket.gethostname() else ["ssh", host, remote_command(command)],
@@ -124,26 +125,36 @@ def free_gpu(host: str, local_host: str) -> tuple[int, int]:
         timeout=30,
         check=True,
     )
-    values = [int(line.strip()) for line in completed.stdout.splitlines() if line.strip().isdigit()]
+    values = []
+    for index, line in enumerate(completed.stdout.splitlines()):
+        fields = [field.strip() for field in line.split(",")]
+        if len(fields) == 3 and all(field.isdigit() for field in fields):
+            values.append((int(fields[0]), int(fields[1]), int(fields[2]), index))
     if not values:
         raise RuntimeError(f"no GPU memory data from {host}")
-    index = max(range(len(values)), key=values.__getitem__)
-    return values[index], index
+    # Prefer an idle device over a larger but saturated device. Free ratio and
+    # absolute memory break ties between similarly idle GPUs.
+    return min(values, key=lambda item: (item[2], -item[0] / item[1], -item[0]))
 
 
-def choose_trainer(config: dict[str, Any]) -> tuple[str, int, dict[str, int]]:
-    availability: dict[str, int] = {}
+def choose_trainer(config: dict[str, Any]) -> tuple[str, int, dict[str, Any]]:
+    availability: dict[str, Any] = {}
     choices = []
     for host in config["trainer_hosts"]:
         try:
-            memory, gpu = free_gpu(host, config["local_host"])
-            availability[host] = memory
-            choices.append((memory, host, gpu))
+            free_memory, total_memory, utilization, gpu = free_gpu(host, config["local_host"])
+            availability[host] = {
+                "gpu": gpu,
+                "free_memory_mib": free_memory,
+                "total_memory_mib": total_memory,
+                "utilization_percent": utilization,
+            }
+            choices.append((utilization, -free_memory / total_memory, -free_memory, host, gpu))
         except Exception:
-            availability[host] = -1
+            availability[host] = {"error": "GPU query failed"}
     if not choices:
         raise RuntimeError("no trainer host has a visible GPU")
-    _, host, gpu = max(choices)
+    _, _, _, host, gpu = min(choices)
     return host, gpu, availability
 
 
@@ -379,6 +390,8 @@ def ensure_gate(
 
 def run_generation(config: dict[str, Any], state: dict[str, Any], run_root: Path) -> dict[str, Any]:
     generation = int(state["generation"]) + 1
+    for stale in ("consecutive_failures", "last_error", "last_traceback"):
+        state.pop(stale, None)
     paths = generation_paths(run_root, generation)
     paths["root"].mkdir(parents=True, exist_ok=True)
     event_log_path = run_root / "events.jsonl"

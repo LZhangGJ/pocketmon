@@ -6,7 +6,9 @@ import time
 import unittest
 from pathlib import Path
 
-from scripts.continuous_rl_pipeline import wait_for_files
+from unittest.mock import patch
+
+from scripts.continuous_rl_pipeline import choose_trainer, wait_for_files
 
 
 class ContinuousPipelineTests(unittest.TestCase):
@@ -29,6 +31,19 @@ class ContinuousPipelineTests(unittest.TestCase):
             path = Path(directory) / "missing"
             with self.assertRaisesRegex(RuntimeError, "did not become visible"):
                 wait_for_files([path], timeout_seconds=0.01)
+
+    def test_trainer_selection_prefers_idle_gpu_over_larger_busy_gpu(self) -> None:
+        readings = {
+            "idle": (20_000, 24_000, 0, 1),
+            "busy": (70_000, 80_000, 92, 3),
+        }
+        with patch("scripts.continuous_rl_pipeline.free_gpu", side_effect=lambda host, _: readings[host]):
+            host, gpu, audit = choose_trainer({
+                "trainer_hosts": ["busy", "idle"],
+                "local_host": "coordinator",
+            })
+        self.assertEqual((host, gpu), ("idle", 1))
+        self.assertEqual(audit["busy"]["utilization_percent"], 92)
 
 
 if __name__ == "__main__":
