@@ -25,13 +25,20 @@ class RLBCPolicyAdapter:
         fallback: Callable[[dict[str, Any]], list[int]],
         device: str = "cpu",
         confidence_threshold: float | None = None,
+        deck: list[int] | None = None,
     ) -> None:
         self.checkpoint_path = Path(checkpoint_path)
         self.fallback = fallback
         self.device = torch.device(device)
         self._model: MaskedPointerActorCritic | None = None
         self._structured = False
-        self._deck: list[int] = []
+        if deck is not None and (
+            len(deck) != 60
+            or not all(isinstance(card_id, int) and not isinstance(card_id, bool) for card_id in deck)
+        ):
+            raise ValueError("configured deck must contain exactly 60 integer card ids")
+        self._configured_deck = list(deck or [])
+        self._deck: list[int] = list(self._configured_deck)
         self._confidence_threshold_override = confidence_threshold
         self._confidence_threshold = 0.0
         self._last_confidence: float | None = None
@@ -53,7 +60,7 @@ class RLBCPolicyAdapter:
 
     def reset(self) -> None:
         self._history.clear()
-        self._deck.clear()
+        self._deck = list(self._configured_deck)
         self._last_turn = None
 
     def _load(self) -> None:
@@ -61,7 +68,12 @@ class RLBCPolicyAdapter:
             return
         self._load_attempted = True
         try:
-            checkpoint = torch.load(self.checkpoint_path, map_location=self.device, weights_only=False)
+            try:
+                checkpoint = torch.load(self.checkpoint_path, map_location=self.device, weights_only=False)
+            except TypeError:
+                # torch<2.0 does not expose the weights_only keyword. These are
+                # trusted, locally trained checkpoints rather than user uploads.
+                checkpoint = torch.load(self.checkpoint_path, map_location=self.device)
             config = checkpoint["config"]
             architecture = config.get("architecture", STATELESS_ARCHITECTURE)
             if architecture not in (STATELESS_ARCHITECTURE, HISTORY_ARCHITECTURE, STRUCTURED_ARCHITECTURE):

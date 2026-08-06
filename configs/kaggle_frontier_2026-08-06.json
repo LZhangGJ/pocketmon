@@ -1,0 +1,18 @@
+{
+  "observed_at_utc": "2026-08-06T12:56:00Z",
+  "discovery_url": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/code?competitionId=116727&sortBy=dateRun&excludeNonAccessedDatasources=true",
+  "policy": "recently_run_first_then_public_score_and_method_diversity",
+  "notebooks": [
+    {"ref": "tetsutani/grimmsnarl-ex-damage-transfer-control", "public_score_observed": 822.8, "updated_label_observed": "20h", "discovery_sort": "recently_run"},
+    {"ref": "makthanithin/pok-mon-tcg-ai-battle-meta-snapshot-06-29", "public_score_observed": 731.8, "updated_label_observed": "19h", "discovery_sort": "recently_run"},
+    {"ref": "farhanabidtech786/pokemon-company-ai-battle-challenge-simulation", "public_score_observed": 744.6, "updated_label_observed": "1d", "discovery_sort": "recently_run"},
+    {"ref": "makthanithin/pokemon-tcg-ai-battle-1084-5-baseline", "public_score_observed": 707.7, "updated_label_observed": "1d", "discovery_sort": "recently_run"},
+    {"ref": "romanrozen/strong-start-baseline-agent-v10-lb-950", "public_score_observed": 885.2, "updated_label_observed": "3d", "discovery_sort": "recently_run"},
+    {"ref": "yaminh/the-pokemon-company-ai-challenge-v3", "updated_label_observed": "3d", "discovery_sort": "recently_run_novelty"},
+    {"ref": "toshikomiyake/rl-mcts-text-embedding-model4", "updated_label_observed": "4d", "discovery_sort": "recently_run_novelty"},
+    {"ref": "utilisateurrichard/pok-mon-muzero", "updated_label_observed": "4d", "discovery_sort": "recently_run_novelty"},
+    {"ref": "prvsiyan/ptcg-ai-battle-search-audited-alakazam-v9", "public_score_observed": 778.2, "updated_label_observed": "4d", "discovery_sort": "recently_run"},
+    {"ref": "prvsiyan/ptcg-844-4-observable-meta-router-visuals", "public_score_observed": 660.8, "updated_label_observed": "4d", "discovery_sort": "recently_run_novelty"},
+    {"ref": "myso1987/ptcg-ai-battle-leaderboard-deck-meta-by-score-band", "updated_label_observed": "19m", "discovery_sort": "recently_run_intelligence"}
+  ]
+}

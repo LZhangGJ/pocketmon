@@ -1,0 +1,7 @@
+[
+  {"name": "beam_search_940", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/beam_search_940"},
+  {"name": "dragapult", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/dragapult"},
+  {"name": "iono", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/iono"},
+  {"name": "library_out_1208", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/library_out"},
+  {"name": "lucario_sample", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/lucario_sample"}
+]
