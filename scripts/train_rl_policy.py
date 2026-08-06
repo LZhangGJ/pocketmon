@@ -334,7 +334,8 @@ def main() -> None:
     seed_everything(args.seed)
     device = choose_device(args.device)
     if device.type == "cuda":
-        torch.cuda.set_device(device); torch.cuda.reset_peak_memory_stats()
+        torch.cuda.set_device(0 if device.index is None else device.index)
+        torch.cuda.reset_peak_memory_stats()
 
     history_enabled = args.architecture == HISTORY_ARCHITECTURE
     structured_enabled = args.architecture == STRUCTURED_ARCHITECTURE
