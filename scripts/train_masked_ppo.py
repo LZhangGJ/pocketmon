@@ -149,7 +149,7 @@ def main() -> None:
         model.train()
         totals = Counter()
         loader = make_loader(dataset, args.batch_size, shuffle=True, seed=args.seed + epoch)
-        for original in loader:
+        for batch_index, original in enumerate(loader):
             batch = to_device(original, device)
             loss, parts = ppo_batch_loss(
                 model,
@@ -160,7 +160,9 @@ def main() -> None:
                 entropy_coefficient=args.entropy_coefficient,
             )
             if not torch.isfinite(loss):
-                raise FloatingPointError("non-finite PPO loss")
+                raise FloatingPointError(
+                    f"non-finite PPO loss at epoch={epoch} batch={batch_index}: {parts}"
+                )
             optimizer.zero_grad(set_to_none=True)
             loss.backward()
             gradient_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), args.gradient_clip_norm)

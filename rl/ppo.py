@@ -111,7 +111,9 @@ def evaluate_action_sequences(
         legal = legal_choice_mask(
             batch["option_mask"], selected, selected_count, batch["min_count"], batch["max_count"]
         )
-        logits = logits.masked_fill(~legal, -torch.inf)
+        # A finite floor preserves an effectively zero illegal probability
+        # while avoiding 0 * -inf in entropy on heavily padded real batches.
+        logits = logits.masked_fill(~legal, torch.finfo(logits.dtype).min)
         active = step <= batch["action_lengths"]
         choosing = step < batch["action_lengths"]
         targets = torch.full((batch_size,), max_options, dtype=torch.long, device=values.device)
@@ -159,7 +161,7 @@ def sample_action(
         legal = legal_choice_mask(
             batch["option_mask"], selected, counts, batch["min_count"], batch["max_count"]
         )
-        logits = logits.masked_fill(~legal, -torch.inf)
+        logits = logits.masked_fill(~legal, torch.finfo(logits.dtype).min)
         probabilities = torch.softmax(logits, dim=1)
         choice = int(torch.multinomial(probabilities[0], 1).item())
         log_probability += float(torch.log(probabilities[0, choice]).item())
@@ -246,7 +248,10 @@ def ppo_batch_loss(
     returns = torch.tensor(
         [float(row["return"]) for row in rows], dtype=values.dtype, device=values.device
     )
-    log_ratio = new_log_probability - old_log_probability
+    # PPO clipping makes ratios far outside this interval equivalent for the
+    # clipped surrogate; bounding the exponent prevents overflow before the
+    # min/clamp operation can take effect.
+    log_ratio = (new_log_probability - old_log_probability).clamp(-20.0, 20.0)
     ratio = log_ratio.exp()
     unclipped = ratio * advantages
     clipped = ratio.clamp(1.0 - clip_ratio, 1.0 + clip_ratio) * advantages

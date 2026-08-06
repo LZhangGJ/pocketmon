@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import unittest
+from copy import deepcopy
 
 import torch
 
@@ -89,6 +90,27 @@ class MaskedPPOTests(unittest.TestCase):
         loss.backward()
         self.assertTrue(any(parameter.grad is not None for parameter in model.parameters()))
         self.assertAlmostEqual(metrics["ratio_mean"], 1.0, places=5)
+
+    def test_entropy_is_finite_with_heavily_padded_option_counts(self) -> None:
+        torch.manual_seed(19)
+        model = StructuredMaskedPointerActorCritic(32)
+        deck = [10, 11, 20] * 20
+        small = deepcopy(observation())
+        small["select"].update({"minCount": 0, "maxCount": 0, "option": []})
+        large = deepcopy(observation())
+        large["select"].update({
+            "minCount": 1,
+            "maxCount": 1,
+            "option": [{"type": index % 14} for index in range(80)],
+        })
+        rows = [
+            model_row_from_observation(small, deck, []),
+            model_row_from_observation(large, deck, [79]),
+        ]
+        log_probability, entropy, values = evaluate_action_sequences(model, collate_rows(rows))
+        self.assertTrue(torch.isfinite(log_probability).all())
+        self.assertTrue(torch.isfinite(entropy).all())
+        self.assertTrue(torch.isfinite(values).all())
 
 
 if __name__ == "__main__":
