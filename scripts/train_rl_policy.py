@@ -460,7 +460,7 @@ def main() -> None:
         raise RuntimeError("no training epoch or partial epoch was executed")
 
     chosen_path = Path(state["best_checkpoint_path"]) if state["best_checkpoint_path"] else last_path
-    chosen = torch.load(chosen_path, map_location=device, weights_only=False)
+    chosen = load_torch_checkpoint(chosen_path, device)
     model.load_state_dict(chosen["model"])
     final_limit = args.max_batches if args.max_batches else 0
     final_loss = run_epoch(model, validation_loader, device, max_batches=final_limit, value_loss_weight=args.value_loss_weight, gradient_clip_norm=args.gradient_clip_norm)
