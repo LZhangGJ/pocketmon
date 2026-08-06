@@ -83,6 +83,15 @@ def checkpoint_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def load_torch_checkpoint(path: Path | str, map_location: torch.device) -> dict[str, Any]:
+    """Load full training checkpoints across the PyTorch 1.10--2.x server fleet."""
+
+    try:
+        return torch.load(path, map_location=map_location, weights_only=False)
+    except TypeError:
+        return torch.load(path, map_location=map_location)
+
+
 def actual_fingerprint_payload(
     *, code_commit: str, input_sha256: str, split_seed: int, validation_fraction: float,
     epochs: int, batch_size: int, learning_rate: float, hidden_dim: int, patience: int,
@@ -385,7 +394,7 @@ def main() -> None:
     warm_start: dict[str, Any] | None = None
     if args.initialize_from:
         source_path = Path(args.initialize_from).resolve()
-        checkpoint = torch.load(source_path, map_location=device, weights_only=False)
+        checkpoint = load_torch_checkpoint(source_path, device)
         source_hidden_dim = int(checkpoint.get("hidden_dim", -1))
         if source_hidden_dim != args.hidden_dim:
             raise ValueError(
@@ -399,7 +408,7 @@ def main() -> None:
             "experiment_fingerprint": checkpoint.get("experiment_fingerprint"),
         }
     if args.resume:
-        checkpoint = torch.load(args.resume, map_location=device, weights_only=False)
+        checkpoint = load_torch_checkpoint(args.resume, device)
         validate_resume_compatibility(
             checkpoint, code_commit=code_commit, input_sha256=audit["input_sha256"], fingerprint=fingerprint
         )
