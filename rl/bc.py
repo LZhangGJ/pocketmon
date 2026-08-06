@@ -453,7 +453,14 @@ def batch_loss(model: MaskedPointerActorCritic, batch: dict[str, Any], value_los
         policy_sum = policy_sum + (per_row * weights).sum()
         policy_count = policy_count + weights.sum()
         if bool(choosing.any()):
-            selected[choosing, targets[choosing]] = True
+            # PyTorch 1.10's CUDA boolean advanced-index assignment can hit an
+            # internal shape assertion on mixed multi-select batches.  Scatter
+            # expresses the same update and works across the heterogeneous
+            # CUDA 11/12 training fleet.
+            updates = torch.zeros_like(selected)
+            safe_targets = targets.clamp_max(max_options - 1).unsqueeze(1)
+            updates.scatter_(1, safe_targets, choosing.unsqueeze(1))
+            selected = selected | updates
     policy_loss = policy_sum / policy_count.clamp_min(1.0)
     value_errors = F.mse_loss(values, batch["outcome"], reduction="none")
     value_sum = (value_errors * batch["value_weight"]).sum()
