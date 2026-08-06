@@ -21,12 +21,23 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from rl.bc import SPLIT_SEED, TrajectoryDataset, build_split_manifest, evaluate_decoding, load_replay_dataset, make_loader, run_epoch
-from rl.model import MaskedPointerActorCritic
+from rl.bc import (
+    SPLIT_SEED,
+    TrajectoryDataset,
+    build_split_manifest,
+    evaluate_decoding,
+    load_replay_dataset,
+    make_loader,
+    run_epoch,
+    sha256_file,
+)
+from rl.features import attack_metadata_table, card_metadata_table
+from rl.model import MaskedPointerActorCritic, StructuredMaskedPointerActorCritic
 
 
 ARCHITECTURE = "stateless_masked_autoregressive_candidate_pointer_with_stop"
 HISTORY_ARCHITECTURE = "causal_gru_history_masked_autoregressive_candidate_pointer_with_stop"
+STRUCTURED_ARCHITECTURE = "structured_card_attack_deepsets_deck_masked_pointer_with_stop"
 HISTORY_GROUP_BY = ["episode_id", "player"]
 HISTORY_ORDER_BY = "action_step"
 HISTORY_TOKEN = "prior pre-action state plus that prior selected-option summary"
@@ -77,6 +88,7 @@ def actual_fingerprint_payload(
     epochs: int, batch_size: int, learning_rate: float, hidden_dim: int, patience: int,
     value_loss_weight: float, gradient_clip_norm: float, architecture: str = ARCHITECTURE,
     history_length: int = 0, experiment_id: str | None = None,
+    structured: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     history_enabled = architecture == HISTORY_ARCHITECTURE
     payload = {
@@ -103,6 +115,8 @@ def actual_fingerprint_payload(
             "order_by": HISTORY_ORDER_BY,
             "token": HISTORY_TOKEN,
         })
+    if structured is not None:
+        payload["structured"] = structured
     if experiment_id is not None:
         payload["experiment_id"] = experiment_id
     return payload
@@ -136,6 +150,9 @@ def current_config_matches(planned: dict[str, Any], actual: dict[str, Any]) -> t
         for field in ("group_by", "order_by", "token"):
             if field in planned["history"]:
                 checks[f"history_{field}"] = actual["history"].get(field) == planned["history"][field]
+    if "structured" in planned:
+        for field, expected in planned["structured"].items():
+            checks[f"structured_{field}"] = actual.get("structured", {}).get(field) == expected
     if "experiment_id" in planned:
         checks["experiment_id"] = actual.get("experiment_id") == planned["experiment_id"]
     if "random_initialization" in planned:
@@ -249,7 +266,7 @@ def append_run_csv(path: Path, record: dict[str, Any]) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="RL-BC-001 stateless masked behavior cloning")
+    parser = argparse.ArgumentParser(description="Masked behavior cloning with optional structured card/deck inputs")
     parser.add_argument("--input", default="data/processed/public_replay_v1.jsonl.gz")
     parser.add_argument("--experiment-id", default="RL-BC-001")
     parser.add_argument("--planned-config", default="configs/rl_bc_001.json")
@@ -263,8 +280,15 @@ def main() -> None:
     parser.add_argument("--patience", type=int, default=5)
     parser.add_argument("--value-loss-weight", type=float, default=0.25)
     parser.add_argument("--gradient-clip-norm", type=float, default=1.0)
-    parser.add_argument("--architecture", choices=(ARCHITECTURE, HISTORY_ARCHITECTURE), default=ARCHITECTURE)
+    parser.add_argument(
+        "--architecture", choices=(ARCHITECTURE, HISTORY_ARCHITECTURE, STRUCTURED_ARCHITECTURE),
+        default=ARCHITECTURE,
+    )
     parser.add_argument("--history-length", type=int, default=0)
+    parser.add_argument("--deck-map", default="data/processed/replay_decks_2026-08-05.jsonl.gz")
+    parser.add_argument("--card-database", default="data/reference/official_cards.json")
+    parser.add_argument("--attack-database", default="data/reference/official_attacks.json")
+    parser.add_argument("--confidence-threshold", type=float, default=0.55)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--checkpoint-dir", default="checkpoints/rl_bc_001")
     parser.add_argument("--metrics-output", default="results/rl_bc_001_metrics.json")
@@ -286,11 +310,29 @@ def main() -> None:
         torch.cuda.set_device(device); torch.cuda.reset_peak_memory_stats()
 
     history_enabled = args.architecture == HISTORY_ARCHITECTURE
+    structured_enabled = args.architecture == STRUCTURED_ARCHITECTURE
     if history_enabled and args.history_length <= 0:
         raise ValueError("history architecture requires --history-length > 0")
     if not history_enabled and args.history_length != 0:
         raise ValueError("stateless architecture requires --history-length 0")
-    rows, audit = load_replay_dataset(Path(args.input), history_length=args.history_length)
+    if not 0.0 <= args.confidence_threshold <= 1.0:
+        raise ValueError("confidence threshold must be in [0, 1]")
+    rows, audit = load_replay_dataset(
+        Path(args.input), history_length=args.history_length,
+        deck_map_path=Path(args.deck_map) if structured_enabled else None,
+        structured=structured_enabled,
+    )
+    structured_assets = None
+    if structured_enabled:
+        structured_assets = {
+            "card_attack_embeddings": True,
+            "entity_encoder": "deepsets_masked_mean_max",
+            "deck_conditioning": "acting_player_submitted_deck_masked_mean",
+            "deck_map_sha256": audit["deck_map"]["sha256"],
+            "card_database_sha256": sha256_file(Path(args.card_database)),
+            "attack_database_sha256": sha256_file(Path(args.attack_database)),
+            "confidence_threshold": args.confidence_threshold,
+        }
     fingerprint_payload = actual_fingerprint_payload(
         code_commit=code_commit, input_sha256=audit["input_sha256"], split_seed=args.split_seed,
         validation_fraction=args.validation_fraction, epochs=args.epochs, batch_size=args.batch_size,
@@ -298,6 +340,7 @@ def main() -> None:
         value_loss_weight=args.value_loss_weight, gradient_clip_norm=args.gradient_clip_norm,
         architecture=args.architecture, history_length=args.history_length,
         experiment_id=args.experiment_id,
+        structured=structured_assets,
     )
     fingerprint = experiment_fingerprint(fingerprint_payload)
     config_matched, config_mismatches = current_config_matches(planned_config, fingerprint_payload)
@@ -312,7 +355,14 @@ def main() -> None:
     validation = TrajectoryDataset([row for row in rows if row["episode_id"] in validation_ids])
     train_loader = make_loader(train, args.batch_size, True, args.seed)
     validation_loader = make_loader(validation, args.batch_size, False, args.seed)
-    model = MaskedPointerActorCritic(args.hidden_dim, history_encoder=history_enabled).to(device)
+    if structured_enabled:
+        model = StructuredMaskedPointerActorCritic(
+            args.hidden_dim,
+            card_metadata=torch.tensor(card_metadata_table(Path(args.card_database))),
+            attack_metadata=torch.tensor(attack_metadata_table(Path(args.attack_database))),
+        ).to(device)
+    else:
+        model = MaskedPointerActorCritic(args.hidden_dim, history_encoder=history_enabled).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     state = new_training_state()
     if args.resume:
@@ -328,6 +378,7 @@ def main() -> None:
         "code_commit": code_commit, "dirty_at_start": bool(initial_dirty), "input_sha256": audit["input_sha256"],
         "device_resolved": str(device), "stateless": not history_enabled, "architecture": args.architecture,
         "history_encoder": history_enabled, "history_length": args.history_length,
+        "structured": structured_assets,
         "policy_rows": "winner_only", "value_rows": "both_players",
         "value_loss_weight": args.value_loss_weight, "gradient_clip_norm": args.gradient_clip_norm,
         "experiment_fingerprint": fingerprint, "config_matched": config_matched,

@@ -13,7 +13,17 @@ import torch
 from torch.nn import functional as F
 from torch.utils.data import DataLoader, Dataset
 
-from .features import ACTION_DIM, HISTORY_DIM, STATE_DIM, action_features, history_features, state_features
+from .features import (
+    ACTION_DIM,
+    ENTITY_DIM,
+    HISTORY_DIM,
+    MAX_DECK_SIZE,
+    STATE_DIM,
+    action_features,
+    history_features,
+    state_features,
+    structured_observation_features,
+)
 from .model import MaskedPointerActorCritic, legal_choice_mask
 
 
@@ -34,6 +44,12 @@ HISTORY_MODEL_INPUT_FIELDS = MODEL_INPUT_FIELDS | {
     "history.prior_pre_action_observation.current.visible_state",
     "history.prior_selected_options",
 }
+STRUCTURED_MODEL_INPUT_FIELDS = MODEL_INPUT_FIELDS | {
+    "observation.current.visible_card_entities",
+    "observation.select.visible_card_entities",
+    "observation.select.option.card_attack_identity",
+    "episode.acting_player_submitted_deck",
+}
 
 
 def sha256_file(path: Path) -> str:
@@ -48,7 +64,7 @@ def _context_key(value: Any) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
 
-def compact_replay_row(raw: dict[str, Any]) -> dict[str, Any]:
+def compact_replay_row(raw: dict[str, Any], structured: bool = False) -> dict[str, Any]:
     """Validate one schema-v2 row and retain only compact pre-action inputs plus labels."""
 
     if raw.get("schema_version") != 2:
@@ -85,7 +101,7 @@ def compact_replay_row(raw: dict[str, Any]) -> dict[str, Any]:
     if not math.isfinite(outcome):
         raise ValueError("non-finite outcome")
     encoded_options = [action_features(option if isinstance(option, dict) else {}, index) for index, option in enumerate(options)]
-    return {
+    row = {
         "episode_id": str(raw.get("episode_id")),
         "player": raw.get("player"),
         "action_step": raw.get("action_step"),
@@ -102,6 +118,9 @@ def compact_replay_row(raw: dict[str, Any]) -> dict[str, Any]:
         "select_context": _context_key(select.get("context")),
         "source_sha256": str(raw.get("source_sha256")),
     }
+    if structured:
+        row.update(structured_observation_features(observation, options))
+    return row
 
 
 def build_causal_histories(rows: list[dict[str, Any]], max_history: int) -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -157,15 +176,59 @@ def build_causal_histories(rows: list[dict[str, Any]], max_history: int) -> tupl
     return prepared, audit
 
 
-def load_replay_dataset(path: Path, history_length: int = 0) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+def load_deck_map(path: Path) -> tuple[dict[tuple[str, int], list[int]], dict[str, Any]]:
+    result: dict[tuple[str, int], list[int]] = {}
+    opener = gzip.open if str(path).endswith(".gz") else open
+    with opener(path, "rt", encoding="utf-8") as handle:
+        for line_number, line in enumerate(handle, 1):
+            raw = json.loads(line)
+            episode_id, player = str(raw.get("episode_id")), raw.get("player")
+            deck = raw.get("deck")
+            if not isinstance(player, int) or isinstance(player, bool) or player not in (0, 1):
+                raise ValueError(f"invalid deck-map player on line {line_number}")
+            if not isinstance(deck, list) or len(deck) != MAX_DECK_SIZE:
+                raise ValueError(f"invalid deck-map deck on line {line_number}")
+            if any(not isinstance(card_id, int) or isinstance(card_id, bool) for card_id in deck):
+                raise ValueError(f"invalid deck-map card ID on line {line_number}")
+            key = (episode_id, player)
+            if key in result and result[key] != deck:
+                raise ValueError(f"conflicting deck map entry for {key}")
+            result[key] = deck
+    return result, {
+        "path": str(path), "sha256": sha256_file(path), "bytes": path.stat().st_size,
+        "entries": len(result), "episodes": len({key[0] for key in result}),
+    }
+
+
+def load_replay_dataset(
+    path: Path,
+    history_length: int = 0,
+    deck_map_path: Path | None = None,
+    structured: bool = False,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    if structured and deck_map_path is None:
+        raise ValueError("structured dataset requires a deck map")
+    deck_map: dict[tuple[str, int], list[int]] = {}
+    deck_audit: dict[str, Any] = {"enabled": False}
+    if deck_map_path is not None:
+        deck_map, deck_audit = load_deck_map(deck_map_path)
+        deck_audit["enabled"] = True
     rows: list[dict[str, Any]] = []
     empty = multi = 0
     with gzip.open(path, "rt", encoding="utf-8") as handle:
         for line_number, line in enumerate(handle, 1):
             try:
-                row = compact_replay_row(json.loads(line))
+                row = compact_replay_row(json.loads(line), structured=structured)
             except Exception as exc:
                 raise ValueError(f"invalid replay row {line_number}: {exc}") from exc
+            if structured:
+                player = row.get("player")
+                key = (row["episode_id"], player)
+                if key not in deck_map:
+                    raise ValueError(f"missing acting-player deck for {key}")
+                # Reuse the sidecar list object across an episode/player instead
+                # of duplicating 60 Python integers for every decision row.
+                row["deck_card_ids"] = deck_map[key]
             rows.append(row)
             empty += int(len(row["action"]) == 0)
             multi += int(len(row["action"]) > 1)
@@ -177,7 +240,10 @@ def load_replay_dataset(path: Path, history_length: int = 0) -> tuple[list[dict[
             row["history"] = []
             row["history_steps"] = []
     episodes = {row["episode_id"] for row in rows}
-    model_input_fields = HISTORY_MODEL_INPUT_FIELDS if history_length else MODEL_INPUT_FIELDS
+    model_input_fields = (
+        STRUCTURED_MODEL_INPUT_FIELDS if structured else
+        HISTORY_MODEL_INPUT_FIELDS if history_length else MODEL_INPUT_FIELDS
+    )
     audit = {
         "input": str(path),
         "input_sha256": sha256_file(path),
@@ -196,6 +262,8 @@ def load_replay_dataset(path: Path, history_length: int = 0) -> tuple[list[dict[
         "model_input_fields": sorted(model_input_fields),
         "forbidden_model_fields_used": sorted(model_input_fields & FORBIDDEN_MODEL_FIELDS),
         "history": history_audit,
+        "structured": structured,
+        "deck_map": deck_audit,
     }
     return rows, audit
 
@@ -291,7 +359,7 @@ def collate_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
         if history:
             histories[index, :len(history)] = torch.tensor(history, dtype=torch.float32)
             history_mask[index, :len(history)] = True
-    return {
+    result = {
         "states": states,
         "options": options,
         "option_mask": option_mask,
@@ -307,6 +375,46 @@ def collate_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "value_weight": torch.tensor([row["value_weight"] for row in rows], dtype=torch.float32),
         "rows": rows,
     }
+    if all("option_card_ids" in row for row in rows):
+        max_entities = max(1, max(len(row["entity_card_ids"]) for row in rows))
+        max_deck = max(1, max(len(row.get("deck_card_ids") or []) for row in rows))
+        option_card_ids = torch.zeros((batch, max_options), dtype=torch.long)
+        option_target_card_ids = torch.zeros((batch, max_options), dtype=torch.long)
+        option_attack_ids = torch.zeros((batch, max_options), dtype=torch.long)
+        entity_card_ids = torch.zeros((batch, max_entities), dtype=torch.long)
+        entity_zone_ids = torch.zeros((batch, max_entities), dtype=torch.long)
+        entity_features = torch.zeros((batch, max_entities, ENTITY_DIM), dtype=torch.float32)
+        entity_mask = torch.zeros((batch, max_entities), dtype=torch.bool)
+        deck_card_ids = torch.zeros((batch, max_deck), dtype=torch.long)
+        deck_mask = torch.zeros((batch, max_deck), dtype=torch.bool)
+        for index, row in enumerate(rows):
+            option_count = len(row["option_card_ids"])
+            entity_count = len(row["entity_card_ids"])
+            deck_count = len(row.get("deck_card_ids") or [])
+            if option_count:
+                option_card_ids[index, :option_count] = torch.tensor(row["option_card_ids"])
+                option_target_card_ids[index, :option_count] = torch.tensor(row["option_target_card_ids"])
+                option_attack_ids[index, :option_count] = torch.tensor(row["option_attack_ids"])
+            if entity_count:
+                entity_card_ids[index, :entity_count] = torch.tensor(row["entity_card_ids"])
+                entity_zone_ids[index, :entity_count] = torch.tensor(row["entity_zone_ids"])
+                entity_features[index, :entity_count] = torch.tensor(row["entity_features"])
+                entity_mask[index, :entity_count] = True
+            if deck_count:
+                deck_card_ids[index, :deck_count] = torch.tensor(row["deck_card_ids"])
+                deck_mask[index, :deck_count] = True
+        result.update({
+            "option_card_ids": option_card_ids,
+            "option_target_card_ids": option_target_card_ids,
+            "option_attack_ids": option_attack_ids,
+            "entity_card_ids": entity_card_ids,
+            "entity_zone_ids": entity_zone_ids,
+            "entity_features": entity_features,
+            "entity_mask": entity_mask,
+            "deck_card_ids": deck_card_ids,
+            "deck_mask": deck_mask,
+        })
+    return result
 
 
 def make_loader(dataset: TrajectoryDataset, batch_size: int, shuffle: bool, seed: int) -> DataLoader:
@@ -319,9 +427,7 @@ def _to_device(batch: dict[str, Any], device: torch.device) -> dict[str, Any]:
 
 def batch_loss(model: MaskedPointerActorCritic, batch: dict[str, Any], value_loss_weight: float = 0.25) -> tuple[torch.Tensor, dict[str, float]]:
     states, options = batch["states"], batch["options"]
-    state, encoded_options, values = model.encode(
-        states, options, batch["histories"], batch["history_lengths"]
-    )
+    state, encoded_options, values = model.encode_batch(batch)
     batch_size, max_options = batch["option_mask"].shape
     selected = torch.zeros_like(batch["option_mask"])
     policy_sum = values.sum() * 0.0
@@ -362,23 +468,32 @@ def batch_loss(model: MaskedPointerActorCritic, batch: dict[str, Any], value_los
 
 @torch.inference_mode()
 def greedy_decode(model: MaskedPointerActorCritic, batch: dict[str, Any]) -> list[list[int]]:
-    state, encoded_options, _ = model.encode(
-        batch["states"], batch["options"], batch["histories"], batch["history_lengths"]
-    )
+    outputs, _ = greedy_decode_with_confidence(model, batch)
+    return outputs
+
+
+@torch.inference_mode()
+def greedy_decode_with_confidence(
+    model: MaskedPointerActorCritic, batch: dict[str, Any]
+) -> tuple[list[list[int]], list[float]]:
+    state, encoded_options, _ = model.encode_batch(batch)
     batch_size, max_options = batch["option_mask"].shape
     selected = torch.zeros_like(batch["option_mask"])
     finished = torch.zeros(batch_size, dtype=torch.bool, device=state.device)
     outputs: list[list[int]] = [[] for _ in range(batch_size)]
+    confidences: list[list[float]] = [[] for _ in range(batch_size)]
     max_steps = int(batch["max_count"].max().item()) + 1
     for step in range(max_steps):
         counts = selected.sum(dim=1)
         logits = model.pointer_logits(state, encoded_options, selected, counts)
         legal = legal_choice_mask(batch["option_mask"], selected, counts, batch["min_count"], batch["max_count"])
         logits = logits.masked_fill(~legal, -torch.inf)
+        probabilities = torch.softmax(logits, dim=1)
         choices = logits.argmax(dim=1)
         for row_index, choice in enumerate(choices.tolist()):
             if finished[row_index]:
                 continue
+            confidences[row_index].append(float(probabilities[row_index, choice]))
             if choice == max_options:
                 finished[row_index] = True
             else:
@@ -388,7 +503,7 @@ def greedy_decode(model: MaskedPointerActorCritic, batch: dict[str, Any]) -> lis
             break
     if not bool(finished.all()):
         raise RuntimeError("decoder did not STOP within maxCount")
-    return outputs
+    return outputs, [min(values) if values else 0.0 for values in confidences]
 
 
 def action_is_legal(action: list[int], option_count: int, min_count: int, max_count: int) -> bool:
