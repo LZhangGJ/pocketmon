@@ -20,7 +20,12 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from rl.ppo import sha256_file
-from rl.promotion import build_promotion_schedule, evaluate_promotion
+from rl.promotion import (
+    build_common_opponent_schedule,
+    build_promotion_schedule,
+    evaluate_common_opponent_screen,
+    evaluate_promotion,
+)
 
 
 def now() -> str:
@@ -172,6 +177,59 @@ def load_results(paths: list[Path]) -> list[dict[str, Any]]:
     return rows
 
 
+def run_distributed_schedule(
+    *,
+    config: dict[str, Any],
+    root: Path,
+    schedule: list[dict[str, Any]],
+    learners: list[dict[str, Any]],
+    opponents: list[dict[str, Any]],
+    label: str,
+) -> list[dict[str, Any]]:
+    """Run a deterministic, resumable league schedule over all evaluation hosts."""
+
+    root.mkdir(parents=True, exist_ok=True)
+    schedule_path = root / "schedule.csv"
+    learners_path = root / "learners.json"
+    opponents_path = root / "opponents.json"
+    write_manifest(learners_path, learners)
+    write_manifest(opponents_path, opponents)
+    with schedule_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=("learner", "opponent", "seed", "learner_seat"))
+        writer.writeheader()
+        writer.writerows(schedule)
+    processes = []
+    result_paths = []
+    hosts = config["evaluation_hosts"]
+    for shard, host in enumerate(hosts):
+        output = root / f"results_shard_{shard:02d}.csv"
+        result_paths.append(output)
+        command = [
+            config["python"], str(Path(config["code_root"]) / "scripts" / "run_league_schedule.py"),
+            "--schedule", str(schedule_path),
+            "--learners", str(learners_path),
+            "--opponents", str(opponents_path),
+            "--shard-index", str(shard),
+            "--shard-count", str(len(hosts)),
+            "--output", str(output),
+            "--cg-dir", config["cg_dir"],
+        ]
+        process, handle = start_process(
+            host=host,
+            local_host=config["local_host"],
+            command=command,
+            log_path=root / f"shard_{shard:02d}.log",
+            environment=config.get("host_environment", {}).get(host),
+        )
+        processes.append((f"{label}:{host}:{shard}", process, handle))
+    wait_processes(processes)
+    wait_for_files(result_paths)
+    rows = load_results(result_paths)
+    if len(rows) != len(schedule):
+        raise RuntimeError(f"{label} incomplete: {len(rows)}/{len(schedule)}")
+    return rows
+
+
 def initial_state(config: dict[str, Any]) -> dict[str, Any]:
     champion = Path(config["initial_champion_package"])
     return {
@@ -194,6 +252,7 @@ def generation_paths(run_root: Path, generation: int) -> dict[str, Path]:
         "train": root / "train",
         "candidate": root / "candidate_agent",
         "gate": root / "gate",
+        "deck": root / "deck_evolution",
     }
 
 
@@ -325,12 +384,6 @@ def ensure_gate(
         {"name": parent_name, "agent_dir": state["champion_package"]},
     ]
     opponents = list(public_items) + [{"name": parent_name, "agent_dir": state["champion_package"]}]
-    learners_path = paths["gate"] / "learners.json"
-    opponents_path = paths["gate"] / "opponents.json"
-    schedule_path = paths["gate"] / "schedule.csv"
-    paths["gate"].mkdir(parents=True, exist_ok=True)
-    write_manifest(learners_path, learners)
-    write_manifest(opponents_path, opponents)
     schedule = build_promotion_schedule(
         candidate=candidate_name,
         parent=parent_name,
@@ -339,39 +392,14 @@ def ensure_gate(
         parent_games=config["gate_parent_games"],
         seed=config["base_seed"] + generation * 100_000,
     )
-    with schedule_path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=("learner", "opponent", "seed", "learner_seat"))
-        writer.writeheader()
-        writer.writerows(schedule)
-    processes = []
-    result_paths = []
-    hosts = config["evaluation_hosts"]
-    for shard, host in enumerate(hosts):
-        output = paths["gate"] / f"results_shard_{shard:02d}.csv"
-        result_paths.append(output)
-        command = [
-            config["python"], str(Path(config["code_root"]) / "scripts" / "run_league_schedule.py"),
-            "--schedule", str(schedule_path),
-            "--learners", str(learners_path),
-            "--opponents", str(opponents_path),
-            "--shard-index", str(shard),
-            "--shard-count", str(len(hosts)),
-            "--output", str(output),
-            "--cg-dir", config["cg_dir"],
-        ]
-        process, handle = start_process(
-            host=host,
-            local_host=config["local_host"],
-            command=command,
-            log_path=paths["gate"] / f"shard_{shard:02d}.log",
-            environment=config.get("host_environment", {}).get(host),
-        )
-        processes.append((f"gate:{host}:{shard}", process, handle))
-    wait_processes(processes)
-    wait_for_files(result_paths)
-    rows = load_results(result_paths)
-    if len(rows) != len(schedule):
-        raise RuntimeError(f"promotion gate incomplete: {len(rows)}/{len(schedule)}")
+    rows = run_distributed_schedule(
+        config=config,
+        root=paths["gate"],
+        schedule=schedule,
+        learners=learners,
+        opponents=opponents,
+        label="promotion_gate",
+    )
     report = evaluate_promotion(
         rows,
         candidate=candidate_name,
@@ -384,6 +412,163 @@ def ensure_gate(
         max_seat_gap=config["max_seat_gap"],
     )
     report.update({"generation": generation, "games": len(rows), "completed_at": now()})
+    atomic_json(report_path, report)
+    return report
+
+
+def ensure_deck_evolution(
+    *,
+    config: dict[str, Any],
+    state: dict[str, Any],
+    generation: int,
+    paths: dict[str, Path],
+) -> dict[str, Any] | None:
+    """Mutate the champion deck, quick-screen variants, then strictly confirm one."""
+
+    every = int(config.get("deck_evolution_every", 0))
+    if every <= 0 or generation % every:
+        return None
+    root = paths["deck"]
+    report_path = root / "promotion.json"
+    if report_path.is_file():
+        return json.loads(report_path.read_text(encoding="utf-8"))
+    root.mkdir(parents=True, exist_ok=True)
+    champion = Path(state["champion_package"])
+    mutations = root / "mutations"
+    mutation_manifest = mutations / "manifest.json"
+    if not mutation_manifest.is_file():
+        command = [
+            config["python"], str(Path(config["code_root"]) / "scripts" / "mutate_legal_decks.py"),
+            "--base-deck", str(champion / "deck.csv"),
+            "--cards", config["card_database"],
+            "--pool-manifest", config["public_opponent_pool"],
+            "--count", str(config["deck_candidate_count"]),
+            "--max-swaps", str(config["deck_max_swaps"]),
+            "--seed", str(config["base_seed"] + generation * 1_000_000 + 701),
+            "--output", str(mutations),
+        ]
+        run_process(
+            host=config["local_host"], local_host=config["local_host"], command=command,
+            log_path=root / "mutate.log",
+        )
+        wait_for_files([mutation_manifest])
+    mutation_data = json.loads(mutation_manifest.read_text(encoding="utf-8"))
+    candidates = mutation_data["candidates"]
+    if len(candidates) != int(config["deck_candidate_count"]):
+        raise RuntimeError("deck mutation manifest has the wrong candidate count")
+
+    base_name = f"deck_base_g{generation:05d}"
+    learner_items = [{"name": base_name, "agent_dir": str(champion)}]
+    package_by_name = {base_name: champion}
+    for index, item in enumerate(candidates):
+        name = f"deck_mutant_g{generation:05d}_{index:03d}"
+        package = root / "packages" / f"candidate_{index:03d}"
+        if not (package / "agent_manifest.json").is_file():
+            command = [
+                config["python"], str(Path(config["code_root"]) / "scripts" / "materialize_rl_specialist_agent.py"),
+                "--checkpoint", str(champion / "checkpoint.pt"),
+                "--deck", str(item["deck"]),
+                "--output", str(package),
+                "--name", name,
+            ]
+            run_process(
+                host=config["local_host"], local_host=config["local_host"], command=command,
+                log_path=root / "materialize.log",
+            )
+        learner_items.append({"name": name, "agent_dir": str(package)})
+        package_by_name[name] = package
+
+    public_items = load_manifest(Path(config["public_opponent_pool"]))
+    public_by_name = {str(item["name"]): item for item in public_items}
+    screen_names = [str(name) for name in config["deck_screen_opponents"]]
+    missing = sorted(set(screen_names) - public_by_name.keys())
+    if missing:
+        raise ValueError(f"deck screen opponents are absent from public pool: {missing}")
+    screen_opponents = [public_by_name[name] for name in screen_names]
+    learner_names = [str(item["name"]) for item in learner_items]
+    screen_schedule = build_common_opponent_schedule(
+        learners=learner_names,
+        opponents=screen_names,
+        games_per_opponent=int(config["deck_screen_games_per_opponent"]),
+        seed=int(config["base_seed"]) + generation * 1_000_000 + 702,
+    )
+    screen_rows = run_distributed_schedule(
+        config=config,
+        root=root / "screen",
+        schedule=screen_schedule,
+        learners=learner_items,
+        opponents=screen_opponents,
+        label="deck_screen",
+    )
+    ranking = evaluate_common_opponent_screen(
+        screen_rows, learners=learner_names, opponents=screen_names,
+    )
+    atomic_json(root / "screen_ranking.json", {"generation": generation, "ranking": ranking})
+    baseline = next(row for row in ranking if row["learner"] == base_name)
+    eligible = [
+        row for row in ranking
+        if row["learner"] != base_name
+        and row["failures"] == 0
+        and row["score_rate"] - baseline["score_rate"] >= float(config["deck_screen_min_delta"])
+    ]
+    if not eligible:
+        report = {
+            "promote": False,
+            "generation": generation,
+            "stage": "screen",
+            "reason": "no legal mutant cleared the common-opponent screen",
+            "baseline": baseline,
+            "ranking": ranking,
+            "completed_at": now(),
+        }
+        atomic_json(report_path, report)
+        return report
+
+    selected = eligible[0]
+    candidate_name = str(selected["learner"])
+    candidate_package = package_by_name[candidate_name]
+    parent_name = base_name
+    public_names = [str(item["name"]) for item in public_items]
+    confirmation_schedule = build_promotion_schedule(
+        candidate=candidate_name,
+        parent=parent_name,
+        public_opponents=public_names,
+        games_per_public=int(config["deck_confirmation_games_per_public"]),
+        parent_games=int(config["deck_confirmation_parent_games"]),
+        seed=int(config["base_seed"]) + generation * 1_000_000 + 703,
+    )
+    confirmation_rows = run_distributed_schedule(
+        config=config,
+        root=root / "confirmation",
+        schedule=confirmation_schedule,
+        learners=[
+            {"name": candidate_name, "agent_dir": str(candidate_package)},
+            {"name": parent_name, "agent_dir": str(champion)},
+        ],
+        opponents=public_items + [{"name": parent_name, "agent_dir": str(champion)}],
+        label="deck_confirmation",
+    )
+    confirmation = evaluate_promotion(
+        confirmation_rows,
+        candidate=candidate_name,
+        parent=parent_name,
+        public_opponents=public_names,
+        min_head_to_head_score=float(config["deck_min_head_to_head_score"]),
+        min_head_to_head_wilson=float(config["deck_min_head_to_head_wilson"]),
+        min_public_delta=float(config["deck_min_public_delta"]),
+        max_worst_matchup_regression=float(config["deck_max_worst_matchup_regression"]),
+        max_seat_gap=float(config["deck_max_seat_gap"]),
+    )
+    report = {
+        **confirmation,
+        "generation": generation,
+        "stage": "confirmation",
+        "selected_screen_entry": selected,
+        "screen_baseline": baseline,
+        "screen_ranking_path": str(root / "screen_ranking.json"),
+        "promoted_package": str(candidate_package) if confirmation["promote"] else None,
+        "completed_at": now(),
+    }
     atomic_json(report_path, report)
     return report
 
@@ -415,19 +600,39 @@ def run_generation(config: dict[str, Any], state: dict[str, Any], run_root: Path
         config=config, state=state, generation=generation, paths=paths, candidate_package=candidate
     )
     previous = state["champion_package"]
+    working_state = dict(state)
+    working_population = list(state["population"])
     if report["promote"]:
-        state["champion_package"] = str(candidate)
-        state["champion_checkpoint_sha256"] = sha256_file(candidate / "checkpoint.pt")
-        state["population"] = (state["population"] + [str(candidate)])[-int(config["population_limit"]):]
+        working_state["champion_package"] = str(candidate)
+        working_state["champion_checkpoint_sha256"] = sha256_file(candidate / "checkpoint.pt")
+        working_population.append(str(candidate))
+    state.update({"status": "deck_evolution", "updated_at": now()})
+    atomic_json(run_root / "state.json", state)
+    deck_report = ensure_deck_evolution(
+        config=config, state=working_state, generation=generation, paths=paths,
+    )
+    if deck_report and deck_report["promote"]:
+        promoted_deck = str(deck_report["promoted_package"])
+        working_state["champion_package"] = promoted_deck
+        working_state["champion_checkpoint_sha256"] = sha256_file(Path(promoted_deck) / "checkpoint.pt")
+        working_population.append(promoted_deck)
+    state["champion_package"] = working_state["champion_package"]
+    state["champion_checkpoint_sha256"] = working_state["champion_checkpoint_sha256"]
+    state["population"] = working_population[-int(config["population_limit"]):]
     state["generation"] = generation
     state.pop("active_generation", None)
-    state["status"] = "promoted" if report["promote"] else "rejected"
+    any_promotion = bool(report["promote"] or (deck_report and deck_report["promote"]))
+    state["status"] = "promoted" if any_promotion else "rejected"
     state["history"].append({
         "generation": generation,
         "candidate_package": str(candidate),
         "parent_package": previous,
         "promoted": bool(report["promote"]),
         "promotion_report": str(paths["gate"] / "promotion.json"),
+        "deck_evolution_run": deck_report is not None,
+        "deck_promoted": bool(deck_report and deck_report["promote"]),
+        "deck_promotion_report": str(paths["deck"] / "promotion.json") if deck_report else None,
+        "final_champion_package": state["champion_package"],
         "completed_at": now(),
     })
     state["updated_at"] = now()

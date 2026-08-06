@@ -49,6 +49,33 @@ def build_promotion_schedule(
     return rows
 
 
+def build_common_opponent_schedule(
+    *,
+    learners: list[str],
+    opponents: list[str],
+    games_per_opponent: int,
+    seed: int,
+) -> list[dict[str, Any]]:
+    """Build a paired-seat screen where every learner sees identical games."""
+
+    if games_per_opponent < 2 or games_per_opponent % 2:
+        raise ValueError("screen game count must be positive and even")
+    if not learners or len(learners) != len(set(learners)):
+        raise ValueError("screen learner names must be non-empty and unique")
+    if not opponents or len(opponents) != len(set(opponents)):
+        raise ValueError("screen opponent names must be non-empty and unique")
+    rows: list[dict[str, Any]] = []
+    for opponent_index, opponent in enumerate(opponents):
+        base = seed + opponent_index * 10_000
+        for pair in range(games_per_opponent // 2):
+            game_seed = base + pair
+            for learner in learners:
+                rows.append({"learner": learner, "opponent": opponent, "seed": game_seed, "learner_seat": 0})
+                rows.append({"learner": learner, "opponent": opponent, "seed": game_seed, "learner_seat": 1})
+    random.Random(seed).shuffle(rows)
+    return rows
+
+
 def _metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
     games = len(rows)
     wins = sum(row["result"] == "win" for row in rows)
@@ -62,6 +89,54 @@ def _metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "score_rate": (wins + 0.5 * draws) / games if games else 0.0,
         "wilson_lower": wilson_lower(wins, games),
     }
+
+
+def evaluate_common_opponent_screen(
+    rows: list[dict[str, Any]],
+    *,
+    learners: list[str],
+    opponents: list[str],
+) -> list[dict[str, Any]]:
+    """Rank policy/deck variants evaluated on identical opponent seeds/seats."""
+
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        grouped[(str(row["learner"]), str(row["opponent"]))].append(row)
+    expected_keys: dict[str, set[tuple[int, int]]] = {}
+    ranking = []
+    for learner in learners:
+        learner_rows = []
+        matchup_metrics = {}
+        for opponent in opponents:
+            matchup = grouped[(learner, opponent)]
+            if not matchup:
+                raise ValueError(f"common-opponent screen missing {(learner, opponent)}")
+            keys = {(int(row["seed"]), int(row["learner_seat"])) for row in matchup}
+            if opponent not in expected_keys:
+                expected_keys[opponent] = keys
+            elif keys != expected_keys[opponent]:
+                raise ValueError(f"common-opponent screen did not use identical seeds/seats for {opponent}")
+            learner_rows.extend(matchup)
+            matchup_metrics[opponent] = _metrics(matchup)
+        aggregate = _metrics(learner_rows)
+        worst_opponent = min(
+            opponents,
+            key=lambda opponent: (matchup_metrics[opponent]["score_rate"], opponent),
+        )
+        ranking.append({
+            "learner": learner,
+            **aggregate,
+            "worst_opponent": worst_opponent,
+            "worst_score_rate": matchup_metrics[worst_opponent]["score_rate"],
+            "matchups": matchup_metrics,
+        })
+    ranking.sort(
+        key=lambda row: (row["failures"] == 0, row["score_rate"], row["worst_score_rate"], row["wilson_lower"]),
+        reverse=True,
+    )
+    for index, row in enumerate(ranking, start=1):
+        row["rank"] = index
+    return ranking
 
 
 def evaluate_promotion(

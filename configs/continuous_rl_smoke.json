@@ -34,6 +34,7 @@
   "max_worst_matchup_regression": 1.0,
   "max_seat_gap": 1.0,
   "population_limit": 4,
+  "deck_evolution_every": 0,
   "base_seed": 2026080790,
   "max_generations": 1,
   "max_consecutive_failures": 1,

@@ -2,7 +2,12 @@ from __future__ import annotations
 
 import unittest
 
-from rl.promotion import build_promotion_schedule, evaluate_promotion
+from rl.promotion import (
+    build_common_opponent_schedule,
+    build_promotion_schedule,
+    evaluate_common_opponent_screen,
+    evaluate_promotion,
+)
 
 
 def result_rows(candidate_wins: int, parent_wins: int, head_wins: int) -> list[dict]:
@@ -52,6 +57,39 @@ class PromotionTests(unittest.TestCase):
         )
         self.assertFalse(rejected["promote"])
         self.assertFalse(rejected["checks"]["public_delta"])
+
+    def test_common_opponent_screen_ranks_without_unmatched_seeds(self) -> None:
+        rows = []
+        for learner, wins in (("base", 1), ("mutant", 2)):
+            for index in range(2):
+                rows.append({
+                    "learner": learner,
+                    "opponent": "public",
+                    "seed": 50,
+                    "learner_seat": index,
+                    "result": "win" if index < wins else "loss",
+                })
+        ranking = evaluate_common_opponent_screen(
+            rows, learners=["base", "mutant"], opponents=["public"]
+        )
+        self.assertEqual(ranking[0]["learner"], "mutant")
+
+    def test_common_opponent_schedule_pairs_all_learners(self) -> None:
+        schedule = build_common_opponent_schedule(
+            learners=["base", "a", "b"], opponents=["x", "y"],
+            games_per_opponent=4, seed=19,
+        )
+        self.assertEqual(len(schedule), 24)
+        for opponent in ("x", "y"):
+            expected = None
+            for learner in ("base", "a", "b"):
+                keys = {
+                    (row["seed"], row["learner_seat"])
+                    for row in schedule
+                    if row["learner"] == learner and row["opponent"] == opponent
+                }
+                expected = keys if expected is None else expected
+                self.assertEqual(keys, expected)
 
 
 if __name__ == "__main__":
