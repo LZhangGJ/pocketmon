@@ -8,10 +8,22 @@ from pathlib import Path
 
 from unittest.mock import patch
 
-from scripts.continuous_rl_pipeline import choose_trainer, wait_for_files
+from scripts.continuous_rl_pipeline import build_rollout_pool, choose_trainer, wait_for_files
 
 
 class ContinuousPipelineTests(unittest.TestCase):
+    def test_rollout_pool_marks_public_and_frozen_population_roles(self) -> None:
+        pool = build_rollout_pool(
+            [{"name": "recent", "agent_dir": "/agents/recent"}],
+            ["/agents/champion", "/agents/history"],
+        )
+        self.assertEqual([item["league_role"] for item in pool], ["public", "population", "population"])
+        self.assertEqual(pool[1]["name"], "population_00")
+
+    def test_rollout_pool_rejects_missing_frozen_population(self) -> None:
+        with self.assertRaisesRegex(ValueError, "at least one population"):
+            build_rollout_pool([], [])
+
     def test_waits_for_delayed_shared_artifact(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "remote-result.json"

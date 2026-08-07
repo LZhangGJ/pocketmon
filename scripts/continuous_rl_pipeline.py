@@ -49,6 +49,19 @@ def write_manifest(path: Path, items: list[dict[str, Any]]) -> None:
     path.write_text(json.dumps(items, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def build_rollout_pool(
+    public: list[dict[str, Any]], population_paths: list[str],
+) -> list[dict[str, Any]]:
+    public_items = [{**item, "league_role": "public"} for item in public]
+    population_items = [
+        {"name": f"population_{index:02d}", "agent_dir": value, "league_role": "population"}
+        for index, value in enumerate(population_paths)
+    ]
+    if not population_items:
+        raise ValueError("frozen PPO league requires at least one population checkpoint")
+    return public_items + population_items
+
+
 def remote_command(command: list[str], environment: dict[str, str] | None = None) -> str:
     values = []
     if environment:
@@ -292,12 +305,8 @@ def ensure_rollouts(
 ) -> list[Path]:
     champion = Path(state["champion_package"])
     public = load_manifest(Path(config["public_opponent_pool"]))
-    population = [
-        {"name": f"population_{index:02d}", "agent_dir": value}
-        for index, value in enumerate(state["population"])
-    ]
     rollout_pool = paths["root"] / "rollout_pool.json"
-    write_manifest(rollout_pool, public + population)
+    write_manifest(rollout_pool, build_rollout_pool(public, list(state["population"])))
     processes = []
     outputs = []
     shard = 0
@@ -328,7 +337,9 @@ def ensure_rollouts(
                 "--pool", str(rollout_pool),
                 "--cg-dir", config["cg_dir"],
                 "--episodes", str(episodes),
-                "--self-play-fraction", str(config["self_play_fraction"]),
+                "--frozen-league-fraction", str(config.get(
+                    "frozen_league_fraction", config.get("self_play_fraction", 0.5)
+                )),
                 "--temperature", str(config["rollout_temperature"]),
                 "--seed", str(config["base_seed"] + generation * 100_000 + shard),
                 "--run-id", f"g{generation:05d}-s{shard:03d}",

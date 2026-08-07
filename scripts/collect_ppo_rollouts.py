@@ -69,10 +69,34 @@ def resolve_manifest(path: Path) -> list[dict[str, Any]]:
             agent_dir = (ROOT / agent_dir).resolve()
         if not (agent_dir / "main.py").is_file() or not (agent_dir / "deck.csv").is_file():
             raise FileNotFoundError(f"invalid rollout opponent: {item}")
-        accepted.append({"name": str(item["name"]), "agent_dir": agent_dir})
+        name = str(item["name"])
+        role = str(item.get("league_role") or (
+            "population" if name.startswith("population_") else "public"
+        ))
+        if role not in {"population", "public"}:
+            raise ValueError(f"unsupported rollout opponent role {role!r}: {item}")
+        accepted.append({"name": name, "agent_dir": agent_dir, "league_role": role})
     if not accepted:
         raise ValueError("rollout opponent manifest is empty")
     return accepted
+
+
+def choose_frozen_opponent(
+    pool: list[dict[str, Any]], rng: random.Random, frozen_league_fraction: float,
+) -> dict[str, Any]:
+    """Choose a frozen opponent; never train both sides of a zero-sum PPO game."""
+
+    if not 0.0 <= frozen_league_fraction <= 1.0:
+        raise ValueError("frozen league fraction must be in [0, 1]")
+    population = [item for item in pool if item.get("league_role") == "population"]
+    public = [item for item in pool if item.get("league_role") == "public"]
+    prefer_population = rng.random() < frozen_league_fraction
+    candidates = population if prefer_population else public
+    if not candidates:
+        candidates = public if prefer_population else population
+    if not candidates:
+        raise ValueError("rollout opponent pool has no frozen opponents")
+    return rng.choice(candidates)
 
 
 def finish_trajectory(rows: list[dict[str, Any]], winner: int) -> None:
@@ -110,19 +134,20 @@ def play_episode(
     install_cg(cg_dir)
     from cg.game import battle_finish, battle_select, battle_start
 
-    self_play = opponent is None
-    trainable_seats = {0, 1} if self_play else {learner_seat}
-    opponent_module = None
-    opponent_deck: list[int] | None = None
-    opponent_name = "self_play"
-    if opponent is not None:
-        opponent_name = str(opponent["name"])
-        opponent_dir = Path(opponent["agent_dir"])
-        opponent_module = load_agent(opponent_dir, f"ppo_opponent_{episode}")
-        opponent_deck = read_deck(opponent_dir / "deck.csv")
+    if opponent is None:
+        raise ValueError("PPO rollouts require a frozen opponent; symmetric two-sided PPO is disabled")
+    # The learner alternates seats across episodes, but the opponent is always
+    # frozen. Training both sides of a shared-policy zero-sum game optimizes an
+    # expected R0 + R1 == 0 objective and only adds gradient noise.
+    trainable_seats = {learner_seat}
+    opponent_name = str(opponent["name"])
+    opponent_role = str(opponent.get("league_role", "public"))
+    frozen_self_play = opponent_role == "population"
+    opponent_dir = Path(opponent["agent_dir"])
+    opponent_module = load_agent(opponent_dir, f"ppo_opponent_{episode}")
+    opponent_deck = read_deck(opponent_dir / "deck.csv")
     decks = [list(learner_deck), list(learner_deck)]
-    if opponent_deck is not None:
-        decks[1 - learner_seat] = opponent_deck
+    decks[1 - learner_seat] = opponent_deck
     observation, start = battle_start(*decks)
     if observation is None:
         raise RuntimeError(f"battle start failed: {start.errorType}")
@@ -170,7 +195,10 @@ def play_episode(
                                 "q_samples": int(label["samples"]),
                                 "behavior_checkpoint_sha256": checkpoint_sha256,
                                 "opponent": opponent_name,
-                                "self_play": self_play,
+                                "self_play": frozen_self_play,
+                                "symmetric_self_play": False,
+                                "frozen_opponent": True,
+                                "opponent_role": opponent_role,
                             })
                             counterfactual_rows.append(q_row)
                     except Exception:
@@ -194,7 +222,10 @@ def play_episode(
                     "temperature": temperature,
                     "trainable": True,
                     "opponent": opponent_name,
-                    "self_play": self_play,
+                    "self_play": frozen_self_play,
+                    "symmetric_self_play": False,
+                    "frozen_opponent": True,
+                    "opponent_role": opponent_role,
                     "reward": 0.0,
                     "outcome": 0.0,
                 })
@@ -210,13 +241,17 @@ def play_episode(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Collect stochastic on-policy masked PPO self-play rollouts")
+    parser = argparse.ArgumentParser(description="Collect learner-only PPO rollouts against a frozen league")
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--deck", type=Path, required=True)
     parser.add_argument("--pool", type=Path, required=True)
     parser.add_argument("--cg-dir", type=Path, required=True)
     parser.add_argument("--episodes", type=int, default=200)
-    parser.add_argument("--self-play-fraction", type=float, default=0.5)
+    parser.add_argument("--frozen-league-fraction", type=float)
+    parser.add_argument(
+        "--self-play-fraction", type=float,
+        help="Deprecated alias for --frozen-league-fraction; self-play opponents are frozen",
+    )
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--max-decisions", type=int, default=5000)
     parser.add_argument("--seed", type=int, default=20260807)
@@ -231,8 +266,13 @@ def main() -> None:
     args = parser.parse_args()
     if args.episodes <= 0:
         raise ValueError("episodes must be positive")
-    if not 0.0 <= args.self_play_fraction <= 1.0:
-        raise ValueError("self-play fraction must be in [0, 1]")
+    frozen_league_fraction = (
+        args.frozen_league_fraction
+        if args.frozen_league_fraction is not None
+        else (args.self_play_fraction if args.self_play_fraction is not None else 0.5)
+    )
+    if not 0.0 <= frozen_league_fraction <= 1.0:
+        raise ValueError("frozen league fraction must be in [0, 1]")
     if not 0.0 <= args.counterfactual_rate <= 1.0:
         raise ValueError("counterfactual rate must be in [0, 1]")
     if args.counterfactual_rate and args.counterfactual_output is None:
@@ -271,8 +311,8 @@ def main() -> None:
             if counterfactual_temporary else open(os.devnull, "w", encoding="utf-8")
         ) as counterfactual_handle:
             for episode in range(args.episodes):
-                self_play = rng.random() < args.self_play_fraction
-                opponent = None if self_play else rng.choice(pool)
+                opponent = choose_frozen_opponent(pool, rng, frozen_league_fraction)
+                frozen_self_play = opponent["league_role"] == "population"
                 learner_seat = episode % 2
                 episode_id = f"{args.run_id}-{episode:06d}"
                 rows, q_rows, winner, opponent_name, q_errors = play_episode(
@@ -302,9 +342,11 @@ def main() -> None:
                 counters["rows"] += len(rows)
                 counters["counterfactual_rows"] += len(q_rows)
                 counters["counterfactual_errors"] += q_errors
-                counters["self_play_episodes"] += int(self_play)
-                counters["wins"] += int(winner in ({0, 1} if self_play else {learner_seat}))
-                counters["losses"] += int(not self_play and winner in {0, 1} and winner != learner_seat)
+                counters["frozen_self_play_episodes"] += int(frozen_self_play)
+                counters["public_opponent_episodes"] += int(not frozen_self_play)
+                counters["symmetric_self_play_episodes"] += 0
+                counters["wins"] += int(winner == learner_seat)
+                counters["losses"] += int(winner in {0, 1} and winner != learner_seat)
                 counters["draws"] += int(winner == 2)
                 opponent_counts[opponent_name] += 1
                 if counters["episodes"] % 10 == 0:
@@ -326,7 +368,8 @@ def main() -> None:
         "behavior_checkpoint_sha256": checkpoint_sha256,
         "engine_seed_controlled": False,
         "temperature": args.temperature,
-        "self_play_fraction": args.self_play_fraction,
+        "frozen_league_fraction": frozen_league_fraction,
+        "symmetric_self_play_fraction": 0.0,
         "opponents": dict(opponent_counts),
         "counterfactual_output": str(args.counterfactual_output) if args.counterfactual_output else None,
         "counterfactual_output_sha256": (
