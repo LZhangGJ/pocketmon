@@ -6,6 +6,8 @@ import hashlib
 import json
 import math
 import re
+import subprocess
+import sys
 import time
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -44,6 +46,11 @@ HIGH_SCORE_NOTEBOOKS = [
     ("prvsiyan/ptcg-ai-battle-search-audited-alakazam-v9", 778.2, 15),
     ("jazivxt/rising-tide-fixed-metal-v15-reproducible-agent", 774.0, 6),
 ]
+
+METHOD_TOKENS = (
+    "agent", "baseline", "rl", "mcts", "muzero", "search", "router",
+    "deck", "imperfect", "ucb", "belief", "probabilistic", "control",
+)
 
 
 def request_json(
@@ -262,6 +269,106 @@ def normalize_notebook_candidates(path: Path | None) -> list[dict[str, Any]]:
     return result
 
 
+def kaggle_kernel_list(sort_by: str, page_size: int) -> list[dict[str, Any]]:
+    completed = subprocess.run(
+        [
+            sys.executable, "-m", "kaggle", "kernels", "list",
+            "--competition", COMPETITION,
+            "--sort-by", sort_by,
+            "--page-size", str(page_size),
+            "--format", "json",
+        ],
+        text=True,
+        capture_output=True,
+        check=True,
+        timeout=120,
+    )
+    payload = json.loads(completed.stdout)
+    if not isinstance(payload, list):
+        raise ValueError(f"unexpected kernels list response for {sort_by}")
+    return payload
+
+
+def _run_time(item: dict[str, Any]) -> datetime | None:
+    value = item.get("lastRunTime")
+    if not value:
+        return None
+    parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    return parsed.replace(tzinfo=timezone.utc) if parsed.tzinfo is None else parsed.astimezone(timezone.utc)
+
+
+def select_live_notebook_candidates(
+    score_items: list[dict[str, Any]],
+    recent_items: list[dict[str, Any]],
+    *,
+    now: datetime,
+    freshness_days: int = 21,
+    limit: int = 24,
+) -> list[dict[str, Any]]:
+    """Mix fresh score-frontier notebooks with recent method-diverse agents."""
+    if freshness_days <= 0 or limit <= 0:
+        raise ValueError("freshness_days and limit must be positive")
+    now = now.astimezone(timezone.utc)
+    score_rank = {str(item["ref"]): rank for rank, item in enumerate(score_items, start=1)}
+    recent_rank = {str(item["ref"]): rank for rank, item in enumerate(recent_items, start=1)}
+    by_ref = {str(item["ref"]): item for item in score_items + recent_items}
+    selected: list[str] = []
+
+    def fresh(item: dict[str, Any]) -> bool:
+        run_time = _run_time(item)
+        return run_time is not None and 0 <= (now - run_time).total_seconds() <= freshness_days * 86400
+
+    fresh_score_quota = max(1, int(round(limit * 2 / 3)))
+    for item in score_items:
+        ref = str(item["ref"])
+        if fresh(item) and ref not in selected:
+            selected.append(ref)
+        if len(selected) >= fresh_score_quota:
+            break
+
+    for item in recent_items:
+        ref = str(item["ref"])
+        method_text = f"{ref} {item.get('title', '')}".lower()
+        if fresh(item) and any(token in method_text for token in METHOD_TOKENS) and ref not in selected:
+            selected.append(ref)
+        if len(selected) >= limit:
+            break
+
+    for item in score_items:
+        ref = str(item["ref"])
+        if fresh(item) and ref not in selected:
+            selected.append(ref)
+        if len(selected) >= limit:
+            break
+
+    result: list[dict[str, Any]] = []
+    for ref in selected:
+        item = by_ref[ref]
+        result.append({
+            "ref": ref,
+            "title_observed": item.get("title", ""),
+            "votes_observed": item.get("totalVotes", ""),
+            "last_run_time_observed": item.get("lastRunTime", ""),
+            "score_rank_observed": score_rank.get(ref),
+            "recent_rank_observed": recent_rank.get(ref),
+            "discovery_sort": "fresh_score_frontier_plus_recent_method_diversity",
+        })
+    return result
+
+
+def discover_live_notebook_candidates(freshness_days: int, limit: int) -> list[dict[str, Any]]:
+    candidates = select_live_notebook_candidates(
+        kaggle_kernel_list("scoreDescending", 100),
+        kaggle_kernel_list("dateRun", 100),
+        now=datetime.now(timezone.utc),
+        freshness_days=freshness_days,
+        limit=limit,
+    )
+    if not candidates:
+        raise RuntimeError("live notebook discovery returned no fresh candidates")
+    return candidates
+
+
 def download_notebooks(
     session: requests.Session,
     output_dir: Path,
@@ -312,6 +419,9 @@ def download_notebooks(
                 "public_score_observed": candidate.get("public_score_observed", ""),
                 "votes_observed": candidate.get("votes_observed", metadata.get("totalVotes", "")),
                 "updated_label_observed": candidate.get("updated_label_observed", ""),
+                "last_run_time_observed": candidate.get("last_run_time_observed", ""),
+                "score_rank_observed": candidate.get("score_rank_observed", ""),
+                "recent_rank_observed": candidate.get("recent_rank_observed", ""),
                 "discovery_sort": candidate.get("discovery_sort", "manual"),
                 "last_run_time": metadata.get("lastRunTime", ""),
                 "current_version_number": metadata.get("currentVersionNumber", ""),
@@ -366,6 +476,8 @@ def main() -> None:
         type=Path,
         help="JSON list discovered from the live Code page/API; preserves recency rather than using frozen global top score",
     )
+    parser.add_argument("--notebook-freshness-days", type=int, default=21)
+    parser.add_argument("--notebook-limit", type=int, default=24)
     parser.add_argument(
         "--state",
         type=Path,
@@ -392,7 +504,7 @@ def main() -> None:
         "competition_url": f"{WEB_ROOT}/competitions/{COMPETITION}",
         "downloaded_at_utc": datetime.now(timezone.utc).isoformat(),
         "public_only": True,
-        "notebook_ranking_observed_on": "2026-08-06",
+        "notebook_ranking_observed_on": date.today().isoformat(),
     }
     if not args.skip_discussions:
         manifest["discussions"], discussion_state = download_discussions(
@@ -400,7 +512,11 @@ def main() -> None:
         )
         state["discussions"] = discussion_state
     if not args.skip_notebooks:
-        candidates = normalize_notebook_candidates(args.notebook_candidates)
+        candidates = (
+            normalize_notebook_candidates(args.notebook_candidates)
+            if args.notebook_candidates is not None
+            else discover_live_notebook_candidates(args.notebook_freshness_days, args.notebook_limit)
+        )
         manifest["notebooks"], notebook_state = download_notebooks(
             session, output_dir, candidates, state.get("notebooks")
         )
