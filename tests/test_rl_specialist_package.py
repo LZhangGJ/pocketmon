@@ -46,7 +46,9 @@ class RLSpecialistPackageTests(unittest.TestCase):
                 "namespace = {'__name__': 'submitted_agent'}\n"
                 "exec(compile(source, '/kaggle_simulations/agent/main.py', 'exec'), namespace)\n"
                 "assert namespace['PACKAGE_ROOT'] == pathlib.Path.cwd().resolve()\n"
-                "assert len(namespace['agent']({'select': None})) == 60\n"
+                "selected = [value for value in namespace.values() if callable(value)][-1]\n"
+                "assert selected is namespace['agent']\n"
+                "assert len(selected({'select': None})) == 60\n"
             )
             environment = dict(os.environ)
             environment["PYTHONPATH"] = str(ROOT)

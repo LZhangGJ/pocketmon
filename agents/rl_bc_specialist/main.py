@@ -57,11 +57,13 @@ POLICY = RLBCPolicyAdapter(
 )
 
 
-def agent(observation: dict[str, Any]) -> list[int]:
-    return POLICY.act(observation)
-
-
 def diagnostics() -> dict[str, Any]:
     result = POLICY.diagnostics()
     result["package_root"] = str(PACKAGE_ROOT)
     return result
+
+
+# Kaggle Environments selects the last callable left by exec(main.py), not a
+# function named "agent". Keep the submission entry point last in this file.
+def agent(observation: dict[str, Any]) -> list[int]:
+    return POLICY.act(observation)

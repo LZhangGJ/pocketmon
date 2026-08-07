@@ -31,13 +31,16 @@ def _worker(package_root: Path) -> dict[str, object]:
     # __file__. Keep this deliberately different from importlib-based matches.
     exec(compile(source, "/kaggle_simulations/agent/main.py", "exec"), namespace)
     import_seconds = time.perf_counter() - started
-    agent = namespace.get("agent")
-    if not callable(agent):
+    named_agent = namespace.get("agent")
+    if not callable(named_agent):
         raise TypeError("main.py did not expose a callable agent")
-    setup_action = agent({"select": None})
+    selected_agent = [value for value in namespace.values() if callable(value)][-1]
+    if selected_agent is not named_agent:
+        raise TypeError("the last callable selected by Kaggle is not main.agent")
+    setup_action = selected_agent({"select": None})
     if not isinstance(setup_action, list) or len(setup_action) != 60:
         raise ValueError("setup action must be a 60-card deck")
-    decision_action = agent({
+    decision_action = selected_agent({
         "current": {"turn": 1},
         "select": {"option": [{}], "minCount": 1, "maxCount": 1},
     })
