@@ -6,7 +6,7 @@ import unittest
 import torch
 
 from rl.action_q import ActionValueEnsemble, q_mean_and_std
-from rl.agent_adapter import conservative_q_choice
+from rl.agent_adapter import apply_q_override_budget, conservative_q_choice
 from rl.counterfactual import sample_hidden_zones, terminal_value
 
 
@@ -38,6 +38,18 @@ class ActionQTests(unittest.TestCase):
         self.assertEqual(tuple(values.shape), (2, 5, 3))
         self.assertEqual(tuple(mean.shape), (2, 5))
         self.assertTrue(torch.isfinite(std).all())
+
+    def test_q_override_budget_caps_takeover_rate(self) -> None:
+        credit = 0.0
+        statuses = []
+        choices = []
+        for _ in range(10):
+            choice, status, credit = apply_q_override_budget(0, 1, "override", credit, 0.20)
+            choices.append(choice)
+            statuses.append(status)
+        self.assertEqual(choices.count(1), 2)
+        self.assertEqual(statuses.count("override"), 2)
+        self.assertEqual(statuses.count("budget_abstain"), 8)
 
     def test_exact_training_decks_fill_hidden_zones(self) -> None:
         decks = [[1] * 30 + [2] * 30, [3] * 30 + [4] * 30]

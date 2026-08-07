@@ -1,0 +1,18 @@
+[
+  {"name": "official_random", "agent_dir": "/homes/lzhang/pocketmon/agents/official_random"},
+  {"name": "alakazam_5th", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/alakazam"},
+  {"name": "archaludon", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/archaludon"},
+  {"name": "library_out_1208", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/library_out"},
+  {"name": "dragapult", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/dragapult"},
+  {"name": "iono", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/iono"},
+  {"name": "lucario_sample", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/lucario_sample"},
+  {"name": "lucario_1084", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/lucario_original"},
+  {"name": "probabilistic", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/probabilistic"},
+  {"name": "beam_search_940", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/beam_search_940"},
+  {"name": "simple_matchup", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/simple_matchup"},
+  {"name": "roman_recent_885", "agent_dir": "/homes/lzhang/pocketmon/tmp/frontier_agents_2026-08-06/05__romanrozen__strong-start-baseline-agent-v10-lb-950"},
+  {"name": "belief_alakazam_v21_aug7", "agent_dir": "/homes/lzhang/pocketmon/tmp/frontier_agents_2026-08-07/belief_alakazam_v21"},
+  {"name": "garchomp_v28_aug7", "agent_dir": "/homes/lzhang/pocketmon/tmp/frontier_agents_2026-08-07/garchomp_v28"},
+  {"name": "probabilistic_aug7", "agent_dir": "/homes/lzhang/pocketmon/tmp/frontier_agents_2026-08-07/improved_probabilistic"},
+  {"name": "our_grimmsnarl_gold_v3_anchor_g0", "agent_dir": "/homes/lzhang/pocketmon/results/gold_v3/bootstrap/grimmsnarl/agent"}
+]

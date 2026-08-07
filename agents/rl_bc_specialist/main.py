@@ -29,9 +29,21 @@ def _read_deck(path: Path) -> list[int]:
     return deck
 
 
+def _read_q_policy(path: Path) -> dict[str, Any]:
+    if not path.is_file():
+        return {}
+    import json
+
+    policy = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(policy, dict):
+        raise ValueError("q_policy.json must contain an object")
+    return policy
+
+
 DECK = _read_deck(PACKAGE_ROOT / "deck.csv")
 CHECKPOINT = Path(os.environ.get("POCKETMON_RL_CHECKPOINT", PACKAGE_ROOT / "checkpoint.pt"))
 Q_CHECKPOINT = PACKAGE_ROOT / "action_q.pt"
+Q_POLICY = _read_q_policy(PACKAGE_ROOT / "q_policy.json")
 
 
 def _legal_fallback(observation: dict[str, Any]) -> list[int]:
@@ -52,8 +64,25 @@ POLICY = RLBCPolicyAdapter(
     confidence_threshold=float(os.environ.get("POCKETMON_RL_CONFIDENCE", "0.0")),
     deck=DECK,
     q_checkpoint_path=Q_CHECKPOINT if Q_CHECKPOINT.is_file() else None,
-    q_top_k=int(os.environ.get("POCKETMON_Q_TOP_K", "4")),
-    q_uncertainty_penalty=float(os.environ.get("POCKETMON_Q_UNCERTAINTY_PENALTY", "0.25")),
+    q_top_k=int(os.environ.get("POCKETMON_Q_TOP_K", Q_POLICY.get("top_k", 4))),
+    q_uncertainty_penalty=float(os.environ.get(
+        "POCKETMON_Q_UNCERTAINTY_PENALTY", Q_POLICY.get("uncertainty_penalty", 0.25)
+    )),
+    q_min_margin=float(os.environ.get(
+        "POCKETMON_Q_MIN_MARGIN", Q_POLICY.get("min_margin", 0.15)
+    )),
+    q_max_uncertainty=float(os.environ.get(
+        "POCKETMON_Q_MAX_UNCERTAINTY", Q_POLICY.get("max_uncertainty", 0.15)
+    )),
+    q_max_override_rate=float(os.environ.get(
+        "POCKETMON_Q_MAX_OVERRIDE_RATE", Q_POLICY.get("max_override_rate", 1.0)
+    )),
+    q_min_validation_rows=int(os.environ.get(
+        "POCKETMON_Q_MIN_VALIDATION_ROWS", Q_POLICY.get("min_validation_rows", 0)
+    )),
+    q_max_validation_mae=float(os.environ.get(
+        "POCKETMON_Q_MAX_VALIDATION_MAE", Q_POLICY.get("max_validation_mae", "inf")
+    )),
 )
 
 

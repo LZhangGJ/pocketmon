@@ -590,6 +590,20 @@ def ensure_action_q_checkpoint(
     return output
 
 
+def q_materialization_arguments(config: dict[str, Any]) -> list[str]:
+    """Serialize the calibrated conservative reranker policy into each package."""
+
+    return [
+        "--q-top-k", str(config.get("q_top_k", 4)),
+        "--q-uncertainty-penalty", str(config.get("q_uncertainty_penalty", 0.50)),
+        "--q-min-margin", str(config.get("q_min_margin", 0.20)),
+        "--q-max-uncertainty", str(config.get("q_max_uncertainty", 0.10)),
+        "--q-max-override-rate", str(config.get("q_max_override_rate", 0.15)),
+        "--q-min-validation-rows", str(config.get("q_min_validation_rows", 500)),
+        "--q-max-validation-mae", str(config.get("q_max_validation_mae", 0.30)),
+    ]
+
+
 def ensure_search_distilled_checkpoint(
     *, config: dict[str, Any], generation: int, paths: dict[str, Path],
     actor_checkpoint: Path, events: list[dict[str, Any]],
@@ -651,6 +665,7 @@ def ensure_candidate_package(
     ]
     if q_checkpoint is not None and bool(config.get("attach_action_q", True)):
         command.extend(["--q-checkpoint", str(q_checkpoint)])
+        command.extend(q_materialization_arguments(config))
     run_process(
         host=config["local_host"], local_host=config["local_host"], command=command,
         log_path=paths["root"] / "materialize.log",
@@ -764,6 +779,7 @@ def ensure_deck_evolution(
             champion_q = champion / "action_q.pt"
             if champion_q.is_file():
                 command.extend(["--q-checkpoint", str(champion_q)])
+                command.extend(q_materialization_arguments(config))
             run_process(
                 host=config["local_host"], local_host=config["local_host"], command=command,
                 log_path=root / "materialize.log",

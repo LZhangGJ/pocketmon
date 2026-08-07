@@ -48,6 +48,23 @@ def conservative_q_choice(
     return actor_choice, "abstain", margin, best_uncertainty
 
 
+def apply_q_override_budget(
+    actor_choice: int,
+    q_choice: int,
+    q_status: str,
+    credit: float,
+    max_override_rate: float,
+) -> tuple[int, str, float]:
+    """Apply a token-bucket cap so Q cannot gradually take over the actor."""
+
+    updated_credit = min(1.0, float(credit) + float(max_override_rate))
+    if q_status != "override":
+        return q_choice, q_status, updated_credit
+    if updated_credit + 1e-12 < 1.0:
+        return actor_choice, "budget_abstain", updated_credit
+    return q_choice, q_status, updated_credit - 1.0
+
+
 class RLBCPolicyAdapter:
     """Local-game adapter with masked decode and a validated rule fallback."""
 
@@ -63,6 +80,9 @@ class RLBCPolicyAdapter:
         q_uncertainty_penalty: float = 0.25,
         q_min_margin: float | None = None,
         q_max_uncertainty: float | None = None,
+        q_max_override_rate: float = 1.0,
+        q_min_validation_rows: int = 0,
+        q_max_validation_mae: float | None = None,
     ) -> None:
         self.checkpoint_path = Path(checkpoint_path)
         self.fallback = fallback
@@ -76,10 +96,22 @@ class RLBCPolicyAdapter:
         self._q_auto_uncertainty = q_max_uncertainty is None
         self._q_min_margin = 0.15 if q_min_margin is None else float(q_min_margin)
         self._q_max_uncertainty = 0.15 if q_max_uncertainty is None else float(q_max_uncertainty)
+        self._q_max_override_rate = float(q_max_override_rate)
+        self._q_min_validation_rows = int(q_min_validation_rows)
+        self._q_max_validation_mae = (
+            math.inf if q_max_validation_mae is None else float(q_max_validation_mae)
+        )
+        self._q_override_credit = 0.0
         if not math.isfinite(self._q_min_margin) or self._q_min_margin < 0:
             raise ValueError("Q minimum margin must be finite and non-negative")
         if not math.isfinite(self._q_max_uncertainty) or self._q_max_uncertainty < 0:
             raise ValueError("Q maximum uncertainty must be finite and non-negative")
+        if not math.isfinite(self._q_max_override_rate) or not 0.0 <= self._q_max_override_rate <= 1.0:
+            raise ValueError("Q maximum override rate must be finite and in [0, 1]")
+        if self._q_min_validation_rows < 0:
+            raise ValueError("Q minimum validation rows must be non-negative")
+        if self._q_max_validation_mae < 0 or math.isnan(self._q_max_validation_mae):
+            raise ValueError("Q maximum validation MAE must be non-negative")
         self._last_q_margin: float | None = None
         self._last_q_uncertainty: float | None = None
         self._structured = False
@@ -112,6 +144,7 @@ class RLBCPolicyAdapter:
             "q_agreements": 0,
             "q_overrides": 0,
             "q_abstentions": 0,
+            "q_budget_abstentions": 0,
         }
 
     def reset(self) -> None:
@@ -179,9 +212,18 @@ class RLBCPolicyAdapter:
                     q_model.eval()
                     self._q_model = q_model
                     validation = q_checkpoint.get("validation", {})
+                    validation_rows = int(validation.get("rows", 0))
+                    validation_mae = float(validation.get("mae", math.inf))
+                    if validation_rows < self._q_min_validation_rows:
+                        raise ValueError(
+                            f"action-Q validation rows {validation_rows} < {self._q_min_validation_rows}"
+                        )
+                    if not math.isfinite(validation_mae) or validation_mae > self._q_max_validation_mae:
+                        raise ValueError(
+                            f"action-Q validation MAE {validation_mae} > {self._q_max_validation_mae}"
+                        )
                     if self._q_auto_margin:
-                        mae = float(validation.get("mae", 0.30))
-                        self._q_min_margin = max(0.10, min(0.50, 0.50 * mae))
+                        self._q_min_margin = max(0.10, min(0.50, 0.50 * validation_mae))
                     if self._q_auto_uncertainty:
                         mean_uncertainty = float(validation.get("mean_uncertainty", 0.10))
                         self._q_max_uncertainty = max(0.05, min(0.25, 1.50 * mean_uncertainty))
@@ -270,12 +312,20 @@ class RLBCPolicyAdapter:
                     min_margin=self._q_min_margin,
                     max_uncertainty=self._q_max_uncertainty,
                 )
+                chosen, q_status, self._q_override_credit = apply_q_override_budget(
+                    actor_choice,
+                    chosen,
+                    q_status,
+                    self._q_override_credit,
+                    self._q_max_override_rate,
+                )
                 confidence = float(torch.softmax(logits, dim=0)[chosen].item())
                 self._diagnostics["q_actions"] += 1
                 diagnostic_key = {
                     "agreement": "q_agreements",
                     "override": "q_overrides",
                     "abstain": "q_abstentions",
+                    "budget_abstain": "q_budget_abstentions",
                 }[q_status]
                 self._diagnostics[diagnostic_key] += 1
                 self._last_q_margin = margin
@@ -371,6 +421,16 @@ class RLBCPolicyAdapter:
             "q_uncertainty_penalty": self._q_uncertainty_penalty,
             "q_min_margin": self._q_min_margin,
             "q_max_uncertainty": self._q_max_uncertainty,
+            "q_max_override_rate": self._q_max_override_rate,
+            "q_override_credit": self._q_override_credit,
+            "q_actual_override_rate": (
+                self._diagnostics["q_overrides"] / self._diagnostics["q_actions"]
+                if self._diagnostics["q_actions"] else 0.0
+            ),
+            "q_min_validation_rows": self._q_min_validation_rows,
+            "q_max_validation_mae": (
+                self._q_max_validation_mae if math.isfinite(self._q_max_validation_mae) else None
+            ),
             "last_q_margin": self._last_q_margin,
             "last_q_uncertainty": self._last_q_uncertainty,
         })

@@ -13,12 +13,21 @@ from scripts.continuous_rl_pipeline import (
     choose_trainer,
     ensure_candidate_package,
     generation_training_config,
+    q_materialization_arguments,
     retain_candidate_in_league,
     wait_for_files,
 )
 
 
 class ContinuousPipelineTests(unittest.TestCase):
+    def test_q_materialization_uses_conservative_defaults(self) -> None:
+        arguments = q_materialization_arguments({})
+        paired = dict(zip(arguments[::2], arguments[1::2]))
+        self.assertEqual(paired["--q-min-margin"], "0.2")
+        self.assertEqual(paired["--q-max-override-rate"], "0.15")
+        self.assertEqual(paired["--q-min-validation-rows"], "500")
+        self.assertEqual(paired["--q-max-validation-mae"], "0.3")
+
     def test_rollout_pool_marks_public_and_frozen_population_roles(self) -> None:
         pool = build_rollout_pool(
             [{"name": "recent", "agent_dir": "/agents/recent"}],
