@@ -57,7 +57,7 @@
     "library_out_1208",
     "probabilistic",
     "beam_search_940",
-    "grim_hybrid_909",
+    "simple_matchup",
     "roman_recent_885"
   ],
   "deck_screen_games_per_opponent": 2,

@@ -9,7 +9,7 @@
   {"name": "lucario_1084", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/lucario_original"},
   {"name": "probabilistic", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/probabilistic"},
   {"name": "beam_search_940", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/beam_search_940"},
-  {"name": "grim_hybrid_909", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/grim_hybrid_909"},
+  {"name": "grim_hybrid_909", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/grim_hybrid_909", "status": "rejected", "reason": "quarantined: local engine SIGABRT buffer full in every paired gate game for both candidate and parent"},
   {"name": "simple_matchup", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/simple_matchup"},
   {"name": "roman_recent_885", "agent_dir": "/homes/lzhang/pocketmon/tmp/frontier_agents_2026-08-06/05__romanrozen__strong-start-baseline-agent-v10-lb-950"},
   {"name": "maktha_recent_707", "agent_dir": "/homes/lzhang/pocketmon/tmp/frontier_agents_2026-08-06/04__makthanithin__pokemon-tcg-ai-battle-1084-5-baseline", "status": "rejected", "reason": "static quarantine failed: SyntaxError at main.py line 322"}
