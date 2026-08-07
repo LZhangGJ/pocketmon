@@ -1,12 +1,26 @@
 from __future__ import annotations
 
 import random
+import tempfile
 import unittest
+from pathlib import Path
+from unittest.mock import patch
 
-from scripts.collect_ppo_rollouts import choose_frozen_opponent
+from scripts.collect_ppo_rollouts import choose_frozen_opponent, read_deck
 
 
 class FrozenLeagueRolloutTests(unittest.TestCase):
+    def test_deck_read_retries_during_atomic_refresh_window(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "deck.csv"
+            path.write_text("1\n" * 60, encoding="utf-8")
+            with patch.object(Path, "read_text", side_effect=["1\n", "2\n" * 60]), patch(
+                "scripts.collect_ppo_rollouts.time.sleep"
+            ) as sleep:
+                deck = read_deck(path, attempts=2, retry_seconds=0.01)
+        self.assertEqual(deck, [2] * 60)
+        sleep.assert_called_once_with(0.01)
+
     def setUp(self) -> None:
         self.pool = [
             {"name": "public", "league_role": "public"},

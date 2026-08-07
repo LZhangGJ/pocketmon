@@ -7,6 +7,7 @@ import json
 import os
 import random
 import sys
+import time
 import types
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -23,11 +24,25 @@ from rl.counterfactual import counterfactual_action_values
 from rl.ppo import load_checkpoint, model_row_from_observation, sample_action, sha256_file
 
 
-def read_deck(path: Path) -> list[int]:
-    deck = [int(line.strip()) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
-    if len(deck) != 60:
-        raise ValueError(f"deck must contain exactly 60 cards: {path}")
-    return deck
+def read_deck(path: Path, attempts: int = 20, retry_seconds: float = 0.1) -> list[int]:
+    """Read a complete deck despite concurrent public-agent refreshes."""
+
+    last_error = "unknown"
+    for attempt in range(attempts):
+        try:
+            deck = [
+                int(line.strip())
+                for line in path.read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            ]
+            if len(deck) == 60:
+                return deck
+            last_error = f"observed {len(deck)} cards"
+        except (FileNotFoundError, OSError, ValueError) as exc:
+            last_error = f"{type(exc).__name__}: {exc}"
+        if attempt + 1 < attempts:
+            time.sleep(retry_seconds)
+    raise ValueError(f"deck must contain exactly 60 cards after {attempts} attempts: {path} ({last_error})")
 
 
 def load_agent(path: Path, name: str):
@@ -75,7 +90,14 @@ def resolve_manifest(path: Path) -> list[dict[str, Any]]:
         ))
         if role not in {"population", "public"}:
             raise ValueError(f"unsupported rollout opponent role {role!r}: {item}")
-        accepted.append({"name": name, "agent_dir": agent_dir, "league_role": role})
+        # Freeze the deck once per shard. Daily notebook refreshes may replace
+        # public agent artifacts while a 64-episode shard is running.
+        accepted.append({
+            "name": name,
+            "agent_dir": agent_dir,
+            "league_role": role,
+            "deck": read_deck(agent_dir / "deck.csv"),
+        })
     if not accepted:
         raise ValueError("rollout opponent manifest is empty")
     return accepted
@@ -145,7 +167,7 @@ def play_episode(
     frozen_self_play = opponent_role == "population"
     opponent_dir = Path(opponent["agent_dir"])
     opponent_module = load_agent(opponent_dir, f"ppo_opponent_{episode}")
-    opponent_deck = read_deck(opponent_dir / "deck.csv")
+    opponent_deck = list(opponent.get("deck") or read_deck(opponent_dir / "deck.csv"))
     decks = [list(learner_deck), list(learner_deck)]
     decks[1 - learner_seat] = opponent_deck
     observation, start = battle_start(*decks)
