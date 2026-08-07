@@ -34,6 +34,11 @@ def purge_agent_modules(path: Path) -> None:
     for child in path.iterdir():
         if child.name.startswith("."):
             continue
+        if child.name == "cg":
+            # The runner installs the selected official engine before loading
+            # agents. Submission archives also bundle that same package, so it
+            # must not be mistaken for agent-private state and purged.
+            continue
         if child.is_dir() and (child / "__init__.py").is_file():
             owned_names.add(child.name)
         elif child.is_file() and child.suffix == ".py" and child.stem != "main":

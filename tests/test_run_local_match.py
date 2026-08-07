@@ -1,5 +1,6 @@
 import sys
 import tempfile
+import types
 import unittest
 from pathlib import Path
 
@@ -40,6 +41,20 @@ class RunLocalMatchTests(unittest.TestCase):
             old_module = load_agent(old, "isolation_old_second")
             self.assertEqual(new_module.VERSION, "new")
             self.assertEqual(old_module.VERSION, "old")
+
+    def test_bundled_cg_does_not_remove_installed_engine(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            agent = self._write_agent(root, "submission", "submission")
+            bundled_cg = agent / "cg"
+            bundled_cg.mkdir()
+            (bundled_cg / "__init__.py").write_text("", encoding="utf-8")
+            engine = types.ModuleType("cg")
+            engine.marker = "installed-engine"
+            sys.modules["cg"] = engine
+
+            load_agent(agent, "submission_with_cg")
+            self.assertIs(sys.modules["cg"], engine)
 
 
 if __name__ == "__main__":
