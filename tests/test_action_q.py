@@ -6,10 +6,31 @@ import unittest
 import torch
 
 from rl.action_q import ActionValueEnsemble, q_mean_and_std
+from rl.agent_adapter import conservative_q_choice
 from rl.counterfactual import sample_hidden_zones, terminal_value
 
 
 class ActionQTests(unittest.TestCase):
+    def test_q_only_overrides_with_margin_and_low_uncertainty(self):
+        candidates = torch.tensor([0, 1, 2])
+        chosen, status, _, _ = conservative_q_choice(
+            0, candidates, torch.tensor([0.1, 0.4, 0.2]), torch.tensor([0.05, 0.08, 0.04]),
+            min_margin=0.15, max_uncertainty=0.10,
+        )
+        self.assertEqual((chosen, status), (1, "override"))
+
+        chosen, status, _, _ = conservative_q_choice(
+            0, candidates, torch.tensor([0.1, 0.2, 0.0]), torch.tensor([0.05, 0.08, 0.04]),
+            min_margin=0.15, max_uncertainty=0.10,
+        )
+        self.assertEqual((chosen, status), (0, "abstain"))
+
+        chosen, status, _, _ = conservative_q_choice(
+            0, candidates, torch.tensor([0.1, 0.4, 0.2]), torch.tensor([0.05, 0.20, 0.04]),
+            min_margin=0.15, max_uncertainty=0.10,
+        )
+        self.assertEqual((chosen, status), (0, "abstain"))
+
     def test_action_q_shapes_and_finite_uncertainty(self) -> None:
         model = ActionValueEnsemble(hidden_dim=8, heads=3)
         values = model(torch.randn(2, 8), torch.randn(2, 5, 8))

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import math
 from pathlib import Path
 from typing import Any, Callable
 
@@ -17,6 +18,31 @@ HISTORY_ARCHITECTURE = "causal_gru_history_masked_autoregressive_candidate_point
 STRUCTURED_ARCHITECTURE = "structured_card_attack_deepsets_deck_masked_pointer_with_stop"
 
 
+def conservative_q_choice(
+    actor_choice: int,
+    candidates: torch.Tensor,
+    lower_bounds: torch.Tensor,
+    uncertainty: torch.Tensor,
+    *,
+    min_margin: float,
+    max_uncertainty: float,
+) -> tuple[int, str, float, float]:
+    """Let Q override the actor only with a calibrated, low-variance margin."""
+    best_position = int(lower_bounds.argmax().item())
+    best_choice = int(candidates[best_position].item())
+    actor_positions = (candidates == actor_choice).nonzero(as_tuple=False)
+    if not len(actor_positions):
+        raise ValueError("actor choice must be present in Q candidates")
+    actor_position = int(actor_positions[0].item())
+    margin = float((lower_bounds[best_position] - lower_bounds[actor_position]).item())
+    best_uncertainty = float(uncertainty[best_position].item())
+    if best_choice == actor_choice:
+        return actor_choice, "agreement", margin, best_uncertainty
+    if margin >= min_margin and best_uncertainty <= max_uncertainty:
+        return best_choice, "override", margin, best_uncertainty
+    return actor_choice, "abstain", margin, best_uncertainty
+
+
 class RLBCPolicyAdapter:
     """Local-game adapter with masked decode and a validated rule fallback."""
 
@@ -30,6 +56,8 @@ class RLBCPolicyAdapter:
         q_checkpoint_path: Path | None = None,
         q_top_k: int = 4,
         q_uncertainty_penalty: float = 0.25,
+        q_min_margin: float | None = None,
+        q_max_uncertainty: float | None = None,
     ) -> None:
         self.checkpoint_path = Path(checkpoint_path)
         self.fallback = fallback
@@ -39,6 +67,16 @@ class RLBCPolicyAdapter:
         self._q_model: ActionValueEnsemble | None = None
         self._q_top_k = max(1, int(q_top_k))
         self._q_uncertainty_penalty = float(q_uncertainty_penalty)
+        self._q_auto_margin = q_min_margin is None
+        self._q_auto_uncertainty = q_max_uncertainty is None
+        self._q_min_margin = 0.15 if q_min_margin is None else float(q_min_margin)
+        self._q_max_uncertainty = 0.15 if q_max_uncertainty is None else float(q_max_uncertainty)
+        if not math.isfinite(self._q_min_margin) or self._q_min_margin < 0:
+            raise ValueError("Q minimum margin must be finite and non-negative")
+        if not math.isfinite(self._q_max_uncertainty) or self._q_max_uncertainty < 0:
+            raise ValueError("Q maximum uncertainty must be finite and non-negative")
+        self._last_q_margin: float | None = None
+        self._last_q_uncertainty: float | None = None
         self._structured = False
         if deck is not None and (
             len(deck) != 60
@@ -66,6 +104,9 @@ class RLBCPolicyAdapter:
             "emergency_legal_actions": 0,
             "q_load_errors": 0,
             "q_actions": 0,
+            "q_agreements": 0,
+            "q_overrides": 0,
+            "q_abstentions": 0,
         }
 
     def reset(self) -> None:
@@ -123,6 +164,13 @@ class RLBCPolicyAdapter:
                     q_model.load_state_dict(q_checkpoint["model"])
                     q_model.eval()
                     self._q_model = q_model
+                    validation = q_checkpoint.get("validation", {})
+                    if self._q_auto_margin:
+                        mae = float(validation.get("mae", 0.30))
+                        self._q_min_margin = max(0.10, min(0.50, 0.50 * mae))
+                    if self._q_auto_uncertainty:
+                        mean_uncertainty = float(validation.get("mean_uncertainty", 0.10))
+                        self._q_max_uncertainty = max(0.05, min(0.25, 1.50 * mean_uncertainty))
                 except Exception:
                     self._diagnostics["q_load_errors"] += 1
                     self._q_model = None
@@ -199,9 +247,25 @@ class RLBCPolicyAdapter:
                 q_values = self._q_model(actor_state, actor_options)
                 q_mean, q_std = q_mean_and_std(q_values)
                 lower = q_mean[0, candidates] - self._q_uncertainty_penalty * q_std[0, candidates]
-                chosen = int(candidates[int(lower.argmax().item())].item())
+                actor_choice = int(logits.argmax().item())
+                chosen, q_status, margin, best_uncertainty = conservative_q_choice(
+                    actor_choice,
+                    candidates,
+                    lower,
+                    q_std[0, candidates],
+                    min_margin=self._q_min_margin,
+                    max_uncertainty=self._q_max_uncertainty,
+                )
                 confidence = float(torch.softmax(logits, dim=0)[chosen].item())
                 self._diagnostics["q_actions"] += 1
+                diagnostic_key = {
+                    "agreement": "q_agreements",
+                    "override": "q_overrides",
+                    "abstain": "q_abstentions",
+                }[q_status]
+                self._diagnostics[diagnostic_key] += 1
+                self._last_q_margin = margin
+                self._last_q_uncertainty = best_uncertainty
                 return [chosen], state, encoded_options, confidence
         actions, confidences = greedy_decode_with_confidence(self._model, batch)
         return actions[0], state, encoded_options, confidences[0]
@@ -291,5 +355,9 @@ class RLBCPolicyAdapter:
             "q_checkpoint_exists": bool(self._q_checkpoint_path and self._q_checkpoint_path.is_file()),
             "q_top_k": self._q_top_k,
             "q_uncertainty_penalty": self._q_uncertainty_penalty,
+            "q_min_margin": self._q_min_margin,
+            "q_max_uncertainty": self._q_max_uncertainty,
+            "last_q_margin": self._last_q_margin,
+            "last_q_uncertainty": self._last_q_uncertainty,
         })
         return result
