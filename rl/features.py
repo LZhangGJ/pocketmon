@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import hashlib
 import json
+import math
+import re
 from pathlib import Path
 from typing import Any
 
@@ -11,6 +14,7 @@ HISTORY_DIM = STATE_DIM + ACTION_DIM + 2
 ENTITY_DIM = 8
 CARD_METADATA_DIM = 17
 ATTACK_METADATA_DIM = 14
+CARD_TEXT_EMBEDDING_DIM = 128
 CARD_VOCAB_SIZE = 2048
 ATTACK_VOCAB_SIZE = 2048
 ENTITY_ZONE_COUNT = 16
@@ -268,6 +272,59 @@ def attack_metadata_table(path: Path) -> list[list[float]]:
         energies = attack.get("energies") or []
         histogram = [float(sum(int(value == kind) for value in energies)) / 5.0 for kind in range(12)]
         table[attack_id] = [_num(attack.get("damage")) / 400.0, len(energies) / 5.0, *histogram]
+    return table
+
+
+def _hashed_text_vector(text: str, dimension: int = CARD_TEXT_EMBEDDING_DIM) -> list[float]:
+    """Return a deterministic signed-hash embedding for card-effect text.
+
+    Word/bigram features capture shared rules language, while character n-grams
+    remain useful when the official database contains legacy mojibake.  The
+    fixed transform keeps checkpoints self-contained and reproducible without
+    downloading a private embedding model at inference time.
+    """
+
+    if dimension <= 0:
+        raise ValueError("text embedding dimension must be positive")
+    normalized = " ".join(re.findall(r"[a-z0-9]+|\{[^}]+\}", str(text).casefold()))
+    words = normalized.split()
+    features = [f"w:{word}" for word in words]
+    features.extend(f"b:{left}_{right}" for left, right in zip(words, words[1:]))
+    compact = normalized.replace(" ", "_")
+    features.extend(f"c3:{compact[index:index + 3]}" for index in range(max(0, len(compact) - 2)))
+    vector = [0.0] * dimension
+    for feature in features:
+        digest = hashlib.blake2b(feature.encode("utf-8"), digest_size=8, person=b"ptcg-text-v1").digest()
+        bucket = int.from_bytes(digest[:4], "little") % dimension
+        vector[bucket] += 1.0 if digest[4] & 1 else -1.0
+    norm = math.sqrt(sum(value * value for value in vector))
+    return vector if norm == 0.0 else [value / norm for value in vector]
+
+
+def card_text_embedding_table(
+    card_path: Path,
+    attack_path: Path,
+    dimension: int = CARD_TEXT_EMBEDDING_DIM,
+) -> list[list[float]]:
+    """Embed official card names, effect text and referenced attack text."""
+
+    attacks = {
+        _safe_id(attack.get("attackId"), ATTACK_VOCAB_SIZE): attack
+        for attack in json.loads(Path(attack_path).read_text(encoding="utf-8"))
+    }
+    table = [[0.0] * dimension for _ in range(CARD_VOCAB_SIZE)]
+    for card in json.loads(Path(card_path).read_text(encoding="utf-8")):
+        card_id = _safe_id(card.get("cardId"), CARD_VOCAB_SIZE)
+        if not card_id:
+            continue
+        fragments = [str(card.get("name") or "")]
+        for skill in card.get("skills") or []:
+            if isinstance(skill, dict):
+                fragments.extend((str(skill.get("name") or ""), str(skill.get("text") or "")))
+        for attack_id in card.get("attacks") or []:
+            attack = attacks.get(_safe_id(attack_id, ATTACK_VOCAB_SIZE)) or {}
+            fragments.extend((str(attack.get("name") or ""), str(attack.get("text") or "")))
+        table[card_id] = _hashed_text_vector(" ".join(fragments), dimension)
     return table
 
 

@@ -11,10 +11,16 @@ from torch.nn import functional as F
 
 from .bc import action_is_legal, collate_rows
 from .features import action_features, state_features, structured_observation_features
-from .model import MaskedPointerActorCritic, StructuredMaskedPointerActorCritic, legal_choice_mask
+from .model import (
+    MaskedPointerActorCritic,
+    StructuredMaskedPointerActorCritic,
+    StructuredTransformerMaskedPointerActorCritic,
+    legal_choice_mask,
+)
 
 
 STRUCTURED_ARCHITECTURE = "structured_card_attack_deepsets_deck_masked_pointer_with_stop"
+STRUCTURED_TRANSFORMER_ARCHITECTURE = "structured_card_attack_transformer_text_deck_masked_pointer_with_stop"
 
 
 def sha256_file(path: Path) -> str:
@@ -32,9 +38,14 @@ def load_checkpoint(path: Path, device: torch.device) -> tuple[MaskedPointerActo
         checkpoint = torch.load(path, map_location=device)
     config = checkpoint.get("config") or {}
     architecture = config.get("architecture")
-    if architecture != STRUCTURED_ARCHITECTURE:
+    if architecture not in (STRUCTURED_ARCHITECTURE, STRUCTURED_TRANSFORMER_ARCHITECTURE):
         raise ValueError(f"PPO requires a structured checkpoint, got {architecture!r}")
-    model = StructuredMaskedPointerActorCritic(int(checkpoint["hidden_dim"]))
+    model_class = (
+        StructuredTransformerMaskedPointerActorCritic
+        if architecture == STRUCTURED_TRANSFORMER_ARCHITECTURE else
+        StructuredMaskedPointerActorCritic
+    )
+    model = model_class(int(checkpoint["hidden_dim"]))
     model.load_state_dict(checkpoint["model"])
     model.to(device)
     return model, checkpoint

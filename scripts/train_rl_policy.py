@@ -30,13 +30,18 @@ from rl.bc import (
     run_epoch,
     sha256_file,
 )
-from rl.features import attack_metadata_table, card_metadata_table
-from rl.model import MaskedPointerActorCritic, StructuredMaskedPointerActorCritic
+from rl.features import attack_metadata_table, card_metadata_table, card_text_embedding_table
+from rl.model import (
+    MaskedPointerActorCritic,
+    StructuredMaskedPointerActorCritic,
+    StructuredTransformerMaskedPointerActorCritic,
+)
 
 
 ARCHITECTURE = "stateless_masked_autoregressive_candidate_pointer_with_stop"
 HISTORY_ARCHITECTURE = "causal_gru_history_masked_autoregressive_candidate_pointer_with_stop"
 STRUCTURED_ARCHITECTURE = "structured_card_attack_deepsets_deck_masked_pointer_with_stop"
+STRUCTURED_TRANSFORMER_ARCHITECTURE = "structured_card_attack_transformer_text_deck_masked_pointer_with_stop"
 
 
 def peak_ram_mb() -> float:
@@ -351,7 +356,12 @@ def main() -> None:
     parser.add_argument("--value-loss-weight", type=float, default=0.25)
     parser.add_argument("--gradient-clip-norm", type=float, default=1.0)
     parser.add_argument(
-        "--architecture", choices=(ARCHITECTURE, HISTORY_ARCHITECTURE, STRUCTURED_ARCHITECTURE),
+        "--architecture", choices=(
+            ARCHITECTURE,
+            HISTORY_ARCHITECTURE,
+            STRUCTURED_ARCHITECTURE,
+            STRUCTURED_TRANSFORMER_ARCHITECTURE,
+        ),
         default=ARCHITECTURE,
     )
     parser.add_argument("--history-length", type=int, default=0)
@@ -395,7 +405,8 @@ def main() -> None:
         torch.cuda.reset_peak_memory_stats()
 
     history_enabled = args.architecture == HISTORY_ARCHITECTURE
-    structured_enabled = args.architecture == STRUCTURED_ARCHITECTURE
+    structured_enabled = args.architecture in (STRUCTURED_ARCHITECTURE, STRUCTURED_TRANSFORMER_ARCHITECTURE)
+    transformer_enabled = args.architecture == STRUCTURED_TRANSFORMER_ARCHITECTURE
     if history_enabled and args.history_length <= 0:
         raise ValueError("history architecture requires --history-length > 0")
     if not history_enabled and args.history_length != 0:
@@ -432,8 +443,9 @@ def main() -> None:
     if structured_enabled:
         structured_assets = {
             "card_attack_embeddings": True,
-            "entity_encoder": "deepsets_masked_mean_max",
+            "entity_encoder": "transformer_cross_attention" if transformer_enabled else "deepsets_masked_mean_max",
             "deck_conditioning": "acting_player_submitted_deck_masked_mean",
+            "card_text_embedding": "signed_hash_word_bigram_char3_128d" if transformer_enabled else "none",
             "deck_map_sha256": audit["deck_map"]["sha256"],
             "card_database_sha256": sha256_file(Path(args.card_database)),
             "attack_database_sha256": sha256_file(Path(args.attack_database)),
@@ -468,7 +480,16 @@ def main() -> None:
     validation = TrajectoryDataset([row for row in rows if row["episode_id"] in validation_ids])
     train_loader = make_loader(train, args.batch_size, True, args.seed)
     validation_loader = make_loader(validation, args.batch_size, False, args.seed)
-    if structured_enabled:
+    if transformer_enabled:
+        model = StructuredTransformerMaskedPointerActorCritic(
+            args.hidden_dim,
+            card_metadata=torch.tensor(card_metadata_table(Path(args.card_database))),
+            attack_metadata=torch.tensor(attack_metadata_table(Path(args.attack_database))),
+            card_text_embeddings=torch.tensor(card_text_embedding_table(
+                Path(args.card_database), Path(args.attack_database)
+            )),
+        ).to(device)
+    elif structured_enabled:
         model = StructuredMaskedPointerActorCritic(
             args.hidden_dim,
             card_metadata=torch.tensor(card_metadata_table(Path(args.card_database))),

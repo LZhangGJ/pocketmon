@@ -8,10 +8,21 @@ from pathlib import Path
 
 import torch
 
-from rl.agent_adapter import RLBCPolicyAdapter, STRUCTURED_ARCHITECTURE
+from rl.agent_adapter import (
+    RLBCPolicyAdapter,
+    STRUCTURED_ARCHITECTURE,
+    STRUCTURED_TRANSFORMER_ARCHITECTURE,
+)
 from rl.bc import batch_loss, collate_rows, greedy_decode, load_deck_map
-from rl.features import STATE_DIM, action_features, state_features, structured_observation_features
-from rl.model import StructuredMaskedPointerActorCritic
+from rl.features import (
+    CARD_TEXT_EMBEDDING_DIM,
+    STATE_DIM,
+    action_features,
+    card_text_embedding_table,
+    state_features,
+    structured_observation_features,
+)
+from rl.model import StructuredMaskedPointerActorCritic, StructuredTransformerMaskedPointerActorCritic
 
 
 def observation() -> dict:
@@ -78,6 +89,42 @@ class StructuredRLTests(unittest.TestCase):
         self.assertEqual(len(predictions), 2)
         self.assertTrue(all(len(action) == 1 for action in predictions))
         self.assertEqual(tuple(batch["deck_card_ids"].shape), (2, 60))
+
+    def test_transformer_text_model_loss_decode_and_adapter_load(self) -> None:
+        batch = collate_rows([compact_structured_row(), compact_structured_row()])
+        model = StructuredTransformerMaskedPointerActorCritic(32)
+        loss, _ = batch_loss(model, batch)
+        self.assertTrue(torch.isfinite(loss))
+        self.assertTrue(all(len(action) == 1 for action in greedy_decode(model.eval(), batch)))
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "transformer.pt"
+            torch.save({
+                "model": model.state_dict(),
+                "hidden_dim": 32,
+                "config": {"architecture": STRUCTURED_TRANSFORMER_ARCHITECTURE},
+            }, path)
+            adapter = RLBCPolicyAdapter(path, fallback=lambda _: [2], deck=[10] * 60)
+            action = adapter.act(observation())
+        self.assertEqual(len(action), 1)
+        self.assertEqual(adapter.diagnostics()["load_errors"], 0)
+
+    def test_card_text_embeddings_are_deterministic_and_include_attacks(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            cards = Path(directory) / "cards.json"
+            attacks = Path(directory) / "attacks.json"
+            cards.write_text(json.dumps([
+                {"cardId": 1, "name": "Alpha", "skills": [], "attacks": [7]},
+                {"cardId": 2, "name": "Beta", "skills": [], "attacks": []},
+            ]), encoding="utf-8")
+            attacks.write_text(json.dumps([
+                {"attackId": 7, "name": "Search", "text": "Search your deck for a card."}
+            ]), encoding="utf-8")
+            first = card_text_embedding_table(cards, attacks)
+            second = card_text_embedding_table(cards, attacks)
+        self.assertEqual(first, second)
+        self.assertEqual(len(first[1]), CARD_TEXT_EMBEDDING_DIM)
+        self.assertNotEqual(first[1], first[2])
+        self.assertAlmostEqual(sum(value * value for value in first[1]), 1.0, places=6)
 
     def test_deck_map_requires_own_60_card_entry(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

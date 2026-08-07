@@ -8,6 +8,7 @@ from .features import (
     ATTACK_METADATA_DIM,
     ATTACK_VOCAB_SIZE,
     CARD_METADATA_DIM,
+    CARD_TEXT_EMBEDDING_DIM,
     CARD_VOCAB_SIZE,
     ENTITY_DIM,
     ENTITY_ZONE_COUNT,
@@ -199,4 +200,100 @@ class StructuredMaskedPointerActorCritic(MaskedPointerActorCritic):
         deck_cards = self._card_repr(batch["deck_card_ids"])
         deck_context = self.deck_encoder(self._masked_mean(deck_cards, batch["deck_mask"]))
         state = self.context_norm(state + entity_context + deck_context)
+        return state, encoded_options, self.value(state).squeeze(-1)
+
+
+class StructuredTransformerMaskedPointerActorCritic(StructuredMaskedPointerActorCritic):
+    """Card-identity Transformer with official effect-text conditioning."""
+
+    def __init__(
+        self,
+        hidden_dim: int = 192,
+        card_metadata: torch.Tensor | None = None,
+        attack_metadata: torch.Tensor | None = None,
+        card_text_embeddings: torch.Tensor | None = None,
+        transformer_heads: int = 4,
+        transformer_layers: int = 2,
+    ) -> None:
+        if hidden_dim % transformer_heads:
+            raise ValueError("hidden_dim must be divisible by transformer_heads")
+        super().__init__(
+            hidden_dim=hidden_dim,
+            card_metadata=card_metadata,
+            attack_metadata=attack_metadata,
+        )
+        card_text_embeddings = (
+            torch.zeros(CARD_VOCAB_SIZE, CARD_TEXT_EMBEDDING_DIM)
+            if card_text_embeddings is None else card_text_embeddings.to(dtype=torch.float32)
+        )
+        if tuple(card_text_embeddings.shape) != (CARD_VOCAB_SIZE, CARD_TEXT_EMBEDDING_DIM):
+            raise ValueError("unexpected card text embedding table shape")
+        self.register_buffer("card_text_embeddings", card_text_embeddings)
+        self.card_text_encoder = nn.Sequential(nn.Linear(CARD_TEXT_EMBEDDING_DIM, 16), nn.Tanh())
+
+        card_repr_dim = 32 + 16 + 16
+        attack_repr_dim = 24 + 16
+        self.option_identity_encoder = nn.Sequential(
+            nn.Linear(card_repr_dim * 2 + attack_repr_dim, hidden_dim), nn.Tanh()
+        )
+        self.entity_encoder = nn.Sequential(
+            nn.Linear(card_repr_dim + 12 + ENTITY_DIM, hidden_dim), nn.Tanh()
+        )
+        self.deck_encoder = nn.Sequential(nn.Linear(card_repr_dim, hidden_dim), nn.Tanh())
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=hidden_dim,
+            nhead=transformer_heads,
+            dim_feedforward=hidden_dim * 4,
+            dropout=0.0,
+            activation="gelu",
+            batch_first=True,
+        )
+        self.entity_transformer = nn.TransformerEncoder(encoder_layer, num_layers=transformer_layers)
+        self.option_entity_attention = nn.MultiheadAttention(
+            hidden_dim, transformer_heads, dropout=0.0, batch_first=True
+        )
+        self.entity_context_norm = nn.LayerNorm(hidden_dim)
+        self.option_context_norm = nn.LayerNorm(hidden_dim)
+
+    def _card_repr(self, ids: torch.Tensor) -> torch.Tensor:
+        return torch.cat((
+            self.card_embedding(ids),
+            self.card_metadata_encoder(self.card_metadata[ids]),
+            self.card_text_encoder(self.card_text_embeddings[ids]),
+        ), dim=-1)
+
+    def encode_batch(self, batch: dict[str, torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        state = self.state_encoder(batch["states"])
+        option_identity = torch.cat((
+            self._card_repr(batch["option_card_ids"]),
+            self._card_repr(batch["option_target_card_ids"]),
+            self._attack_repr(batch["option_attack_ids"]),
+        ), dim=-1)
+        encoded_options = self.option_encoder(batch["options"]) + self.option_identity_encoder(option_identity)
+
+        entities = self.entity_encoder(torch.cat((
+            self._card_repr(batch["entity_card_ids"]),
+            self.zone_embedding(batch["entity_zone_ids"]),
+            batch["entity_features"],
+        ), dim=-1))
+        entity_mask = batch["entity_mask"].clone()
+        empty_rows = ~entity_mask.any(dim=1)
+        entity_mask[empty_rows, 0] = True
+        entities = entities.masked_fill(~entity_mask[..., None], 0.0)
+        entities = self.entity_transformer(entities, src_key_padding_mask=~entity_mask)
+        entity_context = self.entity_context_norm(self._masked_mean(entities, entity_mask))
+
+        deck_cards = self._card_repr(batch["deck_card_ids"])
+        deck_context = self.deck_encoder(self._masked_mean(deck_cards, batch["deck_mask"]))
+        state = self.context_norm(state + entity_context + deck_context)
+
+        option_queries = encoded_options + state[:, None, :] + deck_context[:, None, :]
+        attended, _ = self.option_entity_attention(
+            option_queries,
+            entities,
+            entities,
+            key_padding_mask=~entity_mask,
+            need_weights=False,
+        )
+        encoded_options = self.option_context_norm(option_queries + attended)
         return state, encoded_options, self.value(state).squeeze(-1)

@@ -10,12 +10,17 @@ import torch
 from .bc import action_is_legal, collate_rows, greedy_decode_with_confidence
 from .action_q import ActionValueEnsemble, q_mean_and_std
 from .features import action_features, history_features, state_features, structured_observation_features
-from .model import MaskedPointerActorCritic, StructuredMaskedPointerActorCritic
+from .model import (
+    MaskedPointerActorCritic,
+    StructuredMaskedPointerActorCritic,
+    StructuredTransformerMaskedPointerActorCritic,
+)
 
 
 STATELESS_ARCHITECTURE = "stateless_masked_autoregressive_candidate_pointer_with_stop"
 HISTORY_ARCHITECTURE = "causal_gru_history_masked_autoregressive_candidate_pointer_with_stop"
 STRUCTURED_ARCHITECTURE = "structured_card_attack_deepsets_deck_masked_pointer_with_stop"
+STRUCTURED_TRANSFORMER_ARCHITECTURE = "structured_card_attack_transformer_text_deck_masked_pointer_with_stop"
 
 
 def conservative_q_choice(
@@ -127,10 +132,15 @@ class RLBCPolicyAdapter:
                 checkpoint = torch.load(self.checkpoint_path, map_location=self.device)
             config = checkpoint["config"]
             architecture = config.get("architecture", STATELESS_ARCHITECTURE)
-            if architecture not in (STATELESS_ARCHITECTURE, HISTORY_ARCHITECTURE, STRUCTURED_ARCHITECTURE):
+            if architecture not in (
+                STATELESS_ARCHITECTURE,
+                HISTORY_ARCHITECTURE,
+                STRUCTURED_ARCHITECTURE,
+                STRUCTURED_TRANSFORMER_ARCHITECTURE,
+            ):
                 raise ValueError(f"unsupported checkpoint architecture: {architecture}")
             self._history_enabled = architecture == HISTORY_ARCHITECTURE
-            self._structured = architecture == STRUCTURED_ARCHITECTURE
+            self._structured = architecture in (STRUCTURED_ARCHITECTURE, STRUCTURED_TRANSFORMER_ARCHITECTURE)
             self._history_length = int(config.get("history_length", 0)) if self._history_enabled else 0
             if self._history_enabled and self._history_length <= 0:
                 raise ValueError("history checkpoint has no positive history_length")
@@ -141,11 +151,15 @@ class RLBCPolicyAdapter:
             )
             if not 0.0 <= self._confidence_threshold <= 1.0:
                 raise ValueError("confidence threshold must be in [0, 1]")
-            model = (
-                StructuredMaskedPointerActorCritic(int(checkpoint["hidden_dim"]))
-                if self._structured else
-                MaskedPointerActorCritic(int(checkpoint["hidden_dim"]), history_encoder=self._history_enabled)
-            ).to(self.device)
+            if architecture == STRUCTURED_TRANSFORMER_ARCHITECTURE:
+                model = StructuredTransformerMaskedPointerActorCritic(int(checkpoint["hidden_dim"]))
+            elif architecture == STRUCTURED_ARCHITECTURE:
+                model = StructuredMaskedPointerActorCritic(int(checkpoint["hidden_dim"]))
+            else:
+                model = MaskedPointerActorCritic(
+                    int(checkpoint["hidden_dim"]), history_encoder=self._history_enabled
+                )
+            model = model.to(self.device)
             model.load_state_dict(checkpoint["model"])
             model.eval()
             self._model = model
