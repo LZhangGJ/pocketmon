@@ -10,6 +10,7 @@ import subprocess
 import sys
 import time
 import traceback
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -296,7 +297,35 @@ def load_results(paths: list[Path]) -> list[dict[str, Any]]:
     return rows
 
 
-def run_distributed_schedule(
+@contextmanager
+def exclusive_evaluation_lock(config: dict[str, Any], *, label: str):
+    """Serialize evaluation schedules that share the same server fleet."""
+
+    lock_value = config.get("evaluation_lock_path")
+    if not lock_value:
+        yield
+        return
+
+    import fcntl
+
+    lock_path = Path(lock_value)
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    with lock_path.open("a+", encoding="utf-8") as handle:
+        print(f"[evaluation-lock] waiting: {lock_path} ({label})", flush=True)
+        fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+        try:
+            handle.seek(0)
+            handle.truncate()
+            json.dump({"pid": os.getpid(), "label": label, "acquired_at": now()}, handle)
+            handle.flush()
+            print(f"[evaluation-lock] acquired: {lock_path} ({label})", flush=True)
+            yield
+        finally:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+            print(f"[evaluation-lock] released: {lock_path} ({label})", flush=True)
+
+
+def _run_distributed_schedule_unlocked(
     *,
     config: dict[str, Any],
     root: Path,
@@ -347,6 +376,22 @@ def run_distributed_schedule(
     if len(rows) != len(schedule):
         raise RuntimeError(f"{label} incomplete: {len(rows)}/{len(schedule)}")
     return rows
+
+
+def run_distributed_schedule(
+    *,
+    config: dict[str, Any],
+    root: Path,
+    schedule: list[dict[str, Any]],
+    learners: list[dict[str, Any]],
+    opponents: list[dict[str, Any]],
+    label: str,
+) -> list[dict[str, Any]]:
+    with exclusive_evaluation_lock(config, label=label):
+        return _run_distributed_schedule_unlocked(
+            config=config, root=root, schedule=schedule,
+            learners=learners, opponents=opponents, label=label,
+        )
 
 
 def initial_state(config: dict[str, Any]) -> dict[str, Any]:

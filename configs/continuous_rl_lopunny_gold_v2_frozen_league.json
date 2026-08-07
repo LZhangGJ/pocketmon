@@ -9,6 +9,7 @@
   "rollout_hosts": ["doraemon03", "doraemon20", "doraemon15"],
   "trainer_hosts": ["doraemon03", "doraemon20", "doraemon15"],
   "evaluation_hosts": ["doraemon03", "doraemon20", "doraemon15"],
+  "evaluation_lock_path": "/homes/lzhang/pocketmon/results/continuous_rl/global_evaluation.lock",
   "host_environment": {
     "doraemon15": {
       "LD_PRELOAD": "/homes/lzhang/mypath/new/envs/wsl4mis/lib/libstdc++.so.6"
