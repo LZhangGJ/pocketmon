@@ -6,7 +6,7 @@
   "initial_champion_package": "/homes/lzhang/pocketmon/results/our_agents_2026-08-06/lopunny_froslass_g0",
   "public_opponent_pool": "/homes/lzhang/pocketmon_train_rlbc003/configs/opponent_pool_frontier_server.json",
   "cg_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/grim_hybrid_909/cg",
-  "rollout_hosts": ["doraemon03", "doraemon15"],
+  "rollout_hosts": ["doraemon03", "doraemon20", "doraemon15"],
   "trainer_hosts": ["doraemon03", "doraemon20", "doraemon15"],
   "evaluation_hosts": ["doraemon03", "doraemon20", "doraemon15"],
   "host_environment": {
@@ -14,11 +14,24 @@
       "LD_PRELOAD": "/homes/lzhang/mypath/new/envs/wsl4mis/lib/libstdc++.so.6"
     }
   },
-  "rollout_episodes_per_host": 64,
+  "rollout_workers_per_host": {
+    "doraemon03": 8,
+    "doraemon20": 32,
+    "doraemon15": 24
+  },
+  "rollout_episodes_per_worker": 64,
   "self_play_fraction": 0.60,
   "rollout_temperature": 1.0,
-  "ppo_epochs": 4,
-  "ppo_batch_size": 512,
+  "counterfactual_rate": 0.002,
+  "counterfactual_candidates": 4,
+  "counterfactual_determinizations": 2,
+  "counterfactual_horizon": 12,
+  "action_q_epochs": 6,
+  "action_q_batch_size": 512,
+  "action_q_learning_rate": 0.001,
+  "action_q_heads": 3,
+  "ppo_epochs": 2,
+  "ppo_batch_size": 2048,
   "ppo_learning_rate": 0.00001,
   "gamma": 0.997,
   "gae_lambda": 0.95,

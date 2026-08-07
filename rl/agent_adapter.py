@@ -7,6 +7,7 @@ from typing import Any, Callable
 import torch
 
 from .bc import action_is_legal, collate_rows, greedy_decode_with_confidence
+from .action_q import ActionValueEnsemble, q_mean_and_std
 from .features import action_features, history_features, state_features, structured_observation_features
 from .model import MaskedPointerActorCritic, StructuredMaskedPointerActorCritic
 
@@ -26,11 +27,18 @@ class RLBCPolicyAdapter:
         device: str = "cpu",
         confidence_threshold: float | None = None,
         deck: list[int] | None = None,
+        q_checkpoint_path: Path | None = None,
+        q_top_k: int = 4,
+        q_uncertainty_penalty: float = 0.25,
     ) -> None:
         self.checkpoint_path = Path(checkpoint_path)
         self.fallback = fallback
         self.device = torch.device(device)
         self._model: MaskedPointerActorCritic | None = None
+        self._q_checkpoint_path = Path(q_checkpoint_path) if q_checkpoint_path else None
+        self._q_model: ActionValueEnsemble | None = None
+        self._q_top_k = max(1, int(q_top_k))
+        self._q_uncertainty_penalty = float(q_uncertainty_penalty)
         self._structured = False
         if deck is not None and (
             len(deck) != 60
@@ -56,6 +64,8 @@ class RLBCPolicyAdapter:
             "low_confidence_actions": 0,
             "illegal_fallback_actions": 0,
             "emergency_legal_actions": 0,
+            "q_load_errors": 0,
+            "q_actions": 0,
         }
 
     def reset(self) -> None:
@@ -98,6 +108,24 @@ class RLBCPolicyAdapter:
             model.load_state_dict(checkpoint["model"])
             model.eval()
             self._model = model
+            if self._q_checkpoint_path and self._q_checkpoint_path.is_file() and self._structured:
+                try:
+                    try:
+                        q_checkpoint = torch.load(self._q_checkpoint_path, map_location=self.device, weights_only=False)
+                    except TypeError:
+                        q_checkpoint = torch.load(self._q_checkpoint_path, map_location=self.device)
+                    actor_sha = hashlib.sha256(self.checkpoint_path.read_bytes()).hexdigest()
+                    if q_checkpoint.get("actor_checkpoint_sha256") != actor_sha:
+                        raise ValueError("action-Q checkpoint was trained for a different actor")
+                    q_model = ActionValueEnsemble(
+                        int(q_checkpoint["hidden_dim"]), int(q_checkpoint["heads"])
+                    ).to(self.device)
+                    q_model.load_state_dict(q_checkpoint["model"])
+                    q_model.eval()
+                    self._q_model = q_model
+                except Exception:
+                    self._diagnostics["q_load_errors"] += 1
+                    self._q_model = None
         except Exception:
             self._diagnostics["load_errors"] += 1
             self._model = None
@@ -159,6 +187,22 @@ class RLBCPolicyAdapter:
             key: value.to(self.device) if isinstance(value, torch.Tensor) else value
             for key, value in batch.items()
         }
+        if self._q_model is not None and min_count == 1 and max_count == 1 and len(options) > 1:
+            with torch.inference_mode():
+                actor_state, actor_options, _ = self._model.encode_batch(batch)
+                selected = torch.zeros_like(batch["option_mask"])
+                counts = torch.zeros(1, dtype=torch.long, device=self.device)
+                logits = self._model.pointer_logits(actor_state, actor_options, selected, counts)[0, :-1]
+                logits = logits.masked_fill(~batch["option_mask"][0], torch.finfo(logits.dtype).min)
+                count = min(self._q_top_k, len(options))
+                candidates = logits.topk(count).indices
+                q_values = self._q_model(actor_state, actor_options)
+                q_mean, q_std = q_mean_and_std(q_values)
+                lower = q_mean[0, candidates] - self._q_uncertainty_penalty * q_std[0, candidates]
+                chosen = int(candidates[int(lower.argmax().item())].item())
+                confidence = float(torch.softmax(logits, dim=0)[chosen].item())
+                self._diagnostics["q_actions"] += 1
+                return [chosen], state, encoded_options, confidence
         actions, confidences = greedy_decode_with_confidence(self._model, batch)
         return actions[0], state, encoded_options, confidences[0]
 
@@ -243,5 +287,9 @@ class RLBCPolicyAdapter:
             "deck_cards": len(self._deck),
             "confidence_threshold": self._confidence_threshold,
             "last_confidence": self._last_confidence,
+            "q_checkpoint": str(self._q_checkpoint_path) if self._q_checkpoint_path else None,
+            "q_checkpoint_exists": bool(self._q_checkpoint_path and self._q_checkpoint_path.is_file()),
+            "q_top_k": self._q_top_k,
+            "q_uncertainty_penalty": self._q_uncertainty_penalty,
         })
         return result

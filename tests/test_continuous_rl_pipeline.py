@@ -37,13 +37,27 @@ class ContinuousPipelineTests(unittest.TestCase):
             "idle": (20_000, 24_000, 0, 1),
             "busy": (70_000, 80_000, 92, 3),
         }
-        with patch("scripts.continuous_rl_pipeline.free_gpu", side_effect=lambda host, _: readings[host]):
+        with patch("scripts.continuous_rl_pipeline.torch_cuda_device_count", return_value=4), patch(
+            "scripts.continuous_rl_pipeline.free_gpu", side_effect=lambda host, _: readings[host]
+        ):
             host, gpu, audit = choose_trainer({
                 "trainer_hosts": ["busy", "idle"],
                 "local_host": "coordinator",
             })
         self.assertEqual((host, gpu), ("idle", 1))
         self.assertEqual(audit["busy"]["utilization_percent"], 92)
+
+    def test_trainer_selection_skips_driver_incompatible_host(self) -> None:
+        with patch(
+            "scripts.continuous_rl_pipeline.torch_cuda_device_count",
+            side_effect=lambda host, _: {"broken": 0, "usable": 2}[host],
+        ), patch("scripts.continuous_rl_pipeline.free_gpu", return_value=(20_000, 24_000, 0, 1)):
+            host, gpu, audit = choose_trainer({
+                "trainer_hosts": ["broken", "usable"],
+                "local_host": "coordinator",
+            })
+        self.assertEqual((host, gpu), ("usable", 1))
+        self.assertIn("cannot initialize CUDA", audit["broken"]["error"])
 
 
 if __name__ == "__main__":

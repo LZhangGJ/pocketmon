@@ -184,6 +184,42 @@ def sample_action(
     return action, log_probability, float(values[0].item()), entropy_sum / max(1, tokens)
 
 
+@torch.inference_mode()
+def rank_single_actions(
+    model: MaskedPointerActorCritic,
+    observation: dict[str, Any],
+    deck: list[int],
+    device: torch.device,
+    top_k: int,
+) -> list[int]:
+    """Rank legal option indices for a required single-select decision."""
+
+    row = model_row_from_observation(observation, deck, action=[])
+    if row["min_count"] != 1 or row["max_count"] != 1:
+        return []
+    batch = to_device(collate_rows([row]), device)
+    state, encoded_options, _ = model.encode_batch(batch)
+    selected = torch.zeros_like(batch["option_mask"])
+    counts = torch.zeros(1, dtype=torch.long, device=device)
+    logits = model.pointer_logits(state, encoded_options, selected, counts)[0, :-1]
+    logits = logits.masked_fill(~batch["option_mask"][0], torch.finfo(logits.dtype).min)
+    count = min(max(1, int(top_k)), int(batch["option_mask"][0].sum().item()))
+    return [int(index) for index in logits.topk(count).indices.tolist()]
+
+
+@torch.inference_mode()
+def predict_state_value(
+    model: MaskedPointerActorCritic,
+    observation: dict[str, Any],
+    deck: list[int],
+    device: torch.device,
+) -> float:
+    row = model_row_from_observation(observation, deck, action=[])
+    batch = to_device(collate_rows([row]), device)
+    _, _, values = model.encode_batch(batch)
+    return float(values[0].item())
+
+
 def compute_gae(
     rows: list[dict[str, Any]],
     gamma: float = 0.997,

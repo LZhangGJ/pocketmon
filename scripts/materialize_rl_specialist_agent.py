@@ -26,9 +26,13 @@ def read_deck(path: Path) -> list[int]:
     return deck
 
 
-def materialize(checkpoint: Path, deck_path: Path, output: Path, name: str) -> dict[str, object]:
+def materialize(
+    checkpoint: Path, deck_path: Path, output: Path, name: str,
+    q_checkpoint: Path | None = None,
+) -> dict[str, object]:
     checkpoint = checkpoint.resolve(strict=True)
     deck_path = deck_path.resolve(strict=True)
+    q_checkpoint = q_checkpoint.resolve(strict=True) if q_checkpoint is not None else None
     output = output.resolve()
     if output.exists():
         raise FileExistsError(f"refusing to overwrite existing package: {output}")
@@ -39,6 +43,8 @@ def materialize(checkpoint: Path, deck_path: Path, output: Path, name: str) -> d
         shutil.copy2(ROOT / "agents" / "rl_bc_specialist" / "main.py", staging / "main.py")
         shutil.copytree(ROOT / "rl", staging / "rl", ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
         shutil.copy2(checkpoint, staging / "checkpoint.pt")
+        if q_checkpoint is not None:
+            shutil.copy2(q_checkpoint, staging / "action_q.pt")
         (staging / "deck.csv").write_text("".join(f"{card_id}\n" for card_id in deck), encoding="utf-8")
         manifest: dict[str, object] = {
             "schema_version": 1,
@@ -49,6 +55,7 @@ def materialize(checkpoint: Path, deck_path: Path, output: Path, name: str) -> d
             "main_sha256": sha256(staging / "main.py"),
             "card_count": len(deck),
             "confidence_threshold": 0.0,
+            "action_q_sha256": sha256(staging / "action_q.pt") if q_checkpoint is not None else None,
         }
         (staging / "agent_manifest.json").write_text(
             json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -66,8 +73,11 @@ def main() -> None:
     parser.add_argument("--deck", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--name", required=True)
+    parser.add_argument("--q-checkpoint", type=Path)
     args = parser.parse_args()
-    print(json.dumps(materialize(args.checkpoint, args.deck, args.output, args.name), ensure_ascii=False))
+    print(json.dumps(materialize(
+        args.checkpoint, args.deck, args.output, args.name, q_checkpoint=args.q_checkpoint
+    ), ensure_ascii=False))
 
 
 if __name__ == "__main__":

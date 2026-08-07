@@ -142,14 +142,44 @@ def free_gpu(host: str, local_host: str) -> tuple[int, int, int, int]:
     return min(values, key=lambda item: (item[2], -item[0] / item[1], -item[0]))
 
 
+def torch_cuda_device_count(host: str, config: dict[str, Any]) -> int:
+    """Probe CUDA through the exact Python/environment used for training."""
+
+    command = [
+        config["python"], "-I", "-c",
+        "import torch; print(torch.cuda.device_count() if torch.cuda.is_available() else 0)",
+    ]
+    environment = config.get("host_environment", {}).get(host)
+    completed = subprocess.run(
+        command if host == config["local_host"] or host == socket.gethostname()
+        else ["ssh", host, remote_command(command, environment)],
+        capture_output=True,
+        text=True,
+        timeout=45,
+        check=True,
+        env=({**os.environ, **(environment or {})} if host == config["local_host"] else None),
+    )
+    lines = [line.strip() for line in completed.stdout.splitlines() if line.strip()]
+    if not lines or not lines[-1].isdigit():
+        raise RuntimeError(f"invalid torch CUDA probe from {host}")
+    return int(lines[-1])
+
+
 def choose_trainer(config: dict[str, Any]) -> tuple[str, int, dict[str, Any]]:
     availability: dict[str, Any] = {}
     choices = []
     for host in config["trainer_hosts"]:
         try:
+            torch_devices = torch_cuda_device_count(host, config)
+            if torch_devices <= 0:
+                availability[host] = {"error": "training Python cannot initialize CUDA"}
+                continue
             free_memory, total_memory, utilization, gpu = free_gpu(host, config["local_host"])
+            if gpu >= torch_devices:
+                raise RuntimeError("nvidia-smi device is absent from torch")
             availability[host] = {
                 "gpu": gpu,
+                "torch_cuda_devices": torch_devices,
                 "free_memory_mib": free_memory,
                 "total_memory_mib": total_memory,
                 "utilization_percent": utilization,
@@ -250,6 +280,7 @@ def generation_paths(run_root: Path, generation: int) -> dict[str, Path]:
         "root": root,
         "rollouts": root / "rollouts",
         "train": root / "train",
+        "q_train": root / "action_q",
         "candidate": root / "candidate_agent",
         "gate": root / "gate",
         "deck": root / "deck_evolution",
@@ -269,39 +300,71 @@ def ensure_rollouts(
     write_manifest(rollout_pool, public + population)
     processes = []
     outputs = []
-    for shard, host in enumerate(config["rollout_hosts"]):
-        output = paths["rollouts"] / f"shard_{shard:02d}.jsonl.gz"
-        outputs.append(output)
-        if output.is_file() and output.with_name(output.name + ".summary.json").is_file():
-            continue
-        command = [
-            config["python"], str(Path(config["code_root"]) / "scripts" / "collect_ppo_rollouts.py"),
-            "--checkpoint", str(champion / "checkpoint.pt"),
-            "--deck", str(champion / "deck.csv"),
-            "--pool", str(rollout_pool),
-            "--cg-dir", config["cg_dir"],
-            "--episodes", str(config["rollout_episodes_per_host"]),
-            "--self-play-fraction", str(config["self_play_fraction"]),
-            "--temperature", str(config["rollout_temperature"]),
-            "--seed", str(config["base_seed"] + generation * 1000 + shard),
-            "--run-id", f"g{generation:05d}-s{shard:02d}",
-            "--device", "cpu",
-            "--output", str(output),
-        ]
-        process, handle = start_process(
-            host=host,
-            local_host=config["local_host"],
-            command=command,
-            log_path=paths["rollouts"] / f"shard_{shard:02d}.log",
-            environment=config.get("host_environment", {}).get(host),
-        )
-        processes.append((f"rollout:{host}:{shard}", process, handle))
+    shard = 0
+    configured_workers = config.get("rollout_workers_per_host", 1)
+    counterfactual_enabled = float(config.get("counterfactual_rate", 0.0)) > 0.0
+    for host in config["rollout_hosts"]:
+        workers = int(configured_workers.get(host, 1) if isinstance(configured_workers, dict) else configured_workers)
+        if workers <= 0:
+            raise ValueError(f"rollout worker count must be positive for {host}")
+        episodes = int(config.get("rollout_episodes_per_worker", config.get("rollout_episodes_per_host", 0)))
+        if episodes <= 0:
+            raise ValueError("rollout episodes per worker must be positive")
+        for _worker in range(workers):
+            output = paths["rollouts"] / f"shard_{shard:03d}.jsonl.gz"
+            counterfactual_output = paths["rollouts"] / f"shard_{shard:03d}.counterfactual.jsonl.gz"
+            outputs.append(output)
+            if (
+                output.is_file()
+                and output.with_name(output.name + ".summary.json").is_file()
+                and (not counterfactual_enabled or counterfactual_output.is_file())
+            ):
+                shard += 1
+                continue
+            command = [
+                config["python"], str(Path(config["code_root"]) / "scripts" / "collect_ppo_rollouts.py"),
+                "--checkpoint", str(champion / "checkpoint.pt"),
+                "--deck", str(champion / "deck.csv"),
+                "--pool", str(rollout_pool),
+                "--cg-dir", config["cg_dir"],
+                "--episodes", str(episodes),
+                "--self-play-fraction", str(config["self_play_fraction"]),
+                "--temperature", str(config["rollout_temperature"]),
+                "--seed", str(config["base_seed"] + generation * 100_000 + shard),
+                "--run-id", f"g{generation:05d}-s{shard:03d}",
+                "--device", "cpu",
+                "--output", str(output),
+            ]
+            if counterfactual_enabled:
+                command.extend([
+                    "--counterfactual-output", str(counterfactual_output),
+                    "--counterfactual-rate", str(config["counterfactual_rate"]),
+                    "--counterfactual-candidates", str(config["counterfactual_candidates"]),
+                    "--counterfactual-determinizations", str(config["counterfactual_determinizations"]),
+                    "--counterfactual-horizon", str(config["counterfactual_horizon"]),
+                ])
+            environment = {"OMP_NUM_THREADS": "1", "MKL_NUM_THREADS": "1"}
+            environment.update(config.get("host_environment", {}).get(host) or {})
+            process, handle = start_process(
+                host=host,
+                local_host=config["local_host"],
+                command=command,
+                log_path=paths["rollouts"] / f"shard_{shard:03d}.log",
+                environment=environment,
+            )
+            processes.append((f"rollout:{host}:{shard}", process, handle))
+            shard += 1
     wait_processes(processes)
     wait_for_files([
         path
         for output in outputs
         for path in (output, output.with_name(output.name + ".summary.json"))
     ])
+    if counterfactual_enabled:
+        wait_for_files([
+            paths["rollouts"] / f"shard_{index:03d}.counterfactual.jsonl.gz"
+            for index in range(shard)
+        ])
     return outputs
 
 
@@ -347,9 +410,56 @@ def ensure_candidate_checkpoint(
     return output
 
 
+def ensure_action_q_checkpoint(
+    *, config: dict[str, Any], state: dict[str, Any], generation: int,
+    paths: dict[str, Path], actor_checkpoint: Path, events: list[dict[str, Any]],
+) -> Path | None:
+    if float(config.get("counterfactual_rate", 0.0)) <= 0.0:
+        return None
+    output = paths["q_train"] / "action_q.pt"
+    metrics = paths["q_train"] / "metrics.json"
+    if output.is_file() and metrics.is_file():
+        return output
+    rows = sorted(paths["rollouts"].glob("shard_*.counterfactual.jsonl.gz"))
+    if not rows:
+        raise RuntimeError("counterfactual action-Q training has no shards")
+    trainer, gpu, availability = choose_trainer(config)
+    events.append({
+        "event": "action_q_trainer_selected", "generation": generation,
+        "host": trainer, "gpu": gpu, "free_memory": availability, "time": now(),
+    })
+    command = [
+        config["python"], str(Path(config["code_root"]) / "scripts" / "train_action_q.py"),
+        "--rows", *[str(path) for path in rows],
+        "--actor-checkpoint", str(actor_checkpoint),
+        "--output", str(output),
+        "--metrics-output", str(metrics),
+        "--epochs", str(config["action_q_epochs"]),
+        "--batch-size", str(config["action_q_batch_size"]),
+        "--learning-rate", str(config["action_q_learning_rate"]),
+        "--heads", str(config["action_q_heads"]),
+        "--seed", str(config["base_seed"] + generation * 1000 + 811),
+        "--device", "auto",
+    ]
+    previous = Path(state["champion_package"]) / "action_q.pt"
+    if previous.is_file():
+        command.extend(["--initialize-from", str(previous)])
+    environment = {"CUDA_VISIBLE_DEVICES": str(gpu)}
+    environment.update(config.get("host_environment", {}).get(trainer) or {})
+    run_process(
+        host=trainer,
+        local_host=config["local_host"],
+        command=command,
+        log_path=paths["q_train"] / "train.log",
+        environment=environment,
+    )
+    wait_for_files([output, metrics])
+    return output
+
+
 def ensure_candidate_package(
     *, config: dict[str, Any], state: dict[str, Any], generation: int,
-    paths: dict[str, Path], checkpoint: Path,
+    paths: dict[str, Path], checkpoint: Path, q_checkpoint: Path | None = None,
 ) -> Path:
     output = paths["candidate"]
     if (output / "agent_manifest.json").is_file():
@@ -361,6 +471,8 @@ def ensure_candidate_package(
         "--output", str(output),
         "--name", f"ppo_candidate_g{generation:05d}",
     ]
+    if q_checkpoint is not None:
+        command.extend(["--q-checkpoint", str(q_checkpoint)])
     run_process(
         host=config["local_host"], local_host=config["local_host"], command=command,
         log_path=paths["root"] / "materialize.log",
@@ -471,6 +583,9 @@ def ensure_deck_evolution(
                 "--output", str(package),
                 "--name", name,
             ]
+            champion_q = champion / "action_q.pt"
+            if champion_q.is_file():
+                command.extend(["--q-checkpoint", str(champion_q)])
             run_process(
                 host=config["local_host"], local_host=config["local_host"], command=command,
                 log_path=root / "materialize.log",
@@ -589,10 +704,17 @@ def run_generation(config: dict[str, Any], state: dict[str, Any], run_root: Path
     checkpoint = ensure_candidate_checkpoint(
         config=config, state=state, generation=generation, paths=paths, rollouts=rollouts, log=events
     )
+    state.update({"status": "training_action_q", "updated_at": now()})
+    atomic_json(run_root / "state.json", state)
+    q_checkpoint = ensure_action_q_checkpoint(
+        config=config, state=state, generation=generation, paths=paths,
+        actor_checkpoint=checkpoint, events=events,
+    )
     state.update({"status": "packaging_candidate", "updated_at": now()})
     atomic_json(run_root / "state.json", state)
     candidate = ensure_candidate_package(
-        config=config, state=state, generation=generation, paths=paths, checkpoint=checkpoint
+        config=config, state=state, generation=generation, paths=paths,
+        checkpoint=checkpoint, q_checkpoint=q_checkpoint,
     )
     state.update({"status": "promotion_gate", "updated_at": now()})
     atomic_json(run_root / "state.json", state)

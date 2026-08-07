@@ -22,6 +22,7 @@ def _read_deck(path: Path) -> list[int]:
 
 DECK = _read_deck(PACKAGE_ROOT / "deck.csv")
 CHECKPOINT = Path(os.environ.get("POCKETMON_RL_CHECKPOINT", PACKAGE_ROOT / "checkpoint.pt"))
+Q_CHECKPOINT = PACKAGE_ROOT / "action_q.pt"
 
 
 def _legal_fallback(observation: dict[str, Any]) -> list[int]:
@@ -41,6 +42,9 @@ POLICY = RLBCPolicyAdapter(
     device=os.environ.get("POCKETMON_RL_DEVICE", "cpu"),
     confidence_threshold=float(os.environ.get("POCKETMON_RL_CONFIDENCE", "0.0")),
     deck=DECK,
+    q_checkpoint_path=Q_CHECKPOINT if Q_CHECKPOINT.is_file() else None,
+    q_top_k=int(os.environ.get("POCKETMON_Q_TOP_K", "4")),
+    q_uncertainty_penalty=float(os.environ.get("POCKETMON_Q_UNCERTAINTY_PENALTY", "0.25")),
 )
 
 
