@@ -8,7 +8,6 @@ import json
 import math
 import os
 import random
-import resource
 import subprocess
 import sys
 import time
@@ -38,6 +37,45 @@ from rl.model import MaskedPointerActorCritic, StructuredMaskedPointerActorCriti
 ARCHITECTURE = "stateless_masked_autoregressive_candidate_pointer_with_stop"
 HISTORY_ARCHITECTURE = "causal_gru_history_masked_autoregressive_candidate_pointer_with_stop"
 STRUCTURED_ARCHITECTURE = "structured_card_attack_deepsets_deck_masked_pointer_with_stop"
+
+
+def peak_ram_mb() -> float:
+    """Return process peak RSS in MiB on Unix and Windows."""
+    try:
+        import resource
+    except ImportError:
+        if os.name != "nt":
+            raise
+        import ctypes
+        from ctypes import wintypes
+
+        class ProcessMemoryCounters(ctypes.Structure):
+            _fields_ = [
+                ("cb", wintypes.DWORD),
+                ("PageFaultCount", wintypes.DWORD),
+                ("PeakWorkingSetSize", ctypes.c_size_t),
+                ("WorkingSetSize", ctypes.c_size_t),
+                ("QuotaPeakPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaPeakNonPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaNonPagedPoolUsage", ctypes.c_size_t),
+                ("PagefileUsage", ctypes.c_size_t),
+                ("PeakPagefileUsage", ctypes.c_size_t),
+            ]
+
+        counters = ProcessMemoryCounters()
+        counters.cb = ctypes.sizeof(counters)
+        process = ctypes.windll.kernel32.GetCurrentProcess()
+        ok = ctypes.windll.psapi.GetProcessMemoryInfo(
+            process, ctypes.byref(counters), counters.cb
+        )
+        if not ok:
+            raise OSError(ctypes.get_last_error(), "GetProcessMemoryInfo failed")
+        return counters.PeakWorkingSetSize / (1024.0**2)
+
+    maximum_rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    divisor = 1024.0**2 if sys.platform == "darwin" else 1024.0
+    return maximum_rss / divisor
 HISTORY_GROUP_BY = ["episode_id", "player"]
 HISTORY_ORDER_BY = "action_step"
 HISTORY_TOKEN = "prior pre-action state plus that prior selected-option summary"
@@ -102,6 +140,7 @@ def actual_fingerprint_payload(
     history_length: int = 0, experiment_id: str | None = None,
     structured: dict[str, Any] | None = None,
     initialization: str = "random",
+    initialization_checkpoint_sha256: str | None = None,
 ) -> dict[str, Any]:
     history_enabled = architecture == HISTORY_ARCHITECTURE
     payload = {
@@ -120,6 +159,7 @@ def actual_fingerprint_payload(
             "max_length": history_length if history_enabled else 0,
         },
         "initialization": initialization,
+        "initialization_checkpoint_sha256": initialization_checkpoint_sha256,
         "offline_rl": False,
     }
     if history_enabled:
@@ -176,6 +216,11 @@ def current_config_matches(planned: dict[str, Any], actual: dict[str, Any]) -> t
         )
     if "initialization" in planned:
         checks["initialization"] = actual["initialization"] == planned["initialization"]
+    if "initialization_checkpoint_sha256" in planned:
+        checks["initialization_checkpoint_sha256"] = (
+            actual.get("initialization_checkpoint_sha256")
+            == planned["initialization_checkpoint_sha256"]
+        )
     if "offline_rl" in planned:
         checks["offline_rl"] = actual["offline_rl"] == planned["offline_rl"]
     mismatches = [name for name, matched in checks.items() if not matched]
@@ -362,6 +407,9 @@ def main() -> None:
             "confidence_threshold": args.confidence_threshold,
         }
     initialization = "resume" if args.resume else ("warm_start" if args.initialize_from else "random")
+    initialization_checkpoint_sha256 = (
+        checkpoint_sha256(Path(args.initialize_from).resolve()) if args.initialize_from else None
+    )
     fingerprint_payload = actual_fingerprint_payload(
         code_commit=code_commit, input_sha256=audit["input_sha256"], split_seed=args.split_seed,
         validation_fraction=args.validation_fraction, epochs=args.epochs, batch_size=args.batch_size,
@@ -371,6 +419,7 @@ def main() -> None:
         experiment_id=args.experiment_id,
         structured=structured_assets,
         initialization=initialization,
+        initialization_checkpoint_sha256=initialization_checkpoint_sha256,
     )
     fingerprint = experiment_fingerprint(fingerprint_payload)
     config_matched, config_mismatches = current_config_matches(planned_config, fingerprint_payload)
@@ -497,7 +546,7 @@ def main() -> None:
         "best_epoch": state["best_epoch"], "best_validation_loss": state["best_loss"],
         "training_state": state, "validation_loss": final_loss, "validation": decoding,
         "checkpoint": {"path": str(chosen_path), "sha256": checkpoint_hash, "bytes": chosen_path.stat().st_size},
-        "runtime_seconds": runtime, "peak_ram_mb": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024.0,
+        "runtime_seconds": runtime, "peak_ram_mb": peak_ram_mb(),
         "peak_vram_mb": torch.cuda.max_memory_allocated() / (1024 ** 2) if device.type == "cuda" else 0.0,
         "missing_seeds": missing_seeds, "failures": [],
     }

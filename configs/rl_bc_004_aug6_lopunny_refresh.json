@@ -1,0 +1,39 @@
+{
+  "experiment_id": "RL-BC-004-AUG6-LOPUNNY",
+  "arm": "latest-rating-biased-replay-refresh-lopunny",
+  "architecture": "structured_card_attack_deepsets_deck_masked_pointer_with_stop",
+  "input": "/homes/lzhang/pocketmon/data/processed/public_replay_2026-08-06.jsonl.gz",
+  "input_sha256": "f68b29a6c916f5eef7c0fb969e6795faf5693b9c3480f24c0e7594a60f080856",
+  "split": {
+    "kind": "episode_id",
+    "seed": 20260806,
+    "train_fraction": 0.8,
+    "validation_fraction": 0.2
+  },
+  "training": {
+    "formal_seeds": [17],
+    "epochs": 2,
+    "batch_size": 512,
+    "learning_rate": 0.00005,
+    "hidden_dim": 192,
+    "early_stopping_patience": 2,
+    "value_loss_weight": 0.1,
+    "gradient_clip_norm": 1.0
+  },
+  "history": {"enabled": false, "encoder": "none", "max_length": 0},
+  "structured": {
+    "card_attack_embeddings": true,
+    "entity_encoder": "deepsets_masked_mean_max",
+    "deck_conditioning": "acting_player_submitted_deck_masked_mean",
+    "deck_map_sha256": "765c7fd3b74824763612dc44f6aea489299931236e8e414a3232383f3bcda2c6",
+    "card_database_sha256": "25543d916333d32834ac00ea6138de07f3bc74d1ee43f95993696d8aa8d09efc",
+    "attack_database_sha256": "16279a9cfb8caefbcd4a0da3255432ebb20f6a4346831415a3e6a56972dec5a8",
+    "confidence_threshold": 0.0
+  },
+  "initialization": "warm_start",
+  "initialization_checkpoint_sha256": "ec9f85acd51ac2c8f2e0b3b7977dc33e818d3dde72e234ece85bc1ef9b2fe101",
+  "policy_loss_rows": "policy_weight == 1 only",
+  "value_loss_rows": "value_weight == 1 for both players",
+  "random_initialization": false,
+  "offline_rl": false
+}
