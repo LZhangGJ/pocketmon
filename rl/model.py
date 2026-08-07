@@ -3,7 +3,17 @@ from __future__ import annotations
 import torch
 from torch import nn
 
-from .features import ACTION_DIM, HISTORY_DIM, STATE_DIM
+from .features import (
+    ACTION_DIM,
+    ATTACK_METADATA_DIM,
+    ATTACK_VOCAB_SIZE,
+    CARD_METADATA_DIM,
+    CARD_VOCAB_SIZE,
+    ENTITY_DIM,
+    ENTITY_ZONE_COUNT,
+    HISTORY_DIM,
+    STATE_DIM,
+)
 
 
 def legal_choice_mask(
@@ -65,6 +75,11 @@ class MaskedPointerActorCritic(nn.Module):
         encoded_options = self.option_encoder(options)
         return state, encoded_options, self.value(state).squeeze(-1)
 
+    def encode_batch(self, batch: dict[str, torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        return self.encode(
+            batch["states"], batch["options"], batch["histories"], batch["history_lengths"]
+        )
+
     def pointer_logits(
         self,
         state: torch.Tensor,
@@ -101,3 +116,87 @@ class MaskedPointerActorCritic(nn.Module):
 
 # Keep the old public name for callers while making the new decoder explicit.
 CandidateActorCritic = MaskedPointerActorCritic
+
+
+class StructuredMaskedPointerActorCritic(MaskedPointerActorCritic):
+    """Pointer policy conditioned on card/attack IDs, visible entities and own deck."""
+
+    def __init__(
+        self,
+        hidden_dim: int = 192,
+        card_metadata: torch.Tensor | None = None,
+        attack_metadata: torch.Tensor | None = None,
+    ) -> None:
+        super().__init__(hidden_dim=hidden_dim, history_encoder=False)
+        card_metadata = (
+            torch.zeros(CARD_VOCAB_SIZE, CARD_METADATA_DIM)
+            if card_metadata is None else card_metadata.to(dtype=torch.float32)
+        )
+        attack_metadata = (
+            torch.zeros(ATTACK_VOCAB_SIZE, ATTACK_METADATA_DIM)
+            if attack_metadata is None else attack_metadata.to(dtype=torch.float32)
+        )
+        if tuple(card_metadata.shape) != (CARD_VOCAB_SIZE, CARD_METADATA_DIM):
+            raise ValueError("unexpected card metadata table shape")
+        if tuple(attack_metadata.shape) != (ATTACK_VOCAB_SIZE, ATTACK_METADATA_DIM):
+            raise ValueError("unexpected attack metadata table shape")
+        self.register_buffer("card_metadata", card_metadata)
+        self.register_buffer("attack_metadata", attack_metadata)
+        self.card_embedding = nn.Embedding(CARD_VOCAB_SIZE, 32, padding_idx=0)
+        self.attack_embedding = nn.Embedding(ATTACK_VOCAB_SIZE, 24, padding_idx=0)
+        self.zone_embedding = nn.Embedding(ENTITY_ZONE_COUNT, 12, padding_idx=0)
+        self.card_metadata_encoder = nn.Sequential(nn.Linear(CARD_METADATA_DIM, 16), nn.Tanh())
+        self.attack_metadata_encoder = nn.Sequential(nn.Linear(ATTACK_METADATA_DIM, 16), nn.Tanh())
+        self.option_identity_encoder = nn.Sequential(nn.Linear((32 + 16) * 2 + 24 + 16, hidden_dim), nn.Tanh())
+        self.entity_encoder = nn.Sequential(nn.Linear(32 + 16 + 12 + ENTITY_DIM, hidden_dim), nn.Tanh())
+        self.entity_pool = nn.Sequential(nn.Linear(hidden_dim * 2, hidden_dim), nn.Tanh())
+        self.deck_encoder = nn.Sequential(nn.Linear(32 + 16, hidden_dim), nn.Tanh())
+        self.context_norm = nn.LayerNorm(hidden_dim)
+
+    def _card_repr(self, ids: torch.Tensor) -> torch.Tensor:
+        return torch.cat((
+            self.card_embedding(ids),
+            self.card_metadata_encoder(self.card_metadata[ids]),
+        ), dim=-1)
+
+    def _attack_repr(self, ids: torch.Tensor) -> torch.Tensor:
+        return torch.cat((
+            self.attack_embedding(ids),
+            self.attack_metadata_encoder(self.attack_metadata[ids]),
+        ), dim=-1)
+
+    @staticmethod
+    def _masked_mean(values: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+        weights = mask.to(values.dtype)[..., None]
+        return (values * weights).sum(dim=1) / weights.sum(dim=1).clamp_min(1.0)
+
+    @staticmethod
+    def _masked_max(values: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+        masked = values.masked_fill(~mask[..., None], -torch.inf)
+        pooled = masked.max(dim=1).values
+        return torch.where(mask.any(dim=1, keepdim=True), pooled, torch.zeros_like(pooled))
+
+    def encode_batch(self, batch: dict[str, torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        state = self.state_encoder(batch["states"])
+
+        option_identity = torch.cat((
+            self._card_repr(batch["option_card_ids"]),
+            self._card_repr(batch["option_target_card_ids"]),
+            self._attack_repr(batch["option_attack_ids"]),
+        ), dim=-1)
+        encoded_options = self.option_encoder(batch["options"]) + self.option_identity_encoder(option_identity)
+
+        entities = self.entity_encoder(torch.cat((
+            self._card_repr(batch["entity_card_ids"]),
+            self.zone_embedding(batch["entity_zone_ids"]),
+            batch["entity_features"],
+        ), dim=-1))
+        entity_context = self.entity_pool(torch.cat((
+            self._masked_mean(entities, batch["entity_mask"]),
+            self._masked_max(entities, batch["entity_mask"]),
+        ), dim=-1))
+
+        deck_cards = self._card_repr(batch["deck_card_ids"])
+        deck_context = self.deck_encoder(self._masked_mean(deck_cards, batch["deck_mask"]))
+        state = self.context_norm(state + entity_context + deck_context)
+        return state, encoded_options, self.value(state).squeeze(-1)

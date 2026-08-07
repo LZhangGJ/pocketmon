@@ -30,6 +30,7 @@ REPORT_COUNTERS = (
     "non_acting_actions_skipped",
     "unknown_submission_status_skipped",
     "episodes_terminal_reward",
+    "episodes_terminal_forfeit",
     "episodes_result_fallback",
     "episodes_unresolved_terminal_reward",
     "episodes_missing_winner",
@@ -133,6 +134,8 @@ def main() -> None:
                     winner_source = episode_report.get("winner_source")
                     if winner_source == "terminal_reward":
                         counters["episodes_terminal_reward"] += 1
+                    elif winner_source == "terminal_forfeit":
+                        counters["episodes_terminal_forfeit"] += 1
                     elif winner_source == "observation_result":
                         counters["episodes_result_fallback"] += 1
                     elif winner_source == "unresolved_terminal_reward":

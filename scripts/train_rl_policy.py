@@ -8,7 +8,6 @@ import json
 import math
 import os
 import random
-import resource
 import subprocess
 import sys
 import time
@@ -21,12 +20,62 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from rl.bc import SPLIT_SEED, TrajectoryDataset, build_split_manifest, evaluate_decoding, load_replay_dataset, make_loader, run_epoch
-from rl.model import MaskedPointerActorCritic
+from rl.bc import (
+    SPLIT_SEED,
+    TrajectoryDataset,
+    build_split_manifest,
+    evaluate_decoding,
+    load_replay_dataset,
+    make_loader,
+    run_epoch,
+    sha256_file,
+)
+from rl.features import attack_metadata_table, card_metadata_table
+from rl.model import MaskedPointerActorCritic, StructuredMaskedPointerActorCritic
 
 
 ARCHITECTURE = "stateless_masked_autoregressive_candidate_pointer_with_stop"
 HISTORY_ARCHITECTURE = "causal_gru_history_masked_autoregressive_candidate_pointer_with_stop"
+STRUCTURED_ARCHITECTURE = "structured_card_attack_deepsets_deck_masked_pointer_with_stop"
+
+
+def peak_ram_mb() -> float:
+    """Return process peak RSS in MiB on Unix and Windows."""
+    try:
+        import resource
+    except ImportError:
+        if os.name != "nt":
+            raise
+        import ctypes
+        from ctypes import wintypes
+
+        class ProcessMemoryCounters(ctypes.Structure):
+            _fields_ = [
+                ("cb", wintypes.DWORD),
+                ("PageFaultCount", wintypes.DWORD),
+                ("PeakWorkingSetSize", ctypes.c_size_t),
+                ("WorkingSetSize", ctypes.c_size_t),
+                ("QuotaPeakPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaPeakNonPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaNonPagedPoolUsage", ctypes.c_size_t),
+                ("PagefileUsage", ctypes.c_size_t),
+                ("PeakPagefileUsage", ctypes.c_size_t),
+            ]
+
+        counters = ProcessMemoryCounters()
+        counters.cb = ctypes.sizeof(counters)
+        process = ctypes.windll.kernel32.GetCurrentProcess()
+        ok = ctypes.windll.psapi.GetProcessMemoryInfo(
+            process, ctypes.byref(counters), counters.cb
+        )
+        if not ok:
+            raise OSError(ctypes.get_last_error(), "GetProcessMemoryInfo failed")
+        return counters.PeakWorkingSetSize / (1024.0**2)
+
+    maximum_rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    divisor = 1024.0**2 if sys.platform == "darwin" else 1024.0
+    return maximum_rss / divisor
 HISTORY_GROUP_BY = ["episode_id", "player"]
 HISTORY_ORDER_BY = "action_step"
 HISTORY_TOKEN = "prior pre-action state plus that prior selected-option summary"
@@ -46,7 +95,10 @@ def seed_everything(seed: int) -> None:
     random.seed(seed); torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
-    torch.use_deterministic_algorithms(True, warn_only=True)
+    try:
+        torch.use_deterministic_algorithms(True, warn_only=True)
+    except TypeError:
+        torch.use_deterministic_algorithms(True)
 
 
 def git_sha() -> str:
@@ -72,11 +124,22 @@ def checkpoint_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def load_torch_checkpoint(path: Path | str, map_location: torch.device) -> dict[str, Any]:
+    """Load full training checkpoints across the PyTorch 1.10--2.x server fleet."""
+
+    try:
+        return torch.load(path, map_location=map_location, weights_only=False)
+    except TypeError:
+        return torch.load(path, map_location=map_location)
+
+
 def actual_fingerprint_payload(
     *, code_commit: str, input_sha256: str, split_seed: int, validation_fraction: float,
     epochs: int, batch_size: int, learning_rate: float, hidden_dim: int, patience: int,
     value_loss_weight: float, gradient_clip_norm: float, architecture: str = ARCHITECTURE,
     history_length: int = 0, experiment_id: str | None = None,
+    structured: dict[str, Any] | None = None,
+    initialization: str = "random",
 ) -> dict[str, Any]:
     history_enabled = architecture == HISTORY_ARCHITECTURE
     payload = {
@@ -94,7 +157,7 @@ def actual_fingerprint_payload(
             "encoder": "gru" if history_enabled else "none",
             "max_length": history_length if history_enabled else 0,
         },
-        "initialization": "random",
+        "initialization": initialization,
         "offline_rl": False,
     }
     if history_enabled:
@@ -103,6 +166,8 @@ def actual_fingerprint_payload(
             "order_by": HISTORY_ORDER_BY,
             "token": HISTORY_TOKEN,
         })
+    if structured is not None:
+        payload["structured"] = structured
     if experiment_id is not None:
         payload["experiment_id"] = experiment_id
     return payload
@@ -136,10 +201,19 @@ def current_config_matches(planned: dict[str, Any], actual: dict[str, Any]) -> t
         for field in ("group_by", "order_by", "token"):
             if field in planned["history"]:
                 checks[f"history_{field}"] = actual["history"].get(field) == planned["history"][field]
+    if "structured" in planned:
+        for field, expected in planned["structured"].items():
+            checks[f"structured_{field}"] = actual.get("structured", {}).get(field) == expected
     if "experiment_id" in planned:
         checks["experiment_id"] = actual.get("experiment_id") == planned["experiment_id"]
     if "random_initialization" in planned:
-        checks["random_initialization"] = actual["initialization"] == ("random" if planned["random_initialization"] else "resume")
+        checks["random_initialization"] = (
+            actual["initialization"] == "random"
+            if planned["random_initialization"]
+            else actual["initialization"] in {"resume", "warm_start"}
+        )
+    if "initialization" in planned:
+        checks["initialization"] = actual["initialization"] == planned["initialization"]
     if "offline_rl" in planned:
         checks["offline_rl"] = actual["offline_rl"] == planned["offline_rl"]
     mismatches = [name for name, matched in checks.items() if not matched]
@@ -249,7 +323,7 @@ def append_run_csv(path: Path, record: dict[str, Any]) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="RL-BC-001 stateless masked behavior cloning")
+    parser = argparse.ArgumentParser(description="Masked behavior cloning with optional structured card/deck inputs")
     parser.add_argument("--input", default="data/processed/public_replay_v1.jsonl.gz")
     parser.add_argument("--experiment-id", default="RL-BC-001")
     parser.add_argument("--planned-config", default="configs/rl_bc_001.json")
@@ -263,16 +337,31 @@ def main() -> None:
     parser.add_argument("--patience", type=int, default=5)
     parser.add_argument("--value-loss-weight", type=float, default=0.25)
     parser.add_argument("--gradient-clip-norm", type=float, default=1.0)
-    parser.add_argument("--architecture", choices=(ARCHITECTURE, HISTORY_ARCHITECTURE), default=ARCHITECTURE)
+    parser.add_argument(
+        "--architecture", choices=(ARCHITECTURE, HISTORY_ARCHITECTURE, STRUCTURED_ARCHITECTURE),
+        default=ARCHITECTURE,
+    )
     parser.add_argument("--history-length", type=int, default=0)
+    parser.add_argument("--deck-map", default="data/processed/replay_decks_2026-08-05.jsonl.gz")
+    parser.add_argument("--card-database", default="data/reference/official_cards.json")
+    parser.add_argument("--attack-database", default="data/reference/official_attacks.json")
+    parser.add_argument("--confidence-threshold", type=float, default=0.55)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--checkpoint-dir", default="checkpoints/rl_bc_001")
     parser.add_argument("--metrics-output", default="results/rl_bc_001_metrics.json")
     parser.add_argument("--split-output", default="results/rl_bc_001_split.json")
     parser.add_argument("--runs-output", default="results/rl_bc_001_runs.csv")
     parser.add_argument("--resume", default=None)
+    parser.add_argument(
+        "--initialize-from",
+        default=None,
+        help="Warm-start model weights from a checkpoint while resetting optimizer and epoch state",
+    )
     parser.add_argument("--max-batches", type=int, default=0, help="Smoke-only limit; never completes an epoch")
     args = parser.parse_args()
+
+    if args.resume and args.initialize_from:
+        raise ValueError("--resume and --initialize-from are mutually exclusive")
 
     start = time.perf_counter()
     initial_dirty = assert_formal_worktree_clean(args.max_batches)
@@ -283,14 +372,34 @@ def main() -> None:
     seed_everything(args.seed)
     device = choose_device(args.device)
     if device.type == "cuda":
-        torch.cuda.set_device(device); torch.cuda.reset_peak_memory_stats()
+        torch.cuda.set_device(0 if device.index is None else device.index)
+        torch.cuda.reset_peak_memory_stats()
 
     history_enabled = args.architecture == HISTORY_ARCHITECTURE
+    structured_enabled = args.architecture == STRUCTURED_ARCHITECTURE
     if history_enabled and args.history_length <= 0:
         raise ValueError("history architecture requires --history-length > 0")
     if not history_enabled and args.history_length != 0:
         raise ValueError("stateless architecture requires --history-length 0")
-    rows, audit = load_replay_dataset(Path(args.input), history_length=args.history_length)
+    if not 0.0 <= args.confidence_threshold <= 1.0:
+        raise ValueError("confidence threshold must be in [0, 1]")
+    rows, audit = load_replay_dataset(
+        Path(args.input), history_length=args.history_length,
+        deck_map_path=Path(args.deck_map) if structured_enabled else None,
+        structured=structured_enabled,
+    )
+    structured_assets = None
+    if structured_enabled:
+        structured_assets = {
+            "card_attack_embeddings": True,
+            "entity_encoder": "deepsets_masked_mean_max",
+            "deck_conditioning": "acting_player_submitted_deck_masked_mean",
+            "deck_map_sha256": audit["deck_map"]["sha256"],
+            "card_database_sha256": sha256_file(Path(args.card_database)),
+            "attack_database_sha256": sha256_file(Path(args.attack_database)),
+            "confidence_threshold": args.confidence_threshold,
+        }
+    initialization = "resume" if args.resume else ("warm_start" if args.initialize_from else "random")
     fingerprint_payload = actual_fingerprint_payload(
         code_commit=code_commit, input_sha256=audit["input_sha256"], split_seed=args.split_seed,
         validation_fraction=args.validation_fraction, epochs=args.epochs, batch_size=args.batch_size,
@@ -298,6 +407,8 @@ def main() -> None:
         value_loss_weight=args.value_loss_weight, gradient_clip_norm=args.gradient_clip_norm,
         architecture=args.architecture, history_length=args.history_length,
         experiment_id=args.experiment_id,
+        structured=structured_assets,
+        initialization=initialization,
     )
     fingerprint = experiment_fingerprint(fingerprint_payload)
     config_matched, config_mismatches = current_config_matches(planned_config, fingerprint_payload)
@@ -312,11 +423,34 @@ def main() -> None:
     validation = TrajectoryDataset([row for row in rows if row["episode_id"] in validation_ids])
     train_loader = make_loader(train, args.batch_size, True, args.seed)
     validation_loader = make_loader(validation, args.batch_size, False, args.seed)
-    model = MaskedPointerActorCritic(args.hidden_dim, history_encoder=history_enabled).to(device)
+    if structured_enabled:
+        model = StructuredMaskedPointerActorCritic(
+            args.hidden_dim,
+            card_metadata=torch.tensor(card_metadata_table(Path(args.card_database))),
+            attack_metadata=torch.tensor(attack_metadata_table(Path(args.attack_database))),
+        ).to(device)
+    else:
+        model = MaskedPointerActorCritic(args.hidden_dim, history_encoder=history_enabled).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     state = new_training_state()
+    warm_start: dict[str, Any] | None = None
+    if args.initialize_from:
+        source_path = Path(args.initialize_from).resolve()
+        checkpoint = load_torch_checkpoint(source_path, device)
+        source_hidden_dim = int(checkpoint.get("hidden_dim", -1))
+        if source_hidden_dim != args.hidden_dim:
+            raise ValueError(
+                f"warm-start hidden_dim mismatch: checkpoint={source_hidden_dim}, requested={args.hidden_dim}"
+            )
+        model.load_state_dict(checkpoint["model"], strict=True)
+        warm_start = {
+            "path": str(source_path),
+            "sha256": checkpoint_sha256(source_path),
+            "git_sha": checkpoint.get("git_sha"),
+            "experiment_fingerprint": checkpoint.get("experiment_fingerprint"),
+        }
     if args.resume:
-        checkpoint = torch.load(args.resume, map_location=device, weights_only=False)
+        checkpoint = load_torch_checkpoint(args.resume, device)
         validate_resume_compatibility(
             checkpoint, code_commit=code_commit, input_sha256=audit["input_sha256"], fingerprint=fingerprint
         )
@@ -328,6 +462,8 @@ def main() -> None:
         "code_commit": code_commit, "dirty_at_start": bool(initial_dirty), "input_sha256": audit["input_sha256"],
         "device_resolved": str(device), "stateless": not history_enabled, "architecture": args.architecture,
         "history_encoder": history_enabled, "history_length": args.history_length,
+        "structured": structured_assets,
+        "initialization": initialization, "warm_start": warm_start,
         "policy_rows": "winner_only", "value_rows": "both_players",
         "value_loss_weight": args.value_loss_weight, "gradient_clip_norm": args.gradient_clip_norm,
         "experiment_fingerprint": fingerprint, "config_matched": config_matched,
@@ -363,7 +499,7 @@ def main() -> None:
         raise RuntimeError("no training epoch or partial epoch was executed")
 
     chosen_path = Path(state["best_checkpoint_path"]) if state["best_checkpoint_path"] else last_path
-    chosen = torch.load(chosen_path, map_location=device, weights_only=False)
+    chosen = load_torch_checkpoint(chosen_path, device)
     model.load_state_dict(chosen["model"])
     final_limit = args.max_batches if args.max_batches else 0
     final_loss = run_epoch(model, validation_loader, device, max_batches=final_limit, value_loss_weight=args.value_loss_weight, gradient_clip_norm=args.gradient_clip_norm)
@@ -399,7 +535,7 @@ def main() -> None:
         "best_epoch": state["best_epoch"], "best_validation_loss": state["best_loss"],
         "training_state": state, "validation_loss": final_loss, "validation": decoding,
         "checkpoint": {"path": str(chosen_path), "sha256": checkpoint_hash, "bytes": chosen_path.stat().st_size},
-        "runtime_seconds": runtime, "peak_ram_mb": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024.0,
+        "runtime_seconds": runtime, "peak_ram_mb": peak_ram_mb(),
         "peak_vram_mb": torch.cuda.max_memory_allocated() / (1024 ** 2) if device.type == "cuda" else 0.0,
         "missing_seeds": missing_seeds, "failures": [],
     }

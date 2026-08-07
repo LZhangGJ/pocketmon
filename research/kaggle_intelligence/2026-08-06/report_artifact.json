@@ -1,0 +1,717 @@
+{
+  "manifest": {
+    "version": 1,
+    "surface": "report",
+    "title": "PTCG AI Battle 金牌冲刺情报与行动方案",
+    "description": "Kaggle public discussion and top-notebook audit with a ten-day gold-medal strategy.",
+    "generatedAt": "2026-08-06T15:30:00+09:00",
+    "sources": [
+      {
+        "id": "competition_rules",
+        "label": "Kaggle competition overview and evaluation",
+        "href": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/overview/description"
+      },
+      {
+        "id": "notebook_audit",
+        "label": "Top-20 notebook source audit, observed 2026-08-06",
+        "path": "research/kaggle_intelligence/2026-08-06/analysis/notebook_audit.json",
+        "query": {
+          "id": "top20_notebook_audit_20260806",
+          "description": "Select the reviewed top-20 notebook ranking, methods, lineages, notes, and display groups.",
+          "language": "sql",
+          "engine": "duckdb",
+          "sql": "SELECT rank, CASE WHEN length(title) > 34 THEN substr(title, 1, 31) || '…' ELSE title END AS notebook, split_part(ref, '/', 1) AS owner, score, votes, reviewed_method AS method, lineage, review_note, url, CASE WHEN rank = 3 THEN '学习模型混合系统' WHEN rank IN (1, 12) THEN 'Meta/组合构建器' WHEN rank IN (2, 4, 6, 8, 10, 13, 14, 16, 19) THEN '规则 + 受控搜索' ELSE '规则/专家策略' END AS method_group FROM read_csv_auto('research/kaggle_intelligence/2026-08-06/analysis/notebook_audit.csv') ORDER BY rank",
+          "tables_used": [
+            "research/kaggle_intelligence/2026-08-06/analysis/notebook_audit.csv"
+          ],
+          "executed_at": "2026-08-06T15:30:00+09:00",
+          "metric_definitions": [
+            "score = Kaggle Code Public Score observed on 2026-08-06; dynamic and not a causal method estimate.",
+            "rank = descending Public Score order observed on the competition Code page on 2026-08-06."
+          ]
+        }
+      },
+      {
+        "id": "discussion_archive",
+        "label": "Downloaded Kaggle discussion archive: 202 topics / 1,011 messages",
+        "path": "research/kaggle_intelligence/2026-08-06/discussions/index.csv"
+      },
+      {
+        "id": "repo_baseline",
+        "label": "Current repository BC and evaluation baseline",
+        "path": "docs/RL_BC_002_PLAN.md"
+      }
+    ],
+    "charts": [
+      {
+        "id": "notebook_scores",
+        "title": "公开高分 Notebook 排名快照",
+        "subtitle": "20 个条目包含重复/近复制家族，分数差不能直接解释为方法差异。",
+        "type": "bar",
+        "dataset": "notebook_scores",
+        "sourceId": "notebook_audit",
+        "encodings": {
+          "x": {
+            "field": "notebook",
+            "type": "nominal",
+            "title": "Notebook"
+          },
+          "y": {
+            "field": "score",
+            "type": "quantitative",
+            "title": "Public Score"
+          },
+          "color": {
+            "field": "method_group",
+            "type": "nominal",
+            "title": "方法组"
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "grouping": "grouped"
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "method_table",
+        "title": "Top-20 源码审计与方法谱系",
+        "dataset": "method_table",
+        "sourceId": "notebook_audit",
+        "columns": [
+          {
+            "field": "rank",
+            "label": "排名",
+            "type": "number"
+          },
+          {
+            "field": "score",
+            "label": "分数",
+            "type": "number"
+          },
+          {
+            "field": "owner",
+            "label": "作者",
+            "type": "text"
+          },
+          {
+            "field": "notebook",
+            "label": "Notebook",
+            "type": "text"
+          },
+          {
+            "field": "method_group",
+            "label": "方法组",
+            "type": "text"
+          },
+          {
+            "field": "method",
+            "label": "复核方法",
+            "type": "text"
+          },
+          {
+            "field": "lineage",
+            "label": "谱系",
+            "type": "text"
+          },
+          {
+            "field": "review_note",
+            "label": "审计备注",
+            "type": "text"
+          }
+        ],
+        "defaultSort": {
+          "field": "rank",
+          "direction": "asc"
+        }
+      }
+    ],
+    "blocks": [
+      {
+        "id": "title",
+        "type": "markdown",
+        "body": "# PTCG AI Battle 金牌冲刺情报与行动方案"
+      },
+      {
+        "id": "executive_summary",
+        "type": "markdown",
+        "body": "## Executive Summary\n\n- 前 20 个公开高分 Notebook 折叠为约 10 个方法谱系；没有可证明的纯 RL/纯 BC 赢家。唯一明显含学习模型的强条目，仍依赖 expert router 和大量规则 guard。\n- 最后十天应采用双槽混合策略：槽 A 追求当前 top-band meta 加权胜率，槽 B 选择不同牌组和失败模式做反制。\n- BC 当前不应替换规则教师；最佳短期用途是 confidence-gated candidate ranker/residual。搜索只在高杠杆节点启用，并要求可靠叶价值、margin gate 和完整 fallback。\n- Public Score 只做外部校准。候选晋级由 paired-seat、固定对手 hash、Wilson/Bootstrap 区间、最差 matchup 和零功能失败共同决定。"
+      },
+      {
+        "id": "public_methods",
+        "type": "markdown",
+        "body": "## 公开高分方法的真正共识\n\n公开强方法的共同结构是：**牌组降低决策难度 → 专用规则/专家基线 → 对局路由 → 关键节点受控搜索或模型建议 → 窄 guard → 合法 fallback**。排名 4/8/14 为完全相同源码，排名 10/16 相似度 95.7%，说明 Code 排名前 20 并非 20 个独立证据。"
+      },
+      {
+        "id": "score_chart_block",
+        "type": "chart",
+        "chartId": "notebook_scores"
+      },
+      {
+        "id": "method_table_intro",
+        "type": "markdown",
+        "body": "## 方法审计明细\n\n表中方法来自源码、内嵌压缩资产和 Notebook 叙述的人工复核。分数为 2026-08-06 动态快照，不作为方法因果效果。"
+      },
+      {
+        "id": "method_table_block",
+        "type": "table",
+        "tableId": "method_table"
+      },
+      {
+        "id": "failure_lessons",
+        "type": "markdown",
+        "body": "## Discussion 暴露的三类陷阱\n\n1. **搜索会放大错误价值。** 社区复盘中，beam 给弱策略带来 +11.3pp，却让强策略下降约 15pp。\n2. **BC 准确率不等于 on-policy 强度。** 72%–79% validation accuracy 的自报案例仍可能只有约 600–700 ELO；小错误会把策略带入教师未覆盖状态。\n3. **线上 rating 噪声很大。** 最新讨论记录同一 Agent 两次提交约 400 分差。官方从 μ=600 初始化并动态匹配，短期分数不适合做细粒度 hill-climb。"
+      },
+      {
+        "id": "recommendation",
+        "type": "markdown",
+        "body": "## 建议：双槽混合制胜\n\n**槽 A（Meta-weighted champion）：** 在 Grimmsnarl hybrid、Alakazam bounded-search specialist 和现有 Lucario champion 中，用最新 replay payoff matrix 选加权胜率最高者。\n\n**槽 B（Decorrelated counter）：** 使用不同牌组与失败模式。若 A 是 Grimmsnarl/Alakazam，优先验证 Dragapult + Crushing Hammer 或 Garchomp；若复杂 pilot 不可靠，则回退到成熟 Alakazam/Metal 规则 Agent。\n\n**技术边界：** 规则负责合法性和灾难 guard；BC 负责候选排序/残差；搜索只在 MAIN context、有限分支、0.2–0.8 秒预算和足够 override margin 下运行。"
+      },
+      {
+        "id": "ten_day_plan",
+        "type": "markdown",
+        "body": "## 未来十天的金牌冲刺\n\n- **8/6–8/8：** 把 10 个公开谱系做成哈希冻结 opponent pool；用最新 replay 重建 top-band deck clusters 与 payoff matrix。\n- **8/8–8/10：** 实现 BC confidence gate，并完成一个 Grim hybrid 或 Alakazam bounded-search challenger。\n- **8/10–8/12：** 每 matchup 200–400 局 paired-seat 快筛，先淘汰失败率、最差 matchup 或尾部风险不合格者。\n- **8/12–8/14：** 前 2–3 个候选扩大到约 1,000+ 局/关键 matchup，冻结代码和对手 hash。\n- **8/14–8/16：** 保留线上 champion，用另一个槽测试 challenger；最终上传两个互补且已冻结的 Agent，停止高风险改动。"
+      },
+      {
+        "id": "questions",
+        "type": "markdown",
+        "body": "## Further questions\n\n- 最新 replay 的 top-band Grimmsnarl/Alakazam/Garchomp/Dragapult 份额和互胜矩阵是什么？\n- BC 在高置信覆盖 10%/25%/50% 决策时，override 的净胜率提升分别是多少？\n- Search API 在最终 runtime 中是否稳定、进程隔离后是否仍有正收益？\n- 两个最终槽是否存在共同 hard counter，需要牺牲均值换低尾部风险？"
+      },
+      {
+        "id": "caveats",
+        "type": "markdown",
+        "body": "## Caveats and Assumptions\n\n- Notebook 分数、票数和排序是 2026-08-06 快照；高分条目可能是 builder、复制版或过期 meta 报告。\n- 6 月 29 日 Notebook 和 7 月 26 日 meta 已有时效风险，最终牌组必须由最新 replay 重验。\n- Discussion 的 rating、胜率和方法分类含自报/推断成分；本报告已尽量用源码和仓库证据交叉验证。\n- 聊天中暴露的 Kaggle Token 未被使用或保存。"
+      }
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "status": "ready",
+    "generatedAt": "2026-08-06T15:30:00+09:00",
+    "datasets": {
+      "notebook_scores": [
+        {
+          "rank": 1,
+          "notebook": "⚡ Pokémon TCG AI Battle: Meta S…",
+          "owner": "biohack44",
+          "score": 947.5,
+          "votes": 126,
+          "method_group": "Meta/组合构建器",
+          "method": "meta analysis + rule-agent portfolio builder",
+          "lineage": "meta_snapshot",
+          "review_note": "June 29 data; stale for August decisions",
+          "url": "https://www.kaggle.com/code/biohack44/pok-mon-tcg-ai-battle-meta-snapshot-07-july"
+        },
+        {
+          "rank": 2,
+          "notebook": "Probablity v2",
+          "owner": "aristophanivan",
+          "score": 933.8,
+          "votes": 64,
+          "method_group": "规则 + 受控搜索",
+          "method": "Lucario heuristic + deterministic beam/rollout search",
+          "lineage": "lucario_search",
+          "review_note": "strictly heuristic; engine search",
+          "url": "https://www.kaggle.com/code/aristophanivan/probablity-v2"
+        },
+        {
+          "rank": 3,
+          "notebook": "Grimmsnarl ex Damage-Transfer C…",
+          "owner": "tetsutani",
+          "score": 909.3,
+          "votes": 92,
+          "method_group": "学习模型混合系统",
+          "method": "Grimmsnarl learned ensemble + expert router + extensive rule guards",
+          "lineage": "grim_hybrid",
+          "review_note": "compressed payload statically inspected; not pure RL",
+          "url": "https://www.kaggle.com/code/tetsutani/grimmsnarl-ex-damage-transfer-control"
+        },
+        {
+          "rank": 4,
+          "notebook": "[STRONG START]: Baseline Agent …",
+          "owner": "romanrozen",
+          "score": 892.4,
+          "votes": 173,
+          "method_group": "规则 + 受控搜索",
+          "method": "Alakazam heuristic + determinization + bounded 2-ply minimax",
+          "lineage": "sol_eclipse",
+          "review_note": "exact-source family",
+          "url": "https://www.kaggle.com/code/romanrozen/strong-start-baseline-agent-v10-lb-950"
+        },
+        {
+          "rank": 5,
+          "notebook": "PTCG Meta A Stable Submit",
+          "owner": "llccqq624",
+          "score": 864.6,
+          "votes": 29,
+          "method_group": "规则/专家策略",
+          "method": "Archaludon deterministic heuristic + matchup routing",
+          "lineage": "metal_tempo",
+          "review_note": "stable rule submission",
+          "url": "https://www.kaggle.com/code/llccqq624/ptcg-meta-a-stable-submit"
+        },
+        {
+          "rank": 6,
+          "notebook": "Pokemon AI Battle Agent: Mega L…",
+          "owner": "nursrijan",
+          "score": 851.5,
+          "votes": 49,
+          "method_group": "规则 + 受控搜索",
+          "method": "Lucario heuristic + optional forward rollout",
+          "lineage": "lucario_search",
+          "review_note": "rule fallback on search failure",
+          "url": "https://www.kaggle.com/code/nursrijan/pokemon-ai-battle-agent-mega-lucario"
+        },
+        {
+          "rank": 7,
+          "notebook": "🛡️⚡ BattleCore Compact Agent 🐈‍⬛",
+          "owner": "lucifer19",
+          "score": 846.8,
+          "votes": 26,
+          "method_group": "规则/专家策略",
+          "method": "Archaludon deterministic heuristic + matchup routing",
+          "lineage": "battlecore",
+          "review_note": "search tested but rejected from shipped agent",
+          "url": "https://www.kaggle.com/code/lucifer19/battlecore-compact-agent"
+        },
+        {
+          "rank": 8,
+          "notebook": "Codex Sol Eclipse Alakazam",
+          "owner": "jazivxt",
+          "score": 840.3,
+          "votes": 46,
+          "method_group": "规则 + 受控搜索",
+          "method": "Alakazam heuristic + determinization + bounded 2-ply minimax",
+          "lineage": "sol_eclipse",
+          "review_note": "exact duplicate of ranks 4/14",
+          "url": "https://www.kaggle.com/code/jazivxt/codex-sol-eclipse-alakazam"
+        },
+        {
+          "rank": 9,
+          "notebook": "Mega Lucario V2 Crustle-Aware B…",
+          "owner": "yaroslavkholmirzayev",
+          "score": 828.4,
+          "votes": 9,
+          "method_group": "规则/专家策略",
+          "method": "Lucario deterministic heuristic with Crustle-specific rules",
+          "lineage": "lucario_rules",
+          "review_note": "no search/ML",
+          "url": "https://www.kaggle.com/code/yaroslavkholmirzayev/mega-lucario-v2-crustle-aware-best-submit"
+        },
+        {
+          "rank": 10,
+          "notebook": "Improved Probabilistic agent",
+          "owner": "makthanithin",
+          "score": 817.6,
+          "votes": 6,
+          "method_group": "规则 + 受控搜索",
+          "method": "Lucario heuristic + probabilistic expectimax/rollout",
+          "lineage": "lucario_search",
+          "review_note": "near-copy family with rank 16",
+          "url": "https://www.kaggle.com/code/makthanithin/improved-probabilistic-agent"
+        },
+        {
+          "rank": 11,
+          "notebook": "Beating the Day-1 #1 Crustle Bo…",
+          "owner": "biohack44",
+          "score": 814.1,
+          "votes": 8,
+          "method_group": "规则/专家策略",
+          "method": "Crustle counter deck + minimal deterministic rules",
+          "lineage": "crustle_simple",
+          "review_note": "deck construction is the main lever",
+          "url": "https://www.kaggle.com/code/biohack44/beating-the-day-1-1-crustle-bot-780c4c"
+        },
+        {
+          "rank": 12,
+          "notebook": "Pokemon TCG: Rahul Jiwane",
+          "owner": "rahuljiwane",
+          "score": 799.4,
+          "votes": 18,
+          "method_group": "Meta/组合构建器",
+          "method": "meta analysis + rule-agent portfolio builder",
+          "lineage": "meta_snapshot",
+          "review_note": "near-copy of rank 1; June 29 data",
+          "url": "https://www.kaggle.com/code/rahuljiwane/pokemon-tcg-rahul-jiwane"
+        },
+        {
+          "rank": 13,
+          "notebook": "PTCG AI Battle: Visible-Grim Be…",
+          "owner": "prvsiyan",
+          "score": 798.3,
+          "votes": 12,
+          "method_group": "规则 + 受控搜索",
+          "method": "Alakazam heuristic + visible-opponent belief + bounded search",
+          "lineage": "alakazam_belief",
+          "review_note": "public-state opponent templates",
+          "url": "https://www.kaggle.com/code/prvsiyan/ptcg-ai-battle-visible-grim-belief-alakazam-v21"
+        },
+        {
+          "rank": 14,
+          "notebook": "Codex Sol Eclipse Alakazam 20a31c",
+          "owner": "ravi123a321at",
+          "score": 790.1,
+          "votes": 6,
+          "method_group": "规则 + 受控搜索",
+          "method": "Alakazam heuristic + determinization + bounded 2-ply minimax",
+          "lineage": "sol_eclipse",
+          "review_note": "exact duplicate of ranks 4/8",
+          "url": "https://www.kaggle.com/code/ravi123a321at/codex-sol-eclipse-alakazam-20a31c"
+        },
+        {
+          "rank": 15,
+          "notebook": "🐉 Phantom Dive or Go Home: A Dr…",
+          "owner": "skarin",
+          "score": 789.9,
+          "votes": 44,
+          "method_group": "规则/专家策略",
+          "method": "Dragapult deterministic specialist heuristic",
+          "lineage": "dragapult_rules",
+          "review_note": "single-shot rule agent",
+          "url": "https://www.kaggle.com/code/skarin/phantom-dive-or-go-home-a-dragapult-ex-deck"
+        },
+        {
+          "rank": 16,
+          "notebook": "[Pokemon] Conservative Probabil…",
+          "owner": "daniilkrasnovvv",
+          "score": 784.8,
+          "votes": 5,
+          "method_group": "规则 + 受控搜索",
+          "method": "Lucario heuristic + conservative probabilistic rollout",
+          "lineage": "lucario_search",
+          "review_note": "95.7% similar to rank 10",
+          "url": "https://www.kaggle.com/code/daniilkrasnovvv/pokemon-conservative-probabilistic-agent"
+        },
+        {
+          "rank": 17,
+          "notebook": "🛡️⚡ BattleCore Compact Agent 🐈‍⬛",
+          "owner": "ravi123a321at",
+          "score": 779.7,
+          "votes": 3,
+          "method_group": "规则/专家策略",
+          "method": "Archaludon deterministic heuristic + matchup routing",
+          "lineage": "battlecore",
+          "review_note": "same public builder lineage as rank 7",
+          "url": "https://www.kaggle.com/code/ravi123a321at/battlecore-compact-agent"
+        },
+        {
+          "rank": 18,
+          "notebook": "Beating the Day-2 # New",
+          "owner": "biohack44",
+          "score": 779.3,
+          "votes": 8,
+          "method_group": "规则/专家策略",
+          "method": "Crustle minimal deterministic rules + safety fallbacks",
+          "lineage": "crustle_simple",
+          "review_note": "fixed package of day-one policy",
+          "url": "https://www.kaggle.com/code/biohack44/beating-the-day-2-new"
+        },
+        {
+          "rank": 19,
+          "notebook": "PTCG AI Battle: Search-Audited …",
+          "owner": "prvsiyan",
+          "score": 778.2,
+          "votes": 15,
+          "method_group": "规则 + 受控搜索",
+          "method": "Alakazam heuristic + audited bounded search",
+          "lineage": "alakazam_belief",
+          "review_note": "search gated by margin and fallbacks",
+          "url": "https://www.kaggle.com/code/prvsiyan/ptcg-ai-battle-search-audited-alakazam-v9"
+        },
+        {
+          "rank": 20,
+          "notebook": "Rising Tide: Fixed Metal v15 Re…",
+          "owner": "jazivxt",
+          "score": 774.0,
+          "votes": 6,
+          "method_group": "规则/专家策略",
+          "method": "Archaludon specialist assembled from deterministic policy modules",
+          "lineage": "metal_tempo",
+          "review_note": "fixed deck beat a failed three-deck ensemble",
+          "url": "https://www.kaggle.com/code/jazivxt/rising-tide-fixed-metal-v15-reproducible-agent"
+        }
+      ],
+      "method_table": [
+        {
+          "rank": 1,
+          "notebook": "⚡ Pokémon TCG AI Battle: Meta S…",
+          "owner": "biohack44",
+          "score": 947.5,
+          "votes": 126,
+          "method_group": "Meta/组合构建器",
+          "method": "meta analysis + rule-agent portfolio builder",
+          "lineage": "meta_snapshot",
+          "review_note": "June 29 data; stale for August decisions",
+          "url": "https://www.kaggle.com/code/biohack44/pok-mon-tcg-ai-battle-meta-snapshot-07-july"
+        },
+        {
+          "rank": 2,
+          "notebook": "Probablity v2",
+          "owner": "aristophanivan",
+          "score": 933.8,
+          "votes": 64,
+          "method_group": "规则 + 受控搜索",
+          "method": "Lucario heuristic + deterministic beam/rollout search",
+          "lineage": "lucario_search",
+          "review_note": "strictly heuristic; engine search",
+          "url": "https://www.kaggle.com/code/aristophanivan/probablity-v2"
+        },
+        {
+          "rank": 3,
+          "notebook": "Grimmsnarl ex Damage-Transfer C…",
+          "owner": "tetsutani",
+          "score": 909.3,
+          "votes": 92,
+          "method_group": "学习模型混合系统",
+          "method": "Grimmsnarl learned ensemble + expert router + extensive rule guards",
+          "lineage": "grim_hybrid",
+          "review_note": "compressed payload statically inspected; not pure RL",
+          "url": "https://www.kaggle.com/code/tetsutani/grimmsnarl-ex-damage-transfer-control"
+        },
+        {
+          "rank": 4,
+          "notebook": "[STRONG START]: Baseline Agent …",
+          "owner": "romanrozen",
+          "score": 892.4,
+          "votes": 173,
+          "method_group": "规则 + 受控搜索",
+          "method": "Alakazam heuristic + determinization + bounded 2-ply minimax",
+          "lineage": "sol_eclipse",
+          "review_note": "exact-source family",
+          "url": "https://www.kaggle.com/code/romanrozen/strong-start-baseline-agent-v10-lb-950"
+        },
+        {
+          "rank": 5,
+          "notebook": "PTCG Meta A Stable Submit",
+          "owner": "llccqq624",
+          "score": 864.6,
+          "votes": 29,
+          "method_group": "规则/专家策略",
+          "method": "Archaludon deterministic heuristic + matchup routing",
+          "lineage": "metal_tempo",
+          "review_note": "stable rule submission",
+          "url": "https://www.kaggle.com/code/llccqq624/ptcg-meta-a-stable-submit"
+        },
+        {
+          "rank": 6,
+          "notebook": "Pokemon AI Battle Agent: Mega L…",
+          "owner": "nursrijan",
+          "score": 851.5,
+          "votes": 49,
+          "method_group": "规则 + 受控搜索",
+          "method": "Lucario heuristic + optional forward rollout",
+          "lineage": "lucario_search",
+          "review_note": "rule fallback on search failure",
+          "url": "https://www.kaggle.com/code/nursrijan/pokemon-ai-battle-agent-mega-lucario"
+        },
+        {
+          "rank": 7,
+          "notebook": "🛡️⚡ BattleCore Compact Agent 🐈‍⬛",
+          "owner": "lucifer19",
+          "score": 846.8,
+          "votes": 26,
+          "method_group": "规则/专家策略",
+          "method": "Archaludon deterministic heuristic + matchup routing",
+          "lineage": "battlecore",
+          "review_note": "search tested but rejected from shipped agent",
+          "url": "https://www.kaggle.com/code/lucifer19/battlecore-compact-agent"
+        },
+        {
+          "rank": 8,
+          "notebook": "Codex Sol Eclipse Alakazam",
+          "owner": "jazivxt",
+          "score": 840.3,
+          "votes": 46,
+          "method_group": "规则 + 受控搜索",
+          "method": "Alakazam heuristic + determinization + bounded 2-ply minimax",
+          "lineage": "sol_eclipse",
+          "review_note": "exact duplicate of ranks 4/14",
+          "url": "https://www.kaggle.com/code/jazivxt/codex-sol-eclipse-alakazam"
+        },
+        {
+          "rank": 9,
+          "notebook": "Mega Lucario V2 Crustle-Aware B…",
+          "owner": "yaroslavkholmirzayev",
+          "score": 828.4,
+          "votes": 9,
+          "method_group": "规则/专家策略",
+          "method": "Lucario deterministic heuristic with Crustle-specific rules",
+          "lineage": "lucario_rules",
+          "review_note": "no search/ML",
+          "url": "https://www.kaggle.com/code/yaroslavkholmirzayev/mega-lucario-v2-crustle-aware-best-submit"
+        },
+        {
+          "rank": 10,
+          "notebook": "Improved Probabilistic agent",
+          "owner": "makthanithin",
+          "score": 817.6,
+          "votes": 6,
+          "method_group": "规则 + 受控搜索",
+          "method": "Lucario heuristic + probabilistic expectimax/rollout",
+          "lineage": "lucario_search",
+          "review_note": "near-copy family with rank 16",
+          "url": "https://www.kaggle.com/code/makthanithin/improved-probabilistic-agent"
+        },
+        {
+          "rank": 11,
+          "notebook": "Beating the Day-1 #1 Crustle Bo…",
+          "owner": "biohack44",
+          "score": 814.1,
+          "votes": 8,
+          "method_group": "规则/专家策略",
+          "method": "Crustle counter deck + minimal deterministic rules",
+          "lineage": "crustle_simple",
+          "review_note": "deck construction is the main lever",
+          "url": "https://www.kaggle.com/code/biohack44/beating-the-day-1-1-crustle-bot-780c4c"
+        },
+        {
+          "rank": 12,
+          "notebook": "Pokemon TCG: Rahul Jiwane",
+          "owner": "rahuljiwane",
+          "score": 799.4,
+          "votes": 18,
+          "method_group": "Meta/组合构建器",
+          "method": "meta analysis + rule-agent portfolio builder",
+          "lineage": "meta_snapshot",
+          "review_note": "near-copy of rank 1; June 29 data",
+          "url": "https://www.kaggle.com/code/rahuljiwane/pokemon-tcg-rahul-jiwane"
+        },
+        {
+          "rank": 13,
+          "notebook": "PTCG AI Battle: Visible-Grim Be…",
+          "owner": "prvsiyan",
+          "score": 798.3,
+          "votes": 12,
+          "method_group": "规则 + 受控搜索",
+          "method": "Alakazam heuristic + visible-opponent belief + bounded search",
+          "lineage": "alakazam_belief",
+          "review_note": "public-state opponent templates",
+          "url": "https://www.kaggle.com/code/prvsiyan/ptcg-ai-battle-visible-grim-belief-alakazam-v21"
+        },
+        {
+          "rank": 14,
+          "notebook": "Codex Sol Eclipse Alakazam 20a31c",
+          "owner": "ravi123a321at",
+          "score": 790.1,
+          "votes": 6,
+          "method_group": "规则 + 受控搜索",
+          "method": "Alakazam heuristic + determinization + bounded 2-ply minimax",
+          "lineage": "sol_eclipse",
+          "review_note": "exact duplicate of ranks 4/8",
+          "url": "https://www.kaggle.com/code/ravi123a321at/codex-sol-eclipse-alakazam-20a31c"
+        },
+        {
+          "rank": 15,
+          "notebook": "🐉 Phantom Dive or Go Home: A Dr…",
+          "owner": "skarin",
+          "score": 789.9,
+          "votes": 44,
+          "method_group": "规则/专家策略",
+          "method": "Dragapult deterministic specialist heuristic",
+          "lineage": "dragapult_rules",
+          "review_note": "single-shot rule agent",
+          "url": "https://www.kaggle.com/code/skarin/phantom-dive-or-go-home-a-dragapult-ex-deck"
+        },
+        {
+          "rank": 16,
+          "notebook": "[Pokemon] Conservative Probabil…",
+          "owner": "daniilkrasnovvv",
+          "score": 784.8,
+          "votes": 5,
+          "method_group": "规则 + 受控搜索",
+          "method": "Lucario heuristic + conservative probabilistic rollout",
+          "lineage": "lucario_search",
+          "review_note": "95.7% similar to rank 10",
+          "url": "https://www.kaggle.com/code/daniilkrasnovvv/pokemon-conservative-probabilistic-agent"
+        },
+        {
+          "rank": 17,
+          "notebook": "🛡️⚡ BattleCore Compact Agent 🐈‍⬛",
+          "owner": "ravi123a321at",
+          "score": 779.7,
+          "votes": 3,
+          "method_group": "规则/专家策略",
+          "method": "Archaludon deterministic heuristic + matchup routing",
+          "lineage": "battlecore",
+          "review_note": "same public builder lineage as rank 7",
+          "url": "https://www.kaggle.com/code/ravi123a321at/battlecore-compact-agent"
+        },
+        {
+          "rank": 18,
+          "notebook": "Beating the Day-2 # New",
+          "owner": "biohack44",
+          "score": 779.3,
+          "votes": 8,
+          "method_group": "规则/专家策略",
+          "method": "Crustle minimal deterministic rules + safety fallbacks",
+          "lineage": "crustle_simple",
+          "review_note": "fixed package of day-one policy",
+          "url": "https://www.kaggle.com/code/biohack44/beating-the-day-2-new"
+        },
+        {
+          "rank": 19,
+          "notebook": "PTCG AI Battle: Search-Audited …",
+          "owner": "prvsiyan",
+          "score": 778.2,
+          "votes": 15,
+          "method_group": "规则 + 受控搜索",
+          "method": "Alakazam heuristic + audited bounded search",
+          "lineage": "alakazam_belief",
+          "review_note": "search gated by margin and fallbacks",
+          "url": "https://www.kaggle.com/code/prvsiyan/ptcg-ai-battle-search-audited-alakazam-v9"
+        },
+        {
+          "rank": 20,
+          "notebook": "Rising Tide: Fixed Metal v15 Re…",
+          "owner": "jazivxt",
+          "score": 774.0,
+          "votes": 6,
+          "method_group": "规则/专家策略",
+          "method": "Archaludon specialist assembled from deterministic policy modules",
+          "lineage": "metal_tempo",
+          "review_note": "fixed deck beat a failed three-deck ensemble",
+          "url": "https://www.kaggle.com/code/jazivxt/rising-tide-fixed-metal-v15-reproducible-agent"
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "id": "competition_rules",
+      "label": "Kaggle competition overview and evaluation",
+      "href": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/overview/description"
+    },
+    {
+      "id": "notebook_audit",
+      "label": "Top-20 notebook source audit, observed 2026-08-06",
+      "path": "research/kaggle_intelligence/2026-08-06/analysis/notebook_audit.json",
+      "query": {
+        "id": "top20_notebook_audit_20260806",
+        "description": "Select the reviewed top-20 notebook ranking, methods, lineages, notes, and display groups.",
+        "language": "sql",
+        "engine": "duckdb",
+        "sql": "SELECT rank, CASE WHEN length(title) > 34 THEN substr(title, 1, 31) || '…' ELSE title END AS notebook, split_part(ref, '/', 1) AS owner, score, votes, reviewed_method AS method, lineage, review_note, url, CASE WHEN rank = 3 THEN '学习模型混合系统' WHEN rank IN (1, 12) THEN 'Meta/组合构建器' WHEN rank IN (2, 4, 6, 8, 10, 13, 14, 16, 19) THEN '规则 + 受控搜索' ELSE '规则/专家策略' END AS method_group FROM read_csv_auto('research/kaggle_intelligence/2026-08-06/analysis/notebook_audit.csv') ORDER BY rank",
+        "tables_used": [
+          "research/kaggle_intelligence/2026-08-06/analysis/notebook_audit.csv"
+        ],
+        "executed_at": "2026-08-06T15:30:00+09:00",
+        "metric_definitions": [
+          "score = Kaggle Code Public Score observed on 2026-08-06; dynamic and not a causal method estimate.",
+          "rank = descending Public Score order observed on the competition Code page on 2026-08-06."
+        ]
+      }
+    },
+    {
+      "id": "discussion_archive",
+      "label": "Downloaded Kaggle discussion archive: 202 topics / 1,011 messages",
+      "path": "research/kaggle_intelligence/2026-08-06/discussions/index.csv"
+    },
+    {
+      "id": "repo_baseline",
+      "label": "Current repository BC and evaluation baseline",
+      "path": "docs/RL_BC_002_PLAN.md"
+    }
+  ],
+  "surface": "report"
+}

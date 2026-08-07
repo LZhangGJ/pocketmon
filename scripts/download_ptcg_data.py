@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import os
 import subprocess
 import sys
@@ -67,9 +68,21 @@ def download_file(
                 archive.unlink()
             if target_path.exists() and force:
                 target_path.unlink()
+            if "404" in str(exc):
+                break
             continue
 
     raise RuntimeError(f"Failed to download {file_name} from {slug} after {max_retries} retries: {last_error}")
+
+
+def download_dataset(slug: str, target_dir: Path) -> Path:
+    """Download and unzip a full daily dataset with one Kaggle API request."""
+    target_dir.mkdir(parents=True, exist_ok=True)
+    run_kaggle("datasets", "download", slug, "-p", str(target_dir), "--unzip")
+    manifest = target_dir / MANIFEST
+    if not manifest.is_file():
+        raise FileNotFoundError(f"{MANIFEST} was not found after bulk download from {slug}")
+    return manifest
 
 
 def read_manifest(path: Path) -> list[dict[str, str]]:
@@ -94,6 +107,12 @@ def resolve_daily_slug(requested_date: str | None, index_rows: list[dict[str, st
     return date, slug
 
 
+def select_episodes(episodes: list[dict[str, str]], max_episodes: int) -> list[dict[str, str]]:
+    if max_episodes < 0:
+        raise ValueError("max episodes must be non-negative")
+    return episodes if max_episodes == 0 else episodes[:max_episodes]
+
+
 def main() -> None:
     load_dotenv(ROOT / ".env")
     if not os.getenv("KAGGLE_KEY") and os.getenv("KAGGLE_API_TOKEN"):
@@ -101,17 +120,29 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(description="Download PTCG AI Battle daily datasets from Kaggle")
     parser.add_argument("--date", default=None, help="Date in YYYY-MM-DD. Default: latest available")
-    parser.add_argument("--max-episodes", type=int, default=50, help="How many top episodes to download")
+    parser.add_argument("--max-episodes", type=int, default=50, help="How many top episodes to download; 0 means all")
+    parser.add_argument("--data-dir", type=Path, default=DATA_DIR, help="Replay root directory")
+    parser.add_argument(
+        "--allow-missing",
+        action="store_true",
+        help="Finish the batch and audit files listed by the manifest but unavailable from Kaggle",
+    )
+    parser.add_argument("--audit-output", type=Path, default=None, help="Optional JSON audit path")
     args = parser.parse_args()
 
-    index_dir = DATA_DIR / "_index"
+    data_dir = args.data_dir.expanduser().resolve()
+    index_dir = data_dir / "_index"
     index_manifest = download_file(INDEX_SLUG, MANIFEST, index_dir, force=True)
     index_rows = read_manifest(index_manifest)
 
     date, daily_slug = resolve_daily_slug(args.date, index_rows)
-    day_dir = DATA_DIR / date
+    day_dir = data_dir / date
 
-    daily_manifest = download_file(daily_slug, MANIFEST, day_dir, force=True)
+    daily_manifest = (
+        download_dataset(daily_slug, day_dir)
+        if args.max_episodes == 0
+        else download_file(daily_slug, MANIFEST, day_dir, force=True)
+    )
     episodes = read_manifest(daily_manifest)
 
     score_key = next((k for k in ("avg_score", "score", "top_avg_score") if episodes and k in episodes[0]), None)
@@ -122,16 +153,41 @@ def main() -> None:
     if id_key is None:
         raise RuntimeError("Cannot detect episode id column from daily manifest")
 
-    downloaded = 0
-    for row in episodes[: args.max_episodes]:
+    selected = select_episodes(episodes, args.max_episodes)
+    available = 0
+    failures: list[dict[str, str]] = []
+    for row in selected:
         episode_id = row[id_key]
-        download_file(daily_slug, f"{episode_id}.json", day_dir)
-        downloaded += 1
+        try:
+            download_file(daily_slug, f"{episode_id}.json", day_dir)
+            available += 1
+        except RuntimeError as exc:
+            failures.append({"episode_id": str(episode_id), "error": str(exc)})
+            if not args.allow_missing:
+                raise
+
+    audit = {
+        "schema_version": 1,
+        "date": date,
+        "daily_slug": daily_slug,
+        "manifest_episodes": len(episodes),
+        "selected_episodes": len(selected),
+        "available_episodes": available,
+        "missing_episodes": len(failures),
+        "missing": failures,
+        "complete": not failures and available == len(selected),
+        "output_dir": str(day_dir),
+    }
+    audit_output = (args.audit_output or (data_dir / "_audit" / f"{date}.json")).expanduser().resolve()
+    audit_output.parent.mkdir(parents=True, exist_ok=True)
+    audit_output.write_text(json.dumps(audit, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     print(f"date={date}")
     print(f"daily_slug={daily_slug}")
-    print(f"episodes_downloaded={downloaded}")
+    print(f"episodes_available={available}")
+    print(f"episodes_missing={len(failures)}")
     print(f"output_dir={day_dir}")
+    print(f"audit_output={audit_output}")
 
 
 if __name__ == "__main__":

@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.build_submission import read_deck
+from scripts.build_submission import build, read_deck
 from scripts.materialize_notebook_agent import extract_commented_deck, extract_literal_deck, materialize
 
 
@@ -53,6 +53,30 @@ class SubmissionSourceTests(unittest.TestCase):
             ]
         }
         self.assertEqual(extract_commented_deck(payload), [7] * 30 + [8] * 30)
+
+    def test_rl_package_payload_is_included(self) -> None:
+        import tarfile
+
+        with tempfile.TemporaryDirectory() as directory:
+            temp = Path(directory)
+            agent = temp / "agent"
+            cg = temp / "cg"
+            (agent / "rl").mkdir(parents=True)
+            cg.mkdir()
+            (agent / "main.py").write_text("def agent(obs): return []\n", encoding="utf-8")
+            (agent / "deck.csv").write_text("".join(f"{index}\n" for index in range(60)), encoding="utf-8")
+            (agent / "checkpoint.pt").write_bytes(b"checkpoint")
+            (agent / "agent_manifest.json").write_text(
+                json.dumps({"kind": "our_rl_bc_specialist"}), encoding="utf-8"
+            )
+            (agent / "rl" / "__init__.py").write_text("", encoding="utf-8")
+            (agent / "rl" / "agent_adapter.py").write_text("", encoding="utf-8")
+            for filename in ("api.py", "game.py", "sim.py"):
+                (cg / filename).write_text("", encoding="utf-8")
+            archive = build(agent, cg, temp / "submission.tar.gz")
+            with tarfile.open(archive, "r:gz") as handle:
+                names = set(handle.getnames())
+            self.assertTrue({"checkpoint.pt", "agent_manifest.json", "rl/agent_adapter.py"} <= names)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,1636 @@
+{
+  "schema_version": 1,
+  "base_deck": "configs\\decks\\raging_bolt_toolbox_2026-08-05.csv",
+  "base_sha256": "3b9b850bc144c8c7cef2db092158a1420b8476826429381b4ef33ae0fc5c4143",
+  "seed": 20260806,
+  "max_swaps": 4,
+  "candidate_count": 64,
+  "candidate_pool_cards": 98,
+  "candidates": [
+    {
+      "name": "candidate_000",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_000\\deck.csv",
+      "sha256": "629f83f31c5eee2b7500232c68af9fe5765c8ebc0a94938b866e4f44caf306fd",
+      "changes": [
+        {
+          "removed_id": 63,
+          "removed_name": "Raging Bolt ex",
+          "added_id": 58,
+          "added_name": "Great Tusk",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1121,
+          "removed_name": "Ultra Ball",
+          "added_id": 1152,
+          "added_name": "Poké Pad",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1197,
+          "removed_name": "Xerosic’s Machinations",
+          "added_id": 1231,
+          "added_name": "Dawn",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_001",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_001\\deck.csv",
+      "sha256": "0249897a9d8d142f891f5735a0d80fd13076651603e149ffb93d5618d1ac7900",
+      "changes": [
+        {
+          "removed_id": 1205,
+          "removed_name": "Cyrano",
+          "added_id": 1192,
+          "added_name": "Carmine",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 978,
+          "removed_name": "Passimian",
+          "added_id": 268,
+          "added_name": "Iono’s Tadbulb",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 4,
+          "removed_name": "Basic {L} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_002",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_002\\deck.csv",
+      "sha256": "9c7ef17785d98043659e1b9802b2d47fe6a5dd45b054457da6ae3980fbcf6c1d",
+      "changes": [
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 3,
+          "added_name": "Basic {W} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_003",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_003\\deck.csv",
+      "sha256": "4d7e27a75ca8b57f1c3cdd96284d66763033b78545d4f3420b7b7065578be604",
+      "changes": [
+        {
+          "removed_id": 1198,
+          "removed_name": "Crispin",
+          "added_id": 1192,
+          "added_name": "Carmine",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1182,
+          "removed_name": "Boss’s Orders",
+          "added_id": 1231,
+          "added_name": "Dawn",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 5,
+          "removed_name": "Basic {P} Energy",
+          "added_id": 3,
+          "added_name": "Basic {W} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_004",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_004\\deck.csv",
+      "sha256": "5ac609b26cede7a27b510e61e395f265030838e1567d0c5801ab285a5008d86a",
+      "changes": [
+        {
+          "removed_id": 6,
+          "removed_name": "Basic {F} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 5,
+          "removed_name": "Basic {P} Energy",
+          "added_id": 3,
+          "added_name": "Basic {W} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 4,
+          "removed_name": "Basic {L} Energy",
+          "added_id": 7,
+          "added_name": "Basic {D} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_005",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_005\\deck.csv",
+      "sha256": "1ff3ae012d9526593c7a14b0f10f6ea35c19f4793de5ce75fb13268721fbee9e",
+      "changes": [
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 4,
+          "added_name": "Basic {L} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1116,
+          "removed_name": "Energy Switch",
+          "added_id": 1122,
+          "added_name": "Pokégear 3.0",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1071,
+          "removed_name": "Meowth ex",
+          "added_id": 169,
+          "added_name": "Duraludon",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 4,
+          "added_name": "Basic {L} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_006",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_006\\deck.csv",
+      "sha256": "d20272a9ab4cda558dac787d093ef60816abe2c113c0989b0bba525eb60d0fbc",
+      "changes": [
+        {
+          "removed_id": 1250,
+          "removed_name": "Area Zero Underdepths",
+          "added_id": 1259,
+          "added_name": "Spikemuth Gym",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_007",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_007\\deck.csv",
+      "sha256": "abfe94240bc6f45eb1969ee8da3eff93c0b494f44d2235375a47df408fd50ced",
+      "changes": [
+        {
+          "removed_id": 5,
+          "removed_name": "Basic {P} Energy",
+          "added_id": 7,
+          "added_name": "Basic {D} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 184,
+          "removed_name": "Latias ex",
+          "added_id": 270,
+          "added_name": "Iono’s Wattrel",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_008",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_008\\deck.csv",
+      "sha256": "52729402c30068388f939673360ae27cb9097860cfe280285720bc76bd3a7323",
+      "changes": [
+        {
+          "removed_id": 1071,
+          "removed_name": "Meowth ex",
+          "added_id": 676,
+          "added_name": "Solrock",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1088,
+          "removed_name": "Prime Catcher",
+          "added_id": 1152,
+          "added_name": "Poké Pad",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_009",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_009\\deck.csv",
+      "sha256": "592581378c609c80b1123e31b0f1dc1e5e17cc8e0ae304ab9a5ad01f71347b7c",
+      "changes": [
+        {
+          "removed_id": 63,
+          "removed_name": "Raging Bolt ex",
+          "added_id": 676,
+          "added_name": "Solrock",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 63,
+          "removed_name": "Raging Bolt ex",
+          "added_id": 677,
+          "added_name": "Riolu",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_010",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_010\\deck.csv",
+      "sha256": "347419011f5c052f84ddf821a2466c03b7e67bde4fcc244ceb9fc4343791862b",
+      "changes": [
+        {
+          "removed_id": 1121,
+          "removed_name": "Ultra Ball",
+          "added_id": 1145,
+          "added_name": "Mega Signal",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 184,
+          "removed_name": "Latias ex",
+          "added_id": 1194,
+          "added_name": "Colress’s Tenacity",
+          "role_preserved": false
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_011",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_011\\deck.csv",
+      "sha256": "573ba63f891abab82e04d89809f236d01dcae7a15ddab9ae3ac30b7d278da2e1",
+      "changes": [
+        {
+          "removed_id": 108,
+          "removed_name": "Wellspring Mask Ogerpon ex",
+          "added_id": 676,
+          "added_name": "Solrock",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 96,
+          "removed_name": "Teal Mask Ogerpon ex",
+          "added_id": 676,
+          "added_name": "Solrock",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_012",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_012\\deck.csv",
+      "sha256": "c3e41ee3b022cdb87dc943c7bd4c5ded81623d7aa5bfd845ba107cef687a26b1",
+      "changes": [
+        {
+          "removed_id": 1250,
+          "removed_name": "Area Zero Underdepths",
+          "added_id": 1256,
+          "added_name": "Team Rocket's Watchtower",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 756,
+          "removed_name": "Mega Kangaskhan ex",
+          "added_id": 860,
+          "added_name": "Snorunt",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1250,
+          "removed_name": "Area Zero Underdepths",
+          "added_id": 1252,
+          "added_name": "Gravity Mountain",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_013",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_013\\deck.csv",
+      "sha256": "4fcdb33b9f414c06c1db316539b5a47b35d9311ad8e3fed8d38216e262e92f2f",
+      "changes": [
+        {
+          "removed_id": 1250,
+          "removed_name": "Area Zero Underdepths",
+          "added_id": 1182,
+          "added_name": "Boss’s Orders",
+          "role_preserved": false
+        },
+        {
+          "removed_id": 1182,
+          "removed_name": "Boss’s Orders",
+          "added_id": 1227,
+          "added_name": "Lillie's Determination",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_014",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_014\\deck.csv",
+      "sha256": "6a5eeef3a8a726afb386715111f187c7d2b182a6025a9b05f641a3b5d99032de",
+      "changes": [
+        {
+          "removed_id": 140,
+          "removed_name": "Fezandipiti ex",
+          "added_id": 675,
+          "added_name": "Lunatone",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 6,
+          "removed_name": "Basic {F} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1250,
+          "removed_name": "Area Zero Underdepths",
+          "added_id": 1252,
+          "added_name": "Gravity Mountain",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_015",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_015\\deck.csv",
+      "sha256": "00664e89bb70fedb6d5fa99887bc5b7f34d872400d11eb483a9f6386981a17eb",
+      "changes": [
+        {
+          "removed_id": 1121,
+          "removed_name": "Ultra Ball",
+          "added_id": 1079,
+          "added_name": "Rare Candy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_016",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_016\\deck.csv",
+      "sha256": "46793336db902c5c1ccc96d0e2986e9ce8ccb76ea40e5b6dd424c4f27c0ab462",
+      "changes": [
+        {
+          "removed_id": 1198,
+          "removed_name": "Crispin",
+          "added_id": 1182,
+          "added_name": "Boss’s Orders",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1250,
+          "removed_name": "Area Zero Underdepths",
+          "added_id": 1259,
+          "added_name": "Spikemuth Gym",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 4,
+          "added_name": "Basic {L} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 63,
+          "removed_name": "Raging Bolt ex",
+          "added_id": 677,
+          "added_name": "Riolu",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_017",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_017\\deck.csv",
+      "sha256": "3e814ebd659efa8d0b023e6be1b73a5aac358a420588db1fe64b7883122ca5e2",
+      "changes": [
+        {
+          "removed_id": 1205,
+          "removed_name": "Cyrano",
+          "added_id": 1231,
+          "added_name": "Dawn",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 96,
+          "removed_name": "Teal Mask Ogerpon ex",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": false
+        },
+        {
+          "removed_id": 1231,
+          "removed_name": "Dawn",
+          "added_id": 1182,
+          "added_name": "Boss’s Orders",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 5,
+          "removed_name": "Basic {P} Energy",
+          "added_id": 2,
+          "added_name": "Basic {R} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_018",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_018\\deck.csv",
+      "sha256": "dde9a396e98e5eeecfe5632c4227bae6a89919add26b44a04ff26573e929b35c",
+      "changes": [
+        {
+          "removed_id": 1097,
+          "removed_name": "Night Stretcher",
+          "added_id": 1086,
+          "added_name": "Buddy-Buddy Poffin",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_019",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_019\\deck.csv",
+      "sha256": "68958b47dbcfc51fbdbb055d3c183945e2903e52dede8dd7063e22382eb6962a",
+      "changes": [
+        {
+          "removed_id": 1116,
+          "removed_name": "Energy Switch",
+          "added_id": 1142,
+          "added_name": "Fighting Gong",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_020",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_020\\deck.csv",
+      "sha256": "6b9b37b1cbb022a5ecc472911d6d344c11dd6b434f9ce9a2a3ba61bf92598dd0",
+      "changes": [
+        {
+          "removed_id": 184,
+          "removed_name": "Latias ex",
+          "added_id": 57,
+          "added_name": "Relicanth",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 978,
+          "removed_name": "Passimian",
+          "added_id": 675,
+          "added_name": "Lunatone",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 140,
+          "removed_name": "Fezandipiti ex",
+          "added_id": 19,
+          "added_name": "Telepath Psychic Energy",
+          "role_preserved": false
+        },
+        {
+          "removed_id": 19,
+          "removed_name": "Telepath Psychic Energy",
+          "added_id": 1192,
+          "added_name": "Carmine",
+          "role_preserved": false
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_021",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_021\\deck.csv",
+      "sha256": "17276c60dda202d4dc1ee6f09f2570eb076e4bba0cfd5d6e8067888c1d7f0aa7",
+      "changes": [
+        {
+          "removed_id": 1071,
+          "removed_name": "Meowth ex",
+          "added_id": 235,
+          "added_name": "Budew",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 7,
+          "added_name": "Basic {D} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 184,
+          "removed_name": "Latias ex",
+          "added_id": 722,
+          "added_name": "Snover",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_022",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_022\\deck.csv",
+      "sha256": "0884faabd9bd89e97cb8bab123f16de99e8216273a6596f3996e62619a7017f7",
+      "changes": [
+        {
+          "removed_id": 1205,
+          "removed_name": "Cyrano",
+          "added_id": 1152,
+          "added_name": "Poké Pad",
+          "role_preserved": false
+        },
+        {
+          "removed_id": 1182,
+          "removed_name": "Boss’s Orders",
+          "added_id": 1192,
+          "added_name": "Carmine",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_023",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_023\\deck.csv",
+      "sha256": "4b1f762d26269152167e22f6a187cd3df8b68da26e03c11555bd3e729e2f760d",
+      "changes": [
+        {
+          "removed_id": 6,
+          "removed_name": "Basic {F} Energy",
+          "added_id": 4,
+          "added_name": "Basic {L} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1097,
+          "removed_name": "Night Stretcher",
+          "added_id": 1120,
+          "added_name": "Crushing Hammer",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_024",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_024\\deck.csv",
+      "sha256": "bc13b5d28e49427331f0289a75ef820bf3bbaf5be2310c5ebbccc8d46280b82b",
+      "changes": [
+        {
+          "removed_id": 1116,
+          "removed_name": "Energy Switch",
+          "added_id": 1142,
+          "added_name": "Fighting Gong",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 756,
+          "removed_name": "Mega Kangaskhan ex",
+          "added_id": 305,
+          "added_name": "Dunsparce",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_025",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_025\\deck.csv",
+      "sha256": "c2656c96841a92e32400d9ccd4d2614356000343820bd4abeae7ee9fcfe8d163",
+      "changes": [
+        {
+          "removed_id": 140,
+          "removed_name": "Fezandipiti ex",
+          "added_id": 677,
+          "added_name": "Riolu",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1250,
+          "removed_name": "Area Zero Underdepths",
+          "added_id": 1252,
+          "added_name": "Gravity Mountain",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 4,
+          "added_name": "Basic {L} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1071,
+          "removed_name": "Meowth ex",
+          "added_id": 112,
+          "added_name": "Munkidori",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_026",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_026\\deck.csv",
+      "sha256": "88af541ffd5643cd3569bac539ba8fc8758c4762c8d71cba67c47654923c9494",
+      "changes": [
+        {
+          "removed_id": 1182,
+          "removed_name": "Boss’s Orders",
+          "added_id": 1182,
+          "added_name": "Boss’s Orders",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 756,
+          "removed_name": "Mega Kangaskhan ex",
+          "added_id": 268,
+          "added_name": "Iono’s Tadbulb",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_027",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_027\\deck.csv",
+      "sha256": "d662ad6eee3ff3d381911e3606b3f76c09f98c41e112fdfa7750c3bc33787e4c",
+      "changes": [
+        {
+          "removed_id": 5,
+          "removed_name": "Basic {P} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1071,
+          "removed_name": "Meowth ex",
+          "added_id": 169,
+          "added_name": "Duraludon",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_028",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_028\\deck.csv",
+      "sha256": "e417edd13d1ada1f6098f4f7769597201c03f6467b642eaad985073f97af3582",
+      "changes": [
+        {
+          "removed_id": 6,
+          "removed_name": "Basic {F} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 63,
+          "removed_name": "Raging Bolt ex",
+          "added_id": 677,
+          "added_name": "Riolu",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1205,
+          "removed_name": "Cyrano",
+          "added_id": 1227,
+          "added_name": "Lillie's Determination",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_029",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_029\\deck.csv",
+      "sha256": "0e636e249282c8428931cdeb8320d93169552b56122e6679fa2752fdc063010a",
+      "changes": [
+        {
+          "removed_id": 1250,
+          "removed_name": "Area Zero Underdepths",
+          "added_id": 1264,
+          "added_name": "Battle Cage",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_030",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_030\\deck.csv",
+      "sha256": "0a732ed3ccd7b168e855b36c0e5386dd8316727a5de8d2b3bde0efb077097444",
+      "changes": [
+        {
+          "removed_id": 1198,
+          "removed_name": "Crispin",
+          "added_id": 1152,
+          "added_name": "Poké Pad",
+          "role_preserved": false
+        },
+        {
+          "removed_id": 4,
+          "removed_name": "Basic {L} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_031",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_031\\deck.csv",
+      "sha256": "fb229fc503655688c246821457f9736bc8292033996fd802659d0f74e7144be2",
+      "changes": [
+        {
+          "removed_id": 1071,
+          "removed_name": "Meowth ex",
+          "added_id": 1194,
+          "added_name": "Colress’s Tenacity",
+          "role_preserved": false
+        },
+        {
+          "removed_id": 1116,
+          "removed_name": "Energy Switch",
+          "added_id": 1152,
+          "added_name": "Poké Pad",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 6,
+          "removed_name": "Basic {F} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_032",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_032\\deck.csv",
+      "sha256": "2e431e4663f268fdff6760d099274044cb380597be6d5ba80940f29cf647667b",
+      "changes": [
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 1227,
+          "added_name": "Lillie's Determination",
+          "role_preserved": false
+        },
+        {
+          "removed_id": 63,
+          "removed_name": "Raging Bolt ex",
+          "added_id": 119,
+          "added_name": "Dreepy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1116,
+          "removed_name": "Energy Switch",
+          "added_id": 1086,
+          "added_name": "Buddy-Buddy Poffin",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_033",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_033\\deck.csv",
+      "sha256": "b310d473019571992920d113157652377c6e37c0fad0c4d874c87ca2eb0f63d0",
+      "changes": [
+        {
+          "removed_id": 1071,
+          "removed_name": "Meowth ex",
+          "added_id": 675,
+          "added_name": "Lunatone",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 8,
+          "added_name": "Basic {M} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_034",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_034\\deck.csv",
+      "sha256": "430fa456993c4df988b0016b28813b5341f36f4e331f1345f8594339e96da543",
+      "changes": [
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 3,
+          "added_name": "Basic {W} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_035",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_035\\deck.csv",
+      "sha256": "e5d4fe65e3c5faafa49581d4debbac47ee6e00525ec2f7933d763eb0326763ce",
+      "changes": [
+        {
+          "removed_id": 1205,
+          "removed_name": "Cyrano",
+          "added_id": 673,
+          "added_name": "Makuhita",
+          "role_preserved": false
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_036",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_036\\deck.csv",
+      "sha256": "7fa615a29145e67750a0dfd8aa10c5277909097247300cbdaf9554b17f1cd300",
+      "changes": [
+        {
+          "removed_id": 5,
+          "removed_name": "Basic {P} Energy",
+          "added_id": 5,
+          "added_name": "Basic {P} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 184,
+          "removed_name": "Latias ex",
+          "added_id": 1182,
+          "added_name": "Boss’s Orders",
+          "role_preserved": false
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_037",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_037\\deck.csv",
+      "sha256": "a8c0e8888ecdb7b23f9fa0efa10b97d74d3a7909bdc63194341d27711d2830a5",
+      "changes": [
+        {
+          "removed_id": 1088,
+          "removed_name": "Prime Catcher",
+          "added_id": 1145,
+          "added_name": "Mega Signal",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_038",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_038\\deck.csv",
+      "sha256": "35b18cf4f0ed2aad17f16eff24b26a8a83605dd3e4061203a6a36ed78c7c0748",
+      "changes": [
+        {
+          "removed_id": 1250,
+          "removed_name": "Area Zero Underdepths",
+          "added_id": 1264,
+          "added_name": "Battle Cage",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1198,
+          "removed_name": "Crispin",
+          "added_id": 1192,
+          "added_name": "Carmine",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 978,
+          "removed_name": "Passimian",
+          "added_id": 270,
+          "added_name": "Iono’s Wattrel",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 5,
+          "removed_name": "Basic {P} Energy",
+          "added_id": 3,
+          "added_name": "Basic {W} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_039",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_039\\deck.csv",
+      "sha256": "5aa35a9b5a792e0e1a0092143ab4496289d2fbeba4809a99f2b10ed479d876d9",
+      "changes": [
+        {
+          "removed_id": 1121,
+          "removed_name": "Ultra Ball",
+          "added_id": 1147,
+          "added_name": "Jumbo Ice Cream",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1121,
+          "removed_name": "Ultra Ball",
+          "added_id": 1152,
+          "added_name": "Poké Pad",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_040",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_040\\deck.csv",
+      "sha256": "fe8f03845ad3b1ad92d36bd36e3fbdb25ab56e48131c70066cc6480ab94483b3",
+      "changes": [
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1088,
+          "removed_name": "Prime Catcher",
+          "added_id": 1118,
+          "added_name": "Energy Retrieval",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_041",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_041\\deck.csv",
+      "sha256": "bb92ada23b0e9d65b0cf8e85810cff45b55bcfe4090bff0589d1481a4a25435d",
+      "changes": [
+        {
+          "removed_id": 140,
+          "removed_name": "Fezandipiti ex",
+          "added_id": 1185,
+          "added_name": "Explorer’s Guidance",
+          "role_preserved": false
+        },
+        {
+          "removed_id": 1098,
+          "removed_name": "Glass Trumpet",
+          "added_id": 1152,
+          "added_name": "Poké Pad",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 108,
+          "removed_name": "Wellspring Mask Ogerpon ex",
+          "added_id": 673,
+          "added_name": "Makuhita",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1250,
+          "removed_name": "Area Zero Underdepths",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": false
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_042",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_042\\deck.csv",
+      "sha256": "ce8c26ebfaf3a37ef467efed091b0a6da5d4f23df04f18160fe9949434718d89",
+      "changes": [
+        {
+          "removed_id": 1198,
+          "removed_name": "Crispin",
+          "added_id": 1182,
+          "added_name": "Boss’s Orders",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1121,
+          "removed_name": "Ultra Ball",
+          "added_id": 1102,
+          "added_name": "Dusk Ball",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_043",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_043\\deck.csv",
+      "sha256": "86a46d015ada0fb00259abcc5e194dfa7b540ed23e9189dde2e79695feec8e9e",
+      "changes": [
+        {
+          "removed_id": 4,
+          "removed_name": "Basic {L} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 108,
+          "removed_name": "Wellspring Mask Ogerpon ex",
+          "added_id": 675,
+          "added_name": "Lunatone",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 5,
+          "added_name": "Basic {P} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_044",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_044\\deck.csv",
+      "sha256": "276fb67416dfffc70d4dd4e6a404519531545804aa89477c6c7ed33a227a237e",
+      "changes": [
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1116,
+          "removed_name": "Energy Switch",
+          "added_id": 1122,
+          "added_name": "Pokégear 3.0",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1088,
+          "removed_name": "Prime Catcher",
+          "added_id": 1141,
+          "added_name": "Premium Power Pro",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1198,
+          "removed_name": "Crispin",
+          "added_id": 1194,
+          "added_name": "Colress’s Tenacity",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_045",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_045\\deck.csv",
+      "sha256": "4cb93257314758127070251382bcad04d137873868e9b3e94ea4730c359f6780",
+      "changes": [
+        {
+          "removed_id": 4,
+          "removed_name": "Basic {L} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 63,
+          "removed_name": "Raging Bolt ex",
+          "added_id": 344,
+          "added_name": "Dwebble",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1182,
+          "removed_name": "Boss’s Orders",
+          "added_id": 1227,
+          "added_name": "Lillie's Determination",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 3,
+          "removed_name": "Basic {W} Energy",
+          "added_id": 1227,
+          "added_name": "Lillie's Determination",
+          "role_preserved": false
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_046",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_046\\deck.csv",
+      "sha256": "13910ee1eb9ab902b338053ee39da9694febb10425275432dd6762e9aaa2660b",
+      "changes": [
+        {
+          "removed_id": 756,
+          "removed_name": "Mega Kangaskhan ex",
+          "added_id": 676,
+          "added_name": "Solrock",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 7,
+          "added_name": "Basic {D} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1116,
+          "removed_name": "Energy Switch",
+          "added_id": 1152,
+          "added_name": "Poké Pad",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_047",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_047\\deck.csv",
+      "sha256": "7b28b55ecc935468936a960ce17441dee11af0116b23ed7fc4684e60ee224611",
+      "changes": [
+        {
+          "removed_id": 1097,
+          "removed_name": "Night Stretcher",
+          "added_id": 1147,
+          "added_name": "Jumbo Ice Cream",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_048",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_048\\deck.csv",
+      "sha256": "6ea94ba43567ca60d49a10988f1ae95d4bae62624ff0824ebcef7d3607ddbd9c",
+      "changes": [
+        {
+          "removed_id": 5,
+          "removed_name": "Basic {P} Energy",
+          "added_id": 8,
+          "added_name": "Basic {M} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 6,
+          "removed_name": "Basic {F} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 3,
+          "removed_name": "Basic {W} Energy",
+          "added_id": 3,
+          "added_name": "Basic {W} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_049",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_049\\deck.csv",
+      "sha256": "cae59970797a1316bec40dda9d6aba95b60ed08075f50939eec4b6b1616453f6",
+      "changes": [
+        {
+          "removed_id": 1198,
+          "removed_name": "Crispin",
+          "added_id": 1227,
+          "added_name": "Lillie's Determination",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1205,
+          "removed_name": "Cyrano",
+          "added_id": 1227,
+          "added_name": "Lillie's Determination",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1250,
+          "removed_name": "Area Zero Underdepths",
+          "added_id": 1264,
+          "added_name": "Battle Cage",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_050",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_050\\deck.csv",
+      "sha256": "3b1a75c188345bebf096fac1569cab19e92bd5ca4d5d58f9e405527c90aa848a",
+      "changes": [
+        {
+          "removed_id": 1198,
+          "removed_name": "Crispin",
+          "added_id": 1227,
+          "added_name": "Lillie's Determination",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 63,
+          "removed_name": "Raging Bolt ex",
+          "added_id": 722,
+          "added_name": "Snover",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_051",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_051\\deck.csv",
+      "sha256": "db557d5438320da74fb9dbc46ab30b3e6d39c06fbf9de1d5e30a731f6aae065a",
+      "changes": [
+        {
+          "removed_id": 1198,
+          "removed_name": "Crispin",
+          "added_id": 1182,
+          "added_name": "Boss’s Orders",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1250,
+          "removed_name": "Area Zero Underdepths",
+          "added_id": 1259,
+          "added_name": "Spikemuth Gym",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_052",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_052\\deck.csv",
+      "sha256": "3abb696ad560590becbd3b50eda534d4d4f178818fc7ae8662cf16b1ff7be65a",
+      "changes": [
+        {
+          "removed_id": 5,
+          "removed_name": "Basic {P} Energy",
+          "added_id": 4,
+          "added_name": "Basic {L} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_053",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_053\\deck.csv",
+      "sha256": "48d9c9e485033d2b3f48c7b21c7f38a656586a65b4a5f955b93e730fc8a50d7e",
+      "changes": [
+        {
+          "removed_id": 1121,
+          "removed_name": "Ultra Ball",
+          "added_id": 1123,
+          "added_name": "Switch",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1123,
+          "removed_name": "Switch",
+          "added_id": 1079,
+          "added_name": "Rare Candy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 140,
+          "removed_name": "Fezandipiti ex",
+          "added_id": 673,
+          "added_name": "Makuhita",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1198,
+          "removed_name": "Crispin",
+          "added_id": 1225,
+          "added_name": "Hilda",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_054",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_054\\deck.csv",
+      "sha256": "8aa1af51fb770304bcbb87aa0f0125f455ccb97f21f31da215729aa97b067c62",
+      "changes": [
+        {
+          "removed_id": 1071,
+          "removed_name": "Meowth ex",
+          "added_id": 265,
+          "added_name": "Iono’s Voltorb",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 265,
+          "removed_name": "Iono’s Voltorb",
+          "added_id": 646,
+          "added_name": "Marnie's Impidimp",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1182,
+          "removed_name": "Boss’s Orders",
+          "added_id": 1227,
+          "added_name": "Lillie's Determination",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_055",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_055\\deck.csv",
+      "sha256": "a03a08bc2663adf8e5130b818aa3e5b1c21627963bf6a427d3fbfe645f12d55b",
+      "changes": [
+        {
+          "removed_id": 1121,
+          "removed_name": "Ultra Ball",
+          "added_id": 1123,
+          "added_name": "Switch",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 140,
+          "removed_name": "Fezandipiti ex",
+          "added_id": 646,
+          "added_name": "Marnie's Impidimp",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_056",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_056\\deck.csv",
+      "sha256": "264192486578d2fcf146f743e74ad9fd445d1140d45f8864df45a83da0d4c717",
+      "changes": [
+        {
+          "removed_id": 1198,
+          "removed_name": "Crispin",
+          "added_id": 1198,
+          "added_name": "Crispin",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1098,
+          "removed_name": "Glass Trumpet",
+          "added_id": 6,
+          "added_name": "Basic {F} Energy",
+          "role_preserved": false
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_057",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_057\\deck.csv",
+      "sha256": "4e5d20e3157f74134da5e2eb480fe2d3e97e06008f288025e40f04cc51bc35ba",
+      "changes": [
+        {
+          "removed_id": 1205,
+          "removed_name": "Cyrano",
+          "added_id": 1185,
+          "added_name": "Explorer’s Guidance",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 63,
+          "removed_name": "Raging Bolt ex",
+          "added_id": 3,
+          "added_name": "Basic {W} Energy",
+          "role_preserved": false
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_058",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_058\\deck.csv",
+      "sha256": "d1c52107621d6d5e9fdc608deeba6e0ced6358262ad5c042a76aba6dcc394f3c",
+      "changes": [
+        {
+          "removed_id": 63,
+          "removed_name": "Raging Bolt ex",
+          "added_id": 722,
+          "added_name": "Snover",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 184,
+          "removed_name": "Latias ex",
+          "added_id": 677,
+          "added_name": "Riolu",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_059",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_059\\deck.csv",
+      "sha256": "6024e1c8d6a37ceb148b4b93ace7a50f17b975abc57ee861f080f8d20ead80c2",
+      "changes": [
+        {
+          "removed_id": 1116,
+          "removed_name": "Energy Switch",
+          "added_id": 1141,
+          "added_name": "Premium Power Pro",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 184,
+          "removed_name": "Latias ex",
+          "added_id": 677,
+          "added_name": "Riolu",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_060",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_060\\deck.csv",
+      "sha256": "5be248a1d8e280896d5ab3d4884d31afb33e706c8db1a6bc7ac6f829814311c7",
+      "changes": [
+        {
+          "removed_id": 96,
+          "removed_name": "Teal Mask Ogerpon ex",
+          "added_id": 3,
+          "added_name": "Basic {W} Energy",
+          "role_preserved": false
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_061",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_061\\deck.csv",
+      "sha256": "2d06d7cded04c0c2a737eb16a0cdf4a36d42297afa38ba618da818b896e9b52c",
+      "changes": [
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 3,
+          "added_name": "Basic {W} Energy",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 1116,
+          "removed_name": "Energy Switch",
+          "added_id": 1152,
+          "added_name": "Poké Pad",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_062",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_062\\deck.csv",
+      "sha256": "6bf9714e0525ca2fe7c60e5a61ef0ea1588fd4945a305a79b31c54d9a134c522",
+      "changes": [
+        {
+          "removed_id": 1197,
+          "removed_name": "Xerosic’s Machinations",
+          "added_id": 1233,
+          "added_name": "Canari",
+          "role_preserved": true
+        },
+        {
+          "removed_id": 96,
+          "removed_name": "Teal Mask Ogerpon ex",
+          "added_id": 677,
+          "added_name": "Riolu",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    },
+    {
+      "name": "candidate_063",
+      "deck": "results\\deck_search_2026-08-06\\raging_bolt_g0\\candidate_063\\deck.csv",
+      "sha256": "549a403d41059621a64c9ae865bcda6e1003e4b4c2ce33705d1b2623f42c3217",
+      "changes": [
+        {
+          "removed_id": 1198,
+          "removed_name": "Crispin",
+          "added_id": 7,
+          "added_name": "Basic {D} Energy",
+          "role_preserved": false
+        },
+        {
+          "removed_id": 1,
+          "removed_name": "Basic {G} Energy",
+          "added_id": 3,
+          "added_name": "Basic {W} Energy",
+          "role_preserved": true
+        }
+      ],
+      "legal": true
+    }
+  ]
+}

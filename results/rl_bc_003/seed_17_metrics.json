@@ -1,0 +1,583 @@
+{
+  "actual_config": {
+    "achieved_seeds": [
+      17
+    ],
+    "architecture": "structured_card_attack_deepsets_deck_masked_pointer_with_stop",
+    "attack_database": "/homes/lzhang/pocketmon/data/reference/official_attacks.json",
+    "batch_size": 512,
+    "card_database": "/homes/lzhang/pocketmon/data/reference/official_cards.json",
+    "checkpoint_dir": "/homes/lzhang/rl_bc_003_outputs/seed_17/checkpoints",
+    "code_commit": "272f90b07ba0e07f3cb943f14cce341fff0b09f0",
+    "completed_epochs": 6,
+    "confidence_threshold": 0.55,
+    "config_matched": true,
+    "config_mismatches": [],
+    "deck_map": "/homes/lzhang/pocketmon/data/processed/replay_decks_2026-08-05.jsonl.gz",
+    "device": "cuda:0",
+    "device_resolved": "cuda:0",
+    "dirty_at_start": false,
+    "early_stopped": false,
+    "epochs": 6,
+    "experiment_fingerprint": "8ae845819c360464d6de8c2375d0781f0a7da96083b5dded54b320e1209e2131",
+    "experiment_id": "RL-BC-003",
+    "full_epochs_this_run": 6,
+    "gradient_clip_norm": 1.0,
+    "hidden_dim": 192,
+    "history_encoder": false,
+    "history_length": 0,
+    "input": "/homes/lzhang/pocketmon/data/processed/public_replay_2026-08-05.jsonl.gz",
+    "input_sha256": "3aae7626d5a074301dd5a0175fac3eae9ecb15c8939d9823f7b3a05d1e6d7de4",
+    "learning_rate": 0.0003,
+    "max_batches": 0,
+    "metrics_output": "/homes/lzhang/rl_bc_003_outputs/seed_17/metrics.json",
+    "missing_seeds": [
+      42,
+      20260720
+    ],
+    "optimizer_steps": 7158,
+    "patience": 2,
+    "planned_config": "configs/rl_bc_003_structured_latest.json",
+    "policy_rows": "winner_only",
+    "resume": null,
+    "runs_output": "/homes/lzhang/rl_bc_003_outputs/seed_17/runs.csv",
+    "seed": 17,
+    "split_output": "/homes/lzhang/rl_bc_003_outputs/seed_17/split.json",
+    "split_seed": 20260720,
+    "stateless": true,
+    "structured": {
+      "attack_database_sha256": "16279a9cfb8caefbcd4a0da3255432ebb20f6a4346831415a3e6a56972dec5a8",
+      "card_attack_embeddings": true,
+      "card_database_sha256": "25543d916333d32834ac00ea6138de07f3bc74d1ee43f95993696d8aa8d09efc",
+      "confidence_threshold": 0.55,
+      "deck_conditioning": "acting_player_submitted_deck_masked_mean",
+      "deck_map_sha256": "446e93c35af8043649d9cb544c4b390eff43dc1b8616e7a90d207695345aaf4e",
+      "entity_encoder": "deepsets_masked_mean_max"
+    },
+    "validation_fraction": 0.2,
+    "value_loss_weight": 0.25,
+    "value_rows": "both_players"
+  },
+  "best_epoch": 6,
+  "best_validation_loss": 0.7433902812756441,
+  "checkpoint": {
+    "bytes": 6405791,
+    "path": "/homes/lzhang/rl_bc_003_outputs/seed_17/checkpoints/seed_17_best.pt",
+    "sha256": "c267d10d67ebe1470e3e135da59ee897315a7500391afbfc51f8b4500ed54b39"
+  },
+  "dataset_audit": {
+    "deck_map": {
+      "bytes": 321891,
+      "enabled": true,
+      "entries": 9480,
+      "episodes": 4740,
+      "path": "/homes/lzhang/pocketmon/data/processed/replay_decks_2026-08-05.jsonl.gz",
+      "sha256": "446e93c35af8043649d9cb544c4b390eff43dc1b8616e7a90d207695345aaf4e"
+    },
+    "empty_action_rows": 2952,
+    "episodes": 4740,
+    "forbidden_model_fields_used": [],
+    "history": {
+      "enabled": false,
+      "max_length": 0
+    },
+    "input": "/homes/lzhang/pocketmon/data/processed/public_replay_2026-08-05.jsonl.gz",
+    "input_bytes": 181495959,
+    "input_sha256": "3aae7626d5a074301dd5a0175fac3eae9ecb15c8939d9823f7b3a05d1e6d7de4",
+    "invalid_rows": 0,
+    "model_input_fields": [
+      "episode.acting_player_submitted_deck",
+      "observation.current.visible_card_entities",
+      "observation.current.visible_state",
+      "observation.select.maxCount",
+      "observation.select.minCount",
+      "observation.select.option",
+      "observation.select.option.card_attack_identity",
+      "observation.select.type",
+      "observation.select.visible_card_entities"
+    ],
+    "multi_select_rows": 38798,
+    "observation_logs_rows": 0,
+    "policy_rows": 393043,
+    "readable_rows": 760912,
+    "schema_version": 2,
+    "skipped_rows": 0,
+    "structured": true,
+    "unsupported_rows": 0,
+    "value_rows": 760912
+  },
+  "epochs_completed": 6,
+  "experiment_fingerprint_payload": {
+    "architecture": "structured_card_attack_deepsets_deck_masked_pointer_with_stop",
+    "code_commit": "272f90b07ba0e07f3cb943f14cce341fff0b09f0",
+    "experiment_id": "RL-BC-003",
+    "history": {
+      "enabled": false,
+      "encoder": "none",
+      "max_length": 0
+    },
+    "initialization": "random",
+    "input_sha256": "3aae7626d5a074301dd5a0175fac3eae9ecb15c8939d9823f7b3a05d1e6d7de4",
+    "offline_rl": false,
+    "split": {
+      "seed": 20260720,
+      "validation_fraction": 0.2
+    },
+    "structured": {
+      "attack_database_sha256": "16279a9cfb8caefbcd4a0da3255432ebb20f6a4346831415a3e6a56972dec5a8",
+      "card_attack_embeddings": true,
+      "card_database_sha256": "25543d916333d32834ac00ea6138de07f3bc74d1ee43f95993696d8aa8d09efc",
+      "confidence_threshold": 0.55,
+      "deck_conditioning": "acting_player_submitted_deck_masked_mean",
+      "deck_map_sha256": "446e93c35af8043649d9cb544c4b390eff43dc1b8616e7a90d207695345aaf4e",
+      "entity_encoder": "deepsets_masked_mean_max"
+    },
+    "training": {
+      "batch_size": 512,
+      "epochs": 6,
+      "gradient_clip_norm": 1.0,
+      "hidden_dim": 192,
+      "learning_rate": 0.0003,
+      "patience": 2,
+      "value_loss_weight": 0.25
+    }
+  },
+  "experiment_id": "RL-BC-003",
+  "failures": [],
+  "full_epochs_this_run": 6,
+  "missing_seeds": [
+    42,
+    20260720
+  ],
+  "partial_run": false,
+  "peak_ram_mb": 21033.7109375,
+  "peak_vram_mb": 2208.6416015625,
+  "planned_config": {
+    "architecture": "structured_card_attack_deepsets_deck_masked_pointer_with_stop",
+    "arm": "structured-latest-public-replays",
+    "experiment_id": "RL-BC-003",
+    "history": {
+      "enabled": false,
+      "encoder": "none",
+      "max_length": 0
+    },
+    "input": "data/processed/public_replay_2026-08-05.jsonl.gz",
+    "input_sha256": "3aae7626d5a074301dd5a0175fac3eae9ecb15c8939d9823f7b3a05d1e6d7de4",
+    "offline_rl": false,
+    "policy_loss_rows": "policy_weight == 1 only",
+    "random_initialization": true,
+    "split": {
+      "kind": "episode_id",
+      "seed": 20260720,
+      "train_fraction": 0.8,
+      "validation_fraction": 0.2
+    },
+    "structured": {
+      "attack_database_sha256": "16279a9cfb8caefbcd4a0da3255432ebb20f6a4346831415a3e6a56972dec5a8",
+      "card_attack_embeddings": true,
+      "card_database_sha256": "25543d916333d32834ac00ea6138de07f3bc74d1ee43f95993696d8aa8d09efc",
+      "confidence_threshold": 0.55,
+      "deck_conditioning": "acting_player_submitted_deck_masked_mean",
+      "deck_map_sha256": "446e93c35af8043649d9cb544c4b390eff43dc1b8616e7a90d207695345aaf4e",
+      "entity_encoder": "deepsets_masked_mean_max"
+    },
+    "training": {
+      "batch_size": 512,
+      "early_stopping_patience": 2,
+      "epochs": 6,
+      "formal_seeds": [
+        17,
+        42,
+        20260720
+      ],
+      "gradient_clip_norm": 1.0,
+      "hidden_dim": 192,
+      "learning_rate": 0.0003,
+      "value_loss_weight": 0.25
+    },
+    "value_loss_rows": "value_weight == 1 for both players"
+  },
+  "provenance": {
+    "dirty": false,
+    "experiment_fingerprint": "8ae845819c360464d6de8c2375d0781f0a7da96083b5dded54b320e1209e2131",
+    "git_sha": "272f90b07ba0e07f3cb943f14cce341fff0b09f0",
+    "input_sha256": "3aae7626d5a074301dd5a0175fac3eae9ecb15c8939d9823f7b3a05d1e6d7de4"
+  },
+  "runtime_seconds": 1944.84390950948,
+  "split": {
+    "episode_overlap": [],
+    "policy_rows": 393043,
+    "rows": 760912,
+    "split_seed": 20260720,
+    "train_episodes": 3792,
+    "validation_episodes": 948,
+    "validation_fraction": 0.2,
+    "value_rows": 760912
+  },
+  "status": "partial_formal",
+  "train_rows": 610613,
+  "training_state": {
+    "best_checkpoint_path": "/homes/lzhang/rl_bc_003_outputs/seed_17/checkpoints/seed_17_best.pt",
+    "best_epoch": 6,
+    "best_loss": 0.7433902812756441,
+    "completed_epochs": 6,
+    "history": [
+      {
+        "epoch": 1,
+        "full_epoch": true,
+        "max_batches": 0,
+        "train": {
+          "batches": 1193,
+          "loss": 0.8748036299119529,
+          "policy_loss": 0.6890660238970233,
+          "policy_steps": 656374,
+          "value_loss": 0.7429504240597186,
+          "value_rows": 610613
+        },
+        "validation": {
+          "batches": 294,
+          "loss": 0.8408366239745505,
+          "policy_loss": 0.6512107984600419,
+          "policy_steps": 161903,
+          "value_loss": 0.7585033020580344,
+          "value_rows": 150299
+        }
+      },
+      {
+        "epoch": 2,
+        "full_epoch": true,
+        "max_batches": 0,
+        "train": {
+          "batches": 1193,
+          "loss": 0.7752057913242297,
+          "policy_loss": 0.6156527720868474,
+          "policy_steps": 656374,
+          "value_loss": 0.6382120769495291,
+          "value_rows": 610613
+        },
+        "validation": {
+          "batches": 294,
+          "loss": 0.7976693472386855,
+          "policy_loss": 0.6065876277119826,
+          "policy_steps": 161903,
+          "value_loss": 0.7643268781068117,
+          "value_rows": 150299
+        }
+      },
+      {
+        "epoch": 3,
+        "full_epoch": true,
+        "max_batches": 0,
+        "train": {
+          "batches": 1193,
+          "loss": 0.7219154111328694,
+          "policy_loss": 0.5757366000103825,
+          "policy_steps": 656374,
+          "value_loss": 0.5847152444899474,
+          "value_rows": 610613
+        },
+        "validation": {
+          "batches": 294,
+          "loss": 0.7668426378999036,
+          "policy_loss": 0.5762087689184819,
+          "policy_steps": 161903,
+          "value_loss": 0.7625354759256867,
+          "value_rows": 150299
+        }
+      },
+      {
+        "epoch": 4,
+        "full_epoch": true,
+        "max_batches": 0,
+        "train": {
+          "batches": 1193,
+          "loss": 0.683455957499429,
+          "policy_loss": 0.5486111186173399,
+          "policy_steps": 656374,
+          "value_loss": 0.5393793555283565,
+          "value_rows": 610613
+        },
+        "validation": {
+          "batches": 294,
+          "loss": 0.7565022812636776,
+          "policy_loss": 0.5616005210423846,
+          "policy_steps": 161903,
+          "value_loss": 0.7796070408851722,
+          "value_rows": 150299
+        }
+      },
+      {
+        "epoch": 5,
+        "full_epoch": true,
+        "max_batches": 0,
+        "train": {
+          "batches": 1193,
+          "loss": 0.654547656901634,
+          "policy_loss": 0.5287298891273782,
+          "policy_steps": 656374,
+          "value_loss": 0.5032710710970232,
+          "value_rows": 610613
+        },
+        "validation": {
+          "batches": 294,
+          "loss": 0.7497245187041126,
+          "policy_loss": 0.5501541134208192,
+          "policy_steps": 161903,
+          "value_loss": 0.7982816211331734,
+          "value_rows": 150299
+        }
+      },
+      {
+        "epoch": 6,
+        "full_epoch": true,
+        "max_batches": 0,
+        "train": {
+          "batches": 1193,
+          "loss": 0.6313313524050684,
+          "policy_loss": 0.5137195597212572,
+          "policy_steps": 656374,
+          "value_loss": 0.470447170735245,
+          "value_rows": 610613
+        },
+        "validation": {
+          "batches": 294,
+          "loss": 0.7433902812756441,
+          "policy_loss": 0.5373564221866739,
+          "policy_steps": 161903,
+          "value_loss": 0.8241354363558808,
+          "value_rows": 150299
+        }
+      }
+    ],
+    "optimizer_steps": 7158,
+    "partial_history": [],
+    "stale": 0
+  },
+  "validation": {
+    "by_select": {
+      "context:0": {
+        "rows": 41105,
+        "sequence_exact_match": 0.5490329643595669,
+        "set_exact_match": 0.5490329643595669
+      },
+      "context:1": {
+        "rows": 947,
+        "sequence_exact_match": 0.9514255543822597,
+        "set_exact_match": 0.9514255543822597
+      },
+      "context:13": {
+        "rows": 1779,
+        "sequence_exact_match": 0.48285553681843735,
+        "set_exact_match": 0.48285553681843735
+      },
+      "context:14": {
+        "rows": 1116,
+        "sequence_exact_match": 0.5940860215053764,
+        "set_exact_match": 0.5940860215053764
+      },
+      "context:15": {
+        "rows": 1068,
+        "sequence_exact_match": 0.5552434456928839,
+        "set_exact_match": 0.5580524344569289
+      },
+      "context:16": {
+        "rows": 1779,
+        "sequence_exact_match": 0.642495784148398,
+        "set_exact_match": 0.642495784148398
+      },
+      "context:17": {
+        "rows": 236,
+        "sequence_exact_match": 0.8686440677966102,
+        "set_exact_match": 0.8686440677966102
+      },
+      "context:18": {
+        "rows": 2,
+        "sequence_exact_match": 1.0,
+        "set_exact_match": 1.0
+      },
+      "context:19": {
+        "rows": 27,
+        "sequence_exact_match": 0.8148148148148148,
+        "set_exact_match": 0.8148148148148148
+      },
+      "context:2": {
+        "rows": 422,
+        "sequence_exact_match": 0.5971563981042654,
+        "set_exact_match": 0.6137440758293838
+      },
+      "context:21": {
+        "rows": 1902,
+        "sequence_exact_match": 0.650893796004206,
+        "set_exact_match": 0.650893796004206
+      },
+      "context:22": {
+        "rows": 1983,
+        "sequence_exact_match": 0.8224911749873929,
+        "set_exact_match": 0.8300554715078164
+      },
+      "context:26": {
+        "rows": 33,
+        "sequence_exact_match": 0.15151515151515152,
+        "set_exact_match": 0.24242424242424243
+      },
+      "context:27": {
+        "rows": 49,
+        "sequence_exact_match": 0.8571428571428571,
+        "set_exact_match": 0.8979591836734694
+      },
+      "context:28": {
+        "rows": 32,
+        "sequence_exact_match": 0.5,
+        "set_exact_match": 0.5
+      },
+      "context:3": {
+        "rows": 1869,
+        "sequence_exact_match": 0.6779026217228464,
+        "set_exact_match": 0.6779026217228464
+      },
+      "context:30": {
+        "rows": 1048,
+        "sequence_exact_match": 0.9093511450381679,
+        "set_exact_match": 0.9093511450381679
+      },
+      "context:32": {
+        "rows": 15,
+        "sequence_exact_match": 0.8666666666666667,
+        "set_exact_match": 0.8666666666666667
+      },
+      "context:33": {
+        "rows": 43,
+        "sequence_exact_match": 0.5813953488372093,
+        "set_exact_match": 0.5813953488372093
+      },
+      "context:34": {
+        "rows": 398,
+        "sequence_exact_match": 0.8819095477386935,
+        "set_exact_match": 1.0
+      },
+      "context:35": {
+        "rows": 111,
+        "sequence_exact_match": 0.9819819819819819,
+        "set_exact_match": 0.9819819819819819
+      },
+      "context:37": {
+        "rows": 400,
+        "sequence_exact_match": 0.95,
+        "set_exact_match": 0.95
+      },
+      "context:38": {
+        "rows": 246,
+        "sequence_exact_match": 0.959349593495935,
+        "set_exact_match": 0.959349593495935
+      },
+      "context:4": {
+        "rows": 1697,
+        "sequence_exact_match": 0.8043606364172068,
+        "set_exact_match": 0.8043606364172068
+      },
+      "context:40": {
+        "rows": 1678,
+        "sequence_exact_match": 0.9928486293206198,
+        "set_exact_match": 0.9928486293206198
+      },
+      "context:41": {
+        "rows": 512,
+        "sequence_exact_match": 1.0,
+        "set_exact_match": 1.0
+      },
+      "context:43": {
+        "rows": 1822,
+        "sequence_exact_match": 0.9681668496158068,
+        "set_exact_match": 0.9681668496158068
+      },
+      "context:5": {
+        "rows": 1301,
+        "sequence_exact_match": 0.6310530361260569,
+        "set_exact_match": 0.6856264411990777
+      },
+      "context:7": {
+        "rows": 12744,
+        "sequence_exact_match": 0.6658819836785939,
+        "set_exact_match": 0.6751412429378532
+      },
+      "context:8": {
+        "rows": 1137,
+        "sequence_exact_match": 0.2647317502198769,
+        "set_exact_match": 0.34212840809146877
+      },
+      "context:9": {
+        "rows": 144,
+        "sequence_exact_match": 0.1736111111111111,
+        "set_exact_match": 0.625
+      },
+      "type:0": {
+        "rows": 41105,
+        "sequence_exact_match": 0.5490329643595669,
+        "set_exact_match": 0.5490329643595669
+      },
+      "type:1": {
+        "rows": 30153,
+        "sequence_exact_match": 0.6557888104002918,
+        "set_exact_match": 0.6679600703080953
+      },
+      "type:2": {
+        "rows": 114,
+        "sequence_exact_match": 0.5526315789473685,
+        "set_exact_match": 0.5964912280701754
+      },
+      "type:4": {
+        "rows": 1106,
+        "sequence_exact_match": 0.8960216998191681,
+        "set_exact_match": 0.8960216998191681
+      },
+      "type:5": {
+        "rows": 398,
+        "sequence_exact_match": 0.8819095477386935,
+        "set_exact_match": 1.0
+      },
+      "type:6": {
+        "rows": 111,
+        "sequence_exact_match": 0.9819819819819819,
+        "set_exact_match": 0.9819819819819819
+      },
+      "type:7": {
+        "rows": 400,
+        "sequence_exact_match": 0.95,
+        "set_exact_match": 0.95
+      },
+      "type:8": {
+        "rows": 1924,
+        "sequence_exact_match": 0.9885654885654885,
+        "set_exact_match": 0.9885654885654885
+      },
+      "type:9": {
+        "rows": 2334,
+        "sequence_exact_match": 0.9751499571550986,
+        "set_exact_match": 0.9751499571550986
+      }
+    },
+    "candidate_precision": 0.6542714400719799,
+    "candidate_recall": 0.655902110185383,
+    "decode_legal_rate": 1.0,
+    "decoded_rows": 150299,
+    "empty_action_accuracy": 0.3303834808259587,
+    "empty_action_rows": 339,
+    "invalid_actions": 0,
+    "multi_select_accuracy": 0.5284817484305976,
+    "multi_select_rows": 4301,
+    "policy_rows": 77645,
+    "sequence_exact_match": 0.6235301693605513,
+    "set_exact_match": 0.6289265245669393,
+    "single_select_accuracy": 0.6310874007433109,
+    "single_select_rows": 72917
+  },
+  "validation_loss": {
+    "batches": 294,
+    "loss": 0.7433902812756441,
+    "policy_loss": 0.5373564221866739,
+    "policy_steps": 161903,
+    "value_loss": 0.8241354363558808,
+    "value_rows": 150299
+  },
+  "validation_rows": 150299
+}

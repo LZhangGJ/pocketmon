@@ -1,0 +1,6 @@
+[
+  {"name": "library_out_1208", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/library_out"},
+  {"name": "dragapult", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/dragapult"},
+  {"name": "probabilistic", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/probabilistic"},
+  {"name": "grim_hybrid_909", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/grim_hybrid_909"}
+]

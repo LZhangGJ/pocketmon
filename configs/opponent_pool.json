@@ -9,5 +9,6 @@
   {"name": "lucario_1084", "agent_dir": "tmp/benchmark_agents/lucario_original", "source": "makthanithin/pokemon-tcg-ai-battle-1084-5-baseline"},
   {"name": "probabilistic", "agent_dir": "tmp/benchmark_agents/probabilistic", "source": "aristophanivan/improved-probabilistic-agent"},
   {"name": "beam_search_940", "agent_dir": "tmp/benchmark_agents/beam_search_940", "source": "aristophanivan/multiply-agent-best-940-lb"},
+  {"name": "grim_hybrid_909", "agent_dir": "tmp/benchmark_agents/grim_hybrid_909", "source": "tetsutani/grimmsnarl-ex-damage-transfer-control"},
   {"name": "simple_matchup", "agent_dir": "tmp/benchmark_agents/simple_matchup", "source": "kojimar/simple-baseline-matchup-tests"}
 ]

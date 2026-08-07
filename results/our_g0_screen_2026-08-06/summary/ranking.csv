@@ -1,0 +1,4 @@
+rank,learner,games,wins,losses,draws,failures,win_rate,score_rate,win_wilson_lower,failure_rate,worst_opponent,worst_score_rate
+1,our_lopunny_froslass_g0,52,19,33,0,0,0.36538461538461536,0.36538461538461536,0.24800699873813398,0.0,archaludon,0.0
+2,our_dragapult_munkidori_g0,52,15,37,0,0,0.28846153846153844,0.28846153846153844,0.18329960414709912,0.0,beam_search_940,0.0
+3,our_raging_bolt_g0,52,6,46,0,0,0.11538461538461539,0.11538461538461539,0.053969692030872964,0.0,beam_search_940,0.0

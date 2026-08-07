@@ -1,0 +1,19 @@
+{
+  "generated_at": "2026-08-06T08:38:33.955441+00:00",
+  "path": "data\\processed\\public_replay_2026-08-05.jsonl.gz",
+  "bytes": 181495959,
+  "sha256": "3aae7626d5a074301dd5a0175fac3eae9ecb15c8939d9823f7b3a05d1e6d7de4",
+  "rows": 760912,
+  "episodes": 4740,
+  "schema_versions": {
+    "2": 760912
+  },
+  "outcomes": {
+    "1.0": 393043,
+    "-1.0": 367393,
+    "0.0": 476
+  },
+  "policy_rows": 393043,
+  "value_rows": 760912,
+  "observations_with_logs": 0
+}

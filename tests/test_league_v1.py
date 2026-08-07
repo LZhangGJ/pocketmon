@@ -1,6 +1,6 @@
 import unittest
 
-from scripts.league_v1 import build_schedule, evaluate, wilson_lower
+from scripts.league_v1 import build_named_schedule, build_schedule, evaluate, wilson_lower
 
 
 class LeagueV1Tests(unittest.TestCase):
@@ -14,6 +14,11 @@ class LeagueV1Tests(unittest.TestCase):
     def test_wilson_is_conservative(self):
         self.assertLess(wilson_lower(60, 100), 0.60)
         self.assertGreater(wilson_lower(300, 400), 0.70)
+
+    def test_named_confirmation_schedule(self):
+        rows = build_named_schedule(["a", "b"], ["x"], 4, 9)
+        self.assertEqual(len(rows), 8)
+        self.assertEqual({row.learner for row in rows}, {"a", "b"})
 
     def test_all_ten_must_pass(self):
         config = {"evaluation": {"min_public_win_rate": .6, "min_lower_wilson_bound": .5, "max_failure_rate": 0}, "promotion": {"required_qualified_learners": 10}}

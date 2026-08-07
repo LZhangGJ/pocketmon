@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-08-06T07:32:46.706018+00:00",
+  "card_count": 1267,
+  "attack_count": 1556,
+  "source": "official cg SDK all_card_data()/all_attack()",
+  "sdk_sha256": {
+    "api.py": "593f1298e52a635f90f8f505a52113e9af114f444c293404e37906f18ee06ced",
+    "cg.dll": "a3a401d0f5ccc3474b9c8a7a2431920c4b728d28105a510aa6927ad6283e5cf7",
+    "game.py": "3bd3d4f4a369a11e6d2f5da9094cf15ebc410a2221835e6417b7cff4883f1fc2",
+    "libcg-arm64.so": "116750365a1043f0d95e200bb283c042753cdbd44c7d16331827ad0a44df0553",
+    "libcg.dylib": "00154aee7d3071451096c929c52da9f9af360a2821e686671097f5011e5a5d95",
+    "libcg.so": "feafd4046b2f688bdb33a4972c139b78e13e243ab5707ece52c43cf39a34b887",
+    "sim.py": "1555f57f5d22bf4c09d70e0e667a916e575e68c9dd1de9ead34ba5e7e4968655",
+    "utils.py": "60f29665cee0a88525d6f0383bc45959a6262d16fe35ef380aece1e0ea13c49b",
+    "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

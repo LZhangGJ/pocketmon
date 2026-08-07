@@ -30,11 +30,16 @@ def wilson_lower(wins: int, games: int, z: float = 1.959963984540054) -> float:
 def build_schedule(learners: int, opponents: list[str], games: int, seed: int) -> list[Matchup]:
     if learners != 10:
         raise ValueError("League-v1 requires exactly 10 learners")
+    return build_named_schedule([f"learner_{index:02d}" for index in range(learners)], opponents, games, seed)
+
+
+def build_named_schedule(learners: list[str], opponents: list[str], games: int, seed: int) -> list[Matchup]:
+    if not learners or len(learners) != len(set(learners)):
+        raise ValueError("learner names must be non-empty and unique")
     if games < 2 or games % 2:
         raise ValueError("games_per_pair must be a positive even number")
     rows = []
-    for learner_index in range(learners):
-        learner = f"learner_{learner_index:02d}"
+    for learner_index, learner in enumerate(learners):
         for opponent_index, opponent in enumerate(opponents):
             pair_seed = seed + learner_index * 1_000_000 + opponent_index * 10_000
             for pair in range(games // 2):
@@ -79,6 +84,8 @@ def main() -> None:
     parser.add_argument("--schedule")
     parser.add_argument("--results")
     parser.add_argument("--report")
+    parser.add_argument("--games-per-pair", type=int, help="Override the configured gate size for a smoke/screen round")
+    parser.add_argument("--learners-manifest", type=Path, help="Optional named learner manifest for a narrowed confirmation round")
     args = parser.parse_args()
     config = json.loads(Path(args.config).read_text(encoding="utf-8"))
     if args.results:
@@ -91,8 +98,16 @@ def main() -> None:
         return
     snapshot_path = Path(args.snapshot or config["opponent_snapshot"])
     snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
-    opponents = [item["name"] for item in snapshot["agents"] if item["status"] == "accepted"]
-    schedule = build_schedule(config["learners"], opponents, config["evaluation"]["games_per_pair"], config["base_seed"])
+    items = snapshot.get("agents", []) if isinstance(snapshot, dict) else snapshot
+    opponents = [item["name"] for item in items if item.get("status", "accepted") == "accepted"]
+    games_per_pair = args.games_per_pair or config["evaluation"]["games_per_pair"]
+    if args.learners_manifest:
+        learner_payload = json.loads(args.learners_manifest.read_text(encoding="utf-8"))
+        learner_items = learner_payload.get("agents", []) if isinstance(learner_payload, dict) else learner_payload
+        learner_names = [item["name"] for item in learner_items if item.get("status", "accepted") == "accepted"]
+        schedule = build_named_schedule(learner_names, opponents, games_per_pair, config["base_seed"])
+    else:
+        schedule = build_schedule(config["learners"], opponents, games_per_pair, config["base_seed"])
     output = Path(args.schedule or "results/league_v1_schedule.csv")
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("w", newline="", encoding="utf-8") as handle:

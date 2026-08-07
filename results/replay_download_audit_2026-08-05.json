@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-08-06T07:57:33.605322+00:00",
+  "source": "kaggle/pokemon-tcg-ai-battle-episodes-2026-08-05",
+  "snapshot_date": "2026-08-05",
+  "manifest_rows": 4743,
+  "json_files": 4740,
+  "missing_manifest_rows": [
+    {
+      "episode_id": "90161497",
+      "create_time": "2026-08-05T11:24:56.8614605",
+      "avg_score": "1083.636218",
+      "min_score": "1057.952260",
+      "sum_score": "2167.272435",
+      "agent_count": "2",
+      "size_bytes": "4083176"
+    },
+    {
+      "episode_id": "90144162",
+      "create_time": "2026-08-05T09:44:53.6652255",
+      "avg_score": "1038.006368",
+      "min_score": "1031.156960",
+      "sum_score": "2076.012736",
+      "agent_count": "2",
+      "size_bytes": "3717660"
+    },
+    {
+      "episode_id": "90197034",
+      "create_time": "2026-08-05T14:48:55.4502162",
+      "avg_score": "1024.453970",
+      "min_score": "992.450800",
+      "sum_score": "2048.907939",
+      "agent_count": "2",
+      "size_bytes": "4272912"
+    }
+  ],
+  "missing_individual_download_result": "404 Not Found after 3 retries for first missing ID; full dataset archive contains the same 4740 files",
+  "size_mismatches": [],
+  "manifest_bytes": 21473341110,
+  "available_file_bytes": 21461267362,
+  "usable_fraction": 0.9993674889310563
+}

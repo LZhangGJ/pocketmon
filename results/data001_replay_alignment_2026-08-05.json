@@ -1,0 +1,487 @@
+{
+  "experiment_id": "DATA-001",
+  "generated_at": "2026-08-06T07:55:18.992251+00:00",
+  "input_root": "data\\raw\\replays",
+  "date": "2026-08-05",
+  "files_selected": 4740,
+  "files_loaded": 4740,
+  "load_errors": [],
+  "action_storage_model": {
+    "action": "steps[t].action",
+    "paired_observation": "steps[t-1].observation",
+    "submission_status": "steps[t-1].status",
+    "post_action_status": "steps[t].status"
+  },
+  "alignments": {
+    "previous": {
+      "alignment": "previous",
+      "status_source": "steps[action_step-1].status",
+      "recorded_actions": 1540795,
+      "actions": 770392,
+      "initial_actions_skipped": 9480,
+      "non_acting_actions_skipped": 760923,
+      "unknown_submission_status_skipped": 0,
+      "empty_actions": 2952,
+      "valid_empty_decisions": 2952,
+      "invalid_empty_decisions": 0,
+      "valid_decisions": 760912,
+      "setup_actions": 9480,
+      "invalid_decisions": 0,
+      "valid_rate": 1.0,
+      "reasons": {
+        "deck_submission": 9480,
+        "valid": 760912
+      },
+      "examples": []
+    },
+    "same": {
+      "alignment": "same",
+      "status_source": "steps[action_step-1].status",
+      "recorded_actions": 1540795,
+      "actions": 770392,
+      "initial_actions_skipped": 9480,
+      "non_acting_actions_skipped": 760923,
+      "unknown_submission_status_skipped": 0,
+      "empty_actions": 2952,
+      "valid_empty_decisions": 852,
+      "invalid_empty_decisions": 2100,
+      "valid_decisions": 596456,
+      "setup_actions": 4740,
+      "invalid_decisions": 169196,
+      "valid_rate": 0.7790170991520952,
+      "reasons": {
+        "deck_submission": 4740,
+        "option_index_out_of_range": 121786,
+        "selection_count_out_of_bounds": 47410,
+        "valid": 596456
+      },
+      "examples": [
+        {
+          "episode_id": "90044498",
+          "player": 0,
+          "action_step": 1,
+          "observation_step": 1,
+          "action": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            18,
+            18,
+            96,
+            96,
+            96,
+            96,
+            1094,
+            1094,
+            1094,
+            1094,
+            1118,
+            1118,
+            1119,
+            1119,
+            1119,
+            1119,
+            1122,
+            1122,
+            1122,
+            1127,
+            1127,
+            1137,
+            1147,
+            1147,
+            1159,
+            1182,
+            1182,
+            1182,
+            1201,
+            1213,
+            1213,
+            1213,
+            1213,
+            1221,
+            1223,
+            1223,
+            1227,
+            1227,
+            1227,
+            1227,
+            1251,
+            1251
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "selection_count_out_of_bounds",
+          "option_count": 2,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 1,
+          "action_step": 5,
+          "observation_step": 5,
+          "action": [
+            1
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 1,
+          "min_count": 0,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 0,
+          "action_step": 7,
+          "observation_step": 7,
+          "action": [
+            3
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 1,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 0,
+          "action_step": 13,
+          "observation_step": 13,
+          "action": [
+            0,
+            1
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "selection_count_out_of_bounds",
+          "option_count": 8,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 0,
+          "action_step": 14,
+          "observation_step": 14,
+          "action": [
+            5
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 2,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 1,
+          "action_step": 23,
+          "observation_step": 23,
+          "action": [
+            0,
+            1
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "selection_count_out_of_bounds",
+          "option_count": 10,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 1,
+          "action_step": 25,
+          "observation_step": 25,
+          "action": [
+            0,
+            2
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "selection_count_out_of_bounds",
+          "option_count": 9,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 1,
+          "action_step": 29,
+          "observation_step": 29,
+          "action": [
+            1
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 1,
+          "min_count": 0,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 0,
+          "action_step": 33,
+          "observation_step": 33,
+          "action": [
+            7
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 2,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 0,
+          "action_step": 35,
+          "observation_step": 35,
+          "action": [
+            7
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 1,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 0,
+          "action_step": 37,
+          "observation_step": 37,
+          "action": [
+            5
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 1,
+          "min_count": 0,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 0,
+          "action_step": 42,
+          "observation_step": 42,
+          "action": [
+            5
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 1,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 0,
+          "action_step": 47,
+          "observation_step": 47,
+          "action": [
+            4
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 1,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 1,
+          "action_step": 53,
+          "observation_step": 53,
+          "action": [
+            7
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 2,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 1,
+          "action_step": 59,
+          "observation_step": 59,
+          "action": [
+            16
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 2,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 1,
+          "action_step": 61,
+          "observation_step": 61,
+          "action": [
+            10
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 1,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 1,
+          "action_step": 68,
+          "observation_step": 68,
+          "action": [
+            4
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 2,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 1,
+          "action_step": 72,
+          "observation_step": 72,
+          "action": [
+            2
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 2,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 1,
+          "action_step": 74,
+          "observation_step": 74,
+          "action": [
+            2
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 1,
+          "min_count": 1,
+          "max_count": 1
+        },
+        {
+          "episode_id": "90044498",
+          "player": 0,
+          "action_step": 77,
+          "observation_step": 77,
+          "action": [
+            8
+          ],
+          "submission_status": "ACTIVE",
+          "action_status": "ACTIVE",
+          "observation_status": "ACTIVE",
+          "valid": false,
+          "kind": "invalid",
+          "reason": "option_index_out_of_range",
+          "option_count": 1,
+          "min_count": 1,
+          "max_count": 1
+        }
+      ]
+    }
+  },
+  "recommended_alignment": "previous",
+  "min_valid_rate": 0.999,
+  "gate_passed": true
+}

@@ -1,0 +1,583 @@
+{
+  "actual_config": {
+    "achieved_seeds": [
+      20260720
+    ],
+    "architecture": "structured_card_attack_deepsets_deck_masked_pointer_with_stop",
+    "attack_database": "/homes/lzhang/pocketmon/data/reference/official_attacks.json",
+    "batch_size": 512,
+    "card_database": "/homes/lzhang/pocketmon/data/reference/official_cards.json",
+    "checkpoint_dir": "/homes/lzhang/rl_bc_003_outputs/seed_20260720/checkpoints",
+    "code_commit": "272f90b07ba0e07f3cb943f14cce341fff0b09f0",
+    "completed_epochs": 6,
+    "confidence_threshold": 0.55,
+    "config_matched": true,
+    "config_mismatches": [],
+    "deck_map": "/homes/lzhang/pocketmon/data/processed/replay_decks_2026-08-05.jsonl.gz",
+    "device": "cuda:0",
+    "device_resolved": "cuda:0",
+    "dirty_at_start": false,
+    "early_stopped": false,
+    "epochs": 6,
+    "experiment_fingerprint": "8ae845819c360464d6de8c2375d0781f0a7da96083b5dded54b320e1209e2131",
+    "experiment_id": "RL-BC-003",
+    "full_epochs_this_run": 6,
+    "gradient_clip_norm": 1.0,
+    "hidden_dim": 192,
+    "history_encoder": false,
+    "history_length": 0,
+    "input": "/homes/lzhang/pocketmon/data/processed/public_replay_2026-08-05.jsonl.gz",
+    "input_sha256": "3aae7626d5a074301dd5a0175fac3eae9ecb15c8939d9823f7b3a05d1e6d7de4",
+    "learning_rate": 0.0003,
+    "max_batches": 0,
+    "metrics_output": "/homes/lzhang/rl_bc_003_outputs/seed_20260720/metrics.json",
+    "missing_seeds": [
+      17,
+      42
+    ],
+    "optimizer_steps": 7158,
+    "patience": 2,
+    "planned_config": "configs/rl_bc_003_structured_latest.json",
+    "policy_rows": "winner_only",
+    "resume": null,
+    "runs_output": "/homes/lzhang/rl_bc_003_outputs/seed_20260720/runs.csv",
+    "seed": 20260720,
+    "split_output": "/homes/lzhang/rl_bc_003_outputs/seed_20260720/split.json",
+    "split_seed": 20260720,
+    "stateless": true,
+    "structured": {
+      "attack_database_sha256": "16279a9cfb8caefbcd4a0da3255432ebb20f6a4346831415a3e6a56972dec5a8",
+      "card_attack_embeddings": true,
+      "card_database_sha256": "25543d916333d32834ac00ea6138de07f3bc74d1ee43f95993696d8aa8d09efc",
+      "confidence_threshold": 0.55,
+      "deck_conditioning": "acting_player_submitted_deck_masked_mean",
+      "deck_map_sha256": "446e93c35af8043649d9cb544c4b390eff43dc1b8616e7a90d207695345aaf4e",
+      "entity_encoder": "deepsets_masked_mean_max"
+    },
+    "validation_fraction": 0.2,
+    "value_loss_weight": 0.25,
+    "value_rows": "both_players"
+  },
+  "best_epoch": 6,
+  "best_validation_loss": 0.7426027893171265,
+  "checkpoint": {
+    "bytes": 6406791,
+    "path": "/homes/lzhang/rl_bc_003_outputs/seed_20260720/checkpoints/seed_20260720_best.pt",
+    "sha256": "dcece27e2e8a22775a50db80541ee7a882759e6bebb1636c85ace72e61c407e8"
+  },
+  "dataset_audit": {
+    "deck_map": {
+      "bytes": 321891,
+      "enabled": true,
+      "entries": 9480,
+      "episodes": 4740,
+      "path": "/homes/lzhang/pocketmon/data/processed/replay_decks_2026-08-05.jsonl.gz",
+      "sha256": "446e93c35af8043649d9cb544c4b390eff43dc1b8616e7a90d207695345aaf4e"
+    },
+    "empty_action_rows": 2952,
+    "episodes": 4740,
+    "forbidden_model_fields_used": [],
+    "history": {
+      "enabled": false,
+      "max_length": 0
+    },
+    "input": "/homes/lzhang/pocketmon/data/processed/public_replay_2026-08-05.jsonl.gz",
+    "input_bytes": 181495959,
+    "input_sha256": "3aae7626d5a074301dd5a0175fac3eae9ecb15c8939d9823f7b3a05d1e6d7de4",
+    "invalid_rows": 0,
+    "model_input_fields": [
+      "episode.acting_player_submitted_deck",
+      "observation.current.visible_card_entities",
+      "observation.current.visible_state",
+      "observation.select.maxCount",
+      "observation.select.minCount",
+      "observation.select.option",
+      "observation.select.option.card_attack_identity",
+      "observation.select.type",
+      "observation.select.visible_card_entities"
+    ],
+    "multi_select_rows": 38798,
+    "observation_logs_rows": 0,
+    "policy_rows": 393043,
+    "readable_rows": 760912,
+    "schema_version": 2,
+    "skipped_rows": 0,
+    "structured": true,
+    "unsupported_rows": 0,
+    "value_rows": 760912
+  },
+  "epochs_completed": 6,
+  "experiment_fingerprint_payload": {
+    "architecture": "structured_card_attack_deepsets_deck_masked_pointer_with_stop",
+    "code_commit": "272f90b07ba0e07f3cb943f14cce341fff0b09f0",
+    "experiment_id": "RL-BC-003",
+    "history": {
+      "enabled": false,
+      "encoder": "none",
+      "max_length": 0
+    },
+    "initialization": "random",
+    "input_sha256": "3aae7626d5a074301dd5a0175fac3eae9ecb15c8939d9823f7b3a05d1e6d7de4",
+    "offline_rl": false,
+    "split": {
+      "seed": 20260720,
+      "validation_fraction": 0.2
+    },
+    "structured": {
+      "attack_database_sha256": "16279a9cfb8caefbcd4a0da3255432ebb20f6a4346831415a3e6a56972dec5a8",
+      "card_attack_embeddings": true,
+      "card_database_sha256": "25543d916333d32834ac00ea6138de07f3bc74d1ee43f95993696d8aa8d09efc",
+      "confidence_threshold": 0.55,
+      "deck_conditioning": "acting_player_submitted_deck_masked_mean",
+      "deck_map_sha256": "446e93c35af8043649d9cb544c4b390eff43dc1b8616e7a90d207695345aaf4e",
+      "entity_encoder": "deepsets_masked_mean_max"
+    },
+    "training": {
+      "batch_size": 512,
+      "epochs": 6,
+      "gradient_clip_norm": 1.0,
+      "hidden_dim": 192,
+      "learning_rate": 0.0003,
+      "patience": 2,
+      "value_loss_weight": 0.25
+    }
+  },
+  "experiment_id": "RL-BC-003",
+  "failures": [],
+  "full_epochs_this_run": 6,
+  "missing_seeds": [
+    17,
+    42
+  ],
+  "partial_run": false,
+  "peak_ram_mb": 20971.98046875,
+  "peak_vram_mb": 2745.98046875,
+  "planned_config": {
+    "architecture": "structured_card_attack_deepsets_deck_masked_pointer_with_stop",
+    "arm": "structured-latest-public-replays",
+    "experiment_id": "RL-BC-003",
+    "history": {
+      "enabled": false,
+      "encoder": "none",
+      "max_length": 0
+    },
+    "input": "data/processed/public_replay_2026-08-05.jsonl.gz",
+    "input_sha256": "3aae7626d5a074301dd5a0175fac3eae9ecb15c8939d9823f7b3a05d1e6d7de4",
+    "offline_rl": false,
+    "policy_loss_rows": "policy_weight == 1 only",
+    "random_initialization": true,
+    "split": {
+      "kind": "episode_id",
+      "seed": 20260720,
+      "train_fraction": 0.8,
+      "validation_fraction": 0.2
+    },
+    "structured": {
+      "attack_database_sha256": "16279a9cfb8caefbcd4a0da3255432ebb20f6a4346831415a3e6a56972dec5a8",
+      "card_attack_embeddings": true,
+      "card_database_sha256": "25543d916333d32834ac00ea6138de07f3bc74d1ee43f95993696d8aa8d09efc",
+      "confidence_threshold": 0.55,
+      "deck_conditioning": "acting_player_submitted_deck_masked_mean",
+      "deck_map_sha256": "446e93c35af8043649d9cb544c4b390eff43dc1b8616e7a90d207695345aaf4e",
+      "entity_encoder": "deepsets_masked_mean_max"
+    },
+    "training": {
+      "batch_size": 512,
+      "early_stopping_patience": 2,
+      "epochs": 6,
+      "formal_seeds": [
+        17,
+        42,
+        20260720
+      ],
+      "gradient_clip_norm": 1.0,
+      "hidden_dim": 192,
+      "learning_rate": 0.0003,
+      "value_loss_weight": 0.25
+    },
+    "value_loss_rows": "value_weight == 1 for both players"
+  },
+  "provenance": {
+    "dirty": false,
+    "experiment_fingerprint": "8ae845819c360464d6de8c2375d0781f0a7da96083b5dded54b320e1209e2131",
+    "git_sha": "272f90b07ba0e07f3cb943f14cce341fff0b09f0",
+    "input_sha256": "3aae7626d5a074301dd5a0175fac3eae9ecb15c8939d9823f7b3a05d1e6d7de4"
+  },
+  "runtime_seconds": 2031.5644142590463,
+  "split": {
+    "episode_overlap": [],
+    "policy_rows": 393043,
+    "rows": 760912,
+    "split_seed": 20260720,
+    "train_episodes": 3792,
+    "validation_episodes": 948,
+    "validation_fraction": 0.2,
+    "value_rows": 760912
+  },
+  "status": "partial_formal",
+  "train_rows": 610613,
+  "training_state": {
+    "best_checkpoint_path": "/homes/lzhang/rl_bc_003_outputs/seed_20260720/checkpoints/seed_20260720_best.pt",
+    "best_epoch": 6,
+    "best_loss": 0.7426027893171265,
+    "completed_epochs": 6,
+    "history": [
+      {
+        "epoch": 1,
+        "full_epoch": true,
+        "max_batches": 0,
+        "train": {
+          "batches": 1193,
+          "loss": 0.8739662938106119,
+          "policy_loss": 0.6881387588157896,
+          "policy_steps": 656374,
+          "value_loss": 0.7433101399792894,
+          "value_rows": 610613
+        },
+        "validation": {
+          "batches": 294,
+          "loss": 0.8382846834292773,
+          "policy_loss": 0.6450231315600682,
+          "policy_steps": 161903,
+          "value_loss": 0.7730462074768364,
+          "value_rows": 150299
+        }
+      },
+      {
+        "epoch": 2,
+        "full_epoch": true,
+        "max_batches": 0,
+        "train": {
+          "batches": 1193,
+          "loss": 0.7727621332115271,
+          "policy_loss": 0.6139993514781945,
+          "policy_steps": 656374,
+          "value_loss": 0.6350511269333303,
+          "value_rows": 610613
+        },
+        "validation": {
+          "batches": 294,
+          "loss": 0.7952559115675613,
+          "policy_loss": 0.6018184498041278,
+          "policy_steps": 161903,
+          "value_loss": 0.7737498470537336,
+          "value_rows": 150299
+        }
+      },
+      {
+        "epoch": 3,
+        "full_epoch": true,
+        "max_batches": 0,
+        "train": {
+          "batches": 1193,
+          "loss": 0.719541449336357,
+          "policy_loss": 0.5750681882224439,
+          "policy_steps": 656374,
+          "value_loss": 0.5778930444556523,
+          "value_rows": 610613
+        },
+        "validation": {
+          "batches": 294,
+          "loss": 0.7777347062027389,
+          "policy_loss": 0.577103670041461,
+          "policy_steps": 161903,
+          "value_loss": 0.8025241446451116,
+          "value_rows": 150299
+        }
+      },
+      {
+        "epoch": 4,
+        "full_epoch": true,
+        "max_batches": 0,
+        "train": {
+          "batches": 1193,
+          "loss": 0.682789652780913,
+          "policy_loss": 0.548155972963619,
+          "policy_steps": 656374,
+          "value_loss": 0.5385347192691761,
+          "value_rows": 610613
+        },
+        "validation": {
+          "batches": 294,
+          "loss": 0.7656396750429257,
+          "policy_loss": 0.5608202240251674,
+          "policy_steps": 161903,
+          "value_loss": 0.8192778040710335,
+          "value_rows": 150299
+        }
+      },
+      {
+        "epoch": 5,
+        "full_epoch": true,
+        "max_batches": 0,
+        "train": {
+          "batches": 1193,
+          "loss": 0.6536388608047923,
+          "policy_loss": 0.52846005597516,
+          "policy_steps": 656374,
+          "value_loss": 0.5007152193185292,
+          "value_rows": 610613
+        },
+        "validation": {
+          "batches": 294,
+          "loss": 0.7454933610666095,
+          "policy_loss": 0.5479432561328738,
+          "policy_steps": 161903,
+          "value_loss": 0.7902004197349429,
+          "value_rows": 150299
+        }
+      },
+      {
+        "epoch": 6,
+        "full_epoch": true,
+        "max_batches": 0,
+        "train": {
+          "batches": 1193,
+          "loss": 0.6295294948575056,
+          "policy_loss": 0.5125988321252858,
+          "policy_steps": 656374,
+          "value_loss": 0.46772265092887927,
+          "value_rows": 610613
+        },
+        "validation": {
+          "batches": 294,
+          "loss": 0.7426027893171265,
+          "policy_loss": 0.5388958523241262,
+          "policy_steps": 161903,
+          "value_loss": 0.8148277479720014,
+          "value_rows": 150299
+        }
+      }
+    ],
+    "optimizer_steps": 7158,
+    "partial_history": [],
+    "stale": 0
+  },
+  "validation": {
+    "by_select": {
+      "context:0": {
+        "rows": 41105,
+        "sequence_exact_match": 0.5506386084417954,
+        "set_exact_match": 0.5506386084417954
+      },
+      "context:1": {
+        "rows": 947,
+        "sequence_exact_match": 0.9450897571277719,
+        "set_exact_match": 0.9450897571277719
+      },
+      "context:13": {
+        "rows": 1779,
+        "sequence_exact_match": 0.5126475548060708,
+        "set_exact_match": 0.5126475548060708
+      },
+      "context:14": {
+        "rows": 1116,
+        "sequence_exact_match": 0.5618279569892473,
+        "set_exact_match": 0.5618279569892473
+      },
+      "context:15": {
+        "rows": 1068,
+        "sequence_exact_match": 0.545880149812734,
+        "set_exact_match": 0.5514981273408239
+      },
+      "context:16": {
+        "rows": 1779,
+        "sequence_exact_match": 0.6840921866216976,
+        "set_exact_match": 0.6840921866216976
+      },
+      "context:17": {
+        "rows": 236,
+        "sequence_exact_match": 0.8686440677966102,
+        "set_exact_match": 0.8686440677966102
+      },
+      "context:18": {
+        "rows": 2,
+        "sequence_exact_match": 1.0,
+        "set_exact_match": 1.0
+      },
+      "context:19": {
+        "rows": 27,
+        "sequence_exact_match": 0.8518518518518519,
+        "set_exact_match": 0.8518518518518519
+      },
+      "context:2": {
+        "rows": 422,
+        "sequence_exact_match": 0.7345971563981043,
+        "set_exact_match": 0.7606635071090048
+      },
+      "context:21": {
+        "rows": 1902,
+        "sequence_exact_match": 0.6272344900105152,
+        "set_exact_match": 0.6272344900105152
+      },
+      "context:22": {
+        "rows": 1983,
+        "sequence_exact_match": 0.8119011598587998,
+        "set_exact_match": 0.8164397377710539
+      },
+      "context:26": {
+        "rows": 33,
+        "sequence_exact_match": 0.21212121212121213,
+        "set_exact_match": 0.2727272727272727
+      },
+      "context:27": {
+        "rows": 49,
+        "sequence_exact_match": 0.8571428571428571,
+        "set_exact_match": 0.9183673469387755
+      },
+      "context:28": {
+        "rows": 32,
+        "sequence_exact_match": 0.34375,
+        "set_exact_match": 0.34375
+      },
+      "context:3": {
+        "rows": 1869,
+        "sequence_exact_match": 0.6789727126805778,
+        "set_exact_match": 0.6789727126805778
+      },
+      "context:30": {
+        "rows": 1048,
+        "sequence_exact_match": 0.9064885496183206,
+        "set_exact_match": 0.9064885496183206
+      },
+      "context:32": {
+        "rows": 15,
+        "sequence_exact_match": 0.9333333333333333,
+        "set_exact_match": 0.9333333333333333
+      },
+      "context:33": {
+        "rows": 43,
+        "sequence_exact_match": 0.5581395348837209,
+        "set_exact_match": 0.5581395348837209
+      },
+      "context:34": {
+        "rows": 398,
+        "sequence_exact_match": 0.8819095477386935,
+        "set_exact_match": 1.0
+      },
+      "context:35": {
+        "rows": 111,
+        "sequence_exact_match": 0.990990990990991,
+        "set_exact_match": 0.990990990990991
+      },
+      "context:37": {
+        "rows": 400,
+        "sequence_exact_match": 0.95,
+        "set_exact_match": 0.95
+      },
+      "context:38": {
+        "rows": 246,
+        "sequence_exact_match": 0.959349593495935,
+        "set_exact_match": 0.959349593495935
+      },
+      "context:4": {
+        "rows": 1697,
+        "sequence_exact_match": 0.783146729522687,
+        "set_exact_match": 0.783146729522687
+      },
+      "context:40": {
+        "rows": 1678,
+        "sequence_exact_match": 0.9928486293206198,
+        "set_exact_match": 0.9928486293206198
+      },
+      "context:41": {
+        "rows": 512,
+        "sequence_exact_match": 1.0,
+        "set_exact_match": 1.0
+      },
+      "context:43": {
+        "rows": 1822,
+        "sequence_exact_match": 0.9681668496158068,
+        "set_exact_match": 0.9681668496158068
+      },
+      "context:5": {
+        "rows": 1301,
+        "sequence_exact_match": 0.6395080707148347,
+        "set_exact_match": 0.6910069177555727
+      },
+      "context:7": {
+        "rows": 12744,
+        "sequence_exact_match": 0.6709039548022598,
+        "set_exact_match": 0.6804770872567483
+      },
+      "context:8": {
+        "rows": 1137,
+        "sequence_exact_match": 0.2805628847845207,
+        "set_exact_match": 0.3482849604221636
+      },
+      "context:9": {
+        "rows": 144,
+        "sequence_exact_match": 0.18055555555555555,
+        "set_exact_match": 0.6111111111111112
+      },
+      "type:0": {
+        "rows": 41105,
+        "sequence_exact_match": 0.5506386084417954,
+        "set_exact_match": 0.5506386084417954
+      },
+      "type:1": {
+        "rows": 30153,
+        "sequence_exact_match": 0.6600338274798527,
+        "set_exact_match": 0.6717739528405133
+      },
+      "type:2": {
+        "rows": 114,
+        "sequence_exact_match": 0.5263157894736842,
+        "set_exact_match": 0.5701754385964912
+      },
+      "type:4": {
+        "rows": 1106,
+        "sequence_exact_match": 0.8933092224231465,
+        "set_exact_match": 0.8933092224231465
+      },
+      "type:5": {
+        "rows": 398,
+        "sequence_exact_match": 0.8819095477386935,
+        "set_exact_match": 1.0
+      },
+      "type:6": {
+        "rows": 111,
+        "sequence_exact_match": 0.990990990990991,
+        "set_exact_match": 0.990990990990991
+      },
+      "type:7": {
+        "rows": 400,
+        "sequence_exact_match": 0.95,
+        "set_exact_match": 0.95
+      },
+      "type:8": {
+        "rows": 1924,
+        "sequence_exact_match": 0.9885654885654885,
+        "set_exact_match": 0.9885654885654885
+      },
+      "type:9": {
+        "rows": 2334,
+        "sequence_exact_match": 0.9751499571550986,
+        "set_exact_match": 0.9751499571550986
+      }
+    },
+    "candidate_precision": 0.6561013137649426,
+    "candidate_recall": 0.6579078544470555,
+    "decode_legal_rate": 1.0,
+    "decoded_rows": 150299,
+    "empty_action_accuracy": 0.27728613569321536,
+    "empty_action_rows": 339,
+    "invalid_actions": 0,
+    "multi_select_accuracy": 0.525691699604743,
+    "multi_select_rows": 4301,
+    "policy_rows": 77645,
+    "sequence_exact_match": 0.6259643248116428,
+    "set_exact_match": 0.6311932513362096,
+    "single_select_accuracy": 0.6340359586927603,
+    "single_select_rows": 72917
+  },
+  "validation_loss": {
+    "batches": 294,
+    "loss": 0.7426027893171265,
+    "policy_loss": 0.5388958523241262,
+    "policy_steps": 161903,
+    "value_loss": 0.8148277479720014,
+    "value_rows": 150299
+  },
+  "validation_rows": 150299
+}

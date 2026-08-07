@@ -111,6 +111,24 @@ def reward_only_replay(rewards: tuple[float, float]) -> dict:
     }
 
 
+def forfeit_replay(loser_status: str = "TIMEOUT") -> dict:
+    return {
+        "info": {"EpisodeId": 46},
+        "rewards": [None, 1],
+        "statuses": [loser_status, "DONE"],
+        "steps": [
+            [
+                {"action": None, "status": "ACTIVE", "observation": observation(2), "reward": 0},
+                {"action": None, "status": "ACTIVE", "observation": observation(2), "reward": 0},
+            ],
+            [
+                {"action": None, "status": loser_status, "observation": observation(None), "reward": None},
+                {"action": [], "status": "DONE", "observation": observation(None), "reward": 1},
+            ],
+        ],
+    }
+
+
 class PublicReplayTests(unittest.TestCase):
     def test_previous_alignment_is_valid_and_same_alignment_is_not(self) -> None:
         replay = shifted_replay()
@@ -216,6 +234,22 @@ class PublicReplayTests(unittest.TestCase):
         self.assertEqual(report["winner"], 0)
         self.assertEqual(report["winner_source"], "terminal_reward")
         self.assertTrue(report["reward_mismatch"])
+
+    def test_terminal_outcome_accepts_matching_timeout_or_error_forfeit(self) -> None:
+        for loser_status in ("TIMEOUT", "ERROR"):
+            with self.subTest(loser_status=loser_status):
+                outcome = terminal_outcome(forfeit_replay(loser_status))
+                self.assertEqual(outcome["winner"], 1)
+                self.assertEqual(outcome["winner_source"], "terminal_forfeit")
+                self.assertFalse(outcome["reward_mismatch"])
+
+    def test_terminal_outcome_rejects_inconsistent_partial_forfeit(self) -> None:
+        replay = forfeit_replay()
+        replay["statuses"] = ["DONE", "TIMEOUT"]
+        outcome = terminal_outcome(replay)
+        self.assertIsNone(outcome["winner"])
+        self.assertEqual(outcome["winner_source"], "unresolved_terminal_reward")
+        self.assertTrue(outcome["reward_mismatch"])
 
 
 if __name__ == "__main__":

@@ -1,0 +1,422 @@
+{
+  "games": 120,
+  "learners": [
+    {
+      "learner": "our_lopunny_froslass_g1",
+      "games": 60,
+      "wins": 19,
+      "losses": 41,
+      "draws": 0,
+      "failures": 0,
+      "win_rate": 0.31666666666666665,
+      "score_rate": 0.31666666666666665,
+      "win_wilson_lower": 0.21305867552366523,
+      "failure_rate": 0.0,
+      "seat_metrics": {
+        "0": {
+          "games": 30,
+          "wins": 8,
+          "losses": 22,
+          "draws": 0,
+          "failures": 0,
+          "win_rate": 0.26666666666666666,
+          "score_rate": 0.26666666666666666,
+          "win_wilson_lower": 0.1418266331959632,
+          "failure_rate": 0.0
+        },
+        "1": {
+          "games": 30,
+          "wins": 11,
+          "losses": 19,
+          "draws": 0,
+          "failures": 0,
+          "win_rate": 0.36666666666666664,
+          "score_rate": 0.36666666666666664,
+          "win_wilson_lower": 0.21873920806100705,
+          "failure_rate": 0.0
+        }
+      },
+      "worst_opponent": "archaludon",
+      "worst_score_rate": 0.0,
+      "rank": 1
+    },
+    {
+      "learner": "our_dragapult_munkidori_g1",
+      "games": 60,
+      "wins": 17,
+      "losses": 43,
+      "draws": 0,
+      "failures": 0,
+      "win_rate": 0.2833333333333333,
+      "score_rate": 0.2833333333333333,
+      "win_wilson_lower": 0.18506828428432712,
+      "failure_rate": 0.0,
+      "seat_metrics": {
+        "0": {
+          "games": 30,
+          "wins": 7,
+          "losses": 23,
+          "draws": 0,
+          "failures": 0,
+          "win_rate": 0.23333333333333334,
+          "score_rate": 0.23333333333333334,
+          "win_wilson_lower": 0.11792388144489496,
+          "failure_rate": 0.0
+        },
+        "1": {
+          "games": 30,
+          "wins": 10,
+          "losses": 20,
+          "draws": 0,
+          "failures": 0,
+          "win_rate": 0.3333333333333333,
+          "score_rate": 0.3333333333333333,
+          "win_wilson_lower": 0.1923049808367613,
+          "failure_rate": 0.0
+        }
+      },
+      "worst_opponent": "archaludon",
+      "worst_score_rate": 0.0,
+      "rank": 2
+    }
+  ],
+  "matchups": {
+    "our_dragapult_munkidori_g1": {
+      "alakazam_5th": {
+        "games": 4,
+        "wins": 4,
+        "losses": 0,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 1.0,
+        "score_rate": 1.0,
+        "win_wilson_lower": 0.5101091635454027,
+        "failure_rate": 0.0
+      },
+      "archaludon": {
+        "games": 4,
+        "wins": 0,
+        "losses": 4,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.0,
+        "score_rate": 0.0,
+        "win_wilson_lower": 0.0,
+        "failure_rate": 0.0
+      },
+      "beam_search_940": {
+        "games": 4,
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.5,
+        "score_rate": 0.5,
+        "win_wilson_lower": 0.15003898915214947,
+        "failure_rate": 0.0
+      },
+      "dragapult": {
+        "games": 4,
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.25,
+        "score_rate": 0.25,
+        "win_wilson_lower": 0.045587260809700575,
+        "failure_rate": 0.0
+      },
+      "grim_hybrid_909": {
+        "games": 4,
+        "wins": 0,
+        "losses": 4,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.0,
+        "score_rate": 0.0,
+        "win_wilson_lower": 0.0,
+        "failure_rate": 0.0
+      },
+      "iono": {
+        "games": 4,
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.25,
+        "score_rate": 0.25,
+        "win_wilson_lower": 0.045587260809700575,
+        "failure_rate": 0.0
+      },
+      "library_out_1208": {
+        "games": 4,
+        "wins": 0,
+        "losses": 4,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.0,
+        "score_rate": 0.0,
+        "win_wilson_lower": 0.0,
+        "failure_rate": 0.0
+      },
+      "lucario_1084": {
+        "games": 4,
+        "wins": 0,
+        "losses": 4,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.0,
+        "score_rate": 0.0,
+        "win_wilson_lower": 0.0,
+        "failure_rate": 0.0
+      },
+      "lucario_sample": {
+        "games": 4,
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.25,
+        "score_rate": 0.25,
+        "win_wilson_lower": 0.045587260809700575,
+        "failure_rate": 0.0
+      },
+      "official_random": {
+        "games": 4,
+        "wins": 4,
+        "losses": 0,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 1.0,
+        "score_rate": 1.0,
+        "win_wilson_lower": 0.5101091635454027,
+        "failure_rate": 0.0
+      },
+      "parent_dragapult_g0": {
+        "games": 4,
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.5,
+        "score_rate": 0.5,
+        "win_wilson_lower": 0.15003898915214947,
+        "failure_rate": 0.0
+      },
+      "parent_lopunny_g0": {
+        "games": 4,
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.5,
+        "score_rate": 0.5,
+        "win_wilson_lower": 0.15003898915214947,
+        "failure_rate": 0.0
+      },
+      "probabilistic": {
+        "games": 4,
+        "wins": 0,
+        "losses": 4,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.0,
+        "score_rate": 0.0,
+        "win_wilson_lower": 0.0,
+        "failure_rate": 0.0
+      },
+      "roman_recent_885": {
+        "games": 4,
+        "wins": 0,
+        "losses": 4,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.0,
+        "score_rate": 0.0,
+        "win_wilson_lower": 0.0,
+        "failure_rate": 0.0
+      },
+      "simple_matchup": {
+        "games": 4,
+        "wins": 0,
+        "losses": 4,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.0,
+        "score_rate": 0.0,
+        "win_wilson_lower": 0.0,
+        "failure_rate": 0.0
+      }
+    },
+    "our_lopunny_froslass_g1": {
+      "alakazam_5th": {
+        "games": 4,
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.25,
+        "score_rate": 0.25,
+        "win_wilson_lower": 0.045587260809700575,
+        "failure_rate": 0.0
+      },
+      "archaludon": {
+        "games": 4,
+        "wins": 0,
+        "losses": 4,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.0,
+        "score_rate": 0.0,
+        "win_wilson_lower": 0.0,
+        "failure_rate": 0.0
+      },
+      "beam_search_940": {
+        "games": 4,
+        "wins": 0,
+        "losses": 4,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.0,
+        "score_rate": 0.0,
+        "win_wilson_lower": 0.0,
+        "failure_rate": 0.0
+      },
+      "dragapult": {
+        "games": 4,
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.25,
+        "score_rate": 0.25,
+        "win_wilson_lower": 0.045587260809700575,
+        "failure_rate": 0.0
+      },
+      "grim_hybrid_909": {
+        "games": 4,
+        "wins": 0,
+        "losses": 4,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.0,
+        "score_rate": 0.0,
+        "win_wilson_lower": 0.0,
+        "failure_rate": 0.0
+      },
+      "iono": {
+        "games": 4,
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.5,
+        "score_rate": 0.5,
+        "win_wilson_lower": 0.15003898915214947,
+        "failure_rate": 0.0
+      },
+      "library_out_1208": {
+        "games": 4,
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.25,
+        "score_rate": 0.25,
+        "win_wilson_lower": 0.045587260809700575,
+        "failure_rate": 0.0
+      },
+      "lucario_1084": {
+        "games": 4,
+        "wins": 0,
+        "losses": 4,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.0,
+        "score_rate": 0.0,
+        "win_wilson_lower": 0.0,
+        "failure_rate": 0.0
+      },
+      "lucario_sample": {
+        "games": 4,
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.25,
+        "score_rate": 0.25,
+        "win_wilson_lower": 0.045587260809700575,
+        "failure_rate": 0.0
+      },
+      "official_random": {
+        "games": 4,
+        "wins": 4,
+        "losses": 0,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 1.0,
+        "score_rate": 1.0,
+        "win_wilson_lower": 0.5101091635454027,
+        "failure_rate": 0.0
+      },
+      "parent_dragapult_g0": {
+        "games": 4,
+        "wins": 3,
+        "losses": 1,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.75,
+        "score_rate": 0.75,
+        "win_wilson_lower": 0.3006418425824019,
+        "failure_rate": 0.0
+      },
+      "parent_lopunny_g0": {
+        "games": 4,
+        "wins": 3,
+        "losses": 1,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.75,
+        "score_rate": 0.75,
+        "win_wilson_lower": 0.3006418425824019,
+        "failure_rate": 0.0
+      },
+      "probabilistic": {
+        "games": 4,
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.25,
+        "score_rate": 0.25,
+        "win_wilson_lower": 0.045587260809700575,
+        "failure_rate": 0.0
+      },
+      "roman_recent_885": {
+        "games": 4,
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.25,
+        "score_rate": 0.25,
+        "win_wilson_lower": 0.045587260809700575,
+        "failure_rate": 0.0
+      },
+      "simple_matchup": {
+        "games": 4,
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "failures": 0,
+        "win_rate": 0.25,
+        "score_rate": 0.25,
+        "win_wilson_lower": 0.045587260809700575,
+        "failure_rate": 0.0
+      }
+    }
+  },
+  "paired_seat_groups": 60,
+  "incomplete_pairs": [],
+  "engine_seed_controlled": false
+}

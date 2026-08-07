@@ -1,0 +1,12 @@
+[
+  {"name": "learner_00", "agent_dir": "tmp/benchmark_agents/alakazam", "source": "recent public Alakazam"},
+  {"name": "learner_01", "agent_dir": "tmp/benchmark_agents/archaludon", "source": "public Archaludon"},
+  {"name": "learner_02", "agent_dir": "tmp/benchmark_agents/library_out", "source": "public library-out"},
+  {"name": "learner_03", "agent_dir": "tmp/benchmark_agents/dragapult", "source": "public Dragapult"},
+  {"name": "learner_04", "agent_dir": "tmp/benchmark_agents/iono", "source": "public Iono"},
+  {"name": "learner_05", "agent_dir": "tmp/benchmark_agents/lucario_original", "source": "public Lucario 1084"},
+  {"name": "learner_06", "agent_dir": "tmp/benchmark_agents/probabilistic", "source": "recent probabilistic"},
+  {"name": "learner_07", "agent_dir": "tmp/benchmark_agents/beam_search_940", "source": "public beam search"},
+  {"name": "learner_08", "agent_dir": "tmp/benchmark_agents/grim_hybrid_909", "source": "recent Grimmsnarl hybrid"},
+  {"name": "learner_09", "agent_dir": "tmp/benchmark_agents/simple_matchup", "source": "public matchup baseline"}
+]

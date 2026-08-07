@@ -1,0 +1,1397 @@
+{
+  "episodes": 11,
+  "rows": [
+    {
+      "episode_id": "90088964",
+      "top_level_rewards": [
+        null,
+        1
+      ],
+      "top_level_statuses": [
+        "TIMEOUT",
+        "DONE"
+      ],
+      "steps": 141,
+      "terminal_outcome": {
+        "winner": null,
+        "winner_source": "unresolved_terminal_reward",
+        "terminal_reward_present": true,
+        "terminal_reward_valid": false,
+        "top_level_reward_present": true,
+        "top_level_reward_valid": false,
+        "reward_mismatch": true
+      },
+      "tail": [
+        {
+          "step_index": 136,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                1
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 137,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                27
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 138,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                0
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 139,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                24
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 140,
+          "views": [
+            {
+              "player": 0,
+              "status": "TIMEOUT",
+              "reward": null,
+              "result": -1,
+              "action": null
+            },
+            {
+              "player": 1,
+              "status": "DONE",
+              "reward": 1,
+              "result": -1,
+              "action": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "episode_id": "90104756",
+      "top_level_rewards": [
+        null,
+        1
+      ],
+      "top_level_statuses": [
+        "ERROR",
+        "DONE"
+      ],
+      "steps": 59,
+      "terminal_outcome": {
+        "winner": null,
+        "winner_source": "unresolved_terminal_reward",
+        "terminal_reward_present": true,
+        "terminal_reward_valid": false,
+        "top_level_reward_present": true,
+        "top_level_reward_valid": false,
+        "reward_mismatch": true
+      },
+      "tail": [
+        {
+          "step_index": 54,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 55,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                1
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 56,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                1
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 57,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                2
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 58,
+          "views": [
+            {
+              "player": 0,
+              "status": "ERROR",
+              "reward": null,
+              "result": -1,
+              "action": null
+            },
+            {
+              "player": 1,
+              "status": "DONE",
+              "reward": 1,
+              "result": -1,
+              "action": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "episode_id": "90168889",
+      "top_level_rewards": [
+        1,
+        null
+      ],
+      "top_level_statuses": [
+        "DONE",
+        "ERROR"
+      ],
+      "steps": 42,
+      "terminal_outcome": {
+        "winner": null,
+        "winner_source": "unresolved_terminal_reward",
+        "terminal_reward_present": true,
+        "terminal_reward_valid": false,
+        "top_level_reward_present": true,
+        "top_level_reward_valid": false,
+        "reward_mismatch": true
+      },
+      "tail": [
+        {
+          "step_index": 37,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 38,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                0,
+                1,
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 39,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 40,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 41,
+          "views": [
+            {
+              "player": 0,
+              "status": "DONE",
+              "reward": 1,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ERROR",
+              "reward": null,
+              "result": -1,
+              "action": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "episode_id": "90169512",
+      "top_level_rewards": [
+        1,
+        null
+      ],
+      "top_level_statuses": [
+        "DONE",
+        "TIMEOUT"
+      ],
+      "steps": 3581,
+      "terminal_outcome": {
+        "winner": null,
+        "winner_source": "unresolved_terminal_reward",
+        "terminal_reward_present": true,
+        "terminal_reward_valid": false,
+        "top_level_reward_present": true,
+        "top_level_reward_valid": false,
+        "reward_mismatch": true
+      },
+      "tail": [
+        {
+          "step_index": 3576,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 3577,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 3578,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 3579,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 3580,
+          "views": [
+            {
+              "player": 0,
+              "status": "DONE",
+              "reward": 1,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "TIMEOUT",
+              "reward": null,
+              "result": -1,
+              "action": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "episode_id": "90229336",
+      "top_level_rewards": [
+        null,
+        1
+      ],
+      "top_level_statuses": [
+        "TIMEOUT",
+        "DONE"
+      ],
+      "steps": 65,
+      "terminal_outcome": {
+        "winner": null,
+        "winner_source": "unresolved_terminal_reward",
+        "terminal_reward_present": true,
+        "terminal_reward_valid": false,
+        "top_level_reward_present": true,
+        "top_level_reward_valid": false,
+        "reward_mismatch": true
+      },
+      "tail": [
+        {
+          "step_index": 60,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 61,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 62,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 63,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                2
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 64,
+          "views": [
+            {
+              "player": 0,
+              "status": "TIMEOUT",
+              "reward": null,
+              "result": -1,
+              "action": null
+            },
+            {
+              "player": 1,
+              "status": "DONE",
+              "reward": 1,
+              "result": -1,
+              "action": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "episode_id": "90229552",
+      "top_level_rewards": [
+        null,
+        1
+      ],
+      "top_level_statuses": [
+        "TIMEOUT",
+        "DONE"
+      ],
+      "steps": 144,
+      "terminal_outcome": {
+        "winner": null,
+        "winner_source": "unresolved_terminal_reward",
+        "terminal_reward_present": true,
+        "terminal_reward_valid": false,
+        "top_level_reward_present": true,
+        "top_level_reward_valid": false,
+        "reward_mismatch": true
+      },
+      "tail": [
+        {
+          "step_index": 139,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 140,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 141,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 142,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 143,
+          "views": [
+            {
+              "player": 0,
+              "status": "TIMEOUT",
+              "reward": null,
+              "result": -1,
+              "action": null
+            },
+            {
+              "player": 1,
+              "status": "DONE",
+              "reward": 1,
+              "result": -1,
+              "action": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "episode_id": "90230045",
+      "top_level_rewards": [
+        null,
+        1
+      ],
+      "top_level_statuses": [
+        "TIMEOUT",
+        "DONE"
+      ],
+      "steps": 310,
+      "terminal_outcome": {
+        "winner": null,
+        "winner_source": "unresolved_terminal_reward",
+        "terminal_reward_present": true,
+        "terminal_reward_valid": false,
+        "top_level_reward_present": true,
+        "top_level_reward_valid": false,
+        "reward_mismatch": true
+      },
+      "tail": [
+        {
+          "step_index": 305,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                13
+              ]
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 306,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                27
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 307,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 308,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                14
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 309,
+          "views": [
+            {
+              "player": 0,
+              "status": "TIMEOUT",
+              "reward": null,
+              "result": -1,
+              "action": null
+            },
+            {
+              "player": 1,
+              "status": "DONE",
+              "reward": 1,
+              "result": -1,
+              "action": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "episode_id": "90239373",
+      "top_level_rewards": [
+        1,
+        null
+      ],
+      "top_level_statuses": [
+        "DONE",
+        "TIMEOUT"
+      ],
+      "steps": 96,
+      "terminal_outcome": {
+        "winner": null,
+        "winner_source": "unresolved_terminal_reward",
+        "terminal_reward_present": true,
+        "terminal_reward_valid": false,
+        "top_level_reward_present": true,
+        "top_level_reward_valid": false,
+        "reward_mismatch": true
+      },
+      "tail": [
+        {
+          "step_index": 91,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 92,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 93,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 94,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 95,
+          "views": [
+            {
+              "player": 0,
+              "status": "DONE",
+              "reward": 1,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "TIMEOUT",
+              "reward": null,
+              "result": -1,
+              "action": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "episode_id": "90242213",
+      "top_level_rewards": [
+        null,
+        1
+      ],
+      "top_level_statuses": [
+        "TIMEOUT",
+        "DONE"
+      ],
+      "steps": 95,
+      "terminal_outcome": {
+        "winner": null,
+        "winner_source": "unresolved_terminal_reward",
+        "terminal_reward_present": true,
+        "terminal_reward_valid": false,
+        "top_level_reward_present": true,
+        "top_level_reward_valid": false,
+        "reward_mismatch": true
+      },
+      "tail": [
+        {
+          "step_index": 90,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                7
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 91,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                2
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 92,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                6
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 93,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                0
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 94,
+          "views": [
+            {
+              "player": 0,
+              "status": "TIMEOUT",
+              "reward": null,
+              "result": -1,
+              "action": null
+            },
+            {
+              "player": 1,
+              "status": "DONE",
+              "reward": 1,
+              "result": -1,
+              "action": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "episode_id": "90245102",
+      "top_level_rewards": [
+        1,
+        null
+      ],
+      "top_level_statuses": [
+        "DONE",
+        "TIMEOUT"
+      ],
+      "steps": 1044,
+      "terminal_outcome": {
+        "winner": null,
+        "winner_source": "unresolved_terminal_reward",
+        "terminal_reward_present": true,
+        "terminal_reward_valid": false,
+        "top_level_reward_present": true,
+        "top_level_reward_valid": false,
+        "reward_mismatch": true
+      },
+      "tail": [
+        {
+          "step_index": 1039,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                1
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 1040,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                1
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 1041,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                1
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 1042,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                1
+              ]
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 1043,
+          "views": [
+            {
+              "player": 0,
+              "status": "DONE",
+              "reward": 1,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "TIMEOUT",
+              "reward": null,
+              "result": -1,
+              "action": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "episode_id": "90267837",
+      "top_level_rewards": [
+        1,
+        null
+      ],
+      "top_level_statuses": [
+        "DONE",
+        "TIMEOUT"
+      ],
+      "steps": 516,
+      "terminal_outcome": {
+        "winner": null,
+        "winner_source": "unresolved_terminal_reward",
+        "terminal_reward_present": true,
+        "terminal_reward_valid": false,
+        "top_level_reward_present": true,
+        "top_level_reward_valid": false,
+        "reward_mismatch": true
+      },
+      "tail": [
+        {
+          "step_index": 511,
+          "views": [
+            {
+              "player": 0,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                14
+              ]
+            },
+            {
+              "player": 1,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 512,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                11
+              ]
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            }
+          ]
+        },
+        {
+          "step_index": 513,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 514,
+          "views": [
+            {
+              "player": 0,
+              "status": "INACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "ACTIVE",
+              "reward": 0,
+              "result": -1,
+              "action": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "step_index": 515,
+          "views": [
+            {
+              "player": 0,
+              "status": "DONE",
+              "reward": 1,
+              "result": -1,
+              "action": []
+            },
+            {
+              "player": 1,
+              "status": "TIMEOUT",
+              "reward": null,
+              "result": -1,
+              "action": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

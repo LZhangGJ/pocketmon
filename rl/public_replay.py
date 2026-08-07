@@ -269,12 +269,62 @@ def _reward_mappings_match(left: dict[int, float] | None, right: dict[int, float
     return all(math.isclose(left[player], right[player], rel_tol=0.0, abs_tol=1e-12) for player in left)
 
 
+def _terminal_forfeit_winner(replay: dict[str, Any], steps: list[Any]) -> int | None:
+    """Resolve a Kaggle timeout/error forfeit from matching terminal evidence.
+
+    Kaggle records these episodes with one ``DONE`` player carrying a positive
+    reward and one ``TIMEOUT`` or ``ERROR`` player carrying ``null``.  Accept the
+    result only when the final per-player views and the top-level status/reward
+    vectors agree exactly; otherwise the ordinary incomplete-reward gate remains
+    blocking.
+    """
+
+    top_statuses = replay.get("statuses")
+    top_rewards = replay.get("rewards")
+    if not isinstance(top_statuses, list) or not isinstance(top_rewards, list):
+        return None
+    if len(top_statuses) != 2 or len(top_rewards) != 2:
+        return None
+
+    for step in reversed(steps):
+        if not isinstance(step, list) or len(step) != 2 or not all(isinstance(view, dict) for view in step):
+            continue
+        step_statuses = [view.get("status") for view in step]
+        step_rewards = [view.get("reward") for view in step]
+        if step_statuses != top_statuses or step_rewards != top_rewards:
+            continue
+        winners = [
+            player
+            for player, (status, reward) in enumerate(zip(step_statuses, step_rewards))
+            if status == "DONE" and (_numeric_reward(reward) or 0.0) > 0.0
+        ]
+        forfeits = [
+            player
+            for player, (status, reward) in enumerate(zip(step_statuses, step_rewards))
+            if status in {"TIMEOUT", "ERROR"} and reward is None
+        ]
+        if len(winners) == 1 and len(forfeits) == 1 and winners[0] != forfeits[0]:
+            return winners[0]
+    return None
+
+
 def terminal_outcome(replay: dict[str, Any]) -> dict[str, Any]:
     """Resolve terminal outcome and retain auditable reward-source metadata."""
 
     steps = replay.get("steps") or []
     terminal_reward_present, terminal_rewards = _terminal_reward_mapping(steps)
     top_level_reward_present, top_level_rewards = _top_level_reward_mapping(replay)
+    forfeit_winner = _terminal_forfeit_winner(replay, steps)
+    if terminal_reward_present and terminal_rewards is None and forfeit_winner is not None:
+        return {
+            "winner": forfeit_winner,
+            "winner_source": "terminal_forfeit",
+            "terminal_reward_present": True,
+            "terminal_reward_valid": False,
+            "top_level_reward_present": top_level_reward_present,
+            "top_level_reward_valid": False,
+            "reward_mismatch": False,
+        }
     reward_mismatch = (
         terminal_reward_present
         and top_level_reward_present

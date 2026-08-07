@@ -1,0 +1,24 @@
+{
+  "input": "D:\\github\\kaggle\\rogii\\pocketmon\\data\\processed\\public_replay_2026-08-05.jsonl.gz",
+  "deck_map": "D:\\github\\kaggle\\rogii\\pocketmon\\data\\processed\\replay_decks_2026-08-05.jsonl.gz",
+  "target_deck": "D:\\github\\kaggle\\rogii\\pocketmon\\configs\\decks\\raging_bolt_toolbox_2026-08-05.csv",
+  "match": "pokemon-core",
+  "matching_deck_entries": 206,
+  "generic_fraction_requested": 0.3,
+  "seed": 20260806,
+  "selection": {
+    "target_rows": 14172,
+    "target_policy_rows": 8662,
+    "desired_generic_policy_rows": 3712,
+    "selected_generic_rows": 3729,
+    "selected_generic_policy_rows": 3729
+  },
+  "output": "D:\\github\\kaggle\\rogii\\pocketmon\\data\\processed\\specialists\\raging_bolt.jsonl.gz",
+  "output_deck_map": "D:\\github\\kaggle\\rogii\\pocketmon\\data\\processed\\specialists\\raging_bolt_decks.jsonl.gz",
+  "written": {
+    "rows": 17901,
+    "policy_rows": 12391,
+    "value_rows": 17901,
+    "deck_entries": 252
+  }
+}
