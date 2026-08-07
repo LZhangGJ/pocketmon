@@ -11,6 +11,17 @@ import time
 from pathlib import Path
 
 
+REQUIRED_ZERO_DIAGNOSTICS = (
+    "load_errors",
+    "inference_errors",
+    "illegal_model_actions",
+    "fallback_actions",
+    "illegal_fallback_actions",
+    "emergency_legal_actions",
+    "q_load_errors",
+)
+
+
 def _safe_extract(archive_path: Path, output: Path) -> None:
     output = output.resolve()
     with tarfile.open(archive_path, "r:gz") as archive:
@@ -19,6 +30,23 @@ def _safe_extract(archive_path: Path, output: Path) -> None:
             if output != target and output not in target.parents:
                 raise ValueError(f"archive member escapes package root: {member.name}")
         archive.extractall(output)
+
+
+def _validate_model_diagnostics(diagnostics: object) -> dict[str, object]:
+    if not isinstance(diagnostics, dict):
+        raise TypeError("agent diagnostics must be a dictionary")
+    if diagnostics.get("checkpoint_exists") is not True:
+        raise RuntimeError("checkpoint was not found and loaded during preflight")
+    if int(diagnostics.get("model_actions", 0)) < 1:
+        raise RuntimeError("preflight did not execute a model decision")
+    nonzero = {
+        key: diagnostics.get(key)
+        for key in REQUIRED_ZERO_DIAGNOSTICS
+        if diagnostics.get(key, 0) not in (0, None)
+    }
+    if nonzero:
+        raise RuntimeError(f"model preflight diagnostic counters are nonzero: {nonzero}")
+    return diagnostics
 
 
 def _worker(package_root: Path) -> dict[str, object]:
@@ -48,8 +76,7 @@ def _worker(package_root: Path) -> dict[str, object]:
         raise ValueError(f"single-option decision was not legal: {decision_action!r}")
     diagnostics_fn = namespace.get("diagnostics")
     diagnostics = diagnostics_fn() if callable(diagnostics_fn) else {}
-    if diagnostics.get("load_errors") or diagnostics.get("inference_errors"):
-        raise RuntimeError(f"model preflight failed: {diagnostics}")
+    diagnostics = _validate_model_diagnostics(diagnostics)
     return {
         "gate_passed": True,
         "package_root": str(package_root),
