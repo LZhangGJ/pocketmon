@@ -6,10 +6,18 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.materialize_notebook_agent import materialize
+from scripts.materialize_notebook_agent import atomic_write_bytes, materialize
 
 
 class MaterializeNotebookAgentTests(unittest.TestCase):
+    def test_atomic_write_replaces_complete_file_without_temp_leak(self):
+        with tempfile.TemporaryDirectory() as temp:
+            target = Path(temp) / "deck.csv"
+            target.write_bytes(b"old\n")
+            atomic_write_bytes(target, b"new\n" * 60)
+            self.assertEqual(target.read_bytes(), b"new\n" * 60)
+            self.assertEqual(list(Path(temp).glob(".deck.csv.*.tmp")), [])
+
     def test_extracts_safe_auxiliary_modules_and_weights(self):
         payload = {
             "cells": [

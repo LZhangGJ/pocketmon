@@ -5,14 +5,39 @@ import ast
 import base64
 import io
 import json
+import os
 import py_compile
 import re
 import tarfile
+import tempfile
 from pathlib import Path
 
 
 SAFE_OUTPUT_SUFFIXES = {".py", ".json", ".txt", ".csv"}
 MAX_EMBEDDED_FILE_BYTES = 8 * 1024 * 1024
+
+
+def atomic_write_bytes(path: Path, content: bytes) -> None:
+    """Replace one public-agent artifact without exposing a partial file."""
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="wb", dir=path.parent, prefix=f".{path.name}.", suffix=".tmp", delete=False
+        ) as handle:
+            temporary = Path(handle.name)
+            handle.write(content)
+            handle.flush()
+            os.fsync(handle.fileno())
+        temporary.replace(path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+
+
+def atomic_write_text(path: Path, content: str) -> None:
+    atomic_write_bytes(path, content.encode("utf-8"))
 
 
 def allowed_output_name(name: str) -> bool:
@@ -171,7 +196,7 @@ def materialize(notebook: Path, output: Path, fallback_deck: Path | None = None)
         content = "".join(lines[1:])
         if len(content.encode("utf-8")) > MAX_EMBEDDED_FILE_BYTES:
             raise ValueError(f"Notebook output is too large: {name}")
-        target.write_text(content, encoding="utf-8")
+        atomic_write_text(target, content)
         written.append(target)
     names = {path.name for path in written}
     if not names >= {"main.py", "deck.csv"}:
@@ -179,7 +204,7 @@ def materialize(notebook: Path, output: Path, fallback_deck: Path | None = None)
         if packaged is not None:
             for name, content in packaged.items():
                 target = output / name
-                target.write_bytes(content)
+                atomic_write_bytes(target, content)
                 if target not in written:
                     written.append(target)
             names = {path.name for path in written}
@@ -187,12 +212,12 @@ def materialize(notebook: Path, output: Path, fallback_deck: Path | None = None)
         cards = extract_literal_deck(payload) or extract_commented_deck(payload)
         if cards is not None:
             target = output / "deck.csv"
-            target.write_text("\n".join(map(str, cards)) + "\n", encoding="utf-8")
+            atomic_write_text(target, "\n".join(map(str, cards)) + "\n")
             written.append(target)
             names.add("deck.csv")
     if "deck.csv" not in names and fallback_deck is not None:
         target = output / "deck.csv"
-        target.write_text(fallback_deck.read_text(encoding="utf-8"), encoding="utf-8")
+        atomic_write_text(target, fallback_deck.read_text(encoding="utf-8"))
         written.append(target)
         names.add("deck.csv")
     if not names >= {"main.py", "deck.csv"}:
