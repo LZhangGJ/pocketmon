@@ -604,7 +604,7 @@ def ensure_candidate_package(
         "--output", str(output),
         "--name", f"ppo_candidate_g{generation:05d}",
     ]
-    if q_checkpoint is not None:
+    if q_checkpoint is not None and bool(config.get("attach_action_q", True)):
         command.extend(["--q-checkpoint", str(q_checkpoint)])
     run_process(
         host=config["local_host"], local_host=config["local_host"], command=command,
@@ -901,6 +901,7 @@ def run_generation(config: dict[str, Any], state: dict[str, Any], run_root: Path
         "deck_evolution_run": deck_report is not None,
         "deck_promoted": bool(deck_report and deck_report["promote"]),
         "deck_promotion_report": str(paths["deck"] / "promotion.json") if deck_report else None,
+        "action_q_attached": bool(config.get("attach_action_q", True)),
         "final_champion_package": state["champion_package"],
         "completed_at": now(),
     })

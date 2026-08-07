@@ -11,6 +11,7 @@ from unittest.mock import patch
 from scripts.continuous_rl_pipeline import (
     build_rollout_pool,
     choose_trainer,
+    ensure_candidate_package,
     generation_training_config,
     retain_candidate_in_league,
     wait_for_files,
@@ -121,6 +122,28 @@ class ContinuousPipelineTests(unittest.TestCase):
             })
         self.assertEqual((host, gpu), ("usable", 1))
         self.assertIn("cannot initialize CUDA", audit["broken"]["error"])
+
+    def test_action_q_attachment_can_be_disabled_after_distillation(self) -> None:
+        with tempfile.TemporaryDirectory() as directory, patch(
+            "scripts.continuous_rl_pipeline.run_process"
+        ) as run_process:
+            root = Path(directory)
+            candidate = ensure_candidate_package(
+                config={
+                    "python": "python",
+                    "code_root": "/code",
+                    "local_host": "host",
+                    "attach_action_q": False,
+                },
+                state={"champion_package": str(root / "parent")},
+                generation=1,
+                paths={"candidate": root / "candidate", "root": root},
+                checkpoint=root / "actor.pt",
+                q_checkpoint=root / "q.pt",
+            )
+        self.assertEqual(candidate, root / "candidate")
+        command = run_process.call_args.kwargs["command"]
+        self.assertNotIn("--q-checkpoint", command)
 
 
 if __name__ == "__main__":
