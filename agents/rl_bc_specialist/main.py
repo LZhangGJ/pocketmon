@@ -6,7 +6,16 @@ from pathlib import Path
 from typing import Any
 
 
-PACKAGE_ROOT = Path(__file__).resolve().parent
+_SOURCE_FILE = globals().get("__file__")
+if _SOURCE_FILE:
+    PACKAGE_ROOT = Path(_SOURCE_FILE).resolve().parent
+elif Path("/kaggle_simulations/agent").is_dir():
+    # Kaggle's simulation runner executes main.py with exec(), so __file__ is
+    # intentionally absent even though the extracted package has a fixed root.
+    PACKAGE_ROOT = Path("/kaggle_simulations/agent")
+else:
+    # This also makes a faithful no-__file__ preflight possible outside Kaggle.
+    PACKAGE_ROOT = Path.cwd().resolve()
 if str(PACKAGE_ROOT) not in sys.path:
     sys.path.insert(0, str(PACKAGE_ROOT))
 
