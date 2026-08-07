@@ -30,9 +30,15 @@ REPORT_COUNTERS = (
     "non_acting_actions_skipped",
     "unknown_submission_status_skipped",
     "episodes_terminal_reward",
+    "episodes_terminal_forfeit",
     "episodes_result_fallback",
     "episodes_unresolved_terminal_reward",
     "episodes_missing_winner",
+    "parsed_rows",
+    "quarantined_episodes",
+    "quarantined_rows",
+    "quarantined_reward_mismatches",
+    "quarantined_missing_winners",
     "top_level_reward_episodes",
     "reward_mismatches",
     "duplicate_episode_ids",
@@ -76,11 +82,19 @@ def main() -> None:
     parser.add_argument("--policy-source", choices=("winners", "all"), default="winners")
     parser.add_argument("--keep-logs", action="store_true", help="Keep observation.logs; forbidden for model features")
     parser.add_argument("--max-invalid-rate", type=float, default=0.0)
+    parser.add_argument(
+        "--quarantine-outcome-errors",
+        action="store_true",
+        help="Exclude episodes with missing or contradictory outcome labels instead of assigning a winner",
+    )
+    parser.add_argument("--max-quarantined-episode-rate", type=float, default=0.0)
     parser.add_argument("--output", default="data/processed/public_replay_v1.jsonl.gz")
     parser.add_argument("--report", default="results/data002_public_replay_conversion.json")
     args = parser.parse_args()
     if not 0.0 <= args.max_invalid_rate <= 1.0:
         raise ValueError("--max-invalid-rate must be in [0, 1]")
+    if not 0.0 <= args.max_quarantined_episode_rate <= 1.0:
+        raise ValueError("--max-quarantined-episode-rate must be in [0, 1]")
 
     files = replay_files(Path(args.input_root), args.date, args.max_files)
     output = Path(args.output)
@@ -119,10 +133,7 @@ def main() -> None:
                         keep_logs=args.keep_logs,
                     )
                     counters["episodes"] += 1
-                    counters["rows"] += len(rows)
-                    counters["policy_rows"] += sum(row["policy_weight"] > 0 for row in rows)
-                    counters["value_rows"] += sum(row["value_weight"] > 0 for row in rows)
-                    counters["empty_action_rows"] += sum(row["action"] == [] for row in rows)
+                    counters["parsed_rows"] += len(rows)
                     counters["invalid_decisions"] += episode_report["invalid_decisions"]
                     counters["setup_actions"] += episode_report["setup_actions"]
                     counters["initial_actions_skipped"] += episode_report.get("initial_actions_skipped", 0)
@@ -133,6 +144,8 @@ def main() -> None:
                     winner_source = episode_report.get("winner_source")
                     if winner_source == "terminal_reward":
                         counters["episodes_terminal_reward"] += 1
+                    elif winner_source == "terminal_forfeit":
+                        counters["episodes_terminal_forfeit"] += 1
                     elif winner_source == "observation_result":
                         counters["episodes_result_fallback"] += 1
                     elif winner_source == "unresolved_terminal_reward":
@@ -153,21 +166,46 @@ def main() -> None:
                         errors.append({"path": str(path), "episode_id": episode_id, "reason": "terminal winner was not found"})
                     if episode_report["invalid_decisions"]:
                         errors.append({"path": str(path), **episode_report})
-                    for row in rows:
-                        handle.write(json_dumps(row) + "\n")
+                    outcome_error = bool(
+                        episode_report.get("reward_mismatch") or episode_report["winner"] is None
+                    )
+                    quarantine = args.quarantine_outcome_errors and outcome_error
+                    if quarantine:
+                        counters["quarantined_episodes"] += 1
+                        counters["quarantined_rows"] += len(rows)
+                        counters["quarantined_reward_mismatches"] += int(
+                            bool(episode_report.get("reward_mismatch"))
+                        )
+                        counters["quarantined_missing_winners"] += int(episode_report["winner"] is None)
+                    else:
+                        counters["rows"] += len(rows)
+                        counters["policy_rows"] += sum(row["policy_weight"] > 0 for row in rows)
+                        counters["value_rows"] += sum(row["value_weight"] > 0 for row in rows)
+                        counters["empty_action_rows"] += sum(row["action"] == [] for row in rows)
+                        for row in rows:
+                            handle.write(json_dumps(row) + "\n")
                 except Exception as exc:
                     counters["load_errors"] += 1
                     errors.append({"path": str(path), "reason": f"{type(exc).__name__}: {exc}"})
 
         decision_total = counters["rows"] + counters["invalid_decisions"]
         invalid_rate = counters["invalid_decisions"] / decision_total if decision_total else 1.0
+        quarantined_episode_rate = (
+            counters["quarantined_episodes"] / counters["episodes"] if counters["episodes"] else 1.0
+        )
+        outcome_gate_passed = (
+            counters["quarantined_reward_mismatches"] == counters["reward_mismatches"]
+            and counters["quarantined_missing_winners"] == counters["episodes_missing_winner"]
+            and quarantined_episode_rate <= args.max_quarantined_episode_rate
+        ) if args.quarantine_outcome_errors else (
+            counters["episodes_missing_winner"] == 0 and counters["reward_mismatches"] == 0
+        )
         gate_passed = (
             bool(counters["rows"])
             and invalid_rate <= args.max_invalid_rate
             and counters["load_errors"] == 0
             and counters["conflicting_episode_ids"] == 0
-            and counters["episodes_missing_winner"] == 0
-            and counters["reward_mismatches"] == 0
+            and outcome_gate_passed
             and counters["unknown_submission_status_skipped"] == 0
             and (args.policy_source == "all" or counters["policy_rows"] > 0)
         )
@@ -177,10 +215,14 @@ def main() -> None:
             "alignment": args.alignment,
             "policy_source": args.policy_source,
             "keep_logs": args.keep_logs,
+            "quarantine_outcome_errors": args.quarantine_outcome_errors,
             "files_selected": len(files),
             **dict(counters),
             "invalid_rate": invalid_rate,
             "max_invalid_rate": args.max_invalid_rate,
+            "quarantined_episode_rate": quarantined_episode_rate,
+            "max_quarantined_episode_rate": args.max_quarantined_episode_rate,
+            "outcome_gate_passed": outcome_gate_passed,
             "gate_passed": gate_passed,
             "output": str(output),
             "errors": errors[:50],

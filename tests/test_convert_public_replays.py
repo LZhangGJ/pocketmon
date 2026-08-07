@@ -73,6 +73,40 @@ class ConvertPublicReplaysTests(unittest.TestCase):
             self.assertEqual(payload["load_errors"], 0)
             self.assertFalse(output.exists())
 
+    def test_explicit_outcome_quarantine_publishes_only_reliable_episodes(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            replay_directory = root / "replays" / "2026-07-20"
+            replay_directory.mkdir(parents=True)
+            bad = mismatched_reward_replay()
+            good = mismatched_reward_replay()
+            good["info"]["EpisodeId"] = 100
+            good["rewards"] = [1, -1]
+            (replay_directory / "99.json").write_text(json.dumps(bad), encoding="utf-8")
+            (replay_directory / "100.json").write_text(json.dumps(good), encoding="utf-8")
+            output = root / "processed.jsonl.gz"
+            report = root / "report.json"
+            arguments = [
+                "convert_public_replays.py",
+                "--input-root", str(root / "replays"),
+                "--date", "2026-07-20",
+                "--quarantine-outcome-errors",
+                "--max-quarantined-episode-rate", "0.5",
+                "--output", str(output),
+                "--report", str(report),
+            ]
+
+            with patch.object(sys, "argv", arguments):
+                main()
+
+            payload = json.loads(report.read_text(encoding="utf-8"))
+            self.assertTrue(payload["gate_passed"])
+            self.assertTrue(payload["outcome_gate_passed"])
+            self.assertEqual(payload["quarantined_episodes"], 1)
+            self.assertEqual(payload["quarantined_reward_mismatches"], 1)
+            self.assertEqual(payload["rows"] + payload["quarantined_rows"], payload["parsed_rows"])
+            self.assertTrue(output.exists())
+
 
 if __name__ == "__main__":
     unittest.main()
