@@ -1,0 +1,37 @@
+{
+  "experiment_id": "RL-BC-002-game-smoke",
+  "candidate": {
+    "arm": "RL-BC-002-A",
+    "seed": 20260720,
+    "checkpoint": "checkpoints/rl_bc_002/02782c3/a/seed_20260720_best.pt",
+    "checkpoint_sha256": "2faac94de9e937dee77cd6d5d44036d7f45bb2dc4cc6491c1c97c0091f4fb216",
+    "architecture": "stateless_masked_autoregressive_candidate_pointer_with_stop",
+    "training_code_commit": "02782c3e881a3b7fa7e75c36e2a95fff76b873cf",
+    "input_sha256": "2768c08ae2451f50b5382ad8eed0f3db2cc1facab53d8b25b19aeed39850b694"
+  },
+  "engine_validation": {
+    "seeds": [17, 42, 20260720, 20260721],
+    "repeats_per_seed": 2,
+    "agents": ["official_random", "official_random"],
+    "act_timeout_seconds": 5,
+    "run_timeout_seconds": 120,
+    "episode_steps": 100000,
+    "network_access": "blocked",
+    "required_trace_reproducibility": true
+  },
+  "planned_model_protocol": {
+    "status": "not_started_engine_validation_failed",
+    "opponents": ["official_random", "lucario_rule"],
+    "paired_seeds": [17, 42, 20260720, 20260721, 20260722, 20260723, 20260724, 20260725, 20260726, 20260727],
+    "games_per_opponent": 20,
+    "games_per_seat": 10,
+    "integration_games": 4,
+    "minimum_model_games": 40
+  },
+  "stop_conditions": [
+    "official engine source or runtime identity is not verifiable",
+    "same-seed official_random replay is not reproducible",
+    "winner, turn count, or termination reason is unavailable",
+    "crash, timeout, or illegal action occurs during integration smoke"
+  ]
+}

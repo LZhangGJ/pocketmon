@@ -1,0 +1,137 @@
+{
+  "experiment_id": "RL-BC-002",
+  "status": "completed_formal",
+  "code_commit": "02782c3e881a3b7fa7e75c36e2a95fff76b873cf",
+  "input_sha256": "2768c08ae2451f50b5382ad8eed0f3db2cc1facab53d8b25b19aeed39850b694",
+  "split": {
+    "seed": 20260720,
+    "train_episodes": 400,
+    "validation_episodes": 100,
+    "episode_overlap": [],
+    "train_rows": 63328,
+    "validation_rows": 15448
+  },
+  "seeds": [17, 42, 20260720],
+  "reference_rl_bc_001": {
+    "epochs": 30,
+    "validation_total_loss": {"mean": 0.8920824053709088, "sample_std": 0.0004324728411552455},
+    "sequence_exact_match": {"mean": 0.4486264862648627, "sample_std": 0.0013492810719068875},
+    "set_exact_match": {"mean": 0.45481754817548176, "sample_std": 0.0012320606151141054},
+    "candidate_precision": {"mean": 0.48500507954004396, "sample_std": 0.0015181568805654156},
+    "candidate_recall": {"mean": 0.48672771531239134, "sample_std": 0.001226730641504384},
+    "single_select_accuracy": {"mean": 0.4490559470982337, "sample_std": 0.001140289082231019},
+    "empty_action_accuracy": {"mean": 0.3547008547008547, "sample_std": 0.06452849944675854},
+    "multi_select_accuracy": {"mean": 0.47354497354497355, "sample_std": 0.009164289987136916},
+    "decode_legal_rate": 1.0,
+    "invalid_actions": 0
+  },
+  "stateless_long": {
+    "fingerprint": "b1fcdb91bd72664816c46c75e79098d155344d9d9705bdd426f281f35cf0b103",
+    "epochs_completed": [60, 60, 60],
+    "best_epochs": [59, 60, 59],
+    "validation_total_loss": {"mean": 0.8550915510749798, "sample_std": 0.0016272277430651645},
+    "sequence_exact_match": {"mean": 0.4857728577285773, "sample_std": 0.0025927694553115788},
+    "set_exact_match": {"mean": 0.4920459204592046, "sample_std": 0.0030486775637591414},
+    "candidate_precision": {"mean": 0.5202937793651047, "sample_std": 0.002987201154939334},
+    "candidate_recall": {"mean": 0.5225841350797883, "sample_std": 0.0030543880335337395},
+    "single_select_accuracy": {"mean": 0.48973288088401634, "sample_std": 0.0026502209015083966},
+    "empty_action_accuracy": {"mean": 0.2564102564102564, "sample_std": 0.10256410256410256},
+    "multi_select_accuracy": {"mean": 0.46825396825396826, "sample_std": 0.0},
+    "decode_legal_rate": 1.0,
+    "invalid_actions": 0,
+    "runtime_seconds_total": 3116.956300854683,
+    "peak_ram_mb_max": 1989.1640625,
+    "peak_vram_mb_max": 595.68994140625
+  },
+  "history_gru": {
+    "fingerprint": "1d69ddce3b0cc13696bc210fac6b4fed8880a0794d5ff30fbb4b0c912d0a1b83",
+    "epochs_completed": [31, 25, 29],
+    "best_epochs": [21, 15, 19],
+    "validation_total_loss": {"mean": 0.8948149819711193, "sample_std": 0.0038017460595496226},
+    "sequence_exact_match": {"mean": 0.45407954079540797, "sample_std": 0.0037009541931600732},
+    "set_exact_match": {"mean": 0.46059860598605984, "sample_std": 0.004282727849551349},
+    "candidate_precision": {"mean": 0.48977803467107933, "sample_std": 0.0038227667620788154},
+    "candidate_recall": {"mean": 0.49090066071635563, "sample_std": 0.005008554004976981},
+    "single_select_accuracy": {"mean": 0.4533194118158879, "sample_std": 0.0050317141517883905},
+    "empty_action_accuracy": {"mean": 0.4658119658119658, "sample_std": 0.07833462726420243},
+    "multi_select_accuracy": {"mean": 0.48148148148148145, "sample_std": 0.006999342092763456},
+    "decode_legal_rate": 1.0,
+    "invalid_actions": 0,
+    "runtime_seconds_total": 2035.0642445180566,
+    "peak_ram_mb_max": 2211.7578125,
+    "peak_vram_mb_max": 609.69873046875
+  },
+  "comparisons": {
+    "stateless_long_minus_rl_bc_001": {
+      "validation_total_loss_mean_delta": -0.036990854295929,
+      "sequence_exact_match_mean_delta": 0.0371463714637146,
+      "set_exact_match_mean_delta": 0.03722837228372284,
+      "candidate_precision_mean_delta": 0.03528869982506074,
+      "candidate_recall_mean_delta": 0.03585641976739696,
+      "single_select_accuracy_mean_delta": 0.04067693378578265,
+      "empty_action_accuracy_mean_delta": -0.0982905982905983,
+      "multi_select_accuracy_mean_delta": -0.005291005291005291,
+      "loss_improved_seeds": 3,
+      "sequence_improved_seeds": 3,
+      "set_improved_seeds": 3,
+      "empty_improved_seeds": 1,
+      "multi_improved_seeds": 1
+    },
+    "history_gru_minus_stateless_long": {
+      "validation_total_loss_mean_delta": 0.0397234308961395,
+      "sequence_exact_match_mean_delta": -0.03169331693316934,
+      "set_exact_match_mean_delta": -0.03144731447314478,
+      "candidate_precision_mean_delta": -0.03051574469402537,
+      "candidate_recall_mean_delta": -0.03168347436343269,
+      "single_select_accuracy_mean_delta": -0.03641346906812844,
+      "empty_action_accuracy_mean_delta": 0.2094017094017094,
+      "multi_select_accuracy_mean_delta": 0.01322751322751319,
+      "loss_improved_seeds": 0,
+      "sequence_improved_seeds": 0,
+      "set_improved_seeds": 0,
+      "empty_improved_seeds": 3,
+      "multi_improved_seeds": 3
+    },
+    "history_gru_minus_rl_bc_001": {
+      "validation_total_loss_mean_delta": 0.0027325766002105,
+      "sequence_exact_match_mean_delta": 0.00545305453054527,
+      "set_exact_match_mean_delta": 0.00578105781057808,
+      "empty_action_accuracy_mean_delta": 0.1111111111111111,
+      "multi_select_accuracy_mean_delta": 0.0079365079365079,
+      "sequence_improved_seeds": 3,
+      "set_improved_seeds": 3,
+      "empty_improved_seeds": 3,
+      "multi_improved_seeds": 2
+    }
+  },
+  "convergence": {
+    "stateless_long": "best epochs are 59, 60, and 59; two last-five-epoch trends still decrease and one is nearly flat, so the arm is not convincingly converged at 60 epochs",
+    "history_gru": "all seeds early-stop at 25-31 completed epochs with best epochs 15-21 and positive late validation-loss changes while training loss falls; this is consistent with overfitting"
+  },
+  "history_audit": {
+    "groups": 1000,
+    "max_length": 16,
+    "rows_with_history": 77776,
+    "history_tokens": 1124531,
+    "truncated_rows": 61806,
+    "physical_row_order_used": false,
+    "current_or_future_steps_used": 0
+  },
+  "legality": {
+    "decode_legal_rate_min": 1.0,
+    "invalid_actions": 0,
+    "unsupported_rows": 0,
+    "skipped_rows": 0,
+    "nan_failures": 0,
+    "oom_failures": 0,
+    "runtime_failures": 0
+  },
+  "decision": {
+    "training_length": "60-epoch stateless training materially improves loss and overall exact-match metrics in all three seeds, but degrades empty and multi-select means and is not fully converged",
+    "history_encoder": "the tested minimal GRU does not provide an independent overall gain over the same-budget stateless arm: overall exact metrics and loss are worse in all three seeds, although empty and multi-select accuracy improve in all three",
+    "recommendation": "use stateless-long as the offline overall-metric candidate; do not promote the current GRU as a replacement, and investigate targeted STOP/cardinality modeling or regularized history only within BC",
+    "game_evaluation_condition_met": true,
+    "offline_metrics_imply_win_rate": false,
+    "awr_iql_started": false
+  }
+}

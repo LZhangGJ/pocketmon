@@ -1,0 +1,134 @@
+{
+  "experiment_id": "DATA-001-ACTION-POSITION",
+  "generated_at": "2026-07-20T12:14:35.137930+00:00",
+  "input_root": "data/raw/replays",
+  "date": "2026-07-19",
+  "files_selected": 500,
+  "files_loaded": 500,
+  "load_errors": [],
+  "lag_definition": "action_step - observation_step",
+  "framework_expected_lag": 1,
+  "framework_semantics": {
+    "agent_input": "steps[t-1].observation when steps[t-1].status == ACTIVE",
+    "recorded_action": "steps[t].action",
+    "recorded_status_beside_action": "post-interpreter steps[t].status"
+  },
+  "diagnostic_only": true,
+  "result": {
+    "expected_lag": 1,
+    "best_observed_lag": 1,
+    "active_observations": 79776,
+    "active_missing_observation": 0,
+    "empty_expected_actions": 569,
+    "empty_required_expected_actions": 0,
+    "empty_required_with_valid_other_lag": 0,
+    "empty_required_unresolved": 0,
+    "valid_other_lags": {
+      "-1": 0,
+      "0": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0
+    },
+    "lags": {
+      "-1": {
+        "lag": -1,
+        "observations": 79776,
+        "valid_decisions": 49984,
+        "setup_actions": 0,
+        "invalid_decisions": 29792,
+        "empty_actions": 14408,
+        "missing_actions": 1000,
+        "valid_rate": 0.6265543521861211,
+        "reasons": {
+          "action_not_integer_list": 1000,
+          "option_index_out_of_range": 12199,
+          "selection_count_out_of_bounds": 16593,
+          "valid": 49984
+        }
+      },
+      "0": {
+        "lag": 0,
+        "observations": 79776,
+        "valid_decisions": 53686,
+        "setup_actions": 0,
+        "invalid_decisions": 26090,
+        "empty_actions": 10028,
+        "missing_actions": 0,
+        "valid_rate": 0.6729592860008022,
+        "reasons": {
+          "missing_select": 1000,
+          "option_index_out_of_range": 12383,
+          "selection_count_out_of_bounds": 12707,
+          "valid": 53686
+        }
+      },
+      "1": {
+        "lag": 1,
+        "observations": 79776,
+        "valid_decisions": 78776,
+        "setup_actions": 1000,
+        "invalid_decisions": 0,
+        "empty_actions": 569,
+        "missing_actions": 0,
+        "valid_rate": 1.0,
+        "reasons": {
+          "deck_submission": 1000,
+          "valid": 78776
+        }
+      },
+      "2": {
+        "lag": 2,
+        "observations": 79776,
+        "valid_decisions": 53903,
+        "setup_actions": 0,
+        "invalid_decisions": 25873,
+        "empty_actions": 9551,
+        "missing_actions": 500,
+        "valid_rate": 0.6756794023265142,
+        "reasons": {
+          "action_not_integer_list": 500,
+          "missing_select": 1000,
+          "option_index_out_of_range": 12194,
+          "selection_count_out_of_bounds": 12179,
+          "valid": 53903
+        }
+      },
+      "3": {
+        "lag": 3,
+        "observations": 79776,
+        "valid_decisions": 52981,
+        "setup_actions": 0,
+        "invalid_decisions": 26795,
+        "empty_actions": 14505,
+        "missing_actions": 1000,
+        "valid_rate": 0.6641220417168071,
+        "reasons": {
+          "action_not_integer_list": 1000,
+          "missing_select": 1000,
+          "option_index_out_of_range": 9363,
+          "selection_count_out_of_bounds": 15432,
+          "valid": 52981
+        }
+      },
+      "4": {
+        "lag": 4,
+        "observations": 79776,
+        "valid_decisions": 48942,
+        "setup_actions": 0,
+        "invalid_decisions": 30834,
+        "empty_actions": 19490,
+        "missing_actions": 1500,
+        "valid_rate": 0.6134927797833934,
+        "reasons": {
+          "action_not_integer_list": 1500,
+          "missing_select": 1000,
+          "option_index_out_of_range": 8613,
+          "selection_count_out_of_bounds": 19721,
+          "valid": 48942
+        }
+      }
+    },
+    "examples": []
+  }
+}

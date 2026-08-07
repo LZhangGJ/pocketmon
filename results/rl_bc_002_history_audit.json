@@ -1,0 +1,48 @@
+{
+  "experiment_id": "RL-BC-002-history-schema-audit",
+  "status": "passed",
+  "audited_at_code_commit": "2f1b842e7b780f06635aaa86a02b459ee3fa43e3",
+  "input": "data/processed/public_replay_v1.jsonl.gz",
+  "input_sha256": "2768c08ae2451f50b5382ad8eed0f3db2cc1facab53d8b25b19aeed39850b694",
+  "input_bytes": 19416172,
+  "rows": 78776,
+  "episodes": 500,
+  "required_fields": {
+    "episode_id": 78776,
+    "player": 78776,
+    "action_step": 78776,
+    "observation_step": 78776
+  },
+  "causal_order": {
+    "group_by": ["episode_id", "player"],
+    "order_by": "action_step",
+    "groups": 1000,
+    "duplicate_order_keys": 0,
+    "non_increasing_after_explicit_sort": 0,
+    "action_observation_lag_counts": {
+      "1": 78776
+    },
+    "physical_jsonl_order_used": false,
+    "physical_order_disagrees_with_explicit_order_groups": 0,
+    "group_length_min": 5,
+    "group_length_mean": 78.776,
+    "group_length_max": 152
+  },
+  "player_identity": {
+    "player_0_rows": 40034,
+    "player_1_rows": 38742,
+    "observation_current_yourIndex_mismatches": 0
+  },
+  "leakage_checks": {
+    "observation_logs_rows": 0,
+    "current_action_used_in_history": false,
+    "future_observation_or_action_used": false,
+    "outcome_or_reward_used": false,
+    "winner_used": false,
+    "post_action_state_used": false,
+    "opponent_hidden_information_added": false
+  },
+  "decision": "schema v2 can recover causal same-player history by explicit episode_id, player, and action_step; history construction may proceed only after sorting those keys and must use rows with strictly smaller action_step",
+  "history_window": 16,
+  "failures": []
+}

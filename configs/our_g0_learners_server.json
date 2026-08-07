@@ -1,0 +1,14 @@
+[
+  {
+    "name": "our_raging_bolt_g0",
+    "agent_dir": "/homes/lzhang/pocketmon/results/our_agents_2026-08-06/raging_bolt_g0"
+  },
+  {
+    "name": "our_dragapult_munkidori_g0",
+    "agent_dir": "/homes/lzhang/pocketmon/results/our_agents_2026-08-06/dragapult_munkidori_g0"
+  },
+  {
+    "name": "our_lopunny_froslass_g0",
+    "agent_dir": "/homes/lzhang/pocketmon/results/our_agents_2026-08-06/lopunny_froslass_g0"
+  }
+]

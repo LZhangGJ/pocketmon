@@ -1,0 +1,40 @@
+{
+  "experiment_id": "RL-BC-002-game-smoke",
+  "status": "blocked_official_engine_validation",
+  "engine_recovered": true,
+  "model_games_started": false,
+  "model_games": 0,
+  "blockers": [
+    {
+      "name": "unseedable_official_engine",
+      "evidence": "BattleStart exposes no seed and ApiBattleStart uses std::random_device for each game; 0/4 repeated seed pairs had matching traces"
+    },
+    {
+      "name": "runtime_binary_identity_mismatch",
+      "evidence": "competition archive libcg.so SHA feafd404... differs from kaggle-environments 1.32.0 cabt libcg.so SHA 7acbfc7b..."
+    },
+    {
+      "name": "termination_reason_unavailable",
+      "evidence": "all games ended DONE with readable rewards and turn counts, but final observation result remained -1 and cabt exposes no termination reason"
+    }
+  ],
+  "passed_checks": {
+    "official_source_downloaded": true,
+    "native_engine_loaded": true,
+    "official_random_games": 8,
+    "normally_terminated_games": 8,
+    "crashes": 0,
+    "timeouts": 0,
+    "invalid_actions": 0,
+    "network_access_attempts": 0
+  },
+  "required_to_unblock": [
+    "a pinned official competition runtime whose native engine hash is documented",
+    "an official seedable battle interface or an explicitly approved unseeded evaluation protocol",
+    "a documented termination-reason field or an approved reward/status-only definition"
+  ],
+  "next_action": "do not run RL-BC-002 model matches until all protocol blockers are resolved",
+  "checkpoint_unchanged": true,
+  "training_or_model_changes": false,
+  "awr_iql_ppo_self_play_started": false
+}

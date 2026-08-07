@@ -1,0 +1,49 @@
+{
+  "experiment_id": "RL-BC-005-GOLD-V2-TRANSFORMER-TEXT",
+  "arm": "bias-corrected-official-replay-card-transformer-text",
+  "architecture": "structured_card_attack_transformer_text_deck_masked_pointer_with_stop",
+  "input": "/homes/lzhang/pocketmon/data/processed/public_replay_2026-08-05_2026-08-06.jsonl.gz",
+  "input_sha256": "4f602ca6ef6d94957fab7f21bb4eaacafc0a7bed893eb43a0e355df2b4d08952",
+  "split": {
+    "kind": "episode_id",
+    "seed": 20260807,
+    "train_fraction": 0.8,
+    "validation_fraction": 0.2
+  },
+  "training": {
+    "formal_seeds": [23],
+    "epochs": 3,
+    "batch_size": 384,
+    "learning_rate": 0.0001,
+    "hidden_dim": 192,
+    "early_stopping_patience": 2,
+    "value_loss_weight": 0.1,
+    "gradient_clip_norm": 1.0
+  },
+  "history": {"enabled": false, "encoder": "none", "max_length": 0},
+  "structured": {
+    "card_attack_embeddings": true,
+    "entity_encoder": "transformer_cross_attention",
+    "deck_conditioning": "acting_player_submitted_deck_masked_mean",
+    "card_text_embedding": "signed_hash_word_bigram_char3_128d",
+    "deck_map_sha256": "ff503d7fb21cb1c2fbbbc6d7309c0b85593700a916bdce4411ec7e7f81d80d04",
+    "card_database_sha256": "25543d916333d32834ac00ea6138de07f3bc74d1ee43f95993696d8aa8d09efc",
+    "attack_database_sha256": "16279a9cfb8caefbcd4a0da3255432ebb20f6a4346831415a3e6a56972dec5a8",
+    "confidence_threshold": 0.0
+  },
+  "sampling": {
+    "recency_half_life_days": 2.0,
+    "deck_stratification_alpha": 0.5,
+    "rating_stratification_alpha": 0.5,
+    "rating_bin_width": 100.0,
+    "min_sample_weight": 0.25,
+    "max_sample_weight": 4.0,
+    "opponent_identity": "submitted_deck_sha256_proxy",
+    "agent_id_available": false
+  },
+  "initialization": "random",
+  "random_initialization": true,
+  "policy_loss_rows": "winner_only_with_bias_corrected_sample_weight",
+  "value_loss_rows": "both_players_with_bias_corrected_sample_weight",
+  "offline_rl": false
+}

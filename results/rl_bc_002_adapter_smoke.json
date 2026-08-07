@@ -1,0 +1,89 @@
+{
+  "experiment_id": "RL-BC-002-adapter-smoke",
+  "status": "adapter_functional_smoke_passed_game_smoke_blocked_missing_cg",
+  "adapter_code_commit": "00d116bdb63549dfa8807ea0ef939761fcf327f7",
+  "candidate": {
+    "arm": "RL-BC-002-A",
+    "seed": 20260720,
+    "checkpoint": "checkpoints/rl_bc_002/02782c3/a/seed_20260720_best.pt",
+    "checkpoint_sha256": "2faac94de9e937dee77cd6d5d44036d7f45bb2dc4cc6491c1c97c0091f4fb216",
+    "checkpoint_committed": false
+  },
+  "operational_attempts": [
+    {
+      "attempt": 1,
+      "status": "harness_failed_before_model_import",
+      "reason": "SSH inline Python quoting stripped string literals and produced SyntaxError"
+    },
+    {
+      "attempt": 2,
+      "status": "harness_failed_before_model_import",
+      "reason": "temporary script under /tmp lacked repository root on PYTHONPATH"
+    },
+    {
+      "attempt": 3,
+      "status": "passed",
+      "code_commit": "00d116bdb63549dfa8807ea0ef939761fcf327f7",
+      "reason": "temporary script rerun with explicit repository PYTHONPATH"
+    }
+  ],
+  "functional_smoke": {
+    "input": {
+      "option_count": 2,
+      "min_count": 1,
+      "max_count": 1
+    },
+    "action": [0],
+    "action_legal": true,
+    "diagnostics": {
+      "model_actions": 1,
+      "fallback_actions": 0,
+      "load_errors": 0,
+      "inference_errors": 0,
+      "illegal_model_actions": 0,
+      "illegal_fallback_actions": 0,
+      "emergency_legal_actions": 0,
+      "history_enabled": false,
+      "history_tokens": 0
+    }
+  },
+  "fallback_tests": {
+    "missing_checkpoint_uses_rule_fallback": true,
+    "inference_exception_uses_rule_fallback": true,
+    "illegal_fallback_replaced_by_emergency_legal_action": true,
+    "history_is_causal_and_bounded": true,
+    "runner_collects_diagnostics": true
+  },
+  "game_smoke": {
+    "attempted": false,
+    "status": "blocked_missing_official_cg_engine",
+    "engine_search": {
+      "repository_tmp_search": "no */cg/api.py found",
+      "homes_lzhang_maxdepth_6_search": "no */cg/api.py found"
+    },
+    "opponents": [],
+    "games": 0,
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "crashes": 0,
+    "timeouts": 0,
+    "illegal_actions": 0,
+    "rule_fallbacks": 0,
+    "claim": "no gameplay or win-rate claim"
+  },
+  "verification": {
+    "unit_tests": 62,
+    "unit_test_status": "passed",
+    "compileall": "passed",
+    "test_max_rss_kb": 696964,
+    "test_wall_seconds": 6.11
+  },
+  "awr_iql_started": false,
+  "failures": [
+    {
+      "stage": "game_smoke",
+      "reason": "official cg engine directory is unavailable; adapter gameplay cannot run"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+[
+  {"name": "learner_00", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/alakazam"},
+  {"name": "learner_01", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/archaludon"},
+  {"name": "learner_02", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/library_out"},
+  {"name": "learner_03", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/dragapult"},
+  {"name": "learner_04", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/iono"},
+  {"name": "learner_05", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/lucario_original"},
+  {"name": "learner_06", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/probabilistic"},
+  {"name": "learner_07", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/beam_search_940"},
+  {"name": "learner_08", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/grim_hybrid_909"},
+  {"name": "learner_09", "agent_dir": "/homes/lzhang/pocketmon/tmp/benchmark_agents/simple_matchup"}
+]

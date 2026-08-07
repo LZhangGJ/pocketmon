@@ -1,0 +1,41 @@
+{
+  "experiment_id": "RL-BC-003",
+  "arm": "structured-latest-public-replays",
+  "architecture": "structured_card_attack_deepsets_deck_masked_pointer_with_stop",
+  "input": "data/processed/public_replay_2026-08-05.jsonl.gz",
+  "input_sha256": "3aae7626d5a074301dd5a0175fac3eae9ecb15c8939d9823f7b3a05d1e6d7de4",
+  "split": {
+    "kind": "episode_id",
+    "seed": 20260720,
+    "train_fraction": 0.8,
+    "validation_fraction": 0.2
+  },
+  "training": {
+    "formal_seeds": [17, 42, 20260720],
+    "epochs": 6,
+    "batch_size": 512,
+    "learning_rate": 0.0003,
+    "hidden_dim": 192,
+    "early_stopping_patience": 2,
+    "value_loss_weight": 0.25,
+    "gradient_clip_norm": 1.0
+  },
+  "history": {
+    "enabled": false,
+    "encoder": "none",
+    "max_length": 0
+  },
+  "structured": {
+    "card_attack_embeddings": true,
+    "entity_encoder": "deepsets_masked_mean_max",
+    "deck_conditioning": "acting_player_submitted_deck_masked_mean",
+    "deck_map_sha256": "446e93c35af8043649d9cb544c4b390eff43dc1b8616e7a90d207695345aaf4e",
+    "card_database_sha256": "25543d916333d32834ac00ea6138de07f3bc74d1ee43f95993696d8aa8d09efc",
+    "attack_database_sha256": "16279a9cfb8caefbcd4a0da3255432ebb20f6a4346831415a3e6a56972dec5a8",
+    "confidence_threshold": 0.55
+  },
+  "policy_loss_rows": "policy_weight == 1 only",
+  "value_loss_rows": "value_weight == 1 for both players",
+  "random_initialization": true,
+  "offline_rl": false
+}

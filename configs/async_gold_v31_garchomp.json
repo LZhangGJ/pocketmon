@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "name": "gold_v31_garchomp_async_evolution",
+  "base_config": "configs/continuous_rl_gold_v3_garchomp_specialist.json",
+  "overrides": {
+    "run_root": "/homes/lzhang/pocketmon/results/continuous_rl/gold_v31_async_garchomp",
+    "code_root": "/homes/lzhang/pocketmon_train_goldv31",
+    "card_database": "/homes/lzhang/pocketmon/data/reference/official_cards.json",
+    "search_distillation_epochs": 4,
+    "ppo_epochs": 4,
+    "ppo_learning_rate": 0.000003,
+    "target_kl": 0.008,
+    "action_q_epochs": 8,
+    "action_q_dueling_advantage": true,
+    "action_q_advantage_loss_weight": 0.5,
+    "action_q_loss_priority_weight": 4.0,
+    "retain_rejected_in_league": true,
+    "league_retention_min_public_score": 0.45,
+    "league_retention_max_worst_regression": 0.20,
+    "population_limit": 8,
+    "pbt_variants": [
+      {"name": "conservative"},
+      {
+        "name": "ultra_conservative",
+        "multipliers": {"ppo_learning_rate": 0.5, "entropy_coefficient": 0.5},
+        "overrides": {"frozen_league_fraction": 0.85, "rollout_temperature": 0.8}
+      },
+      {
+        "name": "controlled_exploration",
+        "multipliers": {"entropy_coefficient": 1.5},
+        "overrides": {"frozen_league_fraction": 0.7, "rollout_temperature": 1.0}
+      },
+      {
+        "name": "league_robust",
+        "multipliers": {"ppo_learning_rate": 0.75},
+        "overrides": {"frozen_league_fraction": 0.9, "rollout_temperature": 0.85}
+      }
+    ],
+    "gate_stages": [
+      {
+        "name": "smoke20",
+        "target_games": 20,
+        "opponent_count": 4,
+        "games_per_public": 2,
+        "parent_games": 4,
+        "min_head_to_head_score": 0.25,
+        "min_head_to_head_wilson": 0.0,
+        "min_public_delta": -0.25,
+        "max_worst_matchup_regression": 0.5,
+        "max_seat_gap": 1.0
+      },
+      {
+        "name": "screen200",
+        "target_games": 200,
+        "opponent_count": 8,
+        "games_per_public": 8,
+        "parent_games": 72,
+        "min_head_to_head_score": 0.5,
+        "min_head_to_head_wilson": 0.35,
+        "min_public_delta": 0.0,
+        "max_worst_matchup_regression": 0.2,
+        "max_seat_gap": 0.2
+      },
+      {
+        "name": "confirm400",
+        "target_games": 400,
+        "opponent_count": 16,
+        "games_per_public": 10,
+        "parent_games": 80,
+        "min_head_to_head_score": 0.55,
+        "min_head_to_head_wilson": 0.45,
+        "min_public_delta": 0.02,
+        "max_worst_matchup_regression": 0.1,
+        "max_seat_gap": 0.12
+      }
+    ]
+  },
+  "async": {
+    "max_pending_candidates": 8,
+    "max_parent_version_lag": 2,
+    "deck_candidate_every": 4,
+    "deck_max_swaps": 3,
+    "policy_priority": 100,
+    "deck_priority": 90,
+    "producer_sleep_seconds": 5,
+    "producer_poll_seconds": 15,
+    "evaluator_poll_seconds": 10,
+    "failure_backoff_seconds": 60,
+    "max_consecutive_failures": 3
+  }
+}
