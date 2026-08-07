@@ -1,0 +1,48 @@
+{
+  "topic": {
+    "id": 708584,
+    "title": "Welcome to the Pokémon TCG AI Battle Challenge Simulation Category Competition!",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708584",
+    "commentCount": 4,
+    "votes": 30,
+    "postDate": "2026-06-16T10:13:56.730881200Z",
+    "lastCommentPostDate": "2026-08-06T00:07:25.296666700Z",
+    "isSticky": true
+  },
+  "messages": [
+    {
+      "id": 3503627,
+      "postDate": "2026-07-26T06:53:22.160Z",
+      "content": "<p>I'm working on an agent for this competition and trying to integrate the DeepSeek API (api.deepseek.com) for decision-making. However, I keep getting DNS resolution errors when running my submission on Kaggle:</p>\n<p>Failed to resolve 'api.deepseek.com' ([Errno -3] Temporary failure in name resolution)</p>\n<p>It seems like the Kaggle environment is unable to resolve the domain or reach the external endpoint.</p>\n<p>Has anyone else encountered similar issues when trying to call external APIs in this competition? Is external API access generally allowed, and if so, are there any specific requirements or workarounds (e.g., using Kaggle Secrets, proxy settings, or whitelisting domains)?</p>\n<p>For context, the same code works fine when running locally, so I suspect it's a network restriction on the Kaggle side. I'm using requests with a standard HTTPS connection.(我的翻译器不知道好不好用，将就着读喵</p>",
+      "rawMarkdown": "I'm working on an agent for this competition and trying to integrate the DeepSeek API (api.deepseek.com) for decision-making. However, I keep getting DNS resolution errors when running my submission on Kaggle:\n\n\nFailed to resolve 'api.deepseek.com' ([Errno -3] Temporary failure in name resolution)\n\n\nIt seems like the Kaggle environment is unable to resolve the domain or reach the external endpoint.\n\nHas anyone else encountered similar issues when trying to call external APIs in this competition? Is external API access generally allowed, and if so, are there any specific requirements or workarounds (e.g., using Kaggle Secrets, proxy settings, or whitelisting domains)?\n\nFor context, the same code works fine when running locally, so I suspect it's a network restriction on the Kaggle side. I'm using requests with a standard HTTPS connection.(我的翻译器不知道好不好用，将就着读喵",
+      "votes": -1,
+      "replies": [
+        {
+          "id": 3503798,
+          "postDate": "2026-07-26T13:11:26.117Z",
+          "content": "<p>Internet access is disabled during submission</p>",
+          "rawMarkdown": "Internet access is disabled during submission"
+        }
+      ]
+    },
+    {
+      "id": 3473327,
+      "postDate": "2026-06-16T10:13:56.730Z",
+      "content": "<p>We are excited to launch this competition in collaboration with Kaggle and The Pokémon Company. This challenge focuses on developing AI Training Agents that are capable of playing the Pokémon Trading Card Game (TCG) in a competitive environment.</p>\n<p>As a strategic game of its own, Pokémon TCG players must make gameplay decisions while being mindful of their opponent's own strategies, decks and hands. When formulating their approach to the game, players need to take into consideration various Pokémon types and thousands of different card combinations to consider various gameplay possibilities. In addition, other factors such as card draws and coin tosses introduce additional gameplay variables.</p>\n<p>In this competition, participants will train AI Training Agents that will compete against one another within a digital Pokémon TCG simulation environment. Participants will be tasked with developing an AI Training Agent.</p>\n<p>Some key aspects of the competition include:</p>\n<ul>\n<li>Consideration of an opponent’s unknown hand and strategies</li>\n<li>Simulation-based AI Training Agent training and evaluation</li>\n<li>A combined Simulation Category and Strategy Category competition structure that encourages both performance and research insights.</li>\n</ul>\n<p>The Pokémon TCG AI Battle Challenge will be open to interested AI developers and researchers, engineers and students from around the world, including those less familiar with the Pokémon TCG.</p>\n<p>If you're new to Kaggle competitions, we recommend starting with the Getting Started section and the starter kit provided with the competition.　</p>\n<ul>\n<li><a href=\"https://www.kaggle.com/code/kiyotah/a-sample-rule-based-agent-iono-s-deck\" target=\"_blank\">Iono's Deck</a></li>\n<li><a href=\"https://www.kaggle.com/code/kiyotah/a-sample-rule-based-agent-dragapult-ex-deck\" target=\"_blank\">Dragapult ex Deck</a></li>\n<li><a href=\"https://www.kaggle.com/code/kiyotah/a-sample-rule-based-agent-mega-abomasnow-ex-deck\" target=\"_blank\">Mega Abomasnow ex Deck</a></li>\n<li><a href=\"https://www.kaggle.com/code/kiyotah/a-sample-rule-based-agent-mega-lucario-ex-deck\" target=\"_blank\">Mega Lucario ex Deck</a></li>\n<li><a href=\"https://www.kaggle.com/code/kiyotah/reinforcement-learning-and-mcts-sample-code\" target=\"_blank\">Reinforcement Learning &amp; MCTS</a></li>\n</ul>\n<p>We’re excited to see the creative strategies and AI Training Agents the community develops.</p>",
+      "rawMarkdown": "We are excited to launch this competition in collaboration with Kaggle and The Pokémon Company. This challenge focuses on developing AI Training Agents that are capable of playing the Pokémon Trading Card Game (TCG) in a competitive environment.\n\nAs a strategic game of its own, Pokémon TCG players must make gameplay decisions while being mindful of their opponent's own strategies, decks and hands. When formulating their approach to the game, players need to take into consideration various Pokémon types and thousands of different card combinations to consider various gameplay possibilities. In addition, other factors such as card draws and coin tosses introduce additional gameplay variables.\n\nIn this competition, participants will train AI Training Agents that will compete against one another within a digital Pokémon TCG simulation environment. Participants will be tasked with developing an AI Training Agent.\n\nSome key aspects of the competition include:\n- Consideration of an opponent’s unknown hand and strategies\n- Simulation-based AI Training Agent training and evaluation\n- A combined Simulation Category and Strategy Category competition structure that encourages both performance and research insights.\n\nThe Pokémon TCG AI Battle Challenge will be open to interested AI developers and researchers, engineers and students from around the world, including those less familiar with the Pokémon TCG.\n\nIf you're new to Kaggle competitions, we recommend starting with the Getting Started section and the starter kit provided with the competition.　\n- [Iono's Deck](https://www.kaggle.com/code/kiyotah/a-sample-rule-based-agent-iono-s-deck)\n- [Dragapult ex Deck](https://www.kaggle.com/code/kiyotah/a-sample-rule-based-agent-dragapult-ex-deck)\n- [Mega Abomasnow ex Deck](https://www.kaggle.com/code/kiyotah/a-sample-rule-based-agent-mega-abomasnow-ex-deck)\n- [Mega Lucario ex Deck](https://www.kaggle.com/code/kiyotah/a-sample-rule-based-agent-mega-lucario-ex-deck)\n- [Reinforcement Learning & MCTS](https://www.kaggle.com/code/kiyotah/reinforcement-learning-and-mcts-sample-code)\n\nWe’re excited to see the creative strategies and AI Training Agents the community develops.\n",
+      "votes": 30
+    },
+    {
+      "id": 3509092,
+      "postDate": "2026-08-06T00:07:25.297Z",
+      "content": "<p>Hello! May I ask if the competition environment natively supports PyTorch?</p>",
+      "rawMarkdown": "Hello! May I ask if the competition environment natively supports PyTorch?"
+    },
+    {
+      "id": 3498983,
+      "postDate": "2026-07-16T09:35:22.117Z",
+      "content": "<p>I just wanted to ask what the time limitation for the agents are. Both when making a singular move and for the entire game.</p>",
+      "rawMarkdown": "I just wanted to ask what the time limitation for the agents are. Both when making a singular move and for the entire game."
+    }
+  ]
+}

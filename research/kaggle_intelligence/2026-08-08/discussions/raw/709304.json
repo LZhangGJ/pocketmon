@@ -1,0 +1,55 @@
+{
+  "topic": {
+    "id": 709304,
+    "title": "Kiyota RL/MCTS sample rerun: learning curve and caveat",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709304",
+    "commentCount": 5,
+    "votes": 1,
+    "postDate": "2026-06-18T06:27:28.488823300Z",
+    "lastCommentPostDate": "2026-08-04T13:24:53.053333300Z"
+  },
+  "messages": [
+    {
+      "id": 3498401,
+      "postDate": "2026-07-15T13:51:12.303Z",
+      "content": "<p>I trained the RL starter and submitted it. Its floating around 250-320. I think the RL starter is a bit weak. But there are people who are in the medal zone with pure RL. I don't know anything about the game so i'll continue to build better hidden representations and maybe get a medal if possible.</p>",
+      "rawMarkdown": "I trained the RL starter and submitted it. Its floating around 250-320. I think the RL starter is a bit weak. But there are people who are in the medal zone with pure RL. I don't know anything about the game so i'll continue to build better hidden representations and maybe get a medal if possible.",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3508318,
+          "postDate": "2026-08-04T08:53:43.390Z",
+          "content": "<p>Are there any updates on your experiment's with pure RL?</p>",
+          "rawMarkdown": "Are there any updates on your experiment's with pure RL?",
+          "replies": [
+            {
+              "id": 3508353,
+              "postDate": "2026-08-04T11:06:00.843Z",
+              "content": "<p>I am in the silver zone with RL only. I use top replays for training the value function though.</p>",
+              "rawMarkdown": "I am in the silver zone with RL only. I use top replays for training the value function though."
+            },
+            {
+              "id": 3508399,
+              "postDate": "2026-08-04T13:24:53.053Z",
+              "content": "<p>Can I ask about your system specs? I don't want to burn my gaming lap top 😂</p>",
+              "rawMarkdown": "Can I ask about your system specs? I don't want to burn my gaming lap top 😂"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3474528,
+      "postDate": "2026-06-18T06:27:28.490Z",
+      "content": "<p>I reran Kiyota's public RL/MCTS sample notebook and summarized the learning curve.</p>\n<p>Notebook reference:</p>\n<p><a href=\"https://www.kaggle.com/code/kiyotah/reinforcement-learning-and-mcts-sample-code\" target=\"_blank\">https://www.kaggle.com/code/kiyotah/reinforcement-learning-and-mcts-sample-code</a></p>\n<p>What the sample demonstrates:</p>\n<ul>\n<li>It uses the battle API and search API to collect self-play data.</li>\n<li>It trains a small PyTorch value/policy model over five iterations.</li>\n<li>The evaluation win rate in my rerun moved from <code>18%</code> to a peak of <code>74%</code>, then ended at <code>60%</code>.</li>\n<li>The output is five checkpoint files: <code>model0.pth</code> through <code>model4.pth</code>.</li>\n</ul>\n<p>Important caveat:</p>\n<p>This notebook does not create a submission agent by itself. It does not output <code>main.py</code>, <code>deck.csv</code>, or <code>submission.tar.gz</code>. To turn this into a competition agent, the model architecture and feature encoding would need to be ported into <code>main.py</code>, then validated through battle gates.</p>\n<p>I attached a compact chart of the rerun result for quick reference.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F18926389%2Fc0263f1dea7126b92c316ba8d1e579c8%2Flearning_curve_en_20260618_v1.png?generation=1781763960935736&amp;alt=media\" alt=\"Kiyota RL/MCTS sample rerun learning curve\"></p>",
+      "rawMarkdown": "I reran Kiyota's public RL/MCTS sample notebook and summarized the learning curve.\n\nNotebook reference:\n\nhttps://www.kaggle.com/code/kiyotah/reinforcement-learning-and-mcts-sample-code\n\nWhat the sample demonstrates:\n\n- It uses the battle API and search API to collect self-play data.\n- It trains a small PyTorch value/policy model over five iterations.\n- The evaluation win rate in my rerun moved from `18%` to a peak of `74%`, then ended at `60%`.\n- The output is five checkpoint files: `model0.pth` through `model4.pth`.\n\nImportant caveat:\n\nThis notebook does not create a submission agent by itself. It does not output `main.py`, `deck.csv`, or `submission.tar.gz`. To turn this into a competition agent, the model architecture and feature encoding would need to be ported into `main.py`, then validated through battle gates.\n\nI attached a compact chart of the rerun result for quick reference.\n\n![Kiyota RL/MCTS sample rerun learning curve](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F18926389%2Fc0263f1dea7126b92c316ba8d1e579c8%2Flearning_curve_en_20260618_v1.png?generation=1781763960935736&alt=media)",
+      "votes": 1
+    },
+    {
+      "id": 3508354,
+      "postDate": "2026-08-04T11:07:19.307Z",
+      "content": "<p>This is very insightful. Thank you for sharing!</p>",
+      "rawMarkdown": "This is very insightful. Thank you for sharing!"
+    }
+  ]
+}

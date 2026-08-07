@@ -1,0 +1,33 @@
+{
+  "topic": {
+    "id": 731775,
+    "title": "Issue with inactive teammate",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/731775",
+    "commentCount": 2,
+    "votes": 1,
+    "postDate": "2026-08-01T03:57:34.126822900Z",
+    "lastCommentPostDate": "2026-08-01T07:58:30.070Z"
+  },
+  "messages": [
+    {
+      "id": 3507004,
+      "postDate": "2026-08-01T07:58:30.070Z",
+      "content": "<p>That sounds like a sad story D:. \nI believe there isn't a way to do so. This is absolutely not your case, but let me explain my understanding of why they don't allow this. Because Kaggle has rewards, split the team when money is there makes the money is 2X-&gt;5X. So they not only don't allow split the team, but also not private code sharing.  </p>",
+      "rawMarkdown": "That sounds like a sad story D:. \nI believe there isn't a way to do so. This is absolutely not your case, but let me explain my understanding of why they don't allow this. Because Kaggle has rewards, split the team when money is there makes the money is 2X->5X. So they not only don't allow split the team, but also not private code sharing.  ",
+      "votes": 1
+    },
+    {
+      "id": 3506895,
+      "postDate": "2026-08-01T03:57:34.127Z",
+      "content": "<p>Hello,</p>\n<p>I’m facing an issue with my teammate and I’d like to understand whether I’m still eligible for the competition.</p>\n<p>My teammate has been completely inactive since the very first day. He created his Kaggle account, accepted my invitation to the competition team, and then never logged in again.</p>\n<p>I tried to remove him from the team, but I found out that this isn’t possible.</p>\n<p>More recently, I also invited him to join our team in the companion competition where the write-up must be submitted. However, that invitation has been pending for several days because he has never logged in to accept it.</p>\n<p>In the meantime, I have completed essentially all of the work myself, including a large number of commits and experiments.</p>\n<p>Given that the team composition is currently different between the two competitions, and considering that I don’t expect my teammate to log in and accept the invitation before the deadline, am I still eligible for the competition?</p>\n<p>Is there anything I should do in this situation?</p>\n<p>Thank you for your help.</p>",
+      "rawMarkdown": "Hello,\n\nI’m facing an issue with my teammate and I’d like to understand whether I’m still eligible for the competition.\n\nMy teammate has been completely inactive since the very first day. He created his Kaggle account, accepted my invitation to the competition team, and then never logged in again.\n\nI tried to remove him from the team, but I found out that this isn’t possible.\n\nMore recently, I also invited him to join our team in the companion competition where the write-up must be submitted. However, that invitation has been pending for several days because he has never logged in to accept it.\n\nIn the meantime, I have completed essentially all of the work myself, including a large number of commits and experiments.\n\nGiven that the team composition is currently different between the two competitions, and considering that I don’t expect my teammate to log in and accept the invitation before the deadline, am I still eligible for the competition?\n\nIs there anything I should do in this situation?\n\nThank you for your help.",
+      "votes": 1
+    },
+    {
+      "id": 3506902,
+      "postDate": "2026-08-01T04:17:03.377Z",
+      "content": "<p>Unfortunately, you cannot get rid of this freelancer once you team up according to Kaggle rules. Normally, we teamup in the near the end of the deadline or in the last month of the competition to avoid this situation. Therefore, I feel pity for your experience.</p>",
+      "rawMarkdown": "Unfortunately, you cannot get rid of this freelancer once you team up according to Kaggle rules. Normally, we teamup in the near the end of the deadline or in the last month of the competition to avoid this situation. Therefore, I feel pity for your experience."
+    }
+  ]
+}

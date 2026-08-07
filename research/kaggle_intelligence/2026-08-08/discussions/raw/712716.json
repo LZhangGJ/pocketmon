@@ -1,0 +1,35 @@
+{
+  "topic": {
+    "id": 712716,
+    "title": "make a option to download all of the replays in once ",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712716",
+    "commentCount": 2,
+    "votes": 1,
+    "postDate": "2026-06-23T10:07:15.998104200Z",
+    "lastCommentPostDate": "2026-06-24T04:36:55.300Z"
+  },
+  "messages": [
+    {
+      "id": 3479317,
+      "postDate": "2026-06-23T16:46:47.957Z",
+      "content": "<p>Hey there,</p>\n<p>This is available via the Kaggle CLI. Take a look at the documentation here: <a href=\"https://github.com/Kaggle/kaggle-cli/blob/main/docs/simulation_competitions.md\" target=\"_blank\">https://github.com/Kaggle/kaggle-cli/blob/main/docs/simulation_competitions.md</a></p>",
+      "rawMarkdown": "Hey there,\n\nThis is available via the Kaggle CLI. Take a look at the documentation here: https://github.com/Kaggle/kaggle-cli/blob/main/docs/simulation_competitions.md",
+      "votes": 3,
+      "replies": [
+        {
+          "id": 3479736,
+          "postDate": "2026-06-24T04:36:55.300Z",
+          "content": "<p>thanks for informing👍</p>",
+          "rawMarkdown": "thanks for informing👍"
+        }
+      ]
+    },
+    {
+      "id": 3479055,
+      "postDate": "2026-06-23T10:07:15.997Z",
+      "content": "<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F21014133%2F9152f61fece4d23accb5f9a959b04484%2FScreenshot%20from%202026-06-23%2015-31-59.png?generation=1782208936083438&amp;alt=media\" alt=\"\"></p>\n<p>Hi <a href=\"https://www.kaggle.com/shimishige\" target=\"_blank\">@shimishige</a> ,\njust wanted to express my opinion as in I think having a download button to download all of the episodes as in one buttond will be very cool relaxing feature as it gets hard doing it the manual way…\nIg it's an issue kaggle might need to bring but I think here in this competition you are the boss  who I can reach out to in order to get my suggestion to correct people.</p>\n<p>BTW enjoying this new gen of competitions \nPIkachu, I chose you</p>",
+      "rawMarkdown": "![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F21014133%2F9152f61fece4d23accb5f9a959b04484%2FScreenshot%20from%202026-06-23%2015-31-59.png?generation=1782208936083438&alt=media)\n\nHi @shimishige ,\njust wanted to express my opinion as in I think having a download button to download all of the episodes as in one buttond will be very cool relaxing feature as it gets hard doing it the manual way...\nIg it's an issue kaggle might need to bring but I think here in this competition you are the boss  who I can reach out to in order to get my suggestion to correct people.\n\n\nBTW enjoying this new gen of competitions \nPIkachu, I chose you",
+      "votes": 1
+    }
+  ]
+}

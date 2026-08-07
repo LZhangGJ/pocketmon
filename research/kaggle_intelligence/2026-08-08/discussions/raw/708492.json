@@ -1,0 +1,48 @@
+{
+  "topic": {
+    "id": 708492,
+    "title": "How to Get Started + Competition's Official Discord",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708492",
+    "commentCount": 4,
+    "votes": 16,
+    "postDate": "2026-06-15T20:27:17.391215100Z",
+    "lastCommentPostDate": "2026-06-18T01:31:36.600Z",
+    "isSticky": true
+  },
+  "messages": [
+    {
+      "id": 3473124,
+      "postDate": "2026-06-15T20:27:17.390Z",
+      "content": "<h3>Information for First Timers</h3>\n<p><strong>New to machine learning and data science?</strong> No question is too basic or too simple. Feel free to start your own thread, or use this thread as a place to post any first-timer clarifying questions for the Kaggle community to help you with!</p>\n<p><strong>New to Kaggle?</strong> Take a look at a few videos to learn a bit more about <a href=\"https://www.youtube.com/watch?v=aIus8si_Et0\" target=\"_blank\">site etiquette</a>, <a href=\"https://www.youtube.com/watch?v=sEJHyuWKd-s\" target=\"_blank\">Kaggle lingo</a>, and <a href=\"https://www.youtube.com/watch?&amp;v=GJBOMWpLpTQ\" target=\"_blank\">how to enter a competition using Kaggle Notebooks</a>. Publish and share your <a href=\"https://www.kaggle.com/docs/models#publishing-a-model\" target=\"_blank\">models on Kaggle Models</a>!</p>\n<p><strong>Looking for a Team?</strong> Express your interest in joining a team through our <a href=\"https://www.kaggle.com/discussions/product-feedback/341195\" target=\"_blank\">Team Up</a> feature.</p>\n<p><strong>Remember</strong>: Kaggle is for everyone. Whether you're teaming up or sharing tips in the competition forum, we expect everyone to follow our Kaggle community guidelines.</p>\n<h3>Competition's Official Discord</h3>\n<p>In addition to this competition forum, you can continue the discussion in our official Kaggle Discord Server here:</p>\n<h1><a href=\"http://discord.gg/kaggle\" target=\"_blank\">discord.gg/kaggle</a></h1>\n<p>The Discord is a great place to ask getting started questions, chat about the nuances of this competition, and connect with potential team mates. Learn more about Discord at our <a href=\"https://www.kaggle.com/discussions/general/429933\" target=\"_blank\">announcement here</a>. Here are a few things to keep in mind though:</p>\n<p><strong>1. Discord Competition Channels are 'Public' - Don't Share Private Information</strong></p>\n<p>Discord channels for specific competitions are considered 'public' spaces where you are allowed to talk about competition details. Please remember that private sharing of competition code or data outside of your team is, as always, not permitted. Code sharing must always be done publicly through the Kaggle forums/notebooks.</p>\n<p><strong>2. Discord Competition Channels are Not Monitored by Staff - Keep Important Information on the Kaggle Forums</strong></p>\n<p>Kaggle Staff and Hosts running competitions will not monitor Discord or be available to answer questions in Discord. This is intended to be a more casual space to discuss competitions and help each other. Please keep important questions, insights, writeups, and other valuable conversation on the Kaggle forums. </p>\n<p>Happy Modeling! </p>",
+      "rawMarkdown": "### Information for First Timers\n**New to machine learning and data science?** No question is too basic or too simple. Feel free to start your own thread, or use this thread as a place to post any first-timer clarifying questions for the Kaggle community to help you with!\n\n**New to Kaggle?** Take a look at a few videos to learn a bit more about [site etiquette](https://www.youtube.com/watch?v=aIus8si_Et0), [Kaggle lingo](https://www.youtube.com/watch?v=sEJHyuWKd-s), and [how to enter a competition using Kaggle Notebooks](https://www.youtube.com/watch?&v=GJBOMWpLpTQ). Publish and share your [models on Kaggle Models](https://www.kaggle.com/docs/models#publishing-a-model)!\n\n**Looking for a Team?** Express your interest in joining a team through our [Team Up](https://www.kaggle.com/discussions/product-feedback/341195) feature.\n\n**Remember**: Kaggle is for everyone. Whether you're teaming up or sharing tips in the competition forum, we expect everyone to follow our Kaggle community guidelines.\n\n### Competition's Official Discord\nIn addition to this competition forum, you can continue the discussion in our official Kaggle Discord Server here:\n# [discord.gg/kaggle](http://discord.gg/kaggle)\n \nThe Discord is a great place to ask getting started questions, chat about the nuances of this competition, and connect with potential team mates. Learn more about Discord at our [announcement here](https://www.kaggle.com/discussions/general/429933). Here are a few things to keep in mind though:\n\n**1. Discord Competition Channels are 'Public' - Don't Share Private Information**\n\nDiscord channels for specific competitions are considered 'public' spaces where you are allowed to talk about competition details. Please remember that private sharing of competition code or data outside of your team is, as always, not permitted. Code sharing must always be done publicly through the Kaggle forums/notebooks.\n\n**2. Discord Competition Channels are Not Monitored by Staff - Keep Important Information on the Kaggle Forums**\n\nKaggle Staff and Hosts running competitions will not monitor Discord or be available to answer questions in Discord. This is intended to be a more casual space to discuss competitions and help each other. Please keep important questions, insights, writeups, and other valuable conversation on the Kaggle forums. \n\nHappy Modeling! \n",
+      "votes": 16
+    },
+    {
+      "id": 3474434,
+      "postDate": "2026-06-18T01:31:36.600Z",
+      "content": "<p>For avoidance of doubt, tips and useful information related to the competition should generally be posted in the official Kaggle Discussion forums. Sharing information only on X or other channels are not recommended and may be a rule violation if they are not publicly available for all participants.</p>",
+      "rawMarkdown": "For avoidance of doubt, tips and useful information related to the competition should generally be posted in the official Kaggle Discussion forums. Sharing information only on X or other channels are not recommended and may be a rule violation if they are not publicly available for all participants.",
+      "votes": 3
+    },
+    {
+      "id": 3473912,
+      "postDate": "2026-06-17T07:59:57.057Z",
+      "content": "<p>Hi,</p>\n<p>I’m unable to post in the #pokemon-tcg-ai-battle channel. How can I get permission to post there?</p>",
+      "rawMarkdown": "Hi,\n\nI’m unable to post in the #pokemon-tcg-ai-battle channel. How can I get permission to post there?"
+    },
+    {
+      "id": 3473690,
+      "postDate": "2026-06-16T22:29:22.827Z",
+      "content": "<p>Hi! I have a question about the evaluation process.</p>\n<p>Are participants expected to submit:</p>\n<ol>\n<li>An agent specialized for a single deck chosen by the team, or</li>\n<li>A general-purpose agent capable of playing multiple decks?</li>\n</ol>\n<p>Could you clarify whether the deck is fixed throughout evaluation or if agents may be tested with different decks?</p>\n<p>Thanks in advance!</p>",
+      "rawMarkdown": "Hi! I have a question about the evaluation process.\n\nAre participants expected to submit:\n\n1. An agent specialized for a single deck chosen by the team, or\n2. A general-purpose agent capable of playing multiple decks?\n\nCould you clarify whether the deck is fixed throughout evaluation or if agents may be tested with different decks?\n\nThanks in advance!",
+      "replies": [
+        {
+          "id": 3473726,
+          "postDate": "2026-06-17T00:13:50.043Z",
+          "content": "<p>Hi Grogoat,</p>\n<p>The preferred submission method is to zip a <code>main.py</code> file (the agent that plays the deck) and a <code>deck.csv</code> file that it reads from.</p>\n<p>You're allowed to have two active submissions at any time, so you can make multiple submissions as the meta materializes and you want to try different ideas. However, only your most two recent submissions are active, so you may need to resubmit if one of your better agents is pushed out by a new one.</p>\n<p>Basically - the expectation is #1, but you can have two active and change up your submission as you wish.</p>",
+          "rawMarkdown": "Hi Grogoat,\n\nThe preferred submission method is to zip a `main.py` file (the agent that plays the deck) and a `deck.csv` file that it reads from.\n\nYou're allowed to have two active submissions at any time, so you can make multiple submissions as the meta materializes and you want to try different ideas. However, only your most two recent submissions are active, so you may need to resubmit if one of your better agents is pushed out by a new one.\n\nBasically - the expectation is #1, but you can have two active and change up your submission as you wish."
+        }
+      ]
+    }
+  ]
+}

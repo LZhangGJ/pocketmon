@@ -1,0 +1,34 @@
+{
+  "topic": {
+    "id": 709284,
+    "title": "Seeking Attack ID",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709284",
+    "commentCount": 2,
+    "votes": -1,
+    "postDate": "2026-06-18T04:38:55.153120900Z",
+    "lastCommentPostDate": "2026-06-20T20:46:40.336666700Z"
+  },
+  "messages": [
+    {
+      "id": 3474497,
+      "postDate": "2026-06-18T04:38:55.153Z",
+      "content": "<p>Hey, incredibly naive question here. How are we finding attack IDs (attackid)? I saw the table of Pokemon and Pokemon IDs.</p>",
+      "rawMarkdown": "Hey, incredibly naive question here. How are we finding attack IDs (attackid)? I saw the table of Pokemon and Pokemon IDs.",
+      "votes": -1
+    },
+    {
+      "id": 3475134,
+      "postDate": "2026-06-19T12:29:08.090Z",
+      "content": "<p>Hi there,</p>\n<p>The attack IDs that Pokémon have can be obtained using all_card_data() in api.py within the cg library. The name and text for each attack ID can be retrieved using all_attack().</p>",
+      "rawMarkdown": "Hi there,\n\nThe attack IDs that Pokémon have can be obtained using all_card_data() in api.py within the cg library. The name and text for each attack ID can be retrieved using all_attack().",
+      "replies": [
+        {
+          "id": 3476719,
+          "postDate": "2026-06-20T20:46:40.337Z",
+          "content": "<p>Thank you! If it helps others, I've since produced a script to enter a pokemon ID and receive a printout of the pokemon's attacks. <em>Apologies, it's not formatted within the code block correctly.</em></p>\n<p>`\nfrom cg import api\ndef find_card(all_cards, selected_card):\n    selected_card = selected_card.strip().lower()</p>\n<pre><code>for card in all_cards:\n    if str(card.cardId).lower() == selected_card:\n        # Return the selected card object once match is found\n        return card \nreturn None\n</code></pre>\n<p>def main():</p>\n<pre><code># Gets all attacks and cards from the API and creates a dictionary of attacks by attackId for easy lookup.\nall_attack_ids = {a.attackId: a for a in api.all_attack()}\nall_cards = api.all_card_data()\n\n# Prompt user to select a card by ID. ID can be found in CSV.\nselected_card_id = input(\"Enter card id: \")\ncard = find_card(all_cards, selected_card_id)\n\n# If card is not found, print message and exit.\nif card is None:\n    print(\"Card not found.\")\n    return\n\n# Print card name.\nprint(f\"Selected card: {card.name}\\n\")\n\n# If card has no attacks, print message and exit.\n# This would happen in cases where Energy cards or Trainer cards\n# are selected.\nif not card.attacks:\n    print(\"This card has no attacks.\")\n    return\n\n# Print attack IDs and names for the selected card.\nprint(\"Attack Details:\")\nfor attack_id in card.attacks:\n    attack = all_attack_ids.get(attack_id)\n    # Print attack attributes: attackId, name, damage, text\n    print(\n        f\"Attack ID: {attack.attackId}\\nAttack Name: {attack.name}\\n\"\n        f\"Attack Damage: {attack.damage}\\nAttack Text: {attack.text}\\n\"\n        f\"Attack Cost: {attack.energies}\"\n    )\n</code></pre>\n<p>if <strong>name</strong> == \"<strong>main</strong>\":\n    main()\n`</p>",
+          "rawMarkdown": "Thank you! If it helps others, I've since produced a script to enter a pokemon ID and receive a printout of the pokemon's attacks. *Apologies, it's not formatted within the code block correctly.*\n\n`\nfrom cg import api\ndef find_card(all_cards, selected_card):\n    selected_card = selected_card.strip().lower()\n\n    for card in all_cards:\n        if str(card.cardId).lower() == selected_card:\n            # Return the selected card object once match is found\n            return card \n    return None\ndef main():\n\n    # Gets all attacks and cards from the API and creates a dictionary of attacks by attackId for easy lookup.\n    all_attack_ids = {a.attackId: a for a in api.all_attack()}\n    all_cards = api.all_card_data()\n\n    # Prompt user to select a card by ID. ID can be found in CSV.\n    selected_card_id = input(\"Enter card id: \")\n    card = find_card(all_cards, selected_card_id)\n\n    # If card is not found, print message and exit.\n    if card is None:\n        print(\"Card not found.\")\n        return\n\n    # Print card name.\n    print(f\"Selected card: {card.name}\\n\")\n\n    # If card has no attacks, print message and exit.\n    # This would happen in cases where Energy cards or Trainer cards\n    # are selected.\n    if not card.attacks:\n        print(\"This card has no attacks.\")\n        return\n\n    # Print attack IDs and names for the selected card.\n    print(\"Attack Details:\")\n    for attack_id in card.attacks:\n        attack = all_attack_ids.get(attack_id)\n        # Print attack attributes: attackId, name, damage, text\n        print(\n            f\"Attack ID: {attack.attackId}\\nAttack Name: {attack.name}\\n\"\n            f\"Attack Damage: {attack.damage}\\nAttack Text: {attack.text}\\n\"\n            f\"Attack Cost: {attack.energies}\"\n        )\nif __name__ == \"__main__\":\n    main()\n`"
+        }
+      ]
+    }
+  ]
+}

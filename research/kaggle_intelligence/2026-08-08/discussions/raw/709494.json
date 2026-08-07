@@ -1,0 +1,91 @@
+{
+  "topic": {
+    "id": 709494,
+    "title": "[For First-Timers] Kaggle Rules You Should Know for PokeCa ABC",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709494",
+    "commentCount": 10,
+    "votes": 51,
+    "postDate": "2026-06-18T23:27:38.615705900Z",
+    "lastCommentPostDate": "2026-06-19T16:48:19.963333300Z"
+  },
+  "messages": [
+    {
+      "id": 3474865,
+      "postDate": "2026-06-18T23:27:38.617Z",
+      "content": "<p>A lot of people are joining Kaggle for the first time through PokeCa ABC, and the whole community couldn't be happier to see it!</p>\n<p>That said, Kaggle has a few rules that can lead to disqualification or account suspension if you break them without realizing it. So that you can enjoy the competition all the way to the end with peace of mind, here's a summary of the most important points for first-time participants. None of this is complicated, so please give it a read.</p>\n<hr>\n<h2>1. Watch out for private sharing</h2>\n<p>The most common source of trouble on Kaggle is \"private sharing.\" The idea is very simple:</p>\n<blockquote>\n  <p><strong>Anything about the substance of the competition (ideas, code, strategies, deck recipes, etc.) is either shared with everyone or with no one. Quietly sharing it with only a select few is NOT allowed.</strong></p>\n</blockquote>\n<p>This rule exists to prevent the unfairness of having a small group hold information that gives them an advantage.</p>\n<h3>Examples that are OK</h3>\n<ul>\n<li>Sharing <strong>your own score or rank</strong>, e.g. \"I reached Xth place!\" or \"New personal best!\"</li>\n<li>Sharing impressions like \"This competition is so much fun!\" or cheering each other on</li>\n<li>General questions or chat about the competition spec or publicly available information</li>\n</ul>\n<h3>Examples that are NOT OK</h3>\n<ul>\n<li>Telling <strong>only specific people your ideas or deck recipes</strong> via DMs or off-team chats (Discord, LINE, etc.)</li>\n<li>Quietly trading strategies with someone who isn't on your team</li>\n<li>Slipping your tactics to a limited circle of friends as an \"off-the-record\" tip</li>\n</ul>\n<p>The key point is that <strong>\"quietly, to only a select few\" is the dangerous part.</strong> Sharing your rank or score is fine, but handing the substance of your approach (ideas or recipes) to only a chosen few is out.</p>\n<h3>Please bring useful information to the Kaggle discussions!</h3>\n<p>Here's the part not to misunderstand: it's <strong>not that sharing information itself is bad.</strong> Quite the opposite—<strong>public sharing on the Kaggle platform is welcomed and encouraged.</strong> Kaggle's official rules even state that if you do share, you should share it on the Kaggle discussion forum or notebooks for the benefit of all participants. As long as you share in a place everyone can see, there's no problem at all.</p>\n<p>If you have a good idea or insight, please post it in the Kaggle discussions. It energizes the whole community, and it can even count toward medals for you (more on those below).</p>\n<p>On the other hand:</p>\n<ul>\n<li><strong>Sharing on X (formerly Twitter), blogs, or other places outside Kaggle is not desirable.</strong> Those aren't places where all participants can see things fairly, so they don't count as the \"share with everyone\" the rules envision. Keep useful information on the Kaggle discussions, not on external platforms.</li>\n<li><strong>However, please refrain from sharing information starting one week before the competition's end date ( -&gt; this is a general rule/etiquette for competitions).</strong> Late-stage sharing can significantly affect the standings and undermine fairness.</li>\n</ul>\n<p>When in doubt, check the official rules or ask the organizers—that's the safe move.</p>\n<hr>\n<h2>2. No multiple accounts</h2>\n<p><strong>One person, one account—this is the fundamental rule.</strong></p>\n<p>Using a sub-account (a second/alt account) to:</p>\n<ul>\n<li>manipulate your ranking,</li>\n<li>rack up extra submissions, or</li>\n<li>unfairly chase medals or prizes</li>\n</ul>\n<p>is entirely prohibited. If discovered, it can lead to account suspension or disqualification. This isn't a temporary penalty—it's a serious one that can affect your entire account for a long time. Don't do it, not even \"just a little.\"</p>\n<hr>\n<h2>3. About prizes and medals — the difference between the two tracks</h2>\n<p>PokeCa ABC has two tracks: the <strong>Simulation Track</strong> and the <strong>Strategy Track</strong>. <strong>What you can earn differs by track</strong>, so it's good to be clear about what you're aiming for.</p>\n<table>\n<thead>\n<tr>\n<th>Track</th>\n<th>Medals</th>\n<th>Prize money</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Simulation Track</td>\n<td>Yes</td>\n<td>No</td>\n</tr>\n<tr>\n<td>Strategy Track</td>\n<td>No</td>\n<td>Yes</td>\n</tr>\n</tbody>\n</table>\n<ul>\n<li><strong>Medals in the Simulation Track</strong> accumulate to raise your overall Kaggle ranking and can earn you titles (such as Expert / Master). They're a reward that stays with you as a Kaggler. There is no prize money.</li>\n<li>The <strong>Strategy Track</strong> doesn't come with medals, but it awards prize money.</li>\n</ul>\n<p>Roughly speaking: \"If you want to grow your ranking and titles\" → Simulation Track; \"If you want to go for prize money\" → Strategy Track (and of course you're welcome to take on both). Note that receiving prize money may come with conditions such as identity verification, so please check the official rules page for details.</p>\n<hr>\n<p>One last thing: everything written here isn't a set of \"restrictions\"—it's the foundation that lets everyone enjoy the competition comfortably and fairly. Follow the rules and enjoy PokeCa ABC to the fullest. If anything is unclear, don't hesitate to ask in the discussions.</p>\n<hr>\n<h2>Reference links (primary sources)</h2>\n<p>For the exact rules, always check the official primary sources.</p>\n<ul>\n<li><strong><a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/rules\" target=\"_blank\">The \"Rules\" tab of PokeCa ABC</a></strong> … competition-specific rules take precedence (the restriction on sharing in the final week, etc., is governed <a href=\"https://www.kaggle.com/spoiler-alert\" target=\"_blank\">here</a>)</li>\n<li><strong><a href=\"https://www.kaggle.com/progression/competitions\" target=\"_blank\">Kaggle official Progression System</a> (how medals and titles work)</strong> </li>\n</ul>",
+      "rawMarkdown": "A lot of people are joining Kaggle for the first time through PokeCa ABC, and the whole community couldn't be happier to see it!\n\nThat said, Kaggle has a few rules that can lead to disqualification or account suspension if you break them without realizing it. So that you can enjoy the competition all the way to the end with peace of mind, here's a summary of the most important points for first-time participants. None of this is complicated, so please give it a read.\n\n---\n\n## 1. Watch out for private sharing\n\nThe most common source of trouble on Kaggle is \"private sharing.\" The idea is very simple:\n\n> **Anything about the substance of the competition (ideas, code, strategies, deck recipes, etc.) is either shared with everyone or with no one. Quietly sharing it with only a select few is NOT allowed.**\n\nThis rule exists to prevent the unfairness of having a small group hold information that gives them an advantage.\n\n### Examples that are OK\n\n- Sharing **your own score or rank**, e.g. \"I reached Xth place!\" or \"New personal best!\"\n- Sharing impressions like \"This competition is so much fun!\" or cheering each other on\n- General questions or chat about the competition spec or publicly available information\n\n### Examples that are NOT OK\n\n- Telling **only specific people your ideas or deck recipes** via DMs or off-team chats (Discord, LINE, etc.)\n- Quietly trading strategies with someone who isn't on your team\n- Slipping your tactics to a limited circle of friends as an \"off-the-record\" tip\n\nThe key point is that **\"quietly, to only a select few\" is the dangerous part.** Sharing your rank or score is fine, but handing the substance of your approach (ideas or recipes) to only a chosen few is out.\n\n### Please bring useful information to the Kaggle discussions!\n\nHere's the part not to misunderstand: it's **not that sharing information itself is bad.** Quite the opposite—**public sharing on the Kaggle platform is welcomed and encouraged.** Kaggle's official rules even state that if you do share, you should share it on the Kaggle discussion forum or notebooks for the benefit of all participants. As long as you share in a place everyone can see, there's no problem at all.\n\nIf you have a good idea or insight, please post it in the Kaggle discussions. It energizes the whole community, and it can even count toward medals for you (more on those below).\n\nOn the other hand:\n\n- **Sharing on X (formerly Twitter), blogs, or other places outside Kaggle is not desirable.** Those aren't places where all participants can see things fairly, so they don't count as the \"share with everyone\" the rules envision. Keep useful information on the Kaggle discussions, not on external platforms.\n- **However, please refrain from sharing information starting one week before the competition's end date (~~this is a rule for this competition~~ -> this is a general rule/etiquette for competitions).** Late-stage sharing can significantly affect the standings and undermine fairness.\n\nWhen in doubt, check the official rules or ask the organizers—that's the safe move.\n\n---\n\n## 2. No multiple accounts\n\n**One person, one account—this is the fundamental rule.**\n\nUsing a sub-account (a second/alt account) to:\n\n- manipulate your ranking,\n- rack up extra submissions, or\n- unfairly chase medals or prizes\n\nis entirely prohibited. If discovered, it can lead to account suspension or disqualification. This isn't a temporary penalty—it's a serious one that can affect your entire account for a long time. Don't do it, not even \"just a little.\"\n\n---\n\n## 3. About prizes and medals — the difference between the two tracks\n\nPokeCa ABC has two tracks: the **Simulation Track** and the **Strategy Track**. **What you can earn differs by track**, so it's good to be clear about what you're aiming for.\n\n| Track | Medals | Prize money |\n|---|:---:|:---:|\n| Simulation Track | Yes | No |\n| Strategy Track | No | Yes |\n\n- **Medals in the Simulation Track** accumulate to raise your overall Kaggle ranking and can earn you titles (such as Expert / Master). They're a reward that stays with you as a Kaggler. There is no prize money.\n- The **Strategy Track** doesn't come with medals, but it awards prize money.\n\nRoughly speaking: \"If you want to grow your ranking and titles\" → Simulation Track; \"If you want to go for prize money\" → Strategy Track (and of course you're welcome to take on both). Note that receiving prize money may come with conditions such as identity verification, so please check the official rules page for details.\n\n---\n\nOne last thing: everything written here isn't a set of \"restrictions\"—it's the foundation that lets everyone enjoy the competition comfortably and fairly. Follow the rules and enjoy PokeCa ABC to the fullest. If anything is unclear, don't hesitate to ask in the discussions.\n\n---\n\n## Reference links (primary sources)\n\nFor the exact rules, always check the official primary sources.\n\n- **[The \"Rules\" tab of PokeCa ABC](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/rules)** … competition-specific rules take precedence (the restriction on sharing in the final week, etc., is governed [here](https://www.kaggle.com/spoiler-alert))\n- **[Kaggle official Progression System](https://www.kaggle.com/progression/competitions) (how medals and titles work)** ",
+      "votes": 51
+    },
+    {
+      "id": 3474878,
+      "postDate": "2026-06-19T00:34:59.527Z",
+      "content": "<p>Thank you :)</p>",
+      "rawMarkdown": "Thank you :)",
+      "votes": 5
+    },
+    {
+      "id": 3475160,
+      "postDate": "2026-06-19T13:27:19.743Z",
+      "content": "<blockquote>\n  <p>Telling only specific people your … deck recipes via DMs or off-team chats (Discord, LINE, etc.)</p>\n</blockquote>\n<p>Is this really a problem? Deck lists are inherently public once you submit an agent because you can see them on the leaderboard, no?</p>",
+      "rawMarkdown": "> Telling only specific people your ... deck recipes via DMs or off-team chats (Discord, LINE, etc.)\n\nIs this really a problem? Deck lists are inherently public once you submit an agent because you can see them on the leaderboard, no?",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3475165,
+          "postDate": "2026-06-19T13:39:55.160Z",
+          "content": "<p>Submitted deck recipes might be fine, but aren't unsubmitted deck recipes non-public information? And even the former feels like a gray area to me. Ultimately it should be the host who makes the call — I can't judge individual cases myself.</p>\n<p>Happy Kaggling!</p>",
+          "rawMarkdown": "Submitted deck recipes might be fine, but aren't unsubmitted deck recipes non-public information? And even the former feels like a gray area to me. Ultimately it should be the host who makes the call — I can't judge individual cases myself.\n\nHappy Kaggling!",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "id": 3475054,
+      "postDate": "2026-06-19T08:56:21.007Z",
+      "content": "<p><a href=\"https://www.kaggle.com/isakatsuyoshi\" target=\"_blank\">@isakatsuyoshi</a> </p>\n<p>Thank you for very clear introduction. I have a question.</p>\n<blockquote>\n  <p>However, please refrain from sharing information starting one week before the competition's end date (this is a rule for this competition)</p>\n</blockquote>\n<p>I can't find the source for this competition specific rule. Could you tell me it? </p>",
+      "rawMarkdown": "@isakatsuyoshi \n\nThank you for very clear introduction. I have a question.\n\n>However, please refrain from sharing information starting one week before the competition's end date (this is a rule for this competition)\n\nI can't find the source for this competition specific rule. Could you tell me it? ",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3475076,
+          "postDate": "2026-06-19T09:45:28.910Z",
+          "content": "<p>Here you go!\n<a href=\"https://www.kaggle.com/spoiler-alert\" target=\"_blank\">https://www.kaggle.com/spoiler-alert</a></p>",
+          "rawMarkdown": "Here you go!\n[https://www.kaggle.com/spoiler-alert](https://www.kaggle.com/spoiler-alert)\n",
+          "replies": [
+            {
+              "id": 3475077,
+              "postDate": "2026-06-19T09:46:56.783Z",
+              "content": "<p>This is more of a general competition rule than something specific to this competition. During the final week before the deadline, an alert will be displayed if you try to share a notebook.</p>",
+              "rawMarkdown": "This is more of a general competition rule than something specific to this competition. During the final week before the deadline, an alert will be displayed if you try to share a notebook.\n"
+            },
+            {
+              "id": 3475088,
+              "postDate": "2026-06-19T10:17:07.803Z",
+              "content": "<p>I see. I recoginized this link but I could not find any sentecne referring to it in the \"Rules\" tab of PokeCa ABC, so I confused. Thanks🙏</p>",
+              "rawMarkdown": "I see. I recoginized this link but I could not find any sentecne referring to it in the \"Rules\" tab of PokeCa ABC, so I confused. Thanks🙏"
+            },
+            {
+              "id": 3475091,
+              "postDate": "2026-06-19T10:22:08.150Z",
+              "content": "<p>Sorry for the confusion! That was my mistake in how I phrased it in English 🙏</p>",
+              "rawMarkdown": "Sorry for the confusion! That was my mistake in how I phrased it in English 🙏"
+            },
+            {
+              "id": 3475096,
+              "postDate": "2026-06-19T10:29:50.163Z",
+              "content": "<p>I've made some edits to certain expressions.</p>",
+              "rawMarkdown": "I've made some edits to certain expressions."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3475231,
+      "postDate": "2026-06-19T16:48:19.963Z",
+      "content": "<p>Great summary. Easy to understand and very useful.</p>",
+      "rawMarkdown": "Great summary. Easy to understand and very useful.",
+      "votes": -2
+    }
+  ]
+}

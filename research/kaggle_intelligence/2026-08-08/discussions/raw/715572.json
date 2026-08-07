@@ -1,0 +1,24 @@
+{
+  "topic": {
+    "id": 715572,
+    "title": "Attack damage lookup for supervised value network",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/715572",
+    "commentCount": 1,
+    "postDate": "2026-06-28T21:34:55.162532300Z",
+    "lastCommentPostDate": "2026-06-29T04:05:48.276666700Z"
+  },
+  "messages": [
+    {
+      "id": 3483471,
+      "postDate": "2026-06-29T04:05:48.277Z",
+      "content": "<p>Looking at the cg api, you should be able to use \"all_card_data\" to get card data (including attack IDs), and \"all_attack\" to get attack info (including damage).</p>",
+      "rawMarkdown": "Looking at the cg api, you should be able to use \"all_card_data\" to get card data (including attack IDs), and \"all_attack\" to get attack info (including damage)."
+    },
+    {
+      "id": 3483381,
+      "postDate": "2026-06-28T21:34:55.163Z",
+      "content": "<p>Hey all,</p>\n<p>I'm trying to build a supervised learning value network to see if I can use it for pre-training a value function for an RL agent.</p>\n<p>One of the architecture choices I'd like to make is encoding cards based on their attributes. This means I'd need to know how much each attack does, so that the model can pick up on \"270 damage for 2 energy --&gt; attacker/threat\" (in this case Mega Lucario).</p>\n<p>Do we have any good way to put together a table of which cards have what attacks?</p>",
+      "rawMarkdown": "Hey all,\n\nI'm trying to build a supervised learning value network to see if I can use it for pre-training a value function for an RL agent.\n\nOne of the architecture choices I'd like to make is encoding cards based on their attributes. This means I'd need to know how much each attack does, so that the model can pick up on \"270 damage for 2 energy --> attacker/threat\" (in this case Mega Lucario).\n\nDo we have any good way to put together a table of which cards have what attacks?"
+    }
+  ]
+}

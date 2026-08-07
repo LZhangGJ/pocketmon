@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 733265,
+    "title": "[Bug] Simulator switch the deck between players",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/733265",
+    "votes": 3,
+    "postDate": "2026-08-06T09:38:49.110732Z",
+    "lastCommentPostDate": "2026-08-06T09:38:49.110Z"
+  },
+  "messages": [
+    {
+      "id": 3509388,
+      "postDate": "2026-08-06T09:38:49.110Z",
+      "content": "<p>I find in some games, the 2 players decks is switched.<br>\nFor example in this game:<br>\n<a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=55293612&amp;episodeId=90393243#\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=55293612&amp;episodeId=90393243#</a></p>\n<p>I (Ruko) am using Lopunny deck and opponent is Alakazam deck. \nBut the game showing I am using Alakazam and I lose the game, even the Lopunny deck won.</p>",
+      "rawMarkdown": "I find in some games, the 2 players decks is switched.  \nFor example in this game:  \nhttps://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=55293612&episodeId=90393243#\n\nI (Ruko) am using Lopunny deck and opponent is Alakazam deck. \nBut the game showing I am using Alakazam and I lose the game, even the Lopunny deck won.",
+      "votes": 3
+    }
+  ]
+}

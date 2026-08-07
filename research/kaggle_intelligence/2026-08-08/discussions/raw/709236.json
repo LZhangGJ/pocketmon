@@ -1,0 +1,24 @@
+{
+  "topic": {
+    "id": 709236,
+    "title": "Reactivation of old agents",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709236",
+    "commentCount": 1,
+    "postDate": "2026-06-17T23:49:26.241475900Z",
+    "lastCommentPostDate": "2026-06-18T00:35:24.210Z"
+  },
+  "messages": [
+    {
+      "id": 3474414,
+      "postDate": "2026-06-18T00:35:24.210Z",
+      "content": "<p>Hi there,</p>\n<p>We don't have an option to reactivate old agents (although it is something we've considered adding to our product roadmap). The current process is to resubmit an agent if you want it to be one of your two active agents.</p>",
+      "rawMarkdown": "Hi there,\n\nWe don't have an option to reactivate old agents (although it is something we've considered adding to our product roadmap). The current process is to resubmit an agent if you want it to be one of your two active agents."
+    },
+    {
+      "id": 3474404,
+      "postDate": "2026-06-17T23:49:26.240Z",
+      "content": "<p>Hello,\nI was curious if there is way to reactivate older agents to be considered for the final submission other than resubmitting them.</p>",
+      "rawMarkdown": "Hello,\nI was curious if there is way to reactivate older agents to be considered for the final submission other than resubmitting them."
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "topic": {
+    "id": 728168,
+    "title": "What is your highest score for an active rule-based agent",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728168",
+    "commentCount": 6,
+    "postDate": "2026-07-22T08:53:50.856585300Z",
+    "lastCommentPostDate": "2026-08-05T21:33:17.926666700Z"
+  },
+  "messages": [
+    {
+      "id": 3501834,
+      "postDate": "2026-07-22T22:43:50.507Z",
+      "content": "<p>Got to rank 2 once usually around top 10</p>",
+      "rawMarkdown": "Got to rank 2 once usually around top 10",
+      "votes": 2,
+      "replies": [
+        {
+          "id": 3501843,
+          "postDate": "2026-07-22T23:06:40.660Z",
+          "content": "<p>Bravo!!!!!</p>",
+          "rawMarkdown": "Bravo!!!!!"
+        }
+      ]
+    },
+    {
+      "id": 3509031,
+      "postDate": "2026-08-05T21:33:17.927Z",
+      "content": "<p>I got to top 10 several times with pure heuristics</p>",
+      "rawMarkdown": "I got to top 10 several times with pure heuristics"
+    },
+    {
+      "id": 3503684,
+      "postDate": "2026-07-26T09:13:53.087Z",
+      "content": "<p>We could rank within the top 10 at the start of the tournament. Nowadays, the Gold Tier is dominated by model-based agents; a pure rule-based implementation would likely fall beyond 200th place.</p>",
+      "rawMarkdown": "We could rank within the top 10 at the start of the tournament. Nowadays, the Gold Tier is dominated by model-based agents; a pure rule-based implementation would likely fall beyond 200th place.",
+      "replies": [
+        {
+          "id": 3503965,
+          "postDate": "2026-07-26T19:18:12.613Z",
+          "content": "<p>Yeah its harder for my bot to get to the top now, but it could still reach around top 20 with rule based</p>",
+          "rawMarkdown": "Yeah its harder for my bot to get to the top now, but it could still reach around top 20 with rule based"
+        }
+      ]
+    },
+    {
+      "id": 3502160,
+      "postDate": "2026-07-23T17:05:14.767Z",
+      "content": "<p>around 880+-20</p>",
+      "rawMarkdown": "around 880+-20"
+    },
+    {
+      "id": 3501544,
+      "postDate": "2026-07-22T08:53:50.857Z",
+      "content": "<p>Just curious, because RL/BC seems too expensive for me to implement.</p>",
+      "rawMarkdown": "Just curious, because RL/BC seems too expensive for me to implement."
+    }
+  ]
+}

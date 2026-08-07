@@ -1,0 +1,45 @@
+{
+  "topic": {
+    "id": 713132,
+    "title": "[中文｜Chinese edition] the rules of the Pokémon Trading Card Game",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/713132",
+    "commentCount": 3,
+    "votes": 5,
+    "postDate": "2026-06-24T02:13:31.053830200Z",
+    "lastCommentPostDate": "2026-06-24T03:21:15.066666700Z"
+  },
+  "messages": [
+    {
+      "id": 3479661,
+      "postDate": "2026-06-24T02:13:31.053Z",
+      "content": "<p><a href=\"https://www.pokemon.cn/tcg-rules-howtoplay\" target=\"_blank\">https://www.pokemon.cn/tcg-rules-howtoplay</a></p>\n<p>我以前完全没有接触过宝可梦卡牌，以前玩万智牌和炉石传说多，当然因为猎魔人接触到了昆特牌，我对卡牌类的的基础也就是这些。我找到了官方的中文版规则介绍，希望能对中文玩家有帮助。</p>\n<p>I'm new to the Pokémon TCG. I've mostly played Magic: The Gathering and Hearthstone before, and of course I also got into Gwent through The Witcher. I found the official Chinese version of the rulebook, hoping it will be helpful for Chinese players.</p>",
+      "rawMarkdown": "https://www.pokemon.cn/tcg-rules-howtoplay\n\n我以前完全没有接触过宝可梦卡牌，以前玩万智牌和炉石传说多，当然因为猎魔人接触到了昆特牌，我对卡牌类的的基础也就是这些。我找到了官方的中文版规则介绍，希望能对中文玩家有帮助。\n\nI'm new to the Pokémon TCG. I've mostly played Magic: The Gathering and Hearthstone before, and of course I also got into Gwent through The Witcher. I found the official Chinese version of the rulebook, hoping it will be helpful for Chinese players.\n\n\n\n",
+      "votes": 5
+    },
+    {
+      "id": 3479663,
+      "postDate": "2026-06-24T02:19:22.150Z",
+      "content": "<p>Thanks timmy. I just swtich to this after orbit-ward ended.</p>",
+      "rawMarkdown": "Thanks timmy. I just swtich to this after orbit-ward ended.",
+      "votes": 2,
+      "replies": [
+        {
+          "id": 3479666,
+          "postDate": "2026-06-24T02:22:38.390Z",
+          "content": "<p>Orbit Wars is also an interesting and brand-new challenge for me. I had no prior experience with reinforcement learning agent competitions before. I think there will be more and more Kaggle agent competitions in the future, so I'd like to learn as much as I can.</p>",
+          "rawMarkdown": "Orbit Wars is also an interesting and brand-new challenge for me. I had no prior experience with reinforcement learning agent competitions before. I think there will be more and more Kaggle agent competitions in the future, so I'd like to learn as much as I can.",
+          "votes": 1,
+          "replies": [
+            {
+              "id": 3479702,
+              "postDate": "2026-06-24T03:21:15.067Z",
+              "content": "<p>I'm also a hearthstone and Yu-Gi-Oh player with more than 10 years experience. It is really exited to see a TCG game becoming a kaggle competition.</p>",
+              "rawMarkdown": "I'm also a hearthstone and Yu-Gi-Oh player with more than 10 years experience. It is really exited to see a TCG game becoming a kaggle competition.",
+              "votes": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

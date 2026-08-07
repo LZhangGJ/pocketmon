@@ -1,0 +1,26 @@
+{
+  "topic": {
+    "id": 730196,
+    "title": "Domain-neutral decision kernel v0.1.1 update",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730196",
+    "commentCount": 1,
+    "votes": -5,
+    "postDate": "2026-07-28T12:08:22.342278200Z",
+    "lastCommentPostDate": "2026-07-28T12:29:48.060Z"
+  },
+  "messages": [
+    {
+      "id": 3504593,
+      "postDate": "2026-07-28T12:08:22.343Z",
+      "content": "<p>I am sharing a reusable, domain-neutral decision kernel with a deterministic\nsynthetic demonstration. It contains no protected data, specialized adapter,\ndomain rule implementation, learned artifact, deployment package, or private\nstrategy.</p>\n<ul>\n<li>Public notebook: <a href=\"https://www.kaggle.com/code/weipingyan/imperfect-information-agent-core\" target=\"_blank\">https://www.kaggle.com/code/weipingyan/imperfect-information-agent-core</a></li>\n<li>Notebook version: 2</li>\n<li>Source commit: <code>00fd6ff6bbf2cb8f1789c04fe2d6e6d3240738bf</code></li>\n<li>Source archive SHA-256: <code>e80200fd6719f28829e07cf598c104574b5e7ae26aed9065f6971c58767115fd</code></li>\n<li>Source manifest SHA-256: <code>11cfab4ba9d8428ea93f7b2b594ee421d87a4a77135a18f11e2ea38676b1c758</code></li>\n<li>Public repository, added only after signed-out notebook verification:\nPending until the signed-out Kaggle verification gate passes.</li>\n</ul>\n<p>The notebook reconstructs the exact source archive, verifies every file,\nexecutes a seeded synthetic example and portable checks, and reports optional\ntest-suite availability. The source archive in the notebook is byte-identical\nto the files listed in the manifest.</p>\n<p>Please report reproducibility or generic API issues without posting protected\nor proprietary material.</p>",
+      "rawMarkdown": "I am sharing a reusable, domain-neutral decision kernel with a deterministic\nsynthetic demonstration. It contains no protected data, specialized adapter,\ndomain rule implementation, learned artifact, deployment package, or private\nstrategy.\n\n- Public notebook: https://www.kaggle.com/code/weipingyan/imperfect-information-agent-core\n- Notebook version: 2\n- Source commit: `00fd6ff6bbf2cb8f1789c04fe2d6e6d3240738bf`\n- Source archive SHA-256: `e80200fd6719f28829e07cf598c104574b5e7ae26aed9065f6971c58767115fd`\n- Source manifest SHA-256: `11cfab4ba9d8428ea93f7b2b594ee421d87a4a77135a18f11e2ea38676b1c758`\n- Public repository, added only after signed-out notebook verification:\n  Pending until the signed-out Kaggle verification gate passes.\n\nThe notebook reconstructs the exact source archive, verifies every file,\nexecutes a seeded synthetic example and portable checks, and reports optional\ntest-suite availability. The source archive in the notebook is byte-identical\nto the files listed in the manifest.\n\nPlease report reproducibility or generic API issues without posting protected\nor proprietary material.",
+      "votes": -5
+    },
+    {
+      "id": 3504601,
+      "postDate": "2026-07-28T12:29:48.060Z",
+      "content": "<p>Signed-out Kaggle verification passed. The matching public repository is now available:</p>\n<ul>\n<li>Repository: <a href=\"https://github.com/appleweiping/imperfect-information-agent-core\" target=\"_blank\">https://github.com/appleweiping/imperfect-information-agent-core</a></li>\n<li>Release: <a href=\"https://github.com/appleweiping/imperfect-information-agent-core/releases/tag/v0.1.1\" target=\"_blank\">https://github.com/appleweiping/imperfect-information-agent-core/releases/tag/v0.1.1</a></li>\n<li>Tag: <code>v0.1.1</code></li>\n<li>Commit: <code>00fd6ff6bbf2cb8f1789c04fe2d6e6d3240738bf</code></li>\n</ul>\n<p>GitHub main and the release were also checked signed out; the attached source archive and manifest hashes match the values in the topic above.</p>",
+      "rawMarkdown": "Signed-out Kaggle verification passed. The matching public repository is now available:\n\n- Repository: https://github.com/appleweiping/imperfect-information-agent-core\n- Release: https://github.com/appleweiping/imperfect-information-agent-core/releases/tag/v0.1.1\n- Tag: `v0.1.1`\n- Commit: `00fd6ff6bbf2cb8f1789c04fe2d6e6d3240738bf`\n\nGitHub main and the release were also checked signed out; the attached source archive and manifest hashes match the values in the topic above."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "topic": {
+    "id": 728159,
+    "title": "Do you use a base prompt for coding assistants like Cursor/Gemini/Claude?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728159",
+    "commentCount": 2,
+    "votes": 2,
+    "postDate": "2026-07-22T07:22:08.648233800Z",
+    "lastCommentPostDate": "2026-07-22T09:34:49.860Z"
+  },
+  "messages": [
+    {
+      "id": 3501532,
+      "postDate": "2026-07-22T07:57:10.763Z",
+      "content": "<p>\"Hey claude get me to the first place in the competetion. Make no mistakes.\"</p>",
+      "rawMarkdown": "\"Hey claude get me to the first place in the competetion. Make no mistakes.\"",
+      "votes": 2,
+      "replies": [
+        {
+          "id": 3501555,
+          "postDate": "2026-07-22T09:34:49.860Z",
+          "rawMarkdown": "",
+          "isDeleted": true
+        }
+      ]
+    },
+    {
+      "id": 3501523,
+      "postDate": "2026-07-22T07:22:08.647Z",
+      "content": "<p>I’ve found that coding assistants work much better for me when I give them a strict base prompt focused on KISS, fail-fast, explicit contracts, and minimal diffs.</p>\n<p>Without that, they often:</p>\n<ul>\n<li>overuse try/except</li>\n<li>add silent fallbacks</li>\n<li>guess missing context</li>\n<li>produce code that is harder to debug than to write manually</li>\n</ul>\n<p>With a stricter prompt, the code is less magical but much more controllable.</p>\n<p>Curious how others do this:</p>\n<p>Do you use a persistent/base prompt in Cursor, Gemini, Claude, etc.?\nDo you keep separate prompts for debugging/refactoring/review?\nWhat prompt rules helped you reduce hidden fallbacks and overengineering?\nHere’s the kind of prompt I mean:</p>\n<pre><code>You are a Senior Python Backend Developer. Your goal is to write code that is as simple, readable, and controllable as possible. All architectural decisions must follow the principles of KISS (Keep It Simple, Stupid) and Fail-Fast.\n\n#### 0. Handling Incomplete Context\nIf there isn't enough information about the contract (input/output types, value boundaries, edge-case behavior) to solve the task, do not make assumptions on your own. Ask a clarifying question and wait for the answer before writing any code.\n\n#### 1. The Fail-Fast Principle (No Silent Errors)\n* Silent fallbacks are forbidden.\n* If input data doesn't meet expectations, raise a detailed exception immediately.\n* Prefer explicit checks when contract ambiguity could cause hidden bugs.\n\n#### 2. Fighting Bloatware and DRY\n* No speculative future-proofing.\n* Refactor repeated branching into clearer generalized structures when needed.\n* Compactness is good only if it does not reduce debuggability.\n\n#### 3. Explicitness and Contracts\n* Use type hints for inputs and return values.\n* Keep code self-documenting; comments should explain why, not what.\n\n#### 4. Response Format\nBy default, provide only the changed/new code fragment (relevant diff), not the full file.\n</code></pre>\n<p>What does your default AI coding prompt look like, if you use one at all?</p>",
+      "rawMarkdown": "I’ve found that coding assistants work much better for me when I give them a strict base prompt focused on KISS, fail-fast, explicit contracts, and minimal diffs.\n\nWithout that, they often:\n\n- overuse try/except\n- add silent fallbacks\n- guess missing context\n- produce code that is harder to debug than to write manually\n\nWith a stricter prompt, the code is less magical but much more controllable.\n\nCurious how others do this:\n\nDo you use a persistent/base prompt in Cursor, Gemini, Claude, etc.?\nDo you keep separate prompts for debugging/refactoring/review?\nWhat prompt rules helped you reduce hidden fallbacks and overengineering?\nHere’s the kind of prompt I mean:\n\n```python\nYou are a Senior Python Backend Developer. Your goal is to write code that is as simple, readable, and controllable as possible. All architectural decisions must follow the principles of KISS (Keep It Simple, Stupid) and Fail-Fast.\n\n#### 0. Handling Incomplete Context\nIf there isn't enough information about the contract (input/output types, value boundaries, edge-case behavior) to solve the task, do not make assumptions on your own. Ask a clarifying question and wait for the answer before writing any code.\n\n#### 1. The Fail-Fast Principle (No Silent Errors)\n* Silent fallbacks are forbidden.\n* If input data doesn't meet expectations, raise a detailed exception immediately.\n* Prefer explicit checks when contract ambiguity could cause hidden bugs.\n\n#### 2. Fighting Bloatware and DRY\n* No speculative future-proofing.\n* Refactor repeated branching into clearer generalized structures when needed.\n* Compactness is good only if it does not reduce debuggability.\n\n#### 3. Explicitness and Contracts\n* Use type hints for inputs and return values.\n* Keep code self-documenting; comments should explain why, not what.\n\n#### 4. Response Format\nBy default, provide only the changed/new code fragment (relevant diff), not the full file.\n```\nWhat does your default AI coding prompt look like, if you use one at all?",
+      "votes": 2
+    }
+  ]
+}

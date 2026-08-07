@@ -1,0 +1,76 @@
+{
+  "topic": {
+    "id": 733083,
+    "title": "ELO inconsistency",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/733083",
+    "commentCount": 8,
+    "votes": 1,
+    "postDate": "2026-08-05T19:17:17.082213500Z",
+    "lastCommentPostDate": "2026-08-06T21:24:33.590Z"
+  },
+  "messages": [
+    {
+      "id": 3509278,
+      "postDate": "2026-08-06T06:14:38.110Z",
+      "content": "<p>if you leave it there for like 2 days, i think it will be much more consistent.</p>",
+      "rawMarkdown": "if you leave it there for like 2 days, i think it will be much more consistent.",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3509522,
+          "postDate": "2026-08-06T14:51:33.493Z",
+          "content": "<p>You'll get much fewer games and the rating will also move more slowly. 400 is highly unlikely. I have submitted more than 100 times, so I do have some first hand experience.</p>",
+          "rawMarkdown": "You'll get much fewer games and the rating will also move more slowly. 400 is highly unlikely. I have submitted more than 100 times, so I do have some first hand experience.",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "id": 3508987,
+      "postDate": "2026-08-05T19:17:17.083Z",
+      "content": "<p>This is quite frustrating - I submitted the same agent twice, and they are 400 points apart (after 4+ hours). If you have couple of bad match ups at the beginning, it's really hard to get back to where the rating is supposed to be.</p>",
+      "rawMarkdown": "This is quite frustrating - I submitted the same agent twice, and they are 400 points apart (after 4+ hours). If you have couple of bad match ups at the beginning, it's really hard to get back to where the rating is supposed to be.",
+      "votes": 1
+    },
+    {
+      "id": 3509693,
+      "postDate": "2026-08-06T21:24:33.590Z",
+      "content": "<p>yup has been discussed a lot but the organizers said this works fine. It takes many many days for agents to stabilize since the amount of games is so low</p>",
+      "rawMarkdown": "yup has been discussed a lot but the organizers said this works fine. It takes many many days for agents to stabilize since the amount of games is so low"
+    },
+    {
+      "id": 3509237,
+      "postDate": "2026-08-06T04:47:43.837Z",
+      "content": "<p>I think the player dynamics and decks have been shifting grounds pretty quickly…. You are not competing on the same ground for both bots depending on who you matched up with.</p>",
+      "rawMarkdown": "I think the player dynamics and decks have been shifting grounds pretty quickly.... You are not competing on the same ground for both bots depending on who you matched up with.",
+      "replies": [
+        {
+          "id": 3509254,
+          "postDate": "2026-08-06T05:21:01.657Z",
+          "content": "<p>No that is not the case. This happens even when I submit both at the same time. I understand that everybody's rating shifts all the time, but what I'm arguing is that ELO should be consistent - maybe we don't have enough compute but ideally if instead we have daily leaderboard, in which we do round-robin, that would be much more \"fair\".</p>",
+          "rawMarkdown": "No that is not the case. This happens even when I submit both at the same time. I understand that everybody's rating shifts all the time, but what I'm arguing is that ELO should be consistent - maybe we don't have enough compute but ideally if instead we have daily leaderboard, in which we do round-robin, that would be much more \"fair\"."
+        }
+      ]
+    },
+    {
+      "id": 3509195,
+      "postDate": "2026-08-06T03:15:16.313Z",
+      "content": "<p>I had this but in a different story, when got lucky my model scored over 1000 points and i landed into top 5 :) but then left it for a while and it went to normal 900ish range. So the way I test, I run 2 submissions over 4 hours it give me rough score, but then i would wait over a day and then its more stable. I am not pokemon player but too many random factors comes in play. Ive seen many times where model just cant do better as cards are bad. So i would say give it a day and then you can see where it goes.</p>",
+      "rawMarkdown": "I had this but in a different story, when got lucky my model scored over 1000 points and i landed into top 5 :) but then left it for a while and it went to normal 900ish range. So the way I test, I run 2 submissions over 4 hours it give me rough score, but then i would wait over a day and then its more stable. I am not pokemon player but too many random factors comes in play. Ive seen many times where model just cant do better as cards are bad. So i would say give it a day and then you can see where it goes."
+    },
+    {
+      "id": 3509067,
+      "postDate": "2026-08-05T23:20:18.690Z",
+      "content": "<p>I get you, 2 days ago I uploaded a model twice to collect more replays, and the same agent was below 600 and @ 1000-ish at one point. You have to get lucky with your early placement games, the longer it takes the harder it is to climb with your agent. 😅</p>",
+      "rawMarkdown": "I get you, 2 days ago I uploaded a model twice to collect more replays, and the same agent was below 600 and @ 1000-ish at one point. You have to get lucky with your early placement games, the longer it takes the harder it is to climb with your agent. 😅",
+      "replies": [
+        {
+          "id": 3509528,
+          "postDate": "2026-08-06T15:09:53.350Z",
+          "content": "<p>Yes exactly, and it really shouldn't be like that. Either we add more games even for older agents,do roubd robin,  or we reset leaderboard each day. But the format is already decided, so nothing we can do :)</p>",
+          "rawMarkdown": "Yes exactly, and it really shouldn't be like that. Either we add more games even for older agents,do roubd robin,  or we reset leaderboard each day. But the format is already decided, so nothing we can do :)"
+        }
+      ]
+    }
+  ]
+}

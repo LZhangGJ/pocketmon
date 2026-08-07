@@ -1,0 +1,34 @@
+{
+  "topic": {
+    "id": 708928,
+    "title": "Are Codex, Claude Code, and Similar LLM Tools Allowed for Preprocessing Competition Data?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708928",
+    "commentCount": 2,
+    "votes": 2,
+    "postDate": "2026-06-17T07:39:17.624268Z",
+    "lastCommentPostDate": "2026-06-17T21:04:49.496666700Z"
+  },
+  "messages": [
+    {
+      "id": 3474346,
+      "postDate": "2026-06-17T21:04:49.497Z",
+      "content": "<p>Agentic coding tools are absolutely allowed in this competition, noting the reasonableness clauses cited in the rules and mentioned by Ryan relating to excessive costs. If you do well, we can't wait to hear how you went about it so be sure to save your work for any winners documentation!</p>",
+      "rawMarkdown": "Agentic coding tools are absolutely allowed in this competition, noting the reasonableness clauses cited in the rules and mentioned by Ryan relating to excessive costs. If you do well, we can't wait to hear how you went about it so be sure to save your work for any winners documentation!\n\n",
+      "votes": 1
+    },
+    {
+      "id": 3474230,
+      "postDate": "2026-06-17T16:58:53.527Z",
+      "content": "<p>My interpretation of the rules is that you can use any of the tools you mentioned, and while it's a grey area for how much you can use these tools, the rules noted you shouldn't be spending ~$10,000+ on your models (I think the text referred to spending more than the prizing offered).</p>",
+      "rawMarkdown": "My interpretation of the rules is that you can use any of the tools you mentioned, and while it's a grey area for how much you can use these tools, the rules noted you shouldn't be spending ~$10,000+ on your models (I think the text referred to spending more than the prizing offered).",
+      "votes": 1
+    },
+    {
+      "id": 3473896,
+      "postDate": "2026-06-17T07:39:17.623Z",
+      "content": "<p>Hi, I would like to clarify the allowed use of LLM-based coding assistants during development for this competition.</p>\n<p>The rules seem to allow external tools and LLMs as long as they are reasonably accessible to all participants and have minimal/reasonable cost. The rules also mention that a small subscription fee for additional elements of a large language model, such as Gemini Advanced, may be acceptable if it satisfies the Reasonableness Standard.</p>\n<p>Given that, are tools such as Codex, Claude Code, Cursor, Gemini Advanced, or similar LLM-based coding assistants allowed for development work, including preprocessing and feature engineering?</p>\n<p>To be clear, I am not asking about calling an external API during evaluation. I understand that the submitted agent must not use ingress/egress during evaluation.</p>\n<p>My question is about development only:</p>\n<ul>\n<li>Can we use Codex / Claude Code / similar tools to write preprocessing scripts for the competition data?</li>\n<li>Can these tools inspect schema information, column names, dtypes, missing-value summaries, and file paths?</li>\n<li>Can these tools inspect sample rows, card names, card text, IDs, or other competition data during development, if the data is used only for this competition?</li>\n<li>Can we use these tools to generate derived features, tags, embeddings, or other preprocessing outputs, as long as those outputs are used only for this competition and are not published or reused elsewhere?</li>\n<li>Is there any difference between using a cloud-based LLM coding assistant and a local LLM with no external network transmission?</li>\n</ul>\n<p>In short, where is the boundary for using LLM coding assistants with competition data during development?</p>\n<p>I want to comply with the no-ingress/no-egress rule during evaluation and avoid any reuse or redistribution of Pokémon-related data outside the competition, but I would like to understand what is allowed during normal AI-assisted development.</p>",
+      "rawMarkdown": "Hi, I would like to clarify the allowed use of LLM-based coding assistants during development for this competition.\n\nThe rules seem to allow external tools and LLMs as long as they are reasonably accessible to all participants and have minimal/reasonable cost. The rules also mention that a small subscription fee for additional elements of a large language model, such as Gemini Advanced, may be acceptable if it satisfies the Reasonableness Standard.\n\nGiven that, are tools such as Codex, Claude Code, Cursor, Gemini Advanced, or similar LLM-based coding assistants allowed for development work, including preprocessing and feature engineering?\n\nTo be clear, I am not asking about calling an external API during evaluation. I understand that the submitted agent must not use ingress/egress during evaluation.\n\nMy question is about development only:\n\n* Can we use Codex / Claude Code / similar tools to write preprocessing scripts for the competition data?\n* Can these tools inspect schema information, column names, dtypes, missing-value summaries, and file paths?\n* Can these tools inspect sample rows, card names, card text, IDs, or other competition data during development, if the data is used only for this competition?\n* Can we use these tools to generate derived features, tags, embeddings, or other preprocessing outputs, as long as those outputs are used only for this competition and are not published or reused elsewhere?\n* Is there any difference between using a cloud-based LLM coding assistant and a local LLM with no external network transmission?\n\nIn short, where is the boundary for using LLM coding assistants with competition data during development?\n\nI want to comply with the no-ingress/no-egress rule during evaluation and avoid any reuse or redistribution of Pokémon-related data outside the competition, but I would like to understand what is allowed during normal AI-assisted development.\n",
+      "votes": 2
+    }
+  ]
+}

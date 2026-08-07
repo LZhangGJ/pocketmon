@@ -1,0 +1,36 @@
+{
+  "topic": {
+    "id": 713051,
+    "title": "Official Visualiser/Replay Viewer",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/713051",
+    "commentCount": 2,
+    "votes": 25,
+    "postDate": "2026-06-23T20:33:45.573745800Z",
+    "lastCommentPostDate": "2026-08-05T08:07:01.620Z",
+    "isSticky": true
+  },
+  "messages": [
+    {
+      "id": 3479512,
+      "postDate": "2026-06-23T20:33:45.573Z",
+      "content": "<p>Hi all,</p>\n<p>We're thrilled to see how many of you have been excited to create your own replay viewers, however these unofficial versions violate the terms of the competition and I've had to remove them. Please refer to the official version provided by the competition sponsors here:  <a href=\"https://www.kaggle.com/code/kiyotah/how-to-output-local-battle-as-json-and-view\" target=\"_blank\">https://www.kaggle.com/code/kiyotah/how-to-output-local-battle-as-json-and-view</a>.</p>\n<p>And as always you can review your individual replay games by clicking \"Open Visualiser\" from the Game History page:</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1095143%2F030334b62f95798f491aa1e67779c608%2F2026-06-17%2016.53.43.png?generation=1782246811021652&amp;alt=media\" alt=\"\"></p>\n<p>Best,</p>\n<p>Addison</p>",
+      "rawMarkdown": "Hi all,\n\nWe're thrilled to see how many of you have been excited to create your own replay viewers, however these unofficial versions violate the terms of the competition and I've had to remove them. Please refer to the official version provided by the competition sponsors here:  https://www.kaggle.com/code/kiyotah/how-to-output-local-battle-as-json-and-view.\n\nAnd as always you can review your individual replay games by clicking \"Open Visualiser\" from the Game History page:\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1095143%2F030334b62f95798f491aa1e67779c608%2F2026-06-17%2016.53.43.png?generation=1782246811021652&alt=media)\n\nBest,\n\nAddison",
+      "votes": 25
+    },
+    {
+      "id": 3481828,
+      "postDate": "2026-06-26T13:44:09.613Z",
+      "content": "<p>honestly love the provided viewer. despite having to resize my window its been instrumental in guiding my team. seeing how the bot plays out the deck and schema is a game changer. and analyzing csv's and logs gets tedious lol</p>",
+      "rawMarkdown": "honestly love the provided viewer. despite having to resize my window its been instrumental in guiding my team. seeing how the bot plays out the deck and schema is a game changer. and analyzing csv's and logs gets tedious lol",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3508734,
+          "postDate": "2026-08-05T08:07:01.620Z",
+          "content": "<p>unofficial versions violate the terms of the competition…</p>",
+          "rawMarkdown": "unofficial versions violate the terms of the competition..."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 717832,
+    "title": "replay log curation",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/717832",
+    "votes": 1,
+    "postDate": "2026-07-02T14:46:59.612948300Z",
+    "lastCommentPostDate": "2026-07-02T14:46:59.613333300Z"
+  },
+  "messages": [
+    {
+      "id": 3486453,
+      "postDate": "2026-07-02T14:46:59.613Z",
+      "content": "<p>After being stuck for a while i decided to make a little data curation script utilizing the downloadable replay logs. simple set up and thought i would make it modular for everyone. hope it helps</p>\n<p><a href=\"https://www.kaggle.com/code/chrisgendryx/pokemon-ptcg-log-curation\" target=\"_blank\">https://www.kaggle.com/code/chrisgendryx/pokemon-ptcg-log-curation</a></p>",
+      "rawMarkdown": "After being stuck for a while i decided to make a little data curation script utilizing the downloadable replay logs. simple set up and thought i would make it modular for everyone. hope it helps\n\nhttps://www.kaggle.com/code/chrisgendryx/pokemon-ptcg-log-curation",
+      "votes": 1
+    }
+  ]
+}

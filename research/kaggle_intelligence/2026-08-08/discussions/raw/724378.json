@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 724378,
+    "title": "Action Order: [0,2,4] vs [2,0,4]",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724378",
+    "votes": 1,
+    "postDate": "2026-07-10T21:42:21.014889600Z",
+    "lastCommentPostDate": "2026-07-10T21:42:21.013333300Z"
+  },
+  "messages": [
+    {
+      "id": 3494878,
+      "postDate": "2026-07-10T21:42:21.013Z",
+      "content": "<p>Does the order of actions as returned by the agent when selecting multiple actions ever matter?  For example is [0,2,4] always the same as [2,0,4]?  Appreciate the help with basic question.</p>",
+      "rawMarkdown": "Does the order of actions as returned by the agent when selecting multiple actions ever matter?  For example is [0,2,4] always the same as [2,0,4]?  Appreciate the help with basic question.",
+      "votes": 1
+    }
+  ]
+}

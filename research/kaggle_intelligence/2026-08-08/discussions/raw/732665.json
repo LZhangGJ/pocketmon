@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 732665,
+    "title": "Using current time in submission for strategy?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/732665",
+    "votes": 1,
+    "postDate": "2026-08-04T06:27:59.443291Z",
+    "lastCommentPostDate": "2026-08-04T06:27:59.443333300Z"
+  },
+  "messages": [
+    {
+      "id": 3508280,
+      "postDate": "2026-08-04T06:27:59.443Z",
+      "content": "<p>Can we use current time in submissions for strategy purposes?</p>\n<p>For example, use different policies depending on whether we are early into the ladder or a few days after.</p>",
+      "rawMarkdown": "Can we use current time in submissions for strategy purposes?\n\nFor example, use different policies depending on whether we are early into the ladder or a few days after.",
+      "votes": 1
+    }
+  ]
+}

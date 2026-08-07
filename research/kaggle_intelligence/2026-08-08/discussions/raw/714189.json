@@ -1,0 +1,79 @@
+{
+  "topic": {
+    "id": 714189,
+    "title": "Reminder about the Kaggle Simulation Competition Format",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/714189",
+    "commentCount": 8,
+    "votes": 16,
+    "postDate": "2026-06-25T19:31:22.263130700Z",
+    "lastCommentPostDate": "2026-06-29T14:16:36.180Z",
+    "isSticky": true
+  },
+  "messages": [
+    {
+      "id": 3481263,
+      "postDate": "2026-06-25T19:31:22.263Z",
+      "content": "<p>Hi everyone,</p>\n<p>We have a number of participants who are new to Kaggle competitions and/or simulations and have raised some questions about the format of this competition, how games are run, and how the winners are determined. Here's a brief review.</p>\n<ul>\n<li>You are allowed to have two active submissions at any time on the leaderboard and your best performing submission will be your leaderboard score. You can submit as often as you'd like, up to 5 times per day, and your two <em>most recent</em> submissions will be your active ones. </li>\n<li>Your submissions will continually play games against other submissions throughout the duration of the competition, as well as for approximately two weeks <em>beyond</em> the competition deadline. Your leaderboard ranking will continue to shift throughout the competition, and we run games after the competition to:<ul>\n<li>Ensure that new submissions have time to calibrate to their appropriate ranking on the leaderboard</li>\n<li>Play enough games to increase the confidence (<a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/overview/evaluation\" target=\"_blank\">decrease σ</a>) such that the leaderboard positions have converged.</li></ul></li>\n<li>Every game played meaningfully updates your ranking - unfavorable or favorable matchmaking early on in a submission's lifecycle is never \"locked in.\"</li>\n<li>The two submissions you have active by the end of the submission timeline will be the ones used in the final leaderboard calibration/convergence period. You're encouraged to test different strategies throughout the competition, but its those two that will be tested in the end, and after enough games are run, will determine the final leaderboard.</li>\n<li>We do not intend to reset the leaderboard scores at the deadline for a final tournament, but reserve the right to do in conjunction with the Sponsor team. We'd announce any changes to the format with plenty of notice and would only do so if deemed necessary.</li>\n<li>We aim to have each submission plan dozens of games per day (currently targeting 24/day) with prioritization given to newer submissions and submissions that haven't run in a while. That said, you may see long delays between some episode runs - that's not out of the ordinary. With so many participants and submissions made each day, it's likely that you may encounter some matchmaking lag, but that will resolve itself within the day.</li>\n</ul>\n<p>We're so excited to see how the competition is continuing to unfold! </p>\n<p>Kaggle Team</p>",
+      "rawMarkdown": "Hi everyone,\n\nWe have a number of participants who are new to Kaggle competitions and/or simulations and have raised some questions about the format of this competition, how games are run, and how the winners are determined. Here's a brief review.\n\n- You are allowed to have two active submissions at any time on the leaderboard and your best performing submission will be your leaderboard score. You can submit as often as you'd like, up to 5 times per day, and your two *most recent* submissions will be your active ones. \n- Your submissions will continually play games against other submissions throughout the duration of the competition, as well as for approximately two weeks *beyond* the competition deadline. Your leaderboard ranking will continue to shift throughout the competition, and we run games after the competition to:\n - Ensure that new submissions have time to calibrate to their appropriate ranking on the leaderboard\n - Play enough games to increase the confidence ([decrease σ](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/overview/evaluation)) such that the leaderboard positions have converged.\n- Every game played meaningfully updates your ranking - unfavorable or favorable matchmaking early on in a submission's lifecycle is never \"locked in.\"\n- The two submissions you have active by the end of the submission timeline will be the ones used in the final leaderboard calibration/convergence period. You're encouraged to test different strategies throughout the competition, but its those two that will be tested in the end, and after enough games are run, will determine the final leaderboard.\n- We do not intend to reset the leaderboard scores at the deadline for a final tournament, but reserve the right to do in conjunction with the Sponsor team. We'd announce any changes to the format with plenty of notice and would only do so if deemed necessary.\n- We aim to have each submission plan dozens of games per day (currently targeting 24/day) with prioritization given to newer submissions and submissions that haven't run in a while. That said, you may see long delays between some episode runs - that's not out of the ordinary. With so many participants and submissions made each day, it's likely that you may encounter some matchmaking lag, but that will resolve itself within the day.\n\nWe're so excited to see how the competition is continuing to unfold! \n\nKaggle Team\n",
+      "votes": 16
+    },
+    {
+      "id": 3481643,
+      "postDate": "2026-06-26T09:15:33.940Z",
+      "content": "<p>No reset is an interesting stance. I'm not sure how I feel about it.</p>",
+      "rawMarkdown": "No reset is an interesting stance. I'm not sure how I feel about it.",
+      "votes": 3,
+      "replies": [
+        {
+          "id": 3481728,
+          "postDate": "2026-06-26T11:20:31.243Z",
+          "content": "<p>Resetting makes sense to me. If I design Deck A in June that beats most of the others, then I rise into 1st place. In July, the community evolves to build Deck B that commonly beats Deck A, however has a 50/50 matchup with itself and has drawbacks to Deck C, so it never ends up getting into the top 50 range to challenge 1st place. It’s like RockPaperScissors where you can lock yourself into 1st playing Rock, and all the Paper throwers are stuck in the middle due to draws and Scissor throwers, so they never get to challenge Rock. I think the fact that current 3rd place is afraid to resubmit his better model is more evidence why a reset would be necessary at comp end.</p>\n<p>Also, if a reset occurs we need way more eval games. Even with 250 eval games against single opponent, i found my winrate could fluctuate from 40% to 60% depending on luck of card draws.</p>",
+          "rawMarkdown": "Resetting makes sense to me. If I design Deck A in June that beats most of the others, then I rise into 1st place. In July, the community evolves to build Deck B that commonly beats Deck A, however has a 50/50 matchup with itself and has drawbacks to Deck C, so it never ends up getting into the top 50 range to challenge 1st place. It’s like RockPaperScissors where you can lock yourself into 1st playing Rock, and all the Paper throwers are stuck in the middle due to draws and Scissor throwers, so they never get to challenge Rock. I think the fact that current 3rd place is afraid to resubmit his better model is more evidence why a reset would be necessary at comp end.\n\nAlso, if a reset occurs we need way more eval games. Even with 250 eval games against single opponent, i found my winrate could fluctuate from 40% to 60% depending on luck of card draws.",
+          "votes": 4
+        }
+      ]
+    },
+    {
+      "id": 3481411,
+      "postDate": "2026-06-26T01:41:50.587Z",
+      "content": "<p>Thanks for the clarification.</p>\n<p>This two-active-submissions format makes it a bit risky to submit experimental agents while an older submission is still performing well. I found a new agent idea that looks quite strong locally, but submitting it would deactivate one of my current active submissions.</p>\n<p>So I decided to share it as a public notebook instead:</p>\n<p><a href=\"https://www.kaggle.com/code/masamikobayashi/a-sample-archaludon-75-wr-vs-my-1300-starmie\" target=\"_blank\">https://www.kaggle.com/code/masamikobayashi/a-sample-archaludon-75-wr-vs-my-1300-starmie</a></p>\n<p>It is a simple Archaludon / Cinderace rule-based agent. It does not use machine learning, so there should still be a lot of room to improve it.</p>\n<p>I guess this is my current way of working around the active-submission rule. If I cannot safely test every strong idea myself, I might as well share some of them with everyone. lol</p>\n<p>I would definitely appreciate a pin/manual active-submission selection feature. It would make experimentation much easier.</p>",
+      "rawMarkdown": "Thanks for the clarification.\n\nThis two-active-submissions format makes it a bit risky to submit experimental agents while an older submission is still performing well. I found a new agent idea that looks quite strong locally, but submitting it would deactivate one of my current active submissions.\n\nSo I decided to share it as a public notebook instead:\n\nhttps://www.kaggle.com/code/masamikobayashi/a-sample-archaludon-75-wr-vs-my-1300-starmie\n\nIt is a simple Archaludon / Cinderace rule-based agent. It does not use machine learning, so there should still be a lot of room to improve it.\n\nI guess this is my current way of working around the active-submission rule. If I cannot safely test every strong idea myself, I might as well share some of them with everyone. lol\n\nI would definitely appreciate a pin/manual active-submission selection feature. It would make experimentation much easier.",
+      "votes": 2
+    },
+    {
+      "id": 3482516,
+      "postDate": "2026-06-27T12:06:40.027Z",
+      "content": "<p>Thanks for the detailed write-up on the format. I have a quick follow-up about team mergers. In standard Kaggle competitions, two teams can't merge if their combined submission count exceeds what a single team would be allowed by the merge date. Given how submissions work in this simulation competition (2 active submissions, up to 5 per day, games running continuously), I wanted to confirm: does that same submission-count restriction still apply to team mergers here, or is it handled differently for this Simulation Category?</p>",
+      "rawMarkdown": "Thanks for the detailed write-up on the format. I have a quick follow-up about team mergers. In standard Kaggle competitions, two teams can't merge if their combined submission count exceeds what a single team would be allowed by the merge date. Given how submissions work in this simulation competition (2 active submissions, up to 5 per day, games running continuously), I wanted to confirm: does that same submission-count restriction still apply to team mergers here, or is it handled differently for this Simulation Category?",
+      "replies": [
+        {
+          "id": 3483783,
+          "postDate": "2026-06-29T14:16:36.180Z",
+          "content": "<p>The same submission count restriction applies to team mergers here. Thanks!</p>",
+          "rawMarkdown": "The same submission count restriction applies to team mergers here. Thanks!",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "id": 3482029,
+      "postDate": "2026-06-26T17:51:36.760Z",
+      "content": "<p>Continuing the games after the competition deadline is an excellent approach. It provides a valuable opportunity to learn and improve our models over time. This is particularly helpful for me, as my performance in competitions is not very good yet.</p>",
+      "rawMarkdown": "Continuing the games after the competition deadline is an excellent approach. It provides a valuable opportunity to learn and improve our models over time. This is particularly helpful for me, as my performance in competitions is not very good yet."
+    },
+    {
+      "id": 3481371,
+      "postDate": "2026-06-25T22:51:42.953Z",
+      "content": "<p>Thank you for the clarification regarding the two active submissions.</p>\n<p>Could you clarify whether participants can manually choose which two previous submissions remain active?</p>\n<p>Under the current “latest two submissions” rule, submitting a new experimental version may automatically deactivate the older submission, even when that older submission is the participant’s stable main entry. This makes it difficult to keep one proven submission active while iterating on the second slot, and may discourage experimentation.</p>\n<p>If manual selection is not currently available:</p>\n<ol>\n<li>Is there a recommended way to keep one submission fixed while updating the other?</li>\n<li>If we resubmit an identical version to change the submission order, will its previous games, rating, and uncertainty (sigma) be preserved, or will it be treated as a completely new submission?</li>\n<li>Could Kaggle consider allowing participants to pin or manually select their two active submissions?</li>\n</ol>\n<p>Thank you!</p>",
+      "rawMarkdown": "Thank you for the clarification regarding the two active submissions.\n\nCould you clarify whether participants can manually choose which two previous submissions remain active?\n\nUnder the current “latest two submissions” rule, submitting a new experimental version may automatically deactivate the older submission, even when that older submission is the participant’s stable main entry. This makes it difficult to keep one proven submission active while iterating on the second slot, and may discourage experimentation.\n\nIf manual selection is not currently available:\n\n1. Is there a recommended way to keep one submission fixed while updating the other?\n2. If we resubmit an identical version to change the submission order, will its previous games, rating, and uncertainty (sigma) be preserved, or will it be treated as a completely new submission?\n3. Could Kaggle consider allowing participants to pin or manually select their two active submissions?\n\nThank you!",
+      "replies": [
+        {
+          "id": 3481405,
+          "postDate": "2026-06-26T01:11:59.763Z",
+          "content": "<p>Hi there,</p>\n<p>We're considering a \"pinned\" option, but we can't guarantee it will be ready for this competition. You have to resubmit any older submission to ensure it's one of your two active submissions, and it will continue to climb/fall on the leaderboard accordingly. We wouldn't detect if it's the same submission and preserve prior uncertainty/rating, but we'd ensure it played enough games to return to its appropriate spot on the leaderboard (although that may not happen quickly).</p>",
+          "rawMarkdown": "Hi there,\n\nWe're considering a \"pinned\" option, but we can't guarantee it will be ready for this competition. You have to resubmit any older submission to ensure it's one of your two active submissions, and it will continue to climb/fall on the leaderboard accordingly. We wouldn't detect if it's the same submission and preserve prior uncertainty/rating, but we'd ensure it played enough games to return to its appropriate spot on the leaderboard (although that may not happen quickly)."
+        }
+      ]
+    }
+  ]
+}

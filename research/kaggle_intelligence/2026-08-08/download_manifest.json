@@ -1,0 +1,22 @@
+{
+  "competition": "pokemon-tcg-ai-battle",
+  "competition_url": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle",
+  "downloaded_at_utc": "2026-08-07T18:48:38.121420+00:00",
+  "public_only": true,
+  "discussions": {
+    "topics": 204,
+    "messages": 1022,
+    "pages": 11,
+    "changed_topics": 0,
+    "new_or_changed_messages": 0
+  },
+  "notebooks": {
+    "notebooks": 49,
+    "new_refs": 0,
+    "changed_sources": 0,
+    "score_min": null,
+    "score_max": null
+  },
+  "notebook_selection_observed_on": "2026-08-08",
+  "notebook_selection_policy": "time_score_recency_and_explicit_strategy"
+}

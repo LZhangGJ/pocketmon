@@ -1,0 +1,62 @@
+{
+  "topic": {
+    "id": 731397,
+    "title": "How do we build our decks?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/731397",
+    "commentCount": 6,
+    "postDate": "2026-07-31T08:58:37.666579100Z",
+    "lastCommentPostDate": "2026-08-02T15:42:15.910Z"
+  },
+  "messages": [
+    {
+      "id": 3507422,
+      "postDate": "2026-08-02T02:39:58.970Z",
+      "content": "<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2F6da980d0e0d7404d694199014a544b31%2FSelection_4474.png?generation=1785638329157662&amp;alt=media\" alt=\"\">\n<a href=\"https://x.com/InvenGlobal/status/2080559209888858439\" target=\"_blank\">https://x.com/InvenGlobal/status/2080559209888858439</a><br>\n<a href=\"https://cedil.cesa.or.jp/cedil_sessions/view/3296\" target=\"_blank\">https://cedil.cesa.or.jp/cedil_sessions/view/3296</a>  </p>\n<ul>\n<li>Pokémon TCG Pocketのバトルを支える強化学習AI技術 - Google スライド.pdf</li>\n</ul>",
+      "rawMarkdown": "![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2F6da980d0e0d7404d694199014a544b31%2FSelection_4474.png?generation=1785638329157662&alt=media)\nhttps://x.com/InvenGlobal/status/2080559209888858439  \nhttps://cedil.cesa.or.jp/cedil_sessions/view/3296  \n- Pokémon TCG Pocketのバトルを支える強化学習AI技術 - Google スライド.pdf\n\n",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3507753,
+          "postDate": "2026-08-02T15:42:15.910Z",
+          "content": "<p>That was incredibly generous of you to share. It really inspired me and gave me so many new ideas. Love u man!🤩</p>",
+          "rawMarkdown": "That was incredibly generous of you to share. It really inspired me and gave me so many new ideas. Love u man!🤩"
+        }
+      ]
+    },
+    {
+      "id": 3506365,
+      "postDate": "2026-07-31T09:32:10.253Z",
+      "content": "<p>I guess pretty much like chess. There are basic deck from how to play ptcg bible. You can copy from tournament winner. You can stare at the cards and create from your game play experience and prove it works by playing it. Pretrain, immitation, exploration</p>",
+      "rawMarkdown": "I guess pretty much like chess. There are basic deck from how to play ptcg bible. You can copy from tournament winner. You can stare at the cards and create from your game play experience and prove it works by playing it. Pretrain, immitation, exploration",
+      "replies": [
+        {
+          "id": 3506380,
+          "postDate": "2026-07-31T09:56:44.663Z",
+          "content": "<p>Thanks hengck23! I’ve been experimenting with pretraining, but my goal is to build an automated deck-exploration pipeline that can discover novel decks rather than simply reproduce existing meta decks from the ranked ladder.\nHowever, the search space is far too large for purely random exploration, so I’m trying to develop a rule-based approach to automated deck exploration. This may introduce a cold-start problem, though: when a pretrained checkpoint uses a new deck to play against the same checkpoint, the results have extremely high variance. Fine-tuning for every new deck is also extremely computationally expensive and time-consuming, making it difficult to reliably evaluate a deck’s true strength.\nSo I’m wondering how to design a system that can at least propose reasonably viable new decks and iteratively improve them.</p>",
+          "rawMarkdown": "Thanks hengck23! I’ve been experimenting with pretraining, but my goal is to build an automated deck-exploration pipeline that can discover novel decks rather than simply reproduce existing meta decks from the ranked ladder.\nHowever, the search space is far too large for purely random exploration, so I’m trying to develop a rule-based approach to automated deck exploration. This may introduce a cold-start problem, though: when a pretrained checkpoint uses a new deck to play against the same checkpoint, the results have extremely high variance. Fine-tuning for every new deck is also extremely computationally expensive and time-consuming, making it difficult to reliably evaluate a deck’s true strength.\nSo I’m wondering how to design a system that can at least propose reasonably viable new decks and iteratively improve them.",
+          "replies": [
+            {
+              "id": 3506408,
+              "postDate": "2026-07-31T10:36:53.553Z",
+              "content": "<p>you should think of it like this:  </p>\n<p>1) let the placement of cards in active,bench, etc … JUST BEFORE ATTACK be called FORMATION. It includes item, energy attachment, stadium  … anything that can affect the damage you give to the opponent  </p>\n<p>2) for a FORMATION, score it for damage, HP,  wish card gained by opp, no of cards used …<br>\ncompute the time you need to build it (that is setup cost). e.g. if you have many cards, you may need many turns    </p>\n<p>3) then you have a list of FORMATION and their cost and score   </p>\n<p>4) you can always ask chatgpt for a stronger or customised FORMATION. Or copy from LB, etc …</p>\n<p>deck is to get good formation (strong, fast to build, resistance to random draw). some deck can change formation based on opponent's formation</p>\n<p>then try to train your model to make the most powerful formation in the shortest time and verify it works by playing it with an opponent or self-play</p>\n<p>Typically, the search space may be smaller than you think</p>\n<p><a href=\"https://chatgpt.com/s/t_6a6c7b2d090c8191a89d536d7c7f08ba\" target=\"_blank\">https://chatgpt.com/s/t_6a6c7b2d090c8191a89d536d7c7f08ba</a></p>",
+              "rawMarkdown": "you should think of it like this:  \n\n1) let the placement of cards in active,bench, etc ... JUST BEFORE ATTACK be called FORMATION. It includes item, energy attachment, stadium  ... anything that can affect the damage you give to the opponent  \n\n2) for a FORMATION, score it for damage, HP,  wish card gained by opp, no of cards used ...  \ncompute the time you need to build it (that is setup cost). e.g. if you have many cards, you may need many turns    \n\n3) then you have a list of FORMATION and their cost and score   \n\n4) you can always ask chatgpt for a stronger or customised FORMATION. Or copy from LB, etc ...\n\ndeck is to get good formation (strong, fast to build, resistance to random draw). some deck can change formation based on opponent's formation\n\nthen try to train your model to make the most powerful formation in the shortest time and verify it works by playing it with an opponent or self-play\n\nTypically, the search space may be smaller than you think\n\nhttps://chatgpt.com/s/t_6a6c7b2d090c8191a89d536d7c7f08ba\n",
+              "votes": 2
+            },
+            {
+              "id": 3506438,
+              "postDate": "2026-07-31T11:10:35.317Z",
+              "content": "<p>This has been incredibly inspiring and insightful! I’ve learned so much from you. Thank you hengck23!</p>",
+              "rawMarkdown": "This has been incredibly inspiring and insightful! I’ve learned so much from you. Thank you hengck23!"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3506352,
+      "postDate": "2026-07-31T08:58:37.667Z",
+      "content": "<p>I’m new to RL and the PTCG, and I haven’t played many card games before. I’d like to try building a system that can iteratively improve decks, but I currently have no idea where to start.\nI’d like to ask experienced PTCG players: How do you build a deck from the cards available to you? What factors should be considered? How were the dominant meta decks of recent generations first developed, and how did they evolve over time?\nThanks!</p>",
+      "rawMarkdown": "I’m new to RL and the PTCG, and I haven’t played many card games before. I’d like to try building a system that can iteratively improve decks, but I currently have no idea where to start.\nI’d like to ask experienced PTCG players: How do you build a deck from the cards available to you? What factors should be considered? How were the dominant meta decks of recent generations first developed, and how did they evolve over time?\nThanks!"
+    }
+  ]
+}

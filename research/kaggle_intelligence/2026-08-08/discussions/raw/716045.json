@@ -1,0 +1,84 @@
+{
+  "topic": {
+    "id": 716045,
+    "title": "June 30 Update: Updated Simulation Environment, gameplay increases",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/716045",
+    "commentCount": 9,
+    "votes": 41,
+    "postDate": "2026-06-30T00:30:46.484804300Z",
+    "lastCommentPostDate": "2026-07-01T18:34:42.423333300Z"
+  },
+  "messages": [
+    {
+      "id": 3484065,
+      "postDate": "2026-06-30T00:30:46.483Z",
+      "content": "<p>Hey all</p>\n<p>A few quick announcements as we head into a long holiday weekend here in the US:</p>\n<ol>\n<li><p>The simulation environment has been updated, including an update to the sample submission (`sample_submission.zip` on the `Data` tab).   </p>\n<ol>\n<li>Dataset update:<br><ol>\n<li>Update: cg library now supports macOS and Linux ARM64.  </li>\n<li>We updated the cg library to fix the library-loading issue reported in the thread, and the data has been refreshed accordingly. Changes:<br><ol>\n<li>Added libcg.dylib — macOS binary  </li>\n<li>Added libcg-arm64.so — Linux ARM64 binary  </li></ol></li>\n<li>There are no changes to main.py, deck.csv, or the rest of the cg API, so existing submissions should be unaffected.  </li></ol></li>\n<li>Simulator update:<br><ol>\n<li>This update is intended to address the issue where games could end in a draw due to the step limit, instead of the looping player eventually losing by timeout.  </li>\n<li>Existing scores will be preserved. Under the updated environment, there is now a sufficiently large step limit so that, if a player enters an infinite loop, they should eventually lose by timeout rather than the game ending in a draw.</li></ol></li></ol></li>\n<li><p>We have also been working on increasing game throughput, and we are gradually increasing the game rate as improvements land. We will share updated game-rate targets once the next round of improvement ship, which we expect in the coming days. We're also continuing to monitor things like how the meta may change by rating band, the number of games required for a submission to achieve a high level of stability, etc. We'll be sure to keep everyone updated with any findings or changes to matchmaking or the post-deadline gameplay.</p></li>\n</ol>\n<p>Best,</p>\n<p>Addison</p>",
+      "rawMarkdown": "Hey all\n\nA few quick announcements as we head into a long holiday weekend here in the US:\n\n1. The simulation environment has been updated, including an update to the sample submission (\\`sample\\_submission.zip\\` on the \\`Data\\` tab).   \n   1. Dataset update:  \n      1. Update: cg library now supports macOS and Linux ARM64.  \n      2. We updated the cg library to fix the library-loading issue reported in the thread, and the data has been refreshed accordingly. Changes:  \n         1. Added libcg.dylib — macOS binary  \n         2. Added libcg-arm64.so — Linux ARM64 binary  \n      3. There are no changes to main.py, deck.csv, or the rest of the cg API, so existing submissions should be unaffected.  \n   2. Simulator update:  \n      1. This update is intended to address the issue where games could end in a draw due to the step limit, instead of the looping player eventually losing by timeout.  \n      2. Existing scores will be preserved. Under the updated environment, there is now a sufficiently large step limit so that, if a player enters an infinite loop, they should eventually lose by timeout rather than the game ending in a draw.\n\n2. We have also been working on increasing game throughput, and we are gradually increasing the game rate as improvements land. We will share updated game-rate targets once the next round of improvement ship, which we expect in the coming days. We're also continuing to monitor things like how the meta may change by rating band, the number of games required for a submission to achieve a high level of stability, etc. We'll be sure to keep everyone updated with any findings or changes to matchmaking or the post-deadline gameplay.\n\nBest,\n\nAddison",
+      "votes": 41
+    },
+    {
+      "id": 3484878,
+      "postDate": "2026-06-30T20:34:53.330Z",
+      "content": "<p>We've increased our target matches per submission to 48 per day per submission, and we've added a probability of being matched against a random opponent to 10%. We'll monitor matchmaking performance and keep everyone updated of any changes</p>",
+      "rawMarkdown": "We've increased our target matches per submission to 48 per day per submission, and we've added a probability of being matched against a random opponent to 10%. We'll monitor matchmaking performance and keep everyone updated of any changes",
+      "votes": 9,
+      "replies": [
+        {
+          "id": 3485123,
+          "postDate": "2026-07-01T05:38:41.233Z",
+          "content": "<p>I think the new matchmaking feels a bit unfair for higher-rated agents. Sometimes we get matched against much lower-rated opponents, and winning only gives a few points, but losing once can cost a huge amount of points. In a card game with opening-hand variance and matchup randomness, this feels really harsh😆</p>",
+          "rawMarkdown": "I think the new matchmaking feels a bit unfair for higher-rated agents. Sometimes we get matched against much lower-rated opponents, and winning only gives a few points, but losing once can cost a huge amount of points. In a card game with opening-hand variance and matchup randomness, this feels really harsh😆",
+          "votes": 1,
+          "replies": [
+            {
+              "id": 3485480,
+              "postDate": "2026-07-01T14:05:23.217Z",
+              "content": "<p>We can certainly understand the concern here - with a high volume of games, this normalizes over time. That doesn't mean it will necessarily be fair within a single game, but over hundreds of games there's much more confidence in your position.</p>",
+              "rawMarkdown": "We can certainly understand the concern here - with a high volume of games, this normalizes over time. That doesn't mean it will necessarily be fair within a single game, but over hundreds of games there's much more confidence in your position."
+            }
+          ]
+        },
+        {
+          "id": 3485718,
+          "postDate": "2026-07-01T18:34:42.423Z",
+          "content": "<p>The 10% random opponent chance is very interesting. It shifts some incentives (your deck has to be strong into the low-rating meta) but overall I think it’s a positive change. </p>",
+          "rawMarkdown": "The 10% random opponent chance is very interesting. It shifts some incentives (your deck has to be strong into the low-rating meta) but overall I think it’s a positive change. "
+        }
+      ]
+    },
+    {
+      "id": 3485061,
+      "postDate": "2026-07-01T03:40:29.590Z",
+      "content": "<p>Thanks for the update and for the matchmaking improvements!</p>\n<p>I noticed that sometimes after my submission gets matched into a game and wins, the result shows a +0 rating change. Is this expected behavior, for example due to rounding or the opponent being random/lower-rated, or could it indicate an issue?</p>\n<p>Thanks!</p>",
+      "rawMarkdown": "Thanks for the update and for the matchmaking improvements!\n\nI noticed that sometimes after my submission gets matched into a game and wins, the result shows a +0 rating change. Is this expected behavior, for example due to rounding or the opponent being random/lower-rated, or could it indicate an issue?\n\nThanks!",
+      "replies": [
+        {
+          "id": 3485303,
+          "postDate": "2026-07-01T09:46:08.933Z",
+          "content": "<p><a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54223883&amp;episodeId=83036328#\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54223883&amp;episodeId=83036328#</a>\n<a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54223883&amp;episodeId=83035695#\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54223883&amp;episodeId=83035695#</a>\nsuch as these episodes, my submission won and got 0 point.</p>",
+          "rawMarkdown": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54223883&episodeId=83036328#\nhttps://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54223883&episodeId=83035695#\nsuch as these episodes, my submission won and got 0 point.",
+          "replies": [
+            {
+              "id": 3485479,
+              "postDate": "2026-07-01T14:04:32.060Z",
+              "content": "<p>Hi there - this is expected when the difference between your submission and your opponent's is large enough. If your opponent won, there would be a much larger shift if a \"weaker\" opponent beat a \"stronger\" player.</p>",
+              "rawMarkdown": "Hi there - this is expected when the difference between your submission and your opponent's is large enough. If your opponent won, there would be a much larger shift if a \"weaker\" opponent beat a \"stronger\" player."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3484522,
+      "postDate": "2026-06-30T13:39:58.423Z",
+      "content": "<p>Thanks for the update! One quick question: is the cg-lib dataset the SDK/toolkit referenced in the competition overview, or is there another SDK that participants should be using? I found it via the sample notebooks, but I wasn't sure if that was the intended entry point.</p>",
+      "rawMarkdown": "Thanks for the update! One quick question: is the cg-lib dataset the SDK/toolkit referenced in the competition overview, or is there another SDK that participants should be using? I found it via the sample notebooks, but I wasn't sure if that was the intended entry point."
+    },
+    {
+      "id": 3484121,
+      "postDate": "2026-06-30T04:05:15.357Z",
+      "content": "<p>Yay, thank you so much for the update!\nMy poor Mac can now process games about 3 times faster 😂</p>",
+      "rawMarkdown": "Yay, thank you so much for the update!\nMy poor Mac can now process games about 3 times faster 😂"
+    }
+  ]
+}

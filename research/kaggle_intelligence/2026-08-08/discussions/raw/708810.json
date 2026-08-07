@@ -1,0 +1,65 @@
+{
+  "topic": {
+    "id": 708810,
+    "title": "Question on inference environment",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708810",
+    "commentCount": 6,
+    "votes": 37,
+    "postDate": "2026-06-17T01:11:51.684960300Z",
+    "lastCommentPostDate": "2026-06-24T01:48:57.356666700Z"
+  },
+  "messages": [
+    {
+      "id": 3473740,
+      "postDate": "2026-06-17T01:11:51.683Z",
+      "content": "<p>What hardware is used for inference, and how many seconds do we have for each turn?</p>",
+      "rawMarkdown": "What hardware is used for inference, and how many seconds do we have for each turn?",
+      "votes": 37
+    },
+    {
+      "id": 3478451,
+      "postDate": "2026-06-22T17:52:47.720Z",
+      "content": "<p>Each team has 600 seconds TOTAL for the entire game. There is no per turn increment.</p>",
+      "rawMarkdown": "Each team has 600 seconds TOTAL for the entire game. There is no per turn increment.",
+      "votes": 4,
+      "replies": [
+        {
+          "id": 3478741,
+          "postDate": "2026-06-23T02:18:53.157Z",
+          "content": "<p>Thanks for confirming the 600s total budget! Could you also clarify the inference hardware?</p>\n<ol>\n<li><p>CPU — cores/vCPUs?</p></li>\n<li><p>RAM — memory limit?</p></li>\n<li><p>GPU — available, or CPU-only?</p>\n<p>This determines how large a model and how deep a search we can fit in 600s. Thanks!</p></li>\n</ol>",
+          "rawMarkdown": "Thanks for confirming the 600s total budget! Could you also clarify the inference hardware?\n\n  1. CPU — cores/vCPUs?\n  2. RAM — memory limit?\n  3. GPU — available, or CPU-only?\n\n  This determines how large a model and how deep a search we can fit in 600s. Thanks!",
+          "replies": [
+            {
+              "id": 3479649,
+              "postDate": "2026-06-24T01:47:57.780Z",
+              "content": "<p>CPU only, 1.6 vCPUs, 8GB RAM</p>",
+              "rawMarkdown": "CPU only, 1.6 vCPUs, 8GB RAM",
+              "votes": 8
+            }
+          ]
+        },
+        {
+          "id": 3479631,
+          "postDate": "2026-06-24T01:11:01.300Z",
+          "content": "<p>Hi, is there a full list of the python packages we can use during submission?</p>",
+          "rawMarkdown": "Hi, is there a full list of the python packages we can use during submission?",
+          "replies": [
+            {
+              "id": 3479650,
+              "postDate": "2026-06-24T01:48:57.357Z",
+              "content": "<p>The python packages are the same as in the notebook environment. You can find the docker file inside of the kaggle-environments repository if you want granular details about specific versions</p>",
+              "rawMarkdown": "The python packages are the same as in the notebook environment. You can find the docker file inside of the kaggle-environments repository if you want granular details about specific versions",
+              "votes": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3475120,
+      "postDate": "2026-06-19T11:53:43.740Z",
+      "content": "<p>I can't find any info on this either.</p>",
+      "rawMarkdown": "I can't find any info on this either."
+    }
+  ]
+}

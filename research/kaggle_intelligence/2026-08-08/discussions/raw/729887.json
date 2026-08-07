@@ -1,0 +1,48 @@
+{
+  "topic": {
+    "id": 729887,
+    "title": "I've never seen a competition with nearly 6,000 participants before.",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/729887",
+    "commentCount": 4,
+    "votes": 10,
+    "postDate": "2026-07-27T03:18:52.996876800Z",
+    "lastCommentPostDate": "2026-07-29T04:19:00.143333300Z"
+  },
+  "messages": [
+    {
+      "id": 3504036,
+      "postDate": "2026-07-27T03:18:52.997Z",
+      "content": "<p>This has to be the most popular Kaggle competition ever, right?</p>",
+      "rawMarkdown": "This has to be the most popular Kaggle competition ever, right?\n\n",
+      "votes": 10
+    },
+    {
+      "id": 3504040,
+      "postDate": "2026-07-27T03:58:54.487Z",
+      "content": "<p>Santander Customer Transaction Prediction competition had 8,751 teams with 9,787 Participants 7 years ago. (27 teams got Gold medals!)</p>\n<p>I'm curious whether this competition will surpass that.</p>\n<p><a href=\"https://www.kaggle.com/competitions/santander-customer-transaction-prediction\" target=\"_blank\">https://www.kaggle.com/competitions/santander-customer-transaction-prediction</a></p>",
+      "rawMarkdown": "Santander Customer Transaction Prediction competition had 8,751 teams with 9,787 Participants 7 years ago. (27 teams got Gold medals!)\n\nI'm curious whether this competition will surpass that.\n\nhttps://www.kaggle.com/competitions/santander-customer-transaction-prediction",
+      "votes": 4,
+      "replies": [
+        {
+          "id": 3504053,
+          "postDate": "2026-07-27T05:36:00.330Z",
+          "content": "<p>Wow! Old tabular data competition…..What a time !!!! </p>",
+          "rawMarkdown": "Wow! Old tabular data competition.....What a time !!!! "
+        }
+      ]
+    },
+    {
+      "id": 3504958,
+      "postDate": "2026-07-29T04:19:00.143Z",
+      "content": "<p>Because it's Pokémon <a href=\"https://www.kaggle.com/chesteryuan\" target=\"_blank\">@chesteryuan</a> </p>",
+      "rawMarkdown": "Because it's Pokémon @chesteryuan ",
+      "votes": -1
+    },
+    {
+      "id": 3504425,
+      "postDate": "2026-07-28T02:36:32.203Z",
+      "content": "<p>It’s great to see such a diverse group of people taking part in the competition.<br>\nI hope this will be an opportunity to learn a great deal from a variety of perspectives.</p>",
+      "rawMarkdown": "It’s great to see such a diverse group of people taking part in the competition.   \nI hope this will be an opportunity to learn a great deal from a variety of perspectives."
+    }
+  ]
+}

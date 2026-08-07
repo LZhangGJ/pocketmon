@@ -1,0 +1,26 @@
+{
+  "topic": {
+    "id": 709545,
+    "title": "Rule Clarification - \"Unfair playing practices\"",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709545",
+    "commentCount": 1,
+    "votes": 1,
+    "postDate": "2026-06-19T05:08:28.938908500Z",
+    "lastCommentPostDate": "2026-06-19T12:15:01.636666700Z"
+  },
+  "messages": [
+    {
+      "id": 3474955,
+      "postDate": "2026-06-19T05:08:28.940Z",
+      "content": "<p>Rule 3.8.d mentions unfair playing practices and I want to clarify some specifics around that. \nI'm seeing in some of my testing that agent timeouts are a real failure point, and I have a few decks that win by enemy timeouts more often due to them generating legal in-game moves that are computationally expensive to evaluate. Would it be considered an \"unfair playing practice\" to maximize scenarios that result in opposing agent time burn? I'd like to think this is OK since it's a real-world game tactic, but it's just leaning towards icky so I wanted to confirm. \nWorth saying I'm new to Kaggle competitions, I just like Pokemon. </p>",
+      "rawMarkdown": "Rule 3.8.d mentions unfair playing practices and I want to clarify some specifics around that. \nI'm seeing in some of my testing that agent timeouts are a real failure point, and I have a few decks that win by enemy timeouts more often due to them generating legal in-game moves that are computationally expensive to evaluate. Would it be considered an \"unfair playing practice\" to maximize scenarios that result in opposing agent time burn? I'd like to think this is OK since it's a real-world game tactic, but it's just leaning towards icky so I wanted to confirm. \nWorth saying I'm new to Kaggle competitions, I just like Pokemon. ",
+      "votes": 1
+    },
+    {
+      "id": 3475129,
+      "postDate": "2026-06-19T12:15:01.637Z",
+      "content": "<p>That would be acceptable, but the type of thing that we reserve the right to patch in the engine if we felt it was an unfair. If it's a strategic tactic that's okay. If it's an exploit of the game engine that we consider to be a \"hack\" we'd likely consider it \"unfair\"</p>",
+      "rawMarkdown": "That would be acceptable, but the type of thing that we reserve the right to patch in the engine if we felt it was an unfair. If it's a strategic tactic that's okay. If it's an exploit of the game engine that we consider to be a \"hack\" we'd likely consider it \"unfair\""
+    }
+  ]
+}

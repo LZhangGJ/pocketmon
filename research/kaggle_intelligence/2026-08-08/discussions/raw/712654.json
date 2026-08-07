@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 712654,
+    "title": "card2vec: Is attribute-based card embedding actually useful for RL agents?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712654",
+    "votes": 1,
+    "postDate": "2026-06-23T08:01:46.287619600Z",
+    "lastCommentPostDate": "2026-06-23T08:01:46.286666700Z"
+  },
+  "messages": [
+    {
+      "id": 3478961,
+      "postDate": "2026-06-23T08:01:46.287Z",
+      "content": "<p>Hi everyone,</p>\n<p>I published a notebook that introduces card2vec — an AutoEncoder-based approach\nto represent each Pokémon TCG card as a 64-dimensional dense vector.</p>\n<p>🔗 <a href=\"https://www.kaggle.com/code/niiino/card2vec-learning-dense-card-embeddings\" target=\"_blank\">https://www.kaggle.com/code/niiino/card2vec-learning-dense-card-embeddings</a></p>\n<p>The motivation is that integer card IDs have two drawbacks:</p>\n<ul>\n<li>No generalization to unseen cards</li>\n<li>No semantic structure (similar cards aren't close in representation space)</li>\n</ul>\n<p>card2vec encodes card attributes (HP, type, energy cost, effect keywords, etc.)\ninto a 148-dim feature vector, then compresses it to 64 dims via AutoEncoder.</p>\n<p>⏱️ Runs in under 1 minute on CPU — feel free to try it!</p>\n<hr>\n<p>I'd love to discuss a few open questions I have:</p>\n<p><strong>1. Is dense card representation actually useful?</strong>\nDoes replacing integer IDs with attribute-based embeddings meaningfully help\nthe agent? I've seen a slight improvement in my early experiments, but haven't\ndone enough validation to draw conclusions yet.</p>\n<p><strong>2. Context-awareness</strong>\nword2vec derives meaning from context (surrounding words). card2vec only encodes\nstatic attributes — it has no notion of how a card interacts with others in a\ndeck or game situation. I think this is a significant limitation, but I'm not\nsure how to address it. Has anyone thought about this?</p>\n<p>I'm fairly new to Kaggle and not highly confident in my ML knowledge,\nso any feedback is very welcome!</p>",
+      "rawMarkdown": "Hi everyone,\n\nI published a notebook that introduces card2vec — an AutoEncoder-based approach\nto represent each Pokémon TCG card as a 64-dimensional dense vector.\n\n🔗 https://www.kaggle.com/code/niiino/card2vec-learning-dense-card-embeddings\n\nThe motivation is that integer card IDs have two drawbacks:\n- No generalization to unseen cards\n- No semantic structure (similar cards aren't close in representation space)\n\ncard2vec encodes card attributes (HP, type, energy cost, effect keywords, etc.)\ninto a 148-dim feature vector, then compresses it to 64 dims via AutoEncoder.\n\n⏱️ Runs in under 1 minute on CPU — feel free to try it!\n\n---\n\nI'd love to discuss a few open questions I have:\n\n**1. Is dense card representation actually useful?**\nDoes replacing integer IDs with attribute-based embeddings meaningfully help\nthe agent? I've seen a slight improvement in my early experiments, but haven't\ndone enough validation to draw conclusions yet.\n\n**2. Context-awareness**\nword2vec derives meaning from context (surrounding words). card2vec only encodes\nstatic attributes — it has no notion of how a card interacts with others in a\ndeck or game situation. I think this is a significant limitation, but I'm not\nsure how to address it. Has anyone thought about this?\n\nI'm fairly new to Kaggle and not highly confident in my ML knowledge,\nso any feedback is very welcome!",
+      "votes": 1
+    }
+  ]
+}

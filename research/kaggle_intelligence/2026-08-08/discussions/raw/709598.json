@@ -1,0 +1,54 @@
+{
+  "topic": {
+    "id": 709598,
+    "title": "\"External Data\" Clarification",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709598",
+    "commentCount": 5,
+    "postDate": "2026-06-19T08:58:12.062772600Z",
+    "lastCommentPostDate": "2026-06-21T00:52:26.793333300Z"
+  },
+  "messages": [
+    {
+      "id": 3476316,
+      "postDate": "2026-06-20T13:18:47Z",
+      "content": "<p>Is it allowed to download and use replay data from public matches involving other participants or only from my own submissions?</p>",
+      "rawMarkdown": "Is it allowed to download and use replay data from public matches involving other participants or only from my own submissions?",
+      "replies": [
+        {
+          "id": 3476792,
+          "postDate": "2026-06-21T00:52:26.793Z",
+          "content": "<p>Yes, this is completely fine! Thanks.</p>",
+          "rawMarkdown": "Yes, this is completely fine! Thanks."
+        }
+      ]
+    },
+    {
+      "id": 3475126,
+      "postDate": "2026-06-19T12:12:12.553Z",
+      "content": "<p>In-person or online games of the Pokémon TCG are absolutely fine datasets to use. If you can create the dataset yourself, it's generally considered acceptable. If you were to manually play a number of TCG games with friends, record the results, and use that to train your solution, that is completely fine. However, if you were to purchase a large dataset of games online that costs money that would not be considered allowed.</p>\n<p>You do not need to team up with the person you are playing the game with, but don't use it as a loophole to discuss tactics in <em>this</em> competition.</p>",
+      "rawMarkdown": "In-person or online games of the Pokémon TCG are absolutely fine datasets to use. If you can create the dataset yourself, it's generally considered acceptable. If you were to manually play a number of TCG games with friends, record the results, and use that to train your solution, that is completely fine. However, if you were to purchase a large dataset of games online that costs money that would not be considered allowed.\n\nYou do not need to team up with the person you are playing the game with, but don't use it as a loophole to discuss tactics in *this* competition.",
+      "replies": [
+        {
+          "id": 3475173,
+          "postDate": "2026-06-19T13:59:46.707Z",
+          "content": "<p>If you have a group of friends recording their games, but they don't want to make those games publicly available during the competition timeframe due to secrecy around testing for the World Championships (mid-August), is that data useable? No one would be getting paid in this situation.</p>\n<p>Or can you only use games where a team-member was one of the players?</p>",
+          "rawMarkdown": "If you have a group of friends recording their games, but they don't want to make those games publicly available during the competition timeframe due to secrecy around testing for the World Championships (mid-August), is that data useable? No one would be getting paid in this situation.\n\nOr can you only use games where a team-member was one of the players?",
+          "replies": [
+            {
+              "id": 3475179,
+              "postDate": "2026-06-19T14:14:42.907Z",
+              "content": "<p>That would be considered a non-public dataset unavailable to everyone that you <em>acquired from someone else.</em> It's a grey area, but it feels icky to me and not in the spirit of the rule.</p>",
+              "rawMarkdown": "That would be considered a non-public dataset unavailable to everyone that you *acquired from someone else.* It's a grey area, but it feels icky to me and not in the spirit of the rule."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3475057,
+      "postDate": "2026-06-19T08:58:12.063Z",
+      "content": "<p>Are in-person or online games of the Pokémon TCG considered permissible external data? Does this depend on if neither, one, or both players in a game are team members?</p>",
+      "rawMarkdown": "Are in-person or online games of the Pokémon TCG considered permissible external data? Does this depend on if neither, one, or both players in a game are team members?"
+    }
+  ]
+}

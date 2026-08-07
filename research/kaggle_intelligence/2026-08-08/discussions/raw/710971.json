@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 710971,
+    "title": "Time limit per turn",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/710971",
+    "votes": 4,
+    "postDate": "2026-06-20T22:00:45.716191200Z",
+    "lastCommentPostDate": "2026-06-20T22:00:45.716666700Z"
+  },
+  "messages": [
+    {
+      "id": 3476746,
+      "postDate": "2026-06-20T22:00:45.717Z",
+      "content": "<p>Hello guys,\nI am curious are there any limit for the time per 1 turn?\nHow can you treat the model that are stalling the game?</p>",
+      "rawMarkdown": "Hello guys,\nI am curious are there any limit for the time per 1 turn?\nHow can you treat the model that are stalling the game?",
+      "votes": 4
+    }
+  ]
+}

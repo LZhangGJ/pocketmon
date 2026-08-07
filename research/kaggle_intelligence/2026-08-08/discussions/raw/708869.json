@@ -1,0 +1,61 @@
+{
+  "topic": {
+    "id": 708869,
+    "title": "Is there a way to view the visualizer without submitting?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708869",
+    "commentCount": 6,
+    "votes": 39,
+    "postDate": "2026-06-17T05:25:02.294017300Z",
+    "lastCommentPostDate": "2026-06-21T10:53:09.713333300Z"
+  },
+  "messages": [
+    {
+      "id": 3473820,
+      "postDate": "2026-06-17T05:25:02.293Z",
+      "content": "<p>Would be helpful for reading some of our own local runs quick and diagnosing obvious issues without taking up 1/5 daily runs for each issue. We can view the JSON logs but visualizer locally would be nice.</p>",
+      "rawMarkdown": "Would be helpful for reading some of our own local runs quick and diagnosing obvious issues without taking up 1/5 daily runs for each issue. We can view the JSON logs but visualizer locally would be nice.",
+      "votes": 39
+    },
+    {
+      "id": 3474876,
+      "postDate": "2026-06-19T00:28:07.837Z",
+      "content": "<p>Hi there,</p>\n<p>The sponsor team has created this official notebook you can use: <a href=\"https://www.kaggle.com/code/kiyotah/how-to-output-local-battle-as-json-and-view\" target=\"_blank\">https://www.kaggle.com/code/kiyotah/how-to-output-local-battle-as-json-and-view</a></p>",
+      "rawMarkdown": "Hi there,\n\nThe sponsor team has created this official notebook you can use: https://www.kaggle.com/code/kiyotah/how-to-output-local-battle-as-json-and-view",
+      "votes": 5
+    },
+    {
+      "id": 3474682,
+      "postDate": "2026-06-18T14:01:52.907Z",
+      "content": "<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F35130830%2Fb790196346a43e2945a4684eb828c23c%2F2026-06-18%20231141.png?generation=1781791956533453&amp;alt=media\" alt=\"\"><a href=\"https://github.com/hiro094/PTCG_ABCS_Visualizer\" target=\"_blank\">https://github.com/hiro094/PTCG_ABCS_Visualizer</a></p>\n<p>I made this using AI.\nFeel free to give it a try if you like.</p>",
+      "rawMarkdown": "![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F35130830%2Fb790196346a43e2945a4684eb828c23c%2F2026-06-18%20231141.png?generation=1781791956533453&alt=media)https://github.com/hiro094/PTCG_ABCS_Visualizer\n\nI made this using AI.\nFeel free to give it a try if you like.",
+      "votes": 5
+    },
+    {
+      "id": 3474059,
+      "postDate": "2026-06-17T11:50:23.153Z",
+      "content": "<p>It would be great if we can see actual cards in the visualizer.</p>",
+      "rawMarkdown": "It would be great if we can see actual cards in the visualizer.",
+      "votes": 1
+    },
+    {
+      "id": 3477195,
+      "postDate": "2026-06-21T10:43:55.487Z",
+      "content": "<p>You can save this (AI generated) javascript as bookmark of your browser. And click it at the official ptcg visualizer website, and upload your vis.json</p>\n<pre><code>javascript:(function(){const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=function(ev){const o=JSON.parse(ev.target.result);const h=document.createElement('input');h.type='hidden';h.name='json';h.value='steps'in o?JSON.stringify(o.steps[0][0].visualize):ev.target.result;const%20fm=document.createElement(%27form%27);fm.method=%27POST%27;fm.action=%27https://ptcgvis.heroz.jp/Visualizer/Replay/0%27;fm.target=%27_blank%27;fm.appendChild(h);document.body.appendChild(fm);fm.submit();document.body.removeChild(fm);};r.readAsText(f);};i.click();})();\n</code></pre>",
+      "rawMarkdown": "You can save this (AI generated) javascript as bookmark of your browser. And click it at the official ptcg visualizer website, and upload your vis.json\n\n\n```javascript\njavascript:(function(){const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=function(ev){const o=JSON.parse(ev.target.result);const h=document.createElement('input');h.type='hidden';h.name='json';h.value='steps'in o?JSON.stringify(o.steps[0][0].visualize):ev.target.result;const%20fm=document.createElement(%27form%27);fm.method=%27POST%27;fm.action=%27https://ptcgvis.heroz.jp/Visualizer/Replay/0%27;fm.target=%27_blank%27;fm.appendChild(h);document.body.appendChild(fm);fm.submit();document.body.removeChild(fm);};r.readAsText(f);};i.click();})();\n```",
+      "replies": [
+        {
+          "id": 3477202,
+          "postDate": "2026-06-21T10:53:09.713Z",
+          "content": "<p>this was refrectored from the official notebook which requires a local html to jump to the website and upload the json file</p>",
+          "rawMarkdown": "this was refrectored from the official notebook which requires a local html to jump to the website and upload the json file"
+        }
+      ]
+    },
+    {
+      "id": 3474957,
+      "postDate": "2026-06-19T05:13:02.830Z",
+      "content": "<p>I think so <a href=\"https://www.kaggle.com/chinoki346\" target=\"_blank\">@chinoki346</a> </p>",
+      "rawMarkdown": "I think so @chinoki346 "
+    }
+  ]
+}

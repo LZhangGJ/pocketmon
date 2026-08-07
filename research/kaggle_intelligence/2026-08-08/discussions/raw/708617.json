@@ -1,0 +1,26 @@
+{
+  "topic": {
+    "id": 708617,
+    "title": "Matchup data: ~15k self-play games between the 4 sample decks",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708617",
+    "commentCount": 1,
+    "votes": 35,
+    "postDate": "2026-06-16T13:33:11.937695200Z",
+    "lastCommentPostDate": "2026-07-30T04:32:18.790Z"
+  },
+  "messages": [
+    {
+      "id": 3473394,
+      "postDate": "2026-06-16T13:33:11.937Z",
+      "content": "<p>I ran the four sample rule-based agents (each with its sample deck) against each other locally on the cabt engine — round-robin, first/second player alternated, ~2.5k games per matchup (15,225 total, 0 errors).</p>\n<h2>Standings</h2>\n<table>\n<thead>\n<tr>\n<th>Deck</th>\n<th>Win rate</th>\n<th>W–L</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Mega Lucario ex</td>\n<td><strong>60.4%</strong></td>\n<td>4600–3011</td>\n</tr>\n<tr>\n<td>Dragapult ex</td>\n<td><strong>55.6%</strong></td>\n<td>4232–3382</td>\n</tr>\n<tr>\n<td>Iono</td>\n<td>43.8%</td>\n<td>3336–4277</td>\n</tr>\n<tr>\n<td>Mega Abomasnow ex</td>\n<td>40.2%</td>\n<td>3057–4555</td>\n</tr>\n</tbody>\n</table>\n<h2>Matchup matrix</h2>\n<p>Cell = <strong>row deck's win rate vs column deck</strong>.</p>\n<table>\n<thead>\n<tr>\n<th>↓ vs →</th>\n<th>Mega Lucario</th>\n<th>Dragapult</th>\n<th>Iono</th>\n<th>Mega Abomasnow</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><strong>Mega Lucario</strong></td>\n<td>—</td>\n<td>50%</td>\n<td>78%</td>\n<td>52%</td>\n</tr>\n<tr>\n<td><strong>Dragapult</strong></td>\n<td>50%</td>\n<td>—</td>\n<td>64%</td>\n<td>53%</td>\n</tr>\n<tr>\n<td><strong>Iono</strong></td>\n<td>22%</td>\n<td>36%</td>\n<td>—</td>\n<td>74%</td>\n</tr>\n<tr>\n<td><strong>Mega Abomasnow</strong></td>\n<td>48%</td>\n<td>47%</td>\n<td>26%</td>\n<td>—</td>\n</tr>\n</tbody>\n</table>\n<h2>Takeaways</h2>\n<ul>\n<li><strong>Lucario and Dragapult are the top tier, but ~50/50 head-to-head</strong> — Lucario only leads overall by beating Iono harder (78% vs 64%).</li>\n<li>Clear rock-paper-scissors element: every deck loses to the field but <strong>Iono crushes Abomasnow 74%</strong>.</li>\n<li>First-player win rate is <strong>51.5%</strong> — a small but real going-first edge.</li>\n</ul>\n<p>Numbers are from the <em>sample</em> agents as-is, so they reflect deck + baseline policy together, not deck ceiling. Curious if others see the same ordering.</p>",
+      "rawMarkdown": "I ran the four sample rule-based agents (each with its sample deck) against each other locally on the cabt engine — round-robin, first/second player alternated, ~2.5k games per matchup (15,225 total, 0 errors).\n\n## Standings\n\n| Deck | Win rate | W–L |\n|---|---:|---:|\n| Mega Lucario ex | **60.4%** | 4600–3011 |\n| Dragapult ex | **55.6%** | 4232–3382 |\n| Iono | 43.8% | 3336–4277 |\n| Mega Abomasnow ex | 40.2% | 3057–4555 |\n\n## Matchup matrix\n\nCell = **row deck's win rate vs column deck**.\n\n| ↓ vs → | Mega Lucario | Dragapult | Iono | Mega Abomasnow |\n|---|---:|---:|---:|---:|\n| **Mega Lucario** | — | 50% | 78% | 52% |\n| **Dragapult** | 50% | — | 64% | 53% |\n| **Iono** | 22% | 36% | — | 74% |\n| **Mega Abomasnow** | 48% | 47% | 26% | — |\n\n## Takeaways\n\n- **Lucario and Dragapult are the top tier, but ~50/50 head-to-head** — Lucario only leads overall by beating Iono harder (78% vs 64%).\n- Clear rock-paper-scissors element: every deck loses to the field but **Iono crushes Abomasnow 74%**.\n- First-player win rate is **51.5%** — a small but real going-first edge.\n\nNumbers are from the *sample* agents as-is, so they reflect deck + baseline policy together, not deck ceiling. Curious if others see the same ordering.\n",
+      "votes": 35
+    },
+    {
+      "id": 3505399,
+      "postDate": "2026-07-30T04:32:18.790Z",
+      "content": "<p>Hello, can you introduce how to run the engine of the game locally? Thank you.</p>",
+      "rawMarkdown": "Hello, can you introduce how to run the engine of the game locally? Thank you."
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "topic": {
+    "id": 730155,
+    "title": "How do strong agents decide whether to search before drawing?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730155",
+    "postDate": "2026-07-28T09:06:49.577715700Z",
+    "lastCommentPostDate": "2026-07-28T09:06:49.576666700Z"
+  },
+  "messages": [
+    {
+      "id": 3504524,
+      "postDate": "2026-07-28T09:06:49.577Z",
+      "content": "<blockquote>\n  <p>Hi everyone,</p>\n  <p>I am trying to understand how strong agents handle information order within a\n  turn. A common choice is whether to use a deterministic search action first\n  or draw first.</p>\n  <p>Searching first can thin the deck and avoid drawing a card that could have\n  been searched, but drawing first can reveal what is missing and preserve the\n  search action for a better target. The correct order also seems to depend on\n  the current hand, known deck contents, once-per-turn actions, and whether the\n  deck is search-heavy or draw-heavy.</p>\n  <p>If you are comfortable sharing broad design choices:</p>\n  <ol>\n  <li>Do you encode this as hand-written ordering rules, learn it from full-turn\n  sequences, or compare short action sequences with search/rollouts?</li>\n  <li>For behavior cloning, do you train each decision independently, or preserve\n  the complete order of actions within the turn?</li>\n  <li>How do you treat two action orders that reach a similar board but expose\n  different information along the way?</li>\n  <li>Have you found search-heavy decks easier or harder for learned policies\n  than draw-heavy decks?\n  <img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3901987%2F42c7bf30b073938ea0cd61c8803ed0e8%2Fdraw_vs_search_information_order_20260728.png?generation=1785229646034420&amp;alt=media\" alt=\"\">\n  Broad method categories are enough; no code or deck-specific strategy is\n  needed. Thanks!</li>\n  </ol>\n</blockquote>",
+      "rawMarkdown": "> Hi everyone,\n>\n> I am trying to understand how strong agents handle information order within a\n> turn. A common choice is whether to use a deterministic search action first\n> or draw first.\n>\n> Searching first can thin the deck and avoid drawing a card that could have\n> been searched, but drawing first can reveal what is missing and preserve the\n> search action for a better target. The correct order also seems to depend on\n> the current hand, known deck contents, once-per-turn actions, and whether the\n> deck is search-heavy or draw-heavy.\n>\n> If you are comfortable sharing broad design choices:\n>\n> 1. Do you encode this as hand-written ordering rules, learn it from full-turn\n>    sequences, or compare short action sequences with search/rollouts?\n> 2. For behavior cloning, do you train each decision independently, or preserve\n>    the complete order of actions within the turn?\n> 3. How do you treat two action orders that reach a similar board but expose\n>    different information along the way?\n> 4. Have you found search-heavy decks easier or harder for learned policies\n>    than draw-heavy decks?\n> ![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3901987%2F42c7bf30b073938ea0cd61c8803ed0e8%2Fdraw_vs_search_information_order_20260728.png?generation=1785229646034420&alt=media)\n> Broad method categories are enough; no code or deck-specific strategy is\n> needed. Thanks!\n\n"
+    }
+  ]
+}

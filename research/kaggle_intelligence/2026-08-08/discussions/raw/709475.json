@@ -1,0 +1,32 @@
+{
+  "topic": {
+    "id": 709475,
+    "title": "Pokemon center lady, the banned card?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709475",
+    "commentCount": 2,
+    "votes": 1,
+    "postDate": "2026-06-18T20:37:06.088442600Z",
+    "lastCommentPostDate": "2026-06-22T15:45:23.823333300Z"
+  },
+  "messages": [
+    {
+      "id": 3474834,
+      "postDate": "2026-06-18T20:37:06.090Z",
+      "content": "<p>why isn't it on the list?\nfrom Mega Evolution?\nIs there any particular issue with it?????</p>",
+      "rawMarkdown": "why isn't it on the list?\nfrom Mega Evolution?\nIs there any particular issue with it?????",
+      "votes": 1
+    },
+    {
+      "id": 3478331,
+      "postDate": "2026-06-22T15:45:23.823Z",
+      "content": "<p>Hi there,</p>\n<p>The tournament card pool is specifically defined for this competition and may differ from the current in-person Pokémon Trading Card Game card pool. The card pool is also intended to remain fixed for the duration of the tournament, unless a rebalance becomes necessary.</p>\n<p>All matches in the Pokémon Trading Card Game AI Battle Challenge will use rules and regulations based on the Standard format, but uniquely tailored for this tournament. Only cards included in the designated card list provided by the sponsors may be used.</p>",
+      "rawMarkdown": "Hi there,\n\nThe tournament card pool is specifically defined for this competition and may differ from the current in-person Pokémon Trading Card Game card pool. The card pool is also intended to remain fixed for the duration of the tournament, unless a rebalance becomes necessary.\n\nAll matches in the Pokémon Trading Card Game AI Battle Challenge will use rules and regulations based on the Standard format, but uniquely tailored for this tournament. Only cards included in the designated card list provided by the sponsors may be used."
+    },
+    {
+      "id": 3475162,
+      "postDate": "2026-06-19T13:31:42.067Z",
+      "content": "<p>I noticed Friends in Paldea is missing too.</p>",
+      "rawMarkdown": "I noticed Friends in Paldea is missing too."
+    }
+  ]
+}

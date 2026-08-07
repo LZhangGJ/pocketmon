@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 709293,
+    "title": "Local Visualization Without Submission",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709293",
+    "votes": 1,
+    "postDate": "2026-06-18T05:35:30.576343100Z",
+    "lastCommentPostDate": "2026-06-18T05:35:30.576666700Z"
+  },
+  "messages": [
+    {
+      "id": 3474512,
+      "postDate": "2026-06-18T05:35:30.577Z",
+      "content": "<p>I am trying to find ways to run visualizations locally or get feedback on the game before submitting but the HTML renderer is broken. Has anyone identified a workaround?</p>",
+      "rawMarkdown": "I am trying to find ways to run visualizations locally or get feedback on the game before submitting but the HTML renderer is broken. Has anyone identified a workaround?",
+      "votes": 1
+    }
+  ]
+}

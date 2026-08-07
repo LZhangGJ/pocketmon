@@ -1,0 +1,26 @@
+{
+  "topic": {
+    "id": 709704,
+    "title": "CPU vs GPU runtime",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709704",
+    "commentCount": 1,
+    "votes": 2,
+    "postDate": "2026-06-19T18:09:35.295731200Z",
+    "lastCommentPostDate": "2026-06-22T16:25:01.260Z"
+  },
+  "messages": [
+    {
+      "id": 3475270,
+      "postDate": "2026-06-19T18:09:35.297Z",
+      "content": "<p>Does Kaggle's grading rerun honor the CPU setting (→ gemma-26B on CPU → timeout) or run on GPU regardless (→ we're unblocked)? I've spent all my GPU quota haha…</p>",
+      "rawMarkdown": "Does Kaggle's grading rerun honor the CPU setting (→ gemma-26B on CPU → timeout) or run on GPU regardless (→ we're unblocked)? I've spent all my GPU quota haha...",
+      "votes": 2
+    },
+    {
+      "id": 3478373,
+      "postDate": "2026-06-22T16:25:01.260Z",
+      "content": "<p>All of the games are played on CPU machines, no GPU is available.</p>",
+      "rawMarkdown": "All of the games are played on CPU machines, no GPU is available."
+    }
+  ]
+}

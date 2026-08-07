@@ -1,0 +1,17 @@
+{
+  "topic": {
+    "id": 730179,
+    "title": "Domain-neutral decision kernel release",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730179",
+    "postDate": "2026-07-28T10:36:04.670749700Z",
+    "lastCommentPostDate": "2026-07-28T10:36:04.670Z"
+  },
+  "messages": [
+    {
+      "id": 3504566,
+      "postDate": "2026-07-28T10:36:04.670Z",
+      "content": "<p>I am sharing a reusable, domain-neutral decision kernel with a deterministic\nsynthetic demonstration. It contains no protected data, specialized adapter,\ndomain rule implementation, learned artifact, deployment package, or private\nstrategy.</p>\n<ul>\n<li>Public notebook: <a href=\"https://www.kaggle.com/code/weipingyan/imperfect-information-agent-core\" target=\"_blank\">https://www.kaggle.com/code/weipingyan/imperfect-information-agent-core</a></li>\n<li>Notebook version: 1</li>\n<li>Source commit: <code>b9cef56053ce50cae7ccf3cbea614541aa361e61</code></li>\n<li>Source archive SHA-256: <code>5dd0e86484262e35479845f7ff9a1ecc33a06a6daed2f6e1187a9b9e4fa187fa</code></li>\n<li>Source manifest SHA-256: <code>8ee8360cd247efd1d99ae76b6d24b5670502fa5dd3e4bb10a37b2f3911057130</code></li>\n<li>Public repository, added only after signed-out notebook verification:\nPending until the signed-out Kaggle verification gate passes.</li>\n</ul>\n<p>The notebook reconstructs the exact source archive, verifies every file,\nexecutes a seeded synthetic example and portable checks, and reports optional\ntest-suite availability. The source archive in the notebook is byte-identical\nto the files listed in the manifest.</p>\n<p>Please report reproducibility or generic API issues without posting protected\nor proprietary material.</p>",
+      "rawMarkdown": "I am sharing a reusable, domain-neutral decision kernel with a deterministic\nsynthetic demonstration. It contains no protected data, specialized adapter,\ndomain rule implementation, learned artifact, deployment package, or private\nstrategy.\n\n- Public notebook: https://www.kaggle.com/code/weipingyan/imperfect-information-agent-core\n- Notebook version: 1\n- Source commit: `b9cef56053ce50cae7ccf3cbea614541aa361e61`\n- Source archive SHA-256: `5dd0e86484262e35479845f7ff9a1ecc33a06a6daed2f6e1187a9b9e4fa187fa`\n- Source manifest SHA-256: `8ee8360cd247efd1d99ae76b6d24b5670502fa5dd3e4bb10a37b2f3911057130`\n- Public repository, added only after signed-out notebook verification:\n  Pending until the signed-out Kaggle verification gate passes.\n\nThe notebook reconstructs the exact source archive, verifies every file,\nexecutes a seeded synthetic example and portable checks, and reports optional\ntest-suite availability. The source archive in the notebook is byte-identical\nto the files listed in the manifest.\n\nPlease report reproducibility or generic API issues without posting protected\nor proprietary material."
+    }
+  ]
+}

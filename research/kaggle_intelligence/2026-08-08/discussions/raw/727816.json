@@ -1,0 +1,71 @@
+{
+  "topic": {
+    "id": 727816,
+    "title": "How'd you pick your deck?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/727816",
+    "commentCount": 7,
+    "votes": 2,
+    "postDate": "2026-07-20T19:38:51.933448600Z",
+    "lastCommentPostDate": "2026-08-01T03:03:34.983333300Z"
+  },
+  "messages": [
+    {
+      "id": 3501054,
+      "postDate": "2026-07-21T08:02:36.987Z",
+      "content": "<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F22375114%2Fb27ef0673c95c65b36785144c4d152f5%2Fson.jpg?generation=1784620933627313&amp;alt=media\" alt=\"\"></p>\n<p>Y'all selecting deck based on the meta?</p>",
+      "rawMarkdown": "![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F22375114%2Fb27ef0673c95c65b36785144c4d152f5%2Fson.jpg?generation=1784620933627313&alt=media)\n\nY'all selecting deck based on the meta?",
+      "votes": 2,
+      "replies": [
+        {
+          "id": 3501225,
+          "postDate": "2026-07-21T16:49:31.553Z",
+          "content": "<p>Haha I love the fan video of that guy on YT - are you just picking your personal favorite deck?</p>",
+          "rawMarkdown": "Haha I love the fan video of that guy on YT - are you just picking your personal favorite deck?"
+        }
+      ]
+    },
+    {
+      "id": 3500895,
+      "postDate": "2026-07-20T19:38:51.933Z",
+      "content": "<p>Hello Pokemon Trainers,</p>\n<p>It was very entertaining to see the meta develop over the first few days - Abomasnow on top with an incredible amount of Lucario (probably due to the example Lucario that was provided), then Crustle, then Typhlosion that beat Crustle (sometimes a mixture of the two), then Starmie that could beat either Crustle or Typhlosion, then Alakazam, and now it's still been mostly Crustle and Alakazam. TR Mewtwo, Grimmsnarl, Garchomp, and now Festival Lead have showed up in the top tiers as well but are not nearly as prolific.</p>\n<p>My questions for y'all - <strong>How have you picked what deck to use in the competition? Have you made changes over time? Are people picking a deck based on the meta, on certain results, something else?</strong></p>\n<p>I'm currently training agents on self-play, with a different agent for each popular archetype (Archetypes are arbitrarily grouped by me based on whether the deck included or excluded certain pokemon e.g. Alakazam decks include Alakazam and Dudunsparce). The agent trains against every other popular archetype, and then I keep the best agent based on it's win rate against every popular archetype after a training session (wins/losses into an archetype are weighted based on how popular they are in the replay data).\nI then create my own deck(s) to test locally against the agent(s).</p>\n<p>I'm hoping to create a deck that can get past the starting 600 elo.. I'm incredibly new and naive to machine learning, and I'm learning heavily on domain knowledge of the PTCG to close the gap. I think once I can establish that my agents are actually learning and improving, I can create a more focused deck that is made to counter Kaggle's specific meta (acknowledging that 10% of the time I will face a completely random opponent).</p>\n<p>Your answers, feedback, critique, questions are all welcome. This is my first competition and I'm having a blast learning.</p>",
+      "rawMarkdown": "Hello Pokemon Trainers,\n\nIt was very entertaining to see the meta develop over the first few days - Abomasnow on top with an incredible amount of Lucario (probably due to the example Lucario that was provided), then Crustle, then Typhlosion that beat Crustle (sometimes a mixture of the two), then Starmie that could beat either Crustle or Typhlosion, then Alakazam, and now it's still been mostly Crustle and Alakazam. TR Mewtwo, Grimmsnarl, Garchomp, and now Festival Lead have showed up in the top tiers as well but are not nearly as prolific.\n\nMy questions for y'all - **How have you picked what deck to use in the competition? Have you made changes over time? Are people picking a deck based on the meta, on certain results, something else?**\n\nI'm currently training agents on self-play, with a different agent for each popular archetype (Archetypes are arbitrarily grouped by me based on whether the deck included or excluded certain pokemon e.g. Alakazam decks include Alakazam and Dudunsparce). The agent trains against every other popular archetype, and then I keep the best agent based on it's win rate against every popular archetype after a training session (wins/losses into an archetype are weighted based on how popular they are in the replay data).\nI then create my own deck(s) to test locally against the agent(s).\n\nI'm hoping to create a deck that can get past the starting 600 elo.. I'm incredibly new and naive to machine learning, and I'm learning heavily on domain knowledge of the PTCG to close the gap. I think once I can establish that my agents are actually learning and improving, I can create a more focused deck that is made to counter Kaggle's specific meta (acknowledging that 10% of the time I will face a completely random opponent).\n\nYour answers, feedback, critique, questions are all welcome. This is my first competition and I'm having a blast learning.",
+      "votes": 2
+    },
+    {
+      "id": 3506873,
+      "postDate": "2026-08-01T03:03:34.983Z",
+      "content": "<p>Oh I forgot to mention mine - I've been looking at using TR Honchkrow! It has a sort of easy 'flowchart' to follow, easy like Alakazam can be.</p>",
+      "rawMarkdown": "Oh I forgot to mention mine - I've been looking at using TR Honchkrow! It has a sort of easy 'flowchart' to follow, easy like Alakazam can be."
+    },
+    {
+      "id": 3501438,
+      "postDate": "2026-07-22T01:03:05.123Z",
+      "content": "<p>I picked my decks based on the top ranked decks on this page</p>\n<p><a href=\"https://limitlesstcg.com/\" target=\"_blank\">https://limitlesstcg.com/</a></p>\n<p>Then, based on the agent behavior and the current meta, I'm revolving between Mega Lucario and Alakazam</p>",
+      "rawMarkdown": "I picked my decks based on the top ranked decks on this page\n\nhttps://limitlesstcg.com/\n\nThen, based on the agent behavior and the current meta, I'm revolving between Mega Lucario and Alakazam",
+      "replies": [
+        {
+          "id": 3501687,
+          "postDate": "2026-07-22T15:46:43.157Z",
+          "content": "<p>Thanks for sharing! That's a great site. If you want to look at the decks that match the format that the Kaggle competition is operating in, use this link</p>\n<p><a href=\"https://limitlesstcg.com/decks?time=all&amp;type=all&amp;format=TEF-POR&amp;region=all&amp;division=all\" target=\"_blank\">https://limitlesstcg.com/decks?time=all&amp;type=all&amp;format=TEF-POR®ion=all&amp;division=all</a></p>\n<p>Sharing to share, at the large human tournaments, Mega Lucario is favorable into Crustle and can go even into Starmie decks, but struggles into Alakazam and most other decks. But, a good pilot heavily outweighs a good deck in this format.</p>",
+          "rawMarkdown": "Thanks for sharing! That's a great site. If you want to look at the decks that match the format that the Kaggle competition is operating in, use this link\n\nhttps://limitlesstcg.com/decks?time=all&type=all&format=TEF-POR&region=all&division=all\n\nSharing to share, at the large human tournaments, Mega Lucario is favorable into Crustle and can go even into Starmie decks, but struggles into Alakazam and most other decks. But, a good pilot heavily outweighs a good deck in this format.",
+          "votes": 1,
+          "replies": [
+            {
+              "id": 3501874,
+              "postDate": "2026-07-23T01:13:02.680Z",
+              "content": "<p>Thank you so much for you reply and the link.</p>\n<p>Following your comment, I have seen other participants considering training their agents with several number of matches and that approach can be resource intensive. In my case, I have found that the logs from the battles, both local and against the other participants, can be very helpful to tweak your agent, as they can show you what mistakes it makes.</p>\n<p>gl and hf</p>",
+              "rawMarkdown": "Thank you so much for you reply and the link.\n\nFollowing your comment, I have seen other participants considering training their agents with several number of matches and that approach can be resource intensive. In my case, I have found that the logs from the battles, both local and against the other participants, can be very helpful to tweak your agent, as they can show you what mistakes it makes.\n\ngl and hf",
+              "votes": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3501053,
+      "postDate": "2026-07-21T08:00:00.267Z",
+      "rawMarkdown": "",
+      "isDeleted": true
+    }
+  ]
+}

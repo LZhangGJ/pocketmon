@@ -1,0 +1,85 @@
+{
+  "topic": {
+    "id": 714972,
+    "title": "Public link to my essay — not a solution write-up",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/714972",
+    "commentCount": 9,
+    "votes": 13,
+    "postDate": "2026-06-27T13:04:14.818367100Z",
+    "lastCommentPostDate": "2026-06-30T03:36:33.146666700Z"
+  },
+  "messages": [
+    {
+      "id": 3482555,
+      "postDate": "2026-06-27T13:04:14.820Z",
+      "content": "<p>Just in case, to avoid any private-sharing confusion, I’m posting this publicly here as well.</p>\n<p>I wrote a Japanese note essay about my experience so far in this competition:</p>\n<p><a href=\"https://note.com/glad_puma5862/n/nd72fdc4821cd\" target=\"_blank\">https://note.com/glad_puma5862/n/nd72fdc4821cd</a></p>\n<p>It is only a personal essay / experience report, not a solution write-up. It does not include submission code or competition data.</p>\n<p>No need to read it — I just wanted to make sure the link is shared publicly rather than privately.</p>",
+      "rawMarkdown": "Just in case, to avoid any private-sharing confusion, I’m posting this publicly here as well.\n\nI wrote a Japanese note essay about my experience so far in this competition:\n\nhttps://note.com/glad_puma5862/n/nd72fdc4821cd\n\nIt is only a personal essay / experience report, not a solution write-up. It does not include submission code or competition data.\n\nNo need to read it — I just wanted to make sure the link is shared publicly rather than privately.",
+      "votes": 13
+    },
+    {
+      "id": 3484030,
+      "postDate": "2026-06-29T22:31:06.963Z",
+      "content": "<p>Thanks for sharing. im taking a similar approach as yourself. Ask Claude to create strategies, watch the replays, flag blunders to Claude, rinse and repeat. </p>\n<p>The auto translate from Japanese to English for your article wasn't so great. Do your bot use any sort of machine learning during the match to make decisions or is it just rules based?</p>",
+      "rawMarkdown": "Thanks for sharing. im taking a similar approach as yourself. Ask Claude to create strategies, watch the replays, flag blunders to Claude, rinse and repeat. \n\nThe auto translate from Japanese to English for your article wasn't so great. Do your bot use any sort of machine learning during the match to make decisions or is it just rules based?",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3484060,
+          "postDate": "2026-06-30T00:18:33.770Z",
+          "content": "<p>Thanks for reading it!</p>\n<p>My approach is similar, but maybe a little different. I mostly think about the deck concept, matchup plans, and tactical rules myself, then ask Claude/Codex to help turn those ideas into code.</p>\n<p>The bot is basically rule-based / heuristic-based. I’m not using machine learning or reinforcement learning, at least for now — partly because I don’t really know how to use ML properly😂</p>",
+          "rawMarkdown": "Thanks for reading it!\n\nMy approach is similar, but maybe a little different. I mostly think about the deck concept, matchup plans, and tactical rules myself, then ask Claude/Codex to help turn those ideas into code.\n\nThe bot is basically rule-based / heuristic-based. I’m not using machine learning or reinforcement learning, at least for now — partly because I don’t really know how to use ML properly😂",
+          "replies": [
+            {
+              "id": 3484076,
+              "postDate": "2026-06-30T01:15:44.807Z",
+              "content": "<p>You're killing it with the heuristic agents. I'm sure you'll find a teammate (if you want) who is good at ML that can take you to number one! </p>",
+              "rawMarkdown": "You're killing it with the heuristic agents. I'm sure you'll find a teammate (if you want) who is good at ML that can take you to number one! "
+            },
+            {
+              "id": 3484091,
+              "postDate": "2026-06-30T02:18:44.960Z",
+              "content": "<p>We have a similar approach however you are much further along than I. Just curious, are you making the relevant rules general such that they don't depend on one specific deck? Such that you can change your deck entirely but still gain from your well tuned rules already in place?</p>\n<p>Ive been building some card/function specific rule sets for cards like Ultra Ball, Boss's Orders, Lillie's Determination, also bench sniping and energy acceleration. My goal is to be able to start running various decks that can each perform well with a few specific rules built on top of a large database of more general rules.</p>\n<p>and face-to-face posturing is a good idea.</p>",
+              "rawMarkdown": "We have a similar approach however you are much further along than I. Just curious, are you making the relevant rules general such that they don't depend on one specific deck? Such that you can change your deck entirely but still gain from your well tuned rules already in place?\n\nIve been building some card/function specific rule sets for cards like Ultra Ball, Boss's Orders, Lillie's Determination, also bench sniping and energy acceleration. My goal is to be able to start running various decks that can each perform well with a few specific rules built on top of a large database of more general rules.\n\nand face-to-face posturing is a good idea."
+            },
+            {
+              "id": 3484113,
+              "postDate": "2026-06-30T03:36:33.147Z",
+              "content": "<p>My current feeling is that building one fully general agent for every deck is probably very hard.</p>\n<p>I usually build a separate bot for each deck, while reusing small helper logic where possible.</p>\n<p>I shared two simple examples here:</p>\n<p><a href=\"https://www.kaggle.com/code/masamikobayashi/a-sample-archaludon-75-wr-vs-my-1300-starmie\" target=\"_blank\">https://www.kaggle.com/code/masamikobayashi/a-sample-archaludon-75-wr-vs-my-1300-starmie</a></p>\n<p><a href=\"https://www.kaggle.com/code/masamikobayashi/a-sample-cynthia-garchomp-ex-deck\" target=\"_blank\">https://www.kaggle.com/code/masamikobayashi/a-sample-cynthia-garchomp-ex-deck</a></p>\n<p>They’re not optimal, but they show the basic rule-based structure I’m using. Hope it helps!</p>",
+              "rawMarkdown": "My current feeling is that building one fully general agent for every deck is probably very hard.\n\nI usually build a separate bot for each deck, while reusing small helper logic where possible.\n\nI shared two simple examples here:\n\nhttps://www.kaggle.com/code/masamikobayashi/a-sample-archaludon-75-wr-vs-my-1300-starmie\n\nhttps://www.kaggle.com/code/masamikobayashi/a-sample-cynthia-garchomp-ex-deck\n\nThey’re not optimal, but they show the basic rule-based structure I’m using. Hope it helps!"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3482620,
+      "postDate": "2026-06-27T14:36:45.107Z",
+      "content": "<p>Thanks for your post!</p>\n<p>In the early stages of the competition, I found that aggressive rush decks like Starmie ex and Lucario ex climbed the rankings quickly because their strategy is relatively simple — just pile up enough resources on the field and attack mindlessly. Since the competition was still in its infancy, this approach was very easy and effective for gaining points. However, as we moved into the mid-to-late stages, people gradually became more familiar with the competition and the decks, and such rush decks became easier to counter. Especially when those skilled at coding began to build slower, control-oriented decks, aggressive rush strategies often lost their edge — not to mention the later implementation of reinforcement learning, since control decks' pacing and decision-making align well with RL reward mechanisms. Of course, in any card game, even aggressive rush decks incorporate some element of tempo and pace management; it's not that aggressive rush is inherently doomed.</p>\n<p>I'm currently experimenting with my own control strategy. I've lost many games. While some of players fork open-source decks, I've been learning from a wide variety of deck archetypes at the back of the pack. My heuristic code has already exceeded 3,000 lines to handle different matchups, and Codex has helped me a lot. Writing heuristics for control decks is extremely difficult — especially when reviewing replays, I often find myself helpless against my agent's stupid plays. But after continuous iteration, my win rate has surpassed 50% after three days of learning.</p>\n<p>Tomorrow, I plan to put together a second deck — an aggressive rush strategy tailored to the current Kaggle leaderboard meta — to try climbing the ranks quickly. I believe many other participants will do the same.</p>",
+      "rawMarkdown": "Thanks for your post!\n\nIn the early stages of the competition, I found that aggressive rush decks like Starmie ex and Lucario ex climbed the rankings quickly because their strategy is relatively simple — just pile up enough resources on the field and attack mindlessly. Since the competition was still in its infancy, this approach was very easy and effective for gaining points. However, as we moved into the mid-to-late stages, people gradually became more familiar with the competition and the decks, and such rush decks became easier to counter. Especially when those skilled at coding began to build slower, control-oriented decks, aggressive rush strategies often lost their edge — not to mention the later implementation of reinforcement learning, since control decks' pacing and decision-making align well with RL reward mechanisms. Of course, in any card game, even aggressive rush decks incorporate some element of tempo and pace management; it's not that aggressive rush is inherently doomed.\n\nI'm currently experimenting with my own control strategy. I've lost many games. While some of players fork open-source decks, I've been learning from a wide variety of deck archetypes at the back of the pack. My heuristic code has already exceeded 3,000 lines to handle different matchups, and Codex has helped me a lot. Writing heuristics for control decks is extremely difficult — especially when reviewing replays, I often find myself helpless against my agent's stupid plays. But after continuous iteration, my win rate has surpassed 50% after three days of learning.\n\nTomorrow, I plan to put together a second deck — an aggressive rush strategy tailored to the current Kaggle leaderboard meta — to try climbing the ranks quickly. I believe many other participants will do the same.",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3482630,
+          "postDate": "2026-06-27T14:56:20.007Z",
+          "content": "<p>Thanks! I agree that simple aggressive decks are easier to make consistent, especially in the early stage.</p>\n<p>I’m looking forward to seeing how your control strategy performs on the ladder. Good luck!</p>",
+          "rawMarkdown": "Thanks! I agree that simple aggressive decks are easier to make consistent, especially in the early stage.\n\nI’m looking forward to seeing how your control strategy performs on the ladder. Good luck!"
+        },
+        {
+          "id": 3482810,
+          "postDate": "2026-06-27T22:37:38.770Z",
+          "content": "<p>Control is a very hard archetype to perfect, but it may be very strong if the final metagame isn't prepared for it. Lots of decks have lines that can beat crustle, etc. but if the agent doesn't recognize the situation and play for the correct win conditions it doesn't matter. It will be interesting to see what control decks (if any) perform well on the final leaderboard.</p>",
+          "rawMarkdown": "Control is a very hard archetype to perfect, but it may be very strong if the final metagame isn't prepared for it. Lots of decks have lines that can beat crustle, etc. but if the agent doesn't recognize the situation and play for the correct win conditions it doesn't matter. It will be interesting to see what control decks (if any) perform well on the final leaderboard.",
+          "votes": 2,
+          "replies": [
+            {
+              "id": 3482824,
+              "postDate": "2026-06-28T00:26:17.547Z",
+              "content": "<p>The first hurdle I encountered was the mechanism of Crustle being immune to EX attacks. As you said, control decks require writing many conditional judgments like this, which is very difficult.</p>",
+              "rawMarkdown": "The first hurdle I encountered was the mechanism of Crustle being immune to EX attacks. As you said, control decks require writing many conditional judgments like this, which is very difficult."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

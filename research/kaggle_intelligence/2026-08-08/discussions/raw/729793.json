@@ -1,0 +1,17 @@
+{
+  "topic": {
+    "id": 729793,
+    "title": "Deck of opponent",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/729793",
+    "postDate": "2026-07-26T16:16:14.535935700Z",
+    "lastCommentPostDate": "2026-07-26T16:16:14.536666700Z"
+  },
+  "messages": [
+    {
+      "id": 3503884,
+      "postDate": "2026-07-26T16:16:14.537Z",
+      "content": "<p>In this competition, all participants' decks are transparent in the game logs. Couldn't a bot maker track every opponent and their deck composition? By combining this historical data with in-game card counting and deduction, a bot could map out the opponent's exact remaining deck. Wouldn't this create a significant unfair advantage when planning optimal moves?</p>",
+      "rawMarkdown": "In this competition, all participants' decks are transparent in the game logs. Couldn't a bot maker track every opponent and their deck composition? By combining this historical data with in-game card counting and deduction, a bot could map out the opponent's exact remaining deck. Wouldn't this create a significant unfair advantage when planning optimal moves?"
+    }
+  ]
+}

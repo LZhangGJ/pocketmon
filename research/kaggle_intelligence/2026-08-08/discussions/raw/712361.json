@@ -1,0 +1,17 @@
+{
+  "topic": {
+    "id": 712361,
+    "title": "New to this comp: need small help in getting started",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712361",
+    "postDate": "2026-06-22T19:32:31.839740600Z",
+    "lastCommentPostDate": "2026-06-22T19:32:31.840Z"
+  },
+  "messages": [
+    {
+      "id": 3478546,
+      "postDate": "2026-06-22T19:32:31.840Z",
+      "content": "<p>Hi everyone,</p>\n<p>I'm new to the competition and have been exploring the SDK locally using <code>battle_start()</code>, <code>battle_select()</code>, <code>visualize_data()</code>, and the observation objects.</p>\n<p>A few questions for experienced participants or organizers:</p>\n<ol>\n<li><p>Is there documentation for the meanings of <code>select.context</code> and <code>Option.type</code> values, or are competitors expected to infer these from gameplay and the SDK source?</p></li>\n<li><p>Is there an officially recommended way to visualize/debug games locally beyond inspecting observations and logs? I've looked at <code>visualize_data()</code> and the Kaggle environment renderer, but I'm curious what workflow most participants are using.</p></li>\n<li><p>The SDK exposes search-related APIs (<code>SearchBegin</code>, <code>SearchStep</code>, <code>SearchEnd</code>). Are these intended to be used by agents for look-ahead planning/search, or are they mainly provided for analysis/debugging?</p></li>\n</ol>\n<p>Any guidance would be greatly appreciated. Thanks!</p>",
+      "rawMarkdown": "Hi everyone,\n\nI'm new to the competition and have been exploring the SDK locally using `battle_start()`, `battle_select()`, `visualize_data()`, and the observation objects.\n\nA few questions for experienced participants or organizers:\n\n1. Is there documentation for the meanings of `select.context` and `Option.type` values, or are competitors expected to infer these from gameplay and the SDK source?\n\n2. Is there an officially recommended way to visualize/debug games locally beyond inspecting observations and logs? I've looked at `visualize_data()` and the Kaggle environment renderer, but I'm curious what workflow most participants are using.\n\n3. The SDK exposes search-related APIs (`SearchBegin`, `SearchStep`, `SearchEnd`). Are these intended to be used by agents for look-ahead planning/search, or are they mainly provided for analysis/debugging?\n\nAny guidance would be greatly appreciated. Thanks!\n"
+    }
+  ]
+}

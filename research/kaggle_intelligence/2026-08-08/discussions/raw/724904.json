@@ -1,0 +1,42 @@
+{
+  "topic": {
+    "id": 724904,
+    "title": "Matchmaking issue",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724904",
+    "commentCount": 3,
+    "votes": -1,
+    "postDate": "2026-07-13T14:34:54.385821200Z",
+    "lastCommentPostDate": "2026-07-22T09:19:37.873333300Z"
+  },
+  "messages": [
+    {
+      "id": 3496321,
+      "postDate": "2026-07-13T16:37:38.217Z",
+      "content": "<p>Your submission has a 10% chance of facing a random opponent at any given matchmaking draw.</p>",
+      "rawMarkdown": "Your submission has a 10% chance of facing a random opponent at any given matchmaking draw.",
+      "votes": 2,
+      "replies": [
+        {
+          "id": 3501551,
+          "postDate": "2026-07-22T09:19:37.873Z",
+          "content": "<p>Should not the ELO obtained also proportional to the difficulty? For intance, I once had a match against a much higher ranker and won but still got only +15 points :( </p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9634215%2Fdc28104402bbdf571cb38eb235a8da5c%2FScreenshot%202026-07-22%20111357.png?generation=1784711667257914&amp;alt=media\" alt=\"\"></p>",
+          "rawMarkdown": "Should not the ELO obtained also proportional to the difficulty? For intance, I once had a match against a much higher ranker and won but still got only +15 points :( \n\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9634215%2Fdc28104402bbdf571cb38eb235a8da5c%2FScreenshot%202026-07-22%20111357.png?generation=1784711667257914&alt=media)\n",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "id": 3496271,
+      "postDate": "2026-07-13T14:34:54.387Z",
+      "content": "<p>Why was I matched against a player rated 147 when my rating was 999\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F25183096%2F1cbadc30750cd6e5567a5766fd560212%2FPixPin_2026-07-13_22-34-18.png?generation=1783953272432898&amp;alt=media\" alt=\"\"></p>",
+      "rawMarkdown": "Why was I matched against a player rated 147 when my rating was 999\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F25183096%2F1cbadc30750cd6e5567a5766fd560212%2FPixPin_2026-07-13_22-34-18.png?generation=1783953272432898&alt=media)",
+      "votes": -1
+    },
+    {
+      "id": 3501550,
+      "postDate": "2026-07-22T09:19:15.467Z",
+      "rawMarkdown": "",
+      "isDeleted": true
+    }
+  ]
+}

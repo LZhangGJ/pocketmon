@@ -1,0 +1,1734 @@
+[
+  {
+    "id": 732331,
+    "title": "Second Round Information",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/732331",
+    "commentCount": 18,
+    "votes": 23,
+    "postDate": "2026-08-02T11:00:01.289922600Z",
+    "lastCommentPostDate": "2026-08-04T13:25:59.596666700Z",
+    "isSticky": true
+  },
+  {
+    "id": 728935,
+    "title": "Public Notebook Sharing Deadline: August 2",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728935",
+    "commentCount": 11,
+    "votes": 19,
+    "postDate": "2026-07-24T19:04:27.671769500Z",
+    "lastCommentPostDate": "2026-08-03T04:27:36.726666700Z",
+    "isSticky": true
+  },
+  {
+    "id": 717141,
+    "title": "Game Engine Source Code",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/717141",
+    "commentCount": 11,
+    "votes": 124,
+    "postDate": "2026-07-01T15:07:46.610566800Z",
+    "lastCommentPostDate": "2026-08-01T22:46:30.746666700Z",
+    "isSticky": true
+  },
+  {
+    "id": 713051,
+    "title": "Official Visualiser/Replay Viewer",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/713051",
+    "commentCount": 2,
+    "votes": 25,
+    "postDate": "2026-06-23T20:33:45.573745800Z",
+    "lastCommentPostDate": "2026-08-05T08:07:01.620Z",
+    "isSticky": true
+  },
+  {
+    "id": 708584,
+    "title": "Welcome to the Pokémon TCG AI Battle Challenge Simulation Category Competition!",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708584",
+    "commentCount": 4,
+    "votes": 30,
+    "postDate": "2026-06-16T10:13:56.730881200Z",
+    "lastCommentPostDate": "2026-08-06T00:07:25.296666700Z",
+    "isSticky": true
+  },
+  {
+    "id": 708586,
+    "title": "Differences Between the Official Pokémon TCG Rules and the Simulator Behavior ",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708586",
+    "commentCount": 27,
+    "votes": 36,
+    "postDate": "2026-06-16T10:17:04.884132300Z",
+    "lastCommentPostDate": "2026-07-31T11:34:31.063333300Z",
+    "isSticky": true
+  },
+  {
+    "id": 714189,
+    "title": "Reminder about the Kaggle Simulation Competition Format",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/714189",
+    "commentCount": 8,
+    "votes": 16,
+    "postDate": "2026-06-25T19:31:22.263130700Z",
+    "lastCommentPostDate": "2026-06-29T14:16:36.180Z",
+    "isSticky": true
+  },
+  {
+    "id": 709160,
+    "title": "Daily Top Episodes Datasets",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709160",
+    "commentCount": 5,
+    "votes": 75,
+    "postDate": "2026-06-17T19:00:15.948716500Z",
+    "lastCommentPostDate": "2026-06-27T17:49:53.150Z",
+    "isSticky": true
+  },
+  {
+    "id": 708493,
+    "title": "Important Information About this Challenge",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708493",
+    "commentCount": 1,
+    "votes": 16,
+    "postDate": "2026-06-15T20:27:53.488492600Z",
+    "lastCommentPostDate": "2026-06-20T11:35:09.523333300Z",
+    "isSticky": true
+  },
+  {
+    "id": 708492,
+    "title": "How to Get Started + Competition's Official Discord",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708492",
+    "commentCount": 4,
+    "votes": 16,
+    "postDate": "2026-06-15T20:27:17.391215100Z",
+    "lastCommentPostDate": "2026-06-18T01:31:36.600Z",
+    "isSticky": true
+  },
+  {
+    "id": 732105,
+    "title": "Alternative PTCG Rankings, inspired by Alternative Orbit Wars Rankings",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/732105",
+    "commentCount": 5,
+    "votes": 23,
+    "postDate": "2026-08-01T21:13:37.024482400Z",
+    "lastCommentPostDate": "2026-08-05T10:46:09.843333300Z"
+  },
+  {
+    "id": 731298,
+    "title": "my plan on how to do RL training ... is it my hallucinations?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/731298",
+    "commentCount": 14,
+    "votes": 11,
+    "postDate": "2026-07-31T04:12:45.510846700Z",
+    "lastCommentPostDate": "2026-08-07T09:09:50.546666700Z"
+  },
+  {
+    "id": 733267,
+    "title": "Shaymin vs Battle Cage",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/733267",
+    "commentCount": 3,
+    "votes": 2,
+    "postDate": "2026-08-06T09:41:26.793451500Z",
+    "lastCommentPostDate": "2026-08-06T23:16:24.783333300Z"
+  },
+  {
+    "id": 733137,
+    "title": "Timing of solution sharing after the deadline",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/733137",
+    "votes": 6,
+    "postDate": "2026-08-06T00:35:19.394641100Z",
+    "lastCommentPostDate": "2026-08-06T00:35:19.393333300Z"
+  },
+  {
+    "id": 732905,
+    "title": "How consistent is imitation learning in this setting?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/732905",
+    "commentCount": 9,
+    "votes": 4,
+    "postDate": "2026-08-05T02:22:26.000418100Z",
+    "lastCommentPostDate": "2026-08-06T03:41:28.296666700Z"
+  },
+  {
+    "id": 733265,
+    "title": "[Bug] Simulator switch the deck between players",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/733265",
+    "votes": 3,
+    "postDate": "2026-08-06T09:38:49.110732Z",
+    "lastCommentPostDate": "2026-08-06T09:38:49.110Z"
+  },
+  {
+    "id": 733083,
+    "title": "ELO inconsistency",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/733083",
+    "commentCount": 8,
+    "votes": 1,
+    "postDate": "2026-08-05T19:17:17.082213500Z",
+    "lastCommentPostDate": "2026-08-06T21:24:33.590Z"
+  },
+  {
+    "id": 733477,
+    "title": "Game engine bug",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/733477",
+    "votes": 1,
+    "postDate": "2026-08-07T03:02:49.036075800Z",
+    "lastCommentPostDate": "2026-08-07T03:02:49.036666700Z"
+  },
+  {
+    "id": 729926,
+    "title": "Tracking 3,057 teams through 6 weeks of meta: who switched decks, when — and why it was always too late",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/729926",
+    "commentCount": 15,
+    "votes": 56,
+    "postDate": "2026-07-27T08:53:10.162449700Z",
+    "lastCommentPostDate": "2026-08-02T03:32:38.770Z"
+  },
+  {
+    "id": 731739,
+    "title": "Why is there so much grimmsnarl",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/731739",
+    "commentCount": 10,
+    "votes": 3,
+    "postDate": "2026-08-01T01:04:41.788393Z",
+    "lastCommentPostDate": "2026-08-05T15:37:51.796666700Z"
+  },
+  {
+    "id": 732469,
+    "title": "Official replay viewer is currently unreachable",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/732469",
+    "commentCount": 1,
+    "votes": 6,
+    "postDate": "2026-08-03T07:18:12.877773500Z",
+    "lastCommentPostDate": "2026-08-03T08:49:10.270Z"
+  },
+  {
+    "id": 731352,
+    "title": "Does a Pure Heuristic Top-100 Agent Exist?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/731352",
+    "commentCount": 12,
+    "votes": 3,
+    "postDate": "2026-07-31T06:12:32.579039500Z",
+    "lastCommentPostDate": "2026-08-04T13:34:19.586666700Z"
+  },
+  {
+    "id": 728071,
+    "title": "RL Beginner Question: How Much Training Data Does a PTCG-Game Agent Need?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728071",
+    "commentCount": 66,
+    "votes": 21,
+    "postDate": "2026-07-21T21:57:56.502969900Z",
+    "lastCommentPostDate": "2026-08-04T20:24:00.163333300Z"
+  },
+  {
+    "id": 730143,
+    "title": "Show us your Pokemon",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730143",
+    "commentCount": 11,
+    "votes": 14,
+    "postDate": "2026-07-28T08:11:00.318173800Z",
+    "lastCommentPostDate": "2026-08-01T15:01:37.123333300Z"
+  },
+  {
+    "id": 731083,
+    "title": "Incorrect all_card_data() text for Team Rocket’s Great Ball (#1132)",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/731083",
+    "commentCount": 2,
+    "votes": 4,
+    "postDate": "2026-07-30T17:49:11.955306Z",
+    "lastCommentPostDate": "2026-08-03T17:18:49.766666700Z"
+  },
+  {
+    "id": 730497,
+    "title": "Submission Strategy",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730497",
+    "commentCount": 16,
+    "votes": 4,
+    "postDate": "2026-07-29T13:10:18.097450200Z",
+    "lastCommentPostDate": "2026-08-02T09:10:23.550Z"
+  },
+  {
+    "id": 732665,
+    "title": "Using current time in submission for strategy?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/732665",
+    "votes": 1,
+    "postDate": "2026-08-04T06:27:59.443291Z",
+    "lastCommentPostDate": "2026-08-04T06:27:59.443333300Z"
+  },
+  {
+    "id": 732502,
+    "title": "Unable to load episode replay（Too many requests）",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/732502",
+    "commentCount": 4,
+    "votes": 1,
+    "postDate": "2026-08-03T11:37:49.620735400Z",
+    "lastCommentPostDate": "2026-08-04T03:05:03.630Z"
+  },
+  {
+    "id": 732167,
+    "title": "Is getting a gold mandatory for becoming a finalist in the strategy competition?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/732167",
+    "commentCount": 4,
+    "postDate": "2026-08-02T05:43:47.516139800Z",
+    "lastCommentPostDate": "2026-08-02T11:09:53.660Z"
+  },
+  {
+    "id": 731397,
+    "title": "How do we build our decks?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/731397",
+    "commentCount": 6,
+    "postDate": "2026-07-31T08:58:37.666579100Z",
+    "lastCommentPostDate": "2026-08-02T15:42:15.910Z"
+  },
+  {
+    "id": 731933,
+    "title": "about matching frequency in score band segmentation",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/731933",
+    "commentCount": 3,
+    "votes": 1,
+    "postDate": "2026-08-01T14:41:46.333988Z",
+    "lastCommentPostDate": "2026-08-02T02:47:32.770Z"
+  },
+  {
+    "id": 731775,
+    "title": "Issue with inactive teammate",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/731775",
+    "commentCount": 2,
+    "votes": 1,
+    "postDate": "2026-08-01T03:57:34.126822900Z",
+    "lastCommentPostDate": "2026-08-01T07:58:30.070Z"
+  },
+  {
+    "id": 730554,
+    "title": "22 Curated Deck Archetypes for PTCG AI Battle - A Deck Intelligence Dataset",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730554",
+    "votes": 7,
+    "postDate": "2026-07-29T16:27:47.641211400Z",
+    "lastCommentPostDate": "2026-07-29T16:27:47.640Z"
+  },
+  {
+    "id": 730823,
+    "title": "Is That Matchup Table Measuring the Deck—or the Player? (Part 1)",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730823",
+    "votes": 3,
+    "postDate": "2026-07-30T09:59:53.662674Z",
+    "lastCommentPostDate": "2026-07-30T09:59:53.663333300Z"
+  },
+  {
+    "id": 729887,
+    "title": "I've never seen a competition with nearly 6,000 participants before.",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/729887",
+    "commentCount": 4,
+    "votes": 10,
+    "postDate": "2026-07-27T03:18:52.996876800Z",
+    "lastCommentPostDate": "2026-07-29T04:19:00.143333300Z"
+  },
+  {
+    "id": 728168,
+    "title": "What is your highest score for an active rule-based agent",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728168",
+    "commentCount": 6,
+    "postDate": "2026-07-22T08:53:50.856585300Z",
+    "lastCommentPostDate": "2026-08-05T21:33:17.926666700Z"
+  },
+  {
+    "id": 729644,
+    "title": " Are top agents mostly heuristic, or are people successfully using RL/BC?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/729644",
+    "commentCount": 14,
+    "votes": 4,
+    "postDate": "2026-07-26T08:58:52.437813800Z",
+    "lastCommentPostDate": "2026-07-29T04:45:06.703333300Z"
+  },
+  {
+    "id": 728587,
+    "title": "Minor Engine update",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728587",
+    "commentCount": 3,
+    "votes": 9,
+    "postDate": "2026-07-23T21:04:23.759002800Z",
+    "lastCommentPostDate": "2026-07-28T13:25:48.133333300Z"
+  },
+  {
+    "id": 730707,
+    "title": "Validation Episode Still Fails —  Replay Look Normal but Submission Is Rejected Without Error Details",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730707",
+    "commentCount": 1,
+    "postDate": "2026-07-30T03:17:25.499791400Z",
+    "lastCommentPostDate": "2026-07-30T06:33:56.676666700Z"
+  },
+  {
+    "id": 729882,
+    "title": "wow a good team",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/729882",
+    "commentCount": 5,
+    "votes": 2,
+    "postDate": "2026-07-27T02:40:42.400681200Z",
+    "lastCommentPostDate": "2026-07-28T02:06:22.090Z"
+  },
+  {
+    "id": 727816,
+    "title": "How'd you pick your deck?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/727816",
+    "commentCount": 7,
+    "votes": 2,
+    "postDate": "2026-07-20T19:38:51.933448600Z",
+    "lastCommentPostDate": "2026-08-01T03:03:34.983333300Z"
+  },
+  {
+    "id": 730107,
+    "title": "Frustrated and Desperate: Every Deck I Build Get Gutted",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730107",
+    "commentCount": 3,
+    "postDate": "2026-07-28T03:04:22.427023800Z",
+    "lastCommentPostDate": "2026-07-28T16:29:59.993333300Z"
+  },
+  {
+    "id": 730419,
+    "title": "Flip a coin and prevent damage",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730419",
+    "postDate": "2026-07-29T02:17:24.935412200Z",
+    "lastCommentPostDate": "2026-07-29T02:17:24.936666700Z"
+  },
+  {
+    "id": 730355,
+    "title": "[Question]: Parallel Environments",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730355",
+    "votes": 1,
+    "postDate": "2026-07-28T19:52:34.299252100Z",
+    "lastCommentPostDate": "2026-07-28T19:52:34.300Z"
+  },
+  {
+    "id": 730179,
+    "title": "Domain-neutral decision kernel release",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730179",
+    "postDate": "2026-07-28T10:36:04.670749700Z",
+    "lastCommentPostDate": "2026-07-28T10:36:04.670Z"
+  },
+  {
+    "id": 730155,
+    "title": "How do strong agents decide whether to search before drawing?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730155",
+    "postDate": "2026-07-28T09:06:49.577715700Z",
+    "lastCommentPostDate": "2026-07-28T09:06:49.576666700Z"
+  },
+  {
+    "id": 729939,
+    "title": "My ai has been killing itself.",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/729939",
+    "commentCount": 3,
+    "postDate": "2026-07-27T10:43:44.204119800Z",
+    "lastCommentPostDate": "2026-07-28T02:48:53.040Z"
+  },
+  {
+    "id": 730196,
+    "title": "Domain-neutral decision kernel v0.1.1 update",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730196",
+    "commentCount": 1,
+    "votes": -5,
+    "postDate": "2026-07-28T12:08:22.342278200Z",
+    "lastCommentPostDate": "2026-07-28T12:29:48.060Z"
+  },
+  {
+    "id": 729604,
+    "title": "Is it allowed to call external APIs in this competition? Issues with DeepSeek API",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/729604",
+    "commentCount": 3,
+    "votes": -1,
+    "postDate": "2026-07-26T06:58:25.909810800Z",
+    "lastCommentPostDate": "2026-07-27T15:19:06.010Z"
+  },
+  {
+    "id": 729793,
+    "title": "Deck of opponent",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/729793",
+    "postDate": "2026-07-26T16:16:14.535935700Z",
+    "lastCommentPostDate": "2026-07-26T16:16:14.536666700Z"
+  },
+  {
+    "id": 729219,
+    "title": "What is maximum time agent has to take step?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/729219",
+    "commentCount": 2,
+    "votes": 1,
+    "postDate": "2026-07-25T11:21:15.886226400Z",
+    "lastCommentPostDate": "2026-07-25T18:11:59.806666700Z"
+  },
+  {
+    "id": 727498,
+    "title": "If you are both a Pokemon fan and a kaggler",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/727498",
+    "commentCount": 10,
+    "votes": 17,
+    "postDate": "2026-07-19T06:58:07.125995200Z",
+    "lastCommentPostDate": "2026-07-22T15:44:09.686666700Z"
+  },
+  {
+    "id": 728695,
+    "title": "Why Can Identical Strategies Receive Very Different Scores?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728695",
+    "commentCount": 5,
+    "votes": 2,
+    "postDate": "2026-07-24T07:45:08.114614700Z",
+    "lastCommentPostDate": "2026-07-25T08:44:35.283333300Z"
+  },
+  {
+    "id": 726690,
+    "title": "Large systematic disparity in episode rates between leaderboard agents",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/726690",
+    "commentCount": 8,
+    "votes": 10,
+    "postDate": "2026-07-16T03:34:45.695185800Z",
+    "lastCommentPostDate": "2026-07-24T19:15:51.126666700Z"
+  },
+  {
+    "id": 729440,
+    "title": "Can one agent play multiple decks/tech out cards?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/729440",
+    "commentCount": 3,
+    "postDate": "2026-07-25T16:44:12.890843900Z",
+    "lastCommentPostDate": "2026-07-26T05:35:43.600Z"
+  },
+  {
+    "id": 728724,
+    "title": "Teammate deleted their Kaggle account. Am I still eligible to participate?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728724",
+    "commentCount": 3,
+    "postDate": "2026-07-24T09:38:19.147632Z",
+    "lastCommentPostDate": "2026-07-24T19:12:00.870Z"
+  },
+  {
+    "id": 728068,
+    "title": "An engine bug(?) report ",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728068",
+    "votes": 5,
+    "postDate": "2026-07-21T21:43:24.722010100Z",
+    "lastCommentPostDate": "2026-07-21T21:43:24.723333300Z"
+  },
+  {
+    "id": 728301,
+    "title": "How many games you need before you believe a change helped",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728301",
+    "commentCount": 1,
+    "votes": 2,
+    "postDate": "2026-07-22T19:39:17.785354100Z",
+    "lastCommentPostDate": "2026-07-23T17:47:29.156666700Z"
+  },
+  {
+    "id": 728243,
+    "title": "How should we adapt to leaderboard variance?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728243",
+    "votes": 3,
+    "postDate": "2026-07-22T15:41:27.919400800Z",
+    "lastCommentPostDate": "2026-07-22T15:41:27.920Z"
+  },
+  {
+    "id": 728159,
+    "title": "Do you use a base prompt for coding assistants like Cursor/Gemini/Claude?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728159",
+    "commentCount": 2,
+    "votes": 2,
+    "postDate": "2026-07-22T07:22:08.648233800Z",
+    "lastCommentPostDate": "2026-07-22T09:34:49.860Z"
+  },
+  {
+    "id": 727565,
+    "title": "Curious Questions about Submission Size",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/727565",
+    "commentCount": 10,
+    "postDate": "2026-07-19T15:05:18.244065600Z",
+    "lastCommentPostDate": "2026-07-25T18:59:08.133333300Z"
+  },
+  {
+    "id": 728519,
+    "title": "Option types are plain ints, and other things that cost me submissions",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728519",
+    "votes": -1,
+    "postDate": "2026-07-23T16:38:14.333168800Z",
+    "lastCommentPostDate": "2026-07-23T16:38:14.333333300Z"
+  },
+  {
+    "id": 717697,
+    "title": "Sharing my Reinforcement Learning journey (updated)",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/717697",
+    "commentCount": 55,
+    "votes": 39,
+    "postDate": "2026-07-02T11:08:43.997372900Z",
+    "lastCommentPostDate": "2026-07-25T16:12:42.500Z"
+  },
+  {
+    "id": 728287,
+    "title": "BUG: \"Player 1's deck error\" at Step 0 with mathematically valid 60-card deck",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728287",
+    "postDate": "2026-07-22T18:31:01.655529400Z",
+    "lastCommentPostDate": "2026-07-22T18:31:01.656666700Z"
+  },
+  {
+    "id": 728111,
+    "title": "Match with +0 and -0 points awarded",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728111",
+    "commentCount": 2,
+    "votes": 1,
+    "postDate": "2026-07-22T00:09:01.912548200Z",
+    "lastCommentPostDate": "2026-07-22T00:18:57.856666700Z"
+  },
+  {
+    "id": 727929,
+    "title": "Is matchmaking broken?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/727929",
+    "commentCount": 3,
+    "postDate": "2026-07-21T11:23:22.903422500Z",
+    "lastCommentPostDate": "2026-07-22T05:06:46.903333300Z"
+  },
+  {
+    "id": 724362,
+    "title": "Top players’ methods, revealed by 30,000 games",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724362",
+    "commentCount": 12,
+    "votes": 74,
+    "postDate": "2026-07-10T20:17:25.005571Z",
+    "lastCommentPostDate": "2026-07-17T20:01:48.790Z"
+  },
+  {
+    "id": 727912,
+    "title": "How long does it typically take for the agent's score to stabilize? ",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/727912",
+    "commentCount": 3,
+    "postDate": "2026-07-21T08:41:36.096643200Z",
+    "lastCommentPostDate": "2026-07-21T14:14:39.250Z"
+  },
+  {
+    "id": 727094,
+    "title": "Updated game engine, sample submission file",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/727094",
+    "votes": 10,
+    "postDate": "2026-07-17T19:21:29.915444600Z",
+    "lastCommentPostDate": "2026-07-17T19:21:29.916666700Z"
+  },
+  {
+    "id": 723576,
+    "title": "Can one get good results without having played pokemen before?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/723576",
+    "commentCount": 16,
+    "votes": 13,
+    "postDate": "2026-07-07T10:43:04.194493400Z",
+    "lastCommentPostDate": "2026-07-21T09:03:54.290Z"
+  },
+  {
+    "id": 727695,
+    "title": "How do you tell if your new version is actually better?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/727695",
+    "commentCount": 3,
+    "votes": 1,
+    "postDate": "2026-07-20T10:22:15.160965800Z",
+    "lastCommentPostDate": "2026-07-20T17:22:52.506666700Z"
+  },
+  {
+    "id": 717093,
+    "title": "How Do I Collect Human Played Gameplay Examples?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/717093",
+    "commentCount": 1,
+    "postDate": "2026-07-01T13:36:05.659069500Z",
+    "lastCommentPostDate": "2026-07-31T23:38:43.436666700Z"
+  },
+  {
+    "id": 724904,
+    "title": "Matchmaking issue",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724904",
+    "commentCount": 3,
+    "votes": -1,
+    "postDate": "2026-07-13T14:34:54.385821200Z",
+    "lastCommentPostDate": "2026-07-22T09:19:37.873333300Z"
+  },
+  {
+    "id": 708617,
+    "title": "Matchup data: ~15k self-play games between the 4 sample decks",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708617",
+    "commentCount": 1,
+    "votes": 35,
+    "postDate": "2026-06-16T13:33:11.937695200Z",
+    "lastCommentPostDate": "2026-07-30T04:32:18.790Z"
+  },
+  {
+    "id": 725074,
+    "title": "Regarding a Title to Be Awarded to the Winner of This Competition",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/725074",
+    "commentCount": 4,
+    "votes": 20,
+    "postDate": "2026-07-14T11:51:30.197578500Z",
+    "lastCommentPostDate": "2026-07-14T16:56:02.330Z"
+  },
+  {
+    "id": 716557,
+    "title": "Clarification on Episode JSON Action/Observation Alignment for Behavioral Cloning",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/716557",
+    "commentCount": 1,
+    "postDate": "2026-06-30T17:55:33.980466600Z",
+    "lastCommentPostDate": "2026-07-30T10:02:13.623333300Z"
+  },
+  {
+    "id": 709304,
+    "title": "Kiyota RL/MCTS sample rerun: learning curve and caveat",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709304",
+    "commentCount": 5,
+    "votes": 1,
+    "postDate": "2026-06-18T06:27:28.488823300Z",
+    "lastCommentPostDate": "2026-08-04T13:24:53.053333300Z"
+  },
+  {
+    "id": 726708,
+    "title": "How much time does an agent get per round/game?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/726708",
+    "commentCount": 2,
+    "votes": 1,
+    "postDate": "2026-07-16T06:43:35.865657500Z",
+    "lastCommentPostDate": "2026-07-16T18:23:32.870Z"
+  },
+  {
+    "id": 726696,
+    "title": "Differences in the performance of Heuristic and RL",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/726696",
+    "postDate": "2026-07-16T04:08:53.151056600Z",
+    "lastCommentPostDate": "2026-07-16T04:08:53.150Z"
+  },
+  {
+    "id": 708899,
+    "title": "Requesting build of cabt engine for ARM64",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708899",
+    "commentCount": 8,
+    "votes": 27,
+    "postDate": "2026-06-17T06:29:45.220506700Z",
+    "lastCommentPostDate": "2026-07-23T14:33:21.980Z"
+  },
+  {
+    "id": 710545,
+    "title": "Curious how to interpret replays",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/710545",
+    "commentCount": 2,
+    "postDate": "2026-06-20T12:10:37.777647400Z",
+    "lastCommentPostDate": "2026-07-30T04:48:49.776666700Z"
+  },
+  {
+    "id": 712621,
+    "title": "Leaderboard Scoring Inconsistency",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712621",
+    "commentCount": 23,
+    "votes": 77,
+    "postDate": "2026-06-23T06:59:37.557560100Z",
+    "lastCommentPostDate": "2026-07-16T03:35:26.906666700Z"
+  },
+  {
+    "id": 723591,
+    "title": "First or second — which do agents pick?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/723591",
+    "commentCount": 1,
+    "votes": 22,
+    "postDate": "2026-07-07T11:53:27.858736Z",
+    "lastCommentPostDate": "2026-07-11T13:56:58.713333300Z"
+  },
+  {
+    "id": 724637,
+    "title": "Can RL and MCTS Build Mathematical Theories?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724637",
+    "commentCount": 2,
+    "votes": 3,
+    "postDate": "2026-07-12T12:07:24.829285900Z",
+    "lastCommentPostDate": "2026-07-12T12:14:15.520Z"
+  },
+  {
+    "id": 724187,
+    "title": "Things I tried that didn't work",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724187",
+    "commentCount": 1,
+    "votes": 10,
+    "postDate": "2026-07-09T23:33:35.611810700Z",
+    "lastCommentPostDate": "2026-07-10T13:29:03.910Z"
+  },
+  {
+    "id": 724643,
+    "title": "Is it possible to access replay data from our submitted agents?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724643",
+    "commentCount": 1,
+    "postDate": "2026-07-12T12:38:05.244143200Z",
+    "lastCommentPostDate": "2026-07-13T16:57:01.936666700Z"
+  },
+  {
+    "id": 724733,
+    "title": "Competition eligibility requirements",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724733",
+    "commentCount": 2,
+    "postDate": "2026-07-12T19:40:49.461677Z",
+    "lastCommentPostDate": "2026-07-12T21:14:36.320Z"
+  },
+  {
+    "id": 724421,
+    "title": "私のループエンジニアリング失敗の記録",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724421",
+    "commentCount": 2,
+    "votes": -1,
+    "postDate": "2026-07-11T07:18:47.113371800Z",
+    "lastCommentPostDate": "2026-07-11T09:02:35.240Z"
+  },
+  {
+    "id": 721010,
+    "title": "Pokémon Deck List",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/721010",
+    "votes": 20,
+    "postDate": "2026-07-06T08:05:40.214842300Z",
+    "lastCommentPostDate": "2026-07-06T08:05:40.213333300Z"
+  },
+  {
+    "id": 721338,
+    "title": "How do you teach an agent when to use Boss's Orders and what to discard for Ultra Ball?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/721338",
+    "commentCount": 3,
+    "votes": 11,
+    "postDate": "2026-07-06T12:31:53.260031800Z",
+    "lastCommentPostDate": "2026-07-07T08:36:57.336666700Z"
+  },
+  {
+    "id": 724378,
+    "title": "Action Order: [0,2,4] vs [2,0,4]",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724378",
+    "votes": 1,
+    "postDate": "2026-07-10T21:42:21.014889600Z",
+    "lastCommentPostDate": "2026-07-10T21:42:21.013333300Z"
+  },
+  {
+    "id": 724212,
+    "title": "Can i train on my own hardware / cloud ? :)",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724212",
+    "commentCount": 1,
+    "postDate": "2026-07-10T04:24:01.074345300Z",
+    "lastCommentPostDate": "2026-07-10T08:27:39.356666700Z"
+  },
+  {
+    "id": 724213,
+    "title": "Reliable Submission Checklist: avoid __file__, sys.path, and harness-loading pitfalls",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724213",
+    "postDate": "2026-07-10T04:25:20.795293500Z",
+    "lastCommentPostDate": "2026-07-10T04:25:20.796666700Z"
+  },
+  {
+    "id": 724054,
+    "title": "Can we play this game in browser just like orbit wars was there ? ",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724054",
+    "commentCount": 2,
+    "postDate": "2026-07-09T09:26:30.123818200Z",
+    "lastCommentPostDate": "2026-07-09T11:01:17.763333300Z"
+  },
+  {
+    "id": 723983,
+    "title": "About \"five (5) Submissions per day\"",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/723983",
+    "commentCount": 2,
+    "postDate": "2026-07-09T01:03:07.279281700Z",
+    "lastCommentPostDate": "2026-07-10T02:14:07.046666700Z"
+  },
+  {
+    "id": 722907,
+    "title": "how to solve disabled due to the competition's active submission limit",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/722907",
+    "commentCount": 1,
+    "votes": 1,
+    "postDate": "2026-07-07T02:05:54.167645Z",
+    "lastCommentPostDate": "2026-07-07T02:16:25.976666700Z"
+  },
+  {
+    "id": 716045,
+    "title": "June 30 Update: Updated Simulation Environment, gameplay increases",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/716045",
+    "commentCount": 9,
+    "votes": 41,
+    "postDate": "2026-06-30T00:30:46.484804300Z",
+    "lastCommentPostDate": "2026-07-01T18:34:42.423333300Z"
+  },
+  {
+    "id": 718688,
+    "title": "\"Player 1's deck does not have 60 cards.\",",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/718688",
+    "commentCount": 6,
+    "votes": 2,
+    "postDate": "2026-07-04T00:00:18.446682Z",
+    "lastCommentPostDate": "2026-07-05T20:41:55.343333300Z"
+  },
+  {
+    "id": 711741,
+    "title": "【Question to Host】Is it allowed that **one agent** use multi-decks?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711741",
+    "commentCount": 14,
+    "votes": 27,
+    "postDate": "2026-06-22T00:13:57.882637600Z",
+    "lastCommentPostDate": "2026-07-05T15:51:39.313333300Z"
+  },
+  {
+    "id": 720201,
+    "title": "is their any solo teams in the competion",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/720201",
+    "commentCount": 2,
+    "votes": -2,
+    "postDate": "2026-07-05T16:24:30.113183200Z",
+    "lastCommentPostDate": "2026-07-07T18:26:22.456666700Z"
+  },
+  {
+    "id": 711737,
+    "title": "Request for an explicit ruling on game engine source, reverse engineering, and community engine",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711737",
+    "commentCount": 22,
+    "votes": 102,
+    "postDate": "2026-06-21T23:46:27.859875900Z",
+    "lastCommentPostDate": "2026-07-01T22:09:04.533333300Z"
+  },
+  {
+    "id": 710361,
+    "title": "A Vibecoded Website to View Metas and Cards",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/710361",
+    "commentCount": 10,
+    "votes": 31,
+    "postDate": "2026-06-20T08:49:33.082259300Z",
+    "lastCommentPostDate": "2026-07-05T22:33:42.103333300Z"
+  },
+  {
+    "id": 713608,
+    "title": "What We Tried, What Ceilinged, and Two Questions We Can't Answer Alone",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/713608",
+    "commentCount": 10,
+    "votes": 28,
+    "postDate": "2026-06-24T19:36:55.454658300Z",
+    "lastCommentPostDate": "2026-07-03T04:00:26.300Z"
+  },
+  {
+    "id": 718244,
+    "title": "ポケモンカードの基本ルールまとめ、デッキ考察",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/718244",
+    "votes": 3,
+    "postDate": "2026-07-03T08:32:55.652707200Z",
+    "lastCommentPostDate": "2026-07-03T08:32:55.653333300Z"
+  },
+  {
+    "id": 718783,
+    "title": "Replay triage template: public episodes to loss buckets",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/718783",
+    "votes": 1,
+    "postDate": "2026-07-04T06:23:51.637215700Z",
+    "lastCommentPostDate": "2026-07-04T06:23:51.636666700Z"
+  },
+  {
+    "id": 711644,
+    "title": "How has your experience been with RL/PPO/MCTS in this competition so far?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711644",
+    "commentCount": 5,
+    "votes": 11,
+    "postDate": "2026-06-21T18:03:57.774053100Z",
+    "lastCommentPostDate": "2026-07-03T21:02:31.526666700Z"
+  },
+  {
+    "id": 716241,
+    "title": "Possible bug: Rare Candy consumed without evolving after a legal evolution option is selected",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/716241",
+    "commentCount": 1,
+    "votes": 2,
+    "postDate": "2026-06-30T08:47:21.669044300Z",
+    "lastCommentPostDate": "2026-07-03T19:19:45.140Z"
+  },
+  {
+    "id": 714972,
+    "title": "Public link to my essay — not a solution write-up",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/714972",
+    "commentCount": 9,
+    "votes": 13,
+    "postDate": "2026-06-27T13:04:14.818367100Z",
+    "lastCommentPostDate": "2026-06-30T03:36:33.146666700Z"
+  },
+  {
+    "id": 717698,
+    "title": "How fast should the environment be?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/717698",
+    "commentCount": 2,
+    "votes": 1,
+    "postDate": "2026-07-02T11:09:07.819392500Z",
+    "lastCommentPostDate": "2026-07-03T05:43:35.716666700Z"
+  },
+  {
+    "id": 713377,
+    "title": "Team Merging and Finding Teammates",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/713377",
+    "commentCount": 1,
+    "votes": 6,
+    "postDate": "2026-06-24T11:51:55.524207200Z",
+    "lastCommentPostDate": "2026-07-02T08:59:47.773333300Z"
+  },
+  {
+    "id": 717821,
+    "title": "Is it allowed for a submitted Simulation agent to call a generative AI API during evaluation?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/717821",
+    "commentCount": 2,
+    "postDate": "2026-07-02T14:33:45.943270400Z",
+    "lastCommentPostDate": "2026-07-02T19:15:35.530Z"
+  },
+  {
+    "id": 717832,
+    "title": "replay log curation",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/717832",
+    "votes": 1,
+    "postDate": "2026-07-02T14:46:59.612948300Z",
+    "lastCommentPostDate": "2026-07-02T14:46:59.613333300Z"
+  },
+  {
+    "id": 714030,
+    "title": "[RESOLVED] Possible Infinite Move by Opponent Agent and Unfair Rating",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/714030",
+    "commentCount": 13,
+    "votes": 11,
+    "postDate": "2026-06-25T14:24:13.515600400Z",
+    "lastCommentPostDate": "2026-06-30T07:24:32.380Z"
+  },
+  {
+    "id": 717279,
+    "title": "Stale agents?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/717279",
+    "commentCount": 4,
+    "postDate": "2026-07-01T18:25:27.696138600Z",
+    "lastCommentPostDate": "2026-07-03T00:32:14.426666700Z"
+  },
+  {
+    "id": 716207,
+    "title": "How to Disrupt the Archaludon Meta: My Discoveries with Ogerpon & The \"Hybrid\" Wall",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/716207",
+    "commentCount": 1,
+    "votes": 2,
+    "postDate": "2026-06-30T07:38:48.338520500Z",
+    "lastCommentPostDate": "2026-07-01T12:27:50.103333300Z"
+  },
+  {
+    "id": 714505,
+    "title": "A Visit to a Pokémon Card Shop Mini Tournament",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/714505",
+    "commentCount": 1,
+    "votes": 15,
+    "postDate": "2026-06-26T12:27:18.711091800Z",
+    "lastCommentPostDate": "2026-06-26T13:37:16.623333300Z"
+  },
+  {
+    "id": 712657,
+    "title": "Is Battle Simulate Matching Process Working Well ?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712657",
+    "commentCount": 7,
+    "votes": 58,
+    "postDate": "2026-06-23T08:14:05.970095Z",
+    "lastCommentPostDate": "2026-06-24T16:57:40.800Z"
+  },
+  {
+    "id": 714575,
+    "title": "Error in EN_Card_Data.csv",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/714575",
+    "commentCount": 1,
+    "votes": 1,
+    "postDate": "2026-06-26T15:07:10.577463200Z",
+    "lastCommentPostDate": "2026-07-03T06:23:42.823333300Z"
+  },
+  {
+    "id": 716050,
+    "title": "Episode replays return \"Too many requests\" (429) for ~3 days — Pokémon TCG AI Battle",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/716050",
+    "commentCount": 3,
+    "votes": 1,
+    "postDate": "2026-06-30T00:57:55.555746400Z",
+    "lastCommentPostDate": "2026-06-30T07:17:16.453333300Z"
+  },
+  {
+    "id": 716378,
+    "title": "Where is the SDK mentioned in the competition description?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/716378",
+    "postDate": "2026-06-30T13:40:40.070572400Z",
+    "lastCommentPostDate": "2026-06-30T13:40:40.070Z"
+  },
+  {
+    "id": 716302,
+    "title": "Failed to import transformers",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/716302",
+    "postDate": "2026-06-30T10:59:25.148041600Z",
+    "lastCommentPostDate": "2026-06-30T10:59:25.146666700Z"
+  },
+  {
+    "id": 712893,
+    "title": "Temporary Game Rate Decrease",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712893",
+    "commentCount": 5,
+    "votes": 26,
+    "postDate": "2026-06-23T16:17:43.569231800Z",
+    "lastCommentPostDate": "2026-06-25T14:05:29.303333300Z"
+  },
+  {
+    "id": 715117,
+    "title": "強化学習なしで瞬間60位とった人の環境考察",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/715117",
+    "commentCount": 1,
+    "votes": 2,
+    "postDate": "2026-06-27T19:17:50.805173500Z",
+    "lastCommentPostDate": "2026-06-27T19:50:04.556666700Z"
+  },
+  {
+    "id": 709263,
+    "title": "Daily public meta notes from visible Game History",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709263",
+    "commentCount": 11,
+    "votes": 22,
+    "postDate": "2026-06-18T02:48:42.532924500Z",
+    "lastCommentPostDate": "2026-06-28T05:57:33.230Z"
+  },
+  {
+    "id": 709152,
+    "title": "Memory Leak in libcg.so during continuous RL Training loops (battle_start)",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709152",
+    "commentCount": 5,
+    "votes": 14,
+    "postDate": "2026-06-17T18:30:27.738339400Z",
+    "lastCommentPostDate": "2026-06-29T11:23:16.120Z"
+  },
+  {
+    "id": 715251,
+    "title": "Request for a reproducible evaluation loop beyond sparse live rating",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/715251",
+    "commentCount": 2,
+    "votes": 1,
+    "postDate": "2026-06-28T07:25:51.437120200Z",
+    "lastCommentPostDate": "2026-06-28T22:44:23.596666700Z"
+  },
+  {
+    "id": 715644,
+    "title": "[Bug Report] Error occurring in search_step",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/715644",
+    "votes": 1,
+    "postDate": "2026-06-29T04:58:01.754399400Z",
+    "lastCommentPostDate": "2026-06-29T04:58:01.753333300Z"
+  },
+  {
+    "id": 715126,
+    "title": "対策必須！？ミアレシティ",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/715126",
+    "postDate": "2026-06-27T20:01:10.014217900Z",
+    "lastCommentPostDate": "2026-06-27T20:01:10.013333300Z"
+  },
+  {
+    "id": 715572,
+    "title": "Attack damage lookup for supervised value network",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/715572",
+    "commentCount": 1,
+    "postDate": "2026-06-28T21:34:55.162532300Z",
+    "lastCommentPostDate": "2026-06-29T04:05:48.276666700Z"
+  },
+  {
+    "id": 715319,
+    "title": "How to obtain results of all episodes",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/715319",
+    "commentCount": 2,
+    "postDate": "2026-06-28T10:47:49.690517200Z",
+    "lastCommentPostDate": "2026-06-28T21:40:46.846666700Z"
+  },
+  {
+    "id": 715331,
+    "title": "Issue with score system",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/715331",
+    "postDate": "2026-06-28T11:11:05.479723500Z",
+    "lastCommentPostDate": "2026-06-28T11:11:05.480Z"
+  },
+  {
+    "id": 709584,
+    "title": "\"Gouging Fire\" is missing from the card pool.",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709584",
+    "commentCount": 2,
+    "postDate": "2026-06-19T08:03:58.598197900Z",
+    "lastCommentPostDate": "2026-07-03T04:33:06.350Z"
+  },
+  {
+    "id": 713398,
+    "title": "Pokémon TCG UI based Deck Builder Utility",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/713398",
+    "commentCount": 2,
+    "votes": 1,
+    "postDate": "2026-06-24T12:45:50.144390300Z",
+    "lastCommentPostDate": "2026-06-29T18:09:57.280Z"
+  },
+  {
+    "id": 708810,
+    "title": "Question on inference environment",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708810",
+    "commentCount": 6,
+    "votes": 37,
+    "postDate": "2026-06-17T01:11:51.684960300Z",
+    "lastCommentPostDate": "2026-06-24T01:48:57.356666700Z"
+  },
+  {
+    "id": 708809,
+    "title": "What are good resources when learning the rules?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708809",
+    "commentCount": 4,
+    "votes": 9,
+    "postDate": "2026-06-17T00:53:23.371154900Z",
+    "lastCommentPostDate": "2026-06-27T02:25:50.653333300Z"
+  },
+  {
+    "id": 712119,
+    "title": "Question about using self-play / human-play logs as external data",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712119",
+    "commentCount": 7,
+    "votes": 11,
+    "postDate": "2026-06-22T12:59:48.201757900Z",
+    "lastCommentPostDate": "2026-06-23T17:22:48.880Z"
+  },
+  {
+    "id": 714920,
+    "title": "[Bug Report] AI Agents are completely blind during Deck Searches (No Card IDs provided in observation)",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/714920",
+    "commentCount": 1,
+    "postDate": "2026-06-27T10:45:01.461688300Z",
+    "lastCommentPostDate": "2026-06-27T14:15:40.433333300Z"
+  },
+  {
+    "id": 715124,
+    "title": "エネルギーなし　オーガポンコントロール",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/715124",
+    "commentCount": 1,
+    "votes": -5,
+    "postDate": "2026-06-27T19:47:01.995768400Z",
+    "lastCommentPostDate": "2026-06-28T05:55:16.960Z"
+  },
+  {
+    "id": 713132,
+    "title": "[中文｜Chinese edition] the rules of the Pokémon Trading Card Game",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/713132",
+    "commentCount": 3,
+    "votes": 5,
+    "postDate": "2026-06-24T02:13:31.053830200Z",
+    "lastCommentPostDate": "2026-06-24T03:21:15.066666700Z"
+  },
+  {
+    "id": 714444,
+    "title": " [RESOLVED] Cinderace's Explosiveness does not prevent mulligan",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/714444",
+    "commentCount": 3,
+    "votes": 1,
+    "postDate": "2026-06-26T09:59:27.119542700Z",
+    "lastCommentPostDate": "2026-06-26T11:51:59.383333300Z"
+  },
+  {
+    "id": 711329,
+    "title": "Proposal: an official API extension for simulation / search-based agents",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711329",
+    "votes": 22,
+    "postDate": "2026-06-21T10:29:44.646801300Z",
+    "lastCommentPostDate": "2026-06-21T10:29:44.646666700Z"
+  },
+  {
+    "id": 712476,
+    "title": "How can I keep my older agent active when submitting a new one?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712476",
+    "commentCount": 9,
+    "votes": 3,
+    "postDate": "2026-06-22T23:24:55.830409Z",
+    "lastCommentPostDate": "2026-06-23T15:45:20.750Z"
+  },
+  {
+    "id": 714342,
+    "title": "Public Notebook / Discussion Signals Worth Watching - June 26, 2026",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/714342",
+    "commentCount": 1,
+    "votes": 1,
+    "postDate": "2026-06-26T05:38:04.374769200Z",
+    "lastCommentPostDate": "2026-06-26T06:42:47.323333300Z"
+  },
+  {
+    "id": 712481,
+    "title": "Live meta dashboard + open API for the ladder",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712481",
+    "commentCount": 4,
+    "votes": 4,
+    "postDate": "2026-06-22T23:51:07.016100900Z",
+    "lastCommentPostDate": "2026-06-23T22:17:08.096666700Z"
+  },
+  {
+    "id": 713603,
+    "title": "Game timer",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/713603",
+    "commentCount": 2,
+    "postDate": "2026-06-24T19:30:47.652704700Z",
+    "lastCommentPostDate": "2026-06-26T21:38:56.523333300Z"
+  },
+  {
+    "id": 708869,
+    "title": "Is there a way to view the visualizer without submitting?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708869",
+    "commentCount": 6,
+    "votes": 39,
+    "postDate": "2026-06-17T05:25:02.294017300Z",
+    "lastCommentPostDate": "2026-06-21T10:53:09.713333300Z"
+  },
+  {
+    "id": 709494,
+    "title": "[For First-Timers] Kaggle Rules You Should Know for PokeCa ABC",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709494",
+    "commentCount": 10,
+    "votes": 51,
+    "postDate": "2026-06-18T23:27:38.615705900Z",
+    "lastCommentPostDate": "2026-06-19T16:48:19.963333300Z"
+  },
+  {
+    "id": 712011,
+    "title": "[Dataset+Notebook] 16 Decks That Actually Won Real Pokémon Tournaments — Ready-to-Use deck.csv",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712011",
+    "votes": 8,
+    "postDate": "2026-06-22T09:21:29.543702400Z",
+    "lastCommentPostDate": "2026-06-22T09:21:29.543333300Z"
+  },
+  {
+    "id": 709645,
+    "title": "【Japanese Translation】Kaggle へ初めて参加される方へ： PokeCa ABC に出場する上で知っておくべきルール",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709645",
+    "commentCount": 2,
+    "votes": 13,
+    "postDate": "2026-06-19T13:47:50.765756800Z",
+    "lastCommentPostDate": "2026-06-22T11:16:26.463333300Z"
+  },
+  {
+    "id": 709642,
+    "title": "Question about submission file size limit",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709642",
+    "commentCount": 2,
+    "votes": 3,
+    "postDate": "2026-06-19T13:30:44.403979400Z",
+    "lastCommentPostDate": "2026-06-26T03:38:44.870Z"
+  },
+  {
+    "id": 712716,
+    "title": "make a option to download all of the replays in once ",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712716",
+    "commentCount": 2,
+    "votes": 1,
+    "postDate": "2026-06-23T10:07:15.998104200Z",
+    "lastCommentPostDate": "2026-06-24T04:36:55.300Z"
+  },
+  {
+    "id": 713111,
+    "title": "How to find Attack ID.",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/713111",
+    "commentCount": 1,
+    "votes": 1,
+    "postDate": "2026-06-24T00:31:06.162108800Z",
+    "lastCommentPostDate": "2026-06-24T00:39:29.903333300Z"
+  },
+  {
+    "id": 708929,
+    "title": "Game engine source code?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708929",
+    "commentCount": 14,
+    "votes": 29,
+    "postDate": "2026-06-17T07:39:43.821890800Z",
+    "lastCommentPostDate": "2026-06-19T03:20:36.056666700Z"
+  },
+  {
+    "id": 713650,
+    "title": "The Referee",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/713650",
+    "votes": -2,
+    "postDate": "2026-06-24T21:02:24.517772Z",
+    "lastCommentPostDate": "2026-06-24T21:02:24.516666700Z"
+  },
+  {
+    "id": 711280,
+    "title": "Strategy scoring (Model Score 70%) and \"universal vs deck-specific\" agent design a few questions",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711280",
+    "votes": 5,
+    "postDate": "2026-06-21T09:22:21.385018300Z",
+    "lastCommentPostDate": "2026-06-21T09:22:21.386666700Z"
+  },
+  {
+    "id": 712977,
+    "title": " cardId = 481  'Serperior ex' skill contains japanese text",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712977",
+    "commentCount": 2,
+    "postDate": "2026-06-23T18:39:27.512714Z",
+    "lastCommentPostDate": "2026-06-23T20:24:22.846666700Z"
+  },
+  {
+    "id": 712226,
+    "title": "Bug Report: Engine forces minCount=2 for Mirage Barrage discard, ignoring Ignition Energy's value",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712226",
+    "commentCount": 2,
+    "postDate": "2026-06-22T16:10:21.322213300Z",
+    "lastCommentPostDate": "2026-06-24T10:25:58.196666700Z"
+  },
+  {
+    "id": 712820,
+    "title": " Submission only scores once and then stops – no further activity",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712820",
+    "postDate": "2026-06-23T14:24:39.872486300Z",
+    "lastCommentPostDate": "2026-06-23T14:24:39.873333300Z"
+  },
+  {
+    "id": 712811,
+    "title": "Issue with the Unfair Stamp's behavior",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712811",
+    "postDate": "2026-06-23T14:12:25.802154800Z",
+    "lastCommentPostDate": "2026-06-23T14:12:25.803333300Z"
+  },
+  {
+    "id": 712792,
+    "title": "cards sets allowed for Limited Card Battle.",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712792",
+    "postDate": "2026-06-23T13:16:37.636217500Z",
+    "lastCommentPostDate": "2026-06-23T13:16:37.636666700Z"
+  },
+  {
+    "id": 712654,
+    "title": "card2vec: Is attribute-based card embedding actually useful for RL agents?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712654",
+    "votes": 1,
+    "postDate": "2026-06-23T08:01:46.287619600Z",
+    "lastCommentPostDate": "2026-06-23T08:01:46.286666700Z"
+  },
+  {
+    "id": 711355,
+    "title": "Is the Training Required ?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711355",
+    "commentCount": 1,
+    "votes": 2,
+    "postDate": "2026-06-21T11:12:25.655045100Z",
+    "lastCommentPostDate": "2026-06-21T17:34:47.266666700Z"
+  },
+  {
+    "id": 710971,
+    "title": "Time limit per turn",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/710971",
+    "votes": 4,
+    "postDate": "2026-06-20T22:00:45.716191200Z",
+    "lastCommentPostDate": "2026-06-20T22:00:45.716666700Z"
+  },
+  {
+    "id": 712361,
+    "title": "New to this comp: need small help in getting started",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712361",
+    "postDate": "2026-06-22T19:32:31.839740600Z",
+    "lastCommentPostDate": "2026-06-22T19:32:31.840Z"
+  },
+  {
+    "id": 709704,
+    "title": "CPU vs GPU runtime",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709704",
+    "commentCount": 1,
+    "votes": 2,
+    "postDate": "2026-06-19T18:09:35.295731200Z",
+    "lastCommentPostDate": "2026-06-22T16:25:01.260Z"
+  },
+  {
+    "id": 712120,
+    "title": "What Do We Mean by “Pokémon TCG Intelligence”?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712120",
+    "commentCount": 1,
+    "postDate": "2026-06-22T13:01:55.287981400Z",
+    "lastCommentPostDate": "2026-06-22T16:21:26.430Z"
+  },
+  {
+    "id": 708766,
+    "title": "Significant disparity in scope between Japanese and English rulebooks",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708766",
+    "commentCount": 1,
+    "votes": 3,
+    "postDate": "2026-06-16T21:13:54.164600300Z",
+    "lastCommentPostDate": "2026-06-23T02:21:07.666666700Z"
+  },
+  {
+    "id": 709518,
+    "title": "[Solved] Suspected Serious Regulation Violation (Account sharing)",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709518",
+    "commentCount": 4,
+    "votes": 3,
+    "postDate": "2026-06-19T03:02:03.708649Z",
+    "lastCommentPostDate": "2026-06-19T12:27:40.733333300Z"
+  },
+  {
+    "id": 711662,
+    "title": "Are Cloud-Based AI Coding Assistants Permitted for Private Competition Code?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711662",
+    "commentCount": 1,
+    "postDate": "2026-06-21T18:31:35.863749Z",
+    "lastCommentPostDate": "2026-06-22T17:55:10.763333300Z"
+  },
+  {
+    "id": 711509,
+    "title": "Will the card pool be updated with the release of Pitch Black?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711509",
+    "commentCount": 2,
+    "postDate": "2026-06-21T14:38:01.638120100Z",
+    "lastCommentPostDate": "2026-06-22T15:45:07.430Z"
+  },
+  {
+    "id": 711831,
+    "title": "A per agent \"download all replays\" button to go with the daily episode datasets?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711831",
+    "commentCount": 1,
+    "postDate": "2026-06-22T04:37:28.794384400Z",
+    "lastCommentPostDate": "2026-06-22T06:30:38.016666700Z"
+  },
+  {
+    "id": 711381,
+    "title": "Which official TCG format does the competition's Card Pool map to?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711381",
+    "commentCount": 1,
+    "postDate": "2026-06-21T11:37:12.099755400Z",
+    "lastCommentPostDate": "2026-06-22T15:44:47.536666700Z"
+  },
+  {
+    "id": 709035,
+    "title": "Limitless TGG",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709035",
+    "commentCount": 3,
+    "votes": 7,
+    "postDate": "2026-06-17T12:48:56.321037800Z",
+    "lastCommentPostDate": "2026-06-19T11:33:28.216666700Z"
+  },
+  {
+    "id": 708663,
+    "title": "[Beginner Guide] From Deck List to First Valid Submission",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708663",
+    "votes": 21,
+    "postDate": "2026-06-16T15:56:07.901493500Z",
+    "lastCommentPostDate": "2026-06-16T15:56:07.900Z"
+  },
+  {
+    "id": 711417,
+    "title": "Local setup notes: macOS + Docker smoke test workflow",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711417",
+    "postDate": "2026-06-21T12:13:17.252826100Z",
+    "lastCommentPostDate": "2026-06-21T12:13:17.253333300Z"
+  },
+  {
+    "id": 711352,
+    "title": "Problems when running certain decks against each other!!",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711352",
+    "postDate": "2026-06-21T11:05:40.692054300Z",
+    "lastCommentPostDate": "2026-06-21T11:05:40.693333300Z"
+  },
+  {
+    "id": 709301,
+    "title": "Deck Image Renderer Notebook: English / Japanese card images",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709301",
+    "commentCount": 1,
+    "votes": 6,
+    "postDate": "2026-06-18T06:18:13.302410300Z",
+    "lastCommentPostDate": "2026-06-18T13:34:50.560Z"
+  },
+  {
+    "id": 709475,
+    "title": "Pokemon center lady, the banned card?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709475",
+    "commentCount": 2,
+    "votes": 1,
+    "postDate": "2026-06-18T20:37:06.088442600Z",
+    "lastCommentPostDate": "2026-06-22T15:45:23.823333300Z"
+  },
+  {
+    "id": 709071,
+    "title": "Can you manipulate coin flips? — 300k-game test says no / コインの乱数調整は可能か — 30万試合の実測で「不可能」",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709071",
+    "votes": 9,
+    "postDate": "2026-06-17T14:40:14.443819400Z",
+    "lastCommentPostDate": "2026-06-17T14:40:14.443333300Z"
+  },
+  {
+    "id": 709490,
+    "title": "What can we learn from previous AI card games simulators?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709490",
+    "votes": 4,
+    "postDate": "2026-06-18T21:58:45.872906900Z",
+    "lastCommentPostDate": "2026-06-18T21:58:45.873333300Z"
+  },
+  {
+    "id": 709974,
+    "title": "ポケカAIの進捗2 ~スターミー~",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709974",
+    "postDate": "2026-06-20T03:39:11.051214600Z",
+    "lastCommentPostDate": "2026-06-20T03:39:11.050Z"
+  },
+  {
+    "id": 709554,
+    "title": "2026-06-19 Public Top-100 Meta Snapshot from Visible Game History",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709554",
+    "commentCount": 1,
+    "votes": 2,
+    "postDate": "2026-06-19T05:51:09.789608600Z",
+    "lastCommentPostDate": "2026-06-19T05:55:20.660Z"
+  },
+  {
+    "id": 709598,
+    "title": "\"External Data\" Clarification",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709598",
+    "commentCount": 5,
+    "postDate": "2026-06-19T08:58:12.062772600Z",
+    "lastCommentPostDate": "2026-06-21T00:52:26.793333300Z"
+  },
+  {
+    "id": 709005,
+    "title": "My Notes on Rules & Strategy — What's Your Approach?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709005",
+    "commentCount": 2,
+    "votes": 6,
+    "postDate": "2026-06-17T11:04:00.988454600Z",
+    "lastCommentPostDate": "2026-06-17T11:44:53.153333300Z"
+  },
+  {
+    "id": 709895,
+    "title": "[Solved] [Bug] Player going first can attack on Turn 1",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709895",
+    "commentCount": 2,
+    "postDate": "2026-06-20T02:28:22.852439600Z",
+    "lastCommentPostDate": "2026-06-20T12:30:45.853333300Z"
+  },
+  {
+    "id": 708979,
+    "title": "Permissibility of Using External Data (Data from the Official Website)",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708979",
+    "commentCount": 2,
+    "votes": 5,
+    "postDate": "2026-06-17T09:34:09.930544100Z",
+    "lastCommentPostDate": "2026-06-17T16:06:32.130Z"
+  },
+  {
+    "id": 708880,
+    "title": "Why only 2 month?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708880",
+    "commentCount": 2,
+    "votes": 3,
+    "postDate": "2026-06-17T05:51:06.808441900Z",
+    "lastCommentPostDate": "2026-06-17T13:59:33.293333300Z"
+  },
+  {
+    "id": 709284,
+    "title": "Seeking Attack ID",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709284",
+    "commentCount": 2,
+    "votes": -1,
+    "postDate": "2026-06-18T04:38:55.153120900Z",
+    "lastCommentPostDate": "2026-06-20T20:46:40.336666700Z"
+  },
+  {
+    "id": 708866,
+    "title": "Preliminary Question about Decks",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708866",
+    "commentCount": 1,
+    "votes": 3,
+    "postDate": "2026-06-17T05:20:06.702654900Z",
+    "lastCommentPostDate": "2026-06-18T08:42:29.096666700Z"
+  },
+  {
+    "id": 709664,
+    "title": "Hop’s bag issues",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709664",
+    "postDate": "2026-06-19T15:01:39.993828400Z",
+    "lastCommentPostDate": "2026-06-19T15:01:39.993333300Z"
+  },
+  {
+    "id": 709596,
+    "title": "\"Private Sharing\" Clarification",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709596",
+    "commentCount": 2,
+    "postDate": "2026-06-19T08:50:46.812252700Z",
+    "lastCommentPostDate": "2026-06-19T12:05:14.700Z"
+  },
+  {
+    "id": 709545,
+    "title": "Rule Clarification - \"Unfair playing practices\"",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709545",
+    "commentCount": 1,
+    "votes": 1,
+    "postDate": "2026-06-19T05:08:28.938908500Z",
+    "lastCommentPostDate": "2026-06-19T12:15:01.636666700Z"
+  },
+  {
+    "id": 708928,
+    "title": "Are Codex, Claude Code, and Similar LLM Tools Allowed for Preprocessing Competition Data?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708928",
+    "commentCount": 2,
+    "votes": 2,
+    "postDate": "2026-06-17T07:39:17.624268Z",
+    "lastCommentPostDate": "2026-06-17T21:04:49.496666700Z"
+  },
+  {
+    "id": 709220,
+    "title": "Using languages other than Python",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709220",
+    "commentCount": 1,
+    "votes": 2,
+    "postDate": "2026-06-17T22:02:56.444142800Z",
+    "lastCommentPostDate": "2026-06-18T00:40:36.056666700Z"
+  },
+  {
+    "id": 709498,
+    "title": "Public 7 + Sample 4 matchup matrix",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709498",
+    "votes": 1,
+    "postDate": "2026-06-19T00:09:34.019056900Z",
+    "lastCommentPostDate": "2026-06-19T00:09:34.020Z"
+  },
+  {
+    "id": 709414,
+    "title": "Rule-based, RL, or agentic RLed?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709414",
+    "postDate": "2026-06-18T16:18:45.145948300Z",
+    "lastCommentPostDate": "2026-06-18T16:18:45.146666700Z"
+  },
+  {
+    "id": 709320,
+    "title": "Clarification on the “Reasonableness Standard” for Excessive Costs",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709320",
+    "commentCount": 1,
+    "postDate": "2026-06-18T08:02:57.864477600Z",
+    "lastCommentPostDate": "2026-06-18T17:44:29.066666700Z"
+  },
+  {
+    "id": 709393,
+    "title": "Where is the source code of the environment?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709393",
+    "postDate": "2026-06-18T13:56:17.114169800Z",
+    "lastCommentPostDate": "2026-06-18T13:56:17.113333300Z"
+  },
+  {
+    "id": 709390,
+    "title": "Revenge KOs implementation ",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709390",
+    "votes": 1,
+    "postDate": "2026-06-18T13:41:48.543484Z",
+    "lastCommentPostDate": "2026-06-18T13:41:48.543333300Z"
+  },
+  {
+    "id": 709325,
+    "title": "Is there a way to quickly visualize what the cards look like as images?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709325",
+    "postDate": "2026-06-18T08:17:18.256111400Z",
+    "lastCommentPostDate": "2026-06-18T08:17:18.256666700Z"
+  },
+  {
+    "id": 709293,
+    "title": "Local Visualization Without Submission",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709293",
+    "votes": 1,
+    "postDate": "2026-06-18T05:35:30.576343100Z",
+    "lastCommentPostDate": "2026-06-18T05:35:30.576666700Z"
+  },
+  {
+    "id": 709236,
+    "title": "Reactivation of old agents",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709236",
+    "commentCount": 1,
+    "postDate": "2026-06-17T23:49:26.241475900Z",
+    "lastCommentPostDate": "2026-06-18T00:35:24.210Z"
+  },
+  {
+    "id": 709167,
+    "title": "How to test the agent implementation?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709167",
+    "postDate": "2026-06-17T19:58:09.777065500Z",
+    "lastCommentPostDate": "2026-06-17T19:58:09.776666700Z"
+  },
+  {
+    "id": 709148,
+    "title": "Interesting competition",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709148",
+    "votes": 1,
+    "postDate": "2026-06-17T18:20:42.574440500Z",
+    "lastCommentPostDate": "2026-06-17T18:20:42.573333300Z"
+  }
+]

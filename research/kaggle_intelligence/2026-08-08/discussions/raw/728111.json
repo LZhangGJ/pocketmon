@@ -1,0 +1,35 @@
+{
+  "topic": {
+    "id": 728111,
+    "title": "Match with +0 and -0 points awarded",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728111",
+    "commentCount": 2,
+    "votes": 1,
+    "postDate": "2026-07-22T00:09:01.912548200Z",
+    "lastCommentPostDate": "2026-07-22T00:18:57.856666700Z"
+  },
+  "messages": [
+    {
+      "id": 3501418,
+      "postDate": "2026-07-22T00:15:15.950Z",
+      "content": "<p>When elo differences are that large between opponents, and the higher ranked team wins, that's expected.</p>",
+      "rawMarkdown": "When elo differences are that large between opponents, and the higher ranked team wins, that's expected.",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3501420,
+          "postDate": "2026-07-22T00:18:57.857Z",
+          "content": "<p>Oh right, I forgot random matches were added. I suppose the difference was large enough</p>",
+          "rawMarkdown": "Oh right, I forgot random matches were added. I suppose the difference was large enough"
+        }
+      ]
+    },
+    {
+      "id": 3501417,
+      "postDate": "2026-07-22T00:09:01.913Z",
+      "content": "<p>As the title described, just had a match where no points were awarded or discarded </p>\n<p><a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54888549&amp;episodeId=87363377#\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54888549&amp;episodeId=87363377#</a></p>",
+      "rawMarkdown": "As the title described, just had a match where no points were awarded or discarded \n\nhttps://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54888549&episodeId=87363377#",
+      "votes": 1
+    }
+  ]
+}

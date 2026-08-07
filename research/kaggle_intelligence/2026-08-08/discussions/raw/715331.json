@@ -1,0 +1,17 @@
+{
+  "topic": {
+    "id": 715331,
+    "title": "Issue with score system",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/715331",
+    "postDate": "2026-06-28T11:11:05.479723500Z",
+    "lastCommentPostDate": "2026-06-28T11:11:05.480Z"
+  },
+  "messages": [
+    {
+      "id": 3483053,
+      "postDate": "2026-06-28T11:11:05.480Z",
+      "content": "<p>I had two games running at once by the same bot. Both of them finished in roughly the same time, and only one change was applied. One of them showed I had +118 and other one showed I had +107, but I only got +118.</p>",
+      "rawMarkdown": "I had two games running at once by the same bot. Both of them finished in roughly the same time, and only one change was applied. One of them showed I had +118 and other one showed I had +107, but I only got +118."
+    }
+  ]
+}

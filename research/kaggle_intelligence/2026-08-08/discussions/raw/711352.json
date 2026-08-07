@@ -1,0 +1,17 @@
+{
+  "topic": {
+    "id": 711352,
+    "title": "Problems when running certain decks against each other!!",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711352",
+    "postDate": "2026-06-21T11:05:40.692054300Z",
+    "lastCommentPostDate": "2026-06-21T11:05:40.693333300Z"
+  },
+  "messages": [
+    {
+      "id": 3477211,
+      "postDate": "2026-06-21T11:05:40.693Z",
+      "content": "<p>I have noticed that when I simulate games against random decks I sometimes obtain errors or draw all games unexpectedly. I ensure to keep to the legal constraints of deck creation but would like to clarify what those rules are?</p>",
+      "rawMarkdown": "I have noticed that when I simulate games against random decks I sometimes obtain errors or draw all games unexpectedly. I ensure to keep to the legal constraints of deck creation but would like to clarify what those rules are?"
+    }
+  ]
+}

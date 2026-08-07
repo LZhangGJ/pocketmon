@@ -1,0 +1,39 @@
+{
+  "topic": {
+    "id": 727929,
+    "title": "Is matchmaking broken?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/727929",
+    "commentCount": 3,
+    "postDate": "2026-07-21T11:23:22.903422500Z",
+    "lastCommentPostDate": "2026-07-22T05:06:46.903333300Z"
+  },
+  "messages": [
+    {
+      "id": 3501134,
+      "postDate": "2026-07-21T13:04:30.737Z",
+      "content": "<p><a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/724904#3496321\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/724904#3496321</a></p>",
+      "rawMarkdown": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/724904#3496321",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3501485,
+          "postDate": "2026-07-22T05:06:46.903Z",
+          "content": "<p>Thanks son!</p>",
+          "rawMarkdown": "Thanks son!"
+        }
+      ]
+    },
+    {
+      "id": 3501103,
+      "postDate": "2026-07-21T11:23:22.903Z",
+      "content": "<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F22375114%2Fd62a1bdba274fbafff7d74c64af678f0%2FScreenshot%202026-07-21%20165119.png?generation=1784632928599365&amp;alt=media\" alt=\"\"></p>\n<p>What is this matchmaking? 952 scored agent against 604 scored agent? Am I missing something?</p>",
+      "rawMarkdown": "![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F22375114%2Fd62a1bdba274fbafff7d74c64af678f0%2FScreenshot%202026-07-21%20165119.png?generation=1784632928599365&alt=media)\n\nWhat is this matchmaking? 952 scored agent against 604 scored agent? Am I missing something?"
+    },
+    {
+      "id": 3501174,
+      "postDate": "2026-07-21T14:31:48.960Z",
+      "content": "<p>10% chance of facing a random opponent. That's interesting.</p>",
+      "rawMarkdown": "10% chance of facing a random opponent. That's interesting."
+    }
+  ]
+}

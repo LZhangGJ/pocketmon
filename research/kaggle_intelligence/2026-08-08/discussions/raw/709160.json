@@ -1,0 +1,57 @@
+{
+  "topic": {
+    "id": 709160,
+    "title": "Daily Top Episodes Datasets",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709160",
+    "commentCount": 5,
+    "votes": 75,
+    "postDate": "2026-06-17T19:00:15.948716500Z",
+    "lastCommentPostDate": "2026-06-27T17:49:53.150Z",
+    "isSticky": true
+  },
+  "messages": [
+    {
+      "id": 3474299,
+      "postDate": "2026-06-17T19:00:15.950Z",
+      "content": "<p>For this competition we'll be creating a dataset of the top episodes each day. This should help in reviewing replays as well as training agents. Each new dataset will be added to the index here: <a href=\"https://www.kaggle.com/datasets/kaggle/pokemon-tcg-ai-battle-episodes-index\" target=\"_blank\">https://www.kaggle.com/datasets/kaggle/pokemon-tcg-ai-battle-episodes-index</a></p>",
+      "rawMarkdown": "For this competition we'll be creating a dataset of the top episodes each day. This should help in reviewing replays as well as training agents. Each new dataset will be added to the index here: https://www.kaggle.com/datasets/kaggle/pokemon-tcg-ai-battle-episodes-index",
+      "votes": 75
+    },
+    {
+      "id": 3481016,
+      "postDate": "2026-06-25T14:12:20.977Z",
+      "content": "<p><a href=\"https://www.kaggle.com/bovard\" target=\"_blank\">@bovard</a> \nThank you, this is really helpful!</p>\n<p>Could you add each team's score (rating) to the dataset? Right now the replay JSON only has the team names and the win/loss result (+1/-1) — there's no rating in it.</p>\n<p>For each episode, it would be great to have, for both teams:</p>\n<p>the rating before or after the episode</p>",
+      "rawMarkdown": "@bovard \nThank you, this is really helpful!\n\nCould you add each team's score (rating) to the dataset? Right now the replay JSON only has the team names and the win/loss result (+1/-1) — there's no rating in it.\n\nFor each episode, it would be great to have, for both teams:\n\nthe rating before or after the episode",
+      "votes": 4,
+      "replies": [
+        {
+          "id": 3482719,
+          "postDate": "2026-06-27T17:49:53.150Z",
+          "content": "<p>Adding to this, I would want to have each agent's <code>agent_id</code> in the json file.</p>",
+          "rawMarkdown": "Adding to this, I would want to have each agent's `agent_id` in the json file."
+        }
+      ]
+    },
+    {
+      "id": 3476832,
+      "postDate": "2026-06-21T02:54:36.917Z",
+      "content": "<p>Thank you for all the valuable data!  If it is at all possible to share, what criteria is being used for which episodes get included in each day's index?</p>",
+      "rawMarkdown": "Thank you for all the valuable data!  If it is at all possible to share, what criteria is being used for which episodes get included in each day's index?",
+      "votes": 2,
+      "replies": [
+        {
+          "id": 3479295,
+          "postDate": "2026-06-23T16:14:57.993Z",
+          "content": "<p>We rate the episodes by highest average participant rating. This will bias the dataset towards the episodes from the top competitors. </p>",
+          "rawMarkdown": "We rate the episodes by highest average participant rating. This will bias the dataset towards the episodes from the top competitors. "
+        }
+      ]
+    },
+    {
+      "id": 3477742,
+      "postDate": "2026-06-22T01:25:15.450Z",
+      "rawMarkdown": "",
+      "isDeleted": true
+    }
+  ]
+}

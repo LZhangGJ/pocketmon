@@ -1,0 +1,96 @@
+{
+  "topic": {
+    "id": 728935,
+    "title": "Public Notebook Sharing Deadline: August 2",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728935",
+    "commentCount": 11,
+    "votes": 19,
+    "postDate": "2026-07-24T19:04:27.671769500Z",
+    "lastCommentPostDate": "2026-08-03T04:27:36.726666700Z",
+    "isSticky": true
+  },
+  "messages": [
+    {
+      "id": 3502748,
+      "postDate": "2026-07-24T19:04:27.673Z",
+      "content": "<p>Hi all,</p>\n<p>The deadline for publicly sharing notebooks in this competition has been set as August 2 at 11:59pm UTC. For those of you familiar with Kaggle, this is one week earlier than our normal deadline.</p>\n<p>You will still be able to make your notebooks after the competition has concluded, and any attached notebooks to a submission in the Strategy Competition will also be made public at that competition's deadline.</p>\n<p>This does not prevent you from doing any work or making notebooks, simply from making the notebooks public on Kaggle.</p>\n<p>Thanks for understanding!</p>",
+      "rawMarkdown": "Hi all,\n\nThe deadline for publicly sharing notebooks in this competition has been set as August 2 at 11:59pm UTC. For those of you familiar with Kaggle, this is one week earlier than our normal deadline.\n\nYou will still be able to make your notebooks after the competition has concluded, and any attached notebooks to a submission in the Strategy Competition will also be made public at that competition's deadline.\n\nThis does not prevent you from doing any work or making notebooks, simply from making the notebooks public on Kaggle.\n\nThanks for understanding!",
+      "votes": 19
+    },
+    {
+      "id": 3503305,
+      "postDate": "2026-07-25T14:39:28.260Z",
+      "content": "<p>I give this decision 10,000 likes! I really hope public notebook Sharing will be strictly enforced, especially in optimization competitions like the Santa competition that use 100% public test sets. I was originally very interested in the Santa competition and the ending golf competition, but I’ve seen many Kagglers complaining about it. I hope this year the will be fully implemented. I will definitely make time to participate in the Santa competition this year.</p>\n<p>I even think that for competitions with 100% public leaderboard test sets, we could consider enforcing an even longer cutoff period before sharing is allowed — or even banning sharing completely.</p>",
+      "rawMarkdown": "I give this decision 10,000 likes! I really hope public notebook Sharing will be strictly enforced, especially in optimization competitions like the Santa competition that use 100% public test sets. I was originally very interested in the Santa competition and the ending golf competition, but I’ve seen many Kagglers complaining about it. I hope this year the will be fully implemented. I will definitely make time to participate in the Santa competition this year.\n\nI even think that for competitions with 100% public leaderboard test sets, we could consider enforcing an even longer cutoff period before sharing is allowed — or even banning sharing completely.",
+      "votes": 3
+    },
+    {
+      "id": 3502884,
+      "postDate": "2026-07-25T01:33:35.837Z",
+      "content": "<p>Will contestants still be able to update publicized notebooks during that period?</p>",
+      "rawMarkdown": "Will contestants still be able to update publicized notebooks during that period?",
+      "votes": 2
+    },
+    {
+      "id": 3507897,
+      "postDate": "2026-08-03T04:27:36.727Z",
+      "content": "<p>It is no longer possible to submit notebooks for meta-analysis; this causes users to send requests to Kaggle—placing a load on Kaggle's servers—while the users themselves hit request limits.</p>\n<p>Could you create a dataset like the one at this URL? \n<a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/709160\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/709160</a></p>\n<p>Example notebook for meta-analysis : \n<a href=\"https://www.kaggle.com/code/myso1987/ptcg-ai-battle-leaderboard-deck-meta-by-score-band\" target=\"_blank\">https://www.kaggle.com/code/myso1987/ptcg-ai-battle-leaderboard-deck-meta-by-score-band</a></p>",
+      "rawMarkdown": "It is no longer possible to submit notebooks for meta-analysis; this causes users to send requests to Kaggle—placing a load on Kaggle's servers—while the users themselves hit request limits.\n\nCould you create a dataset like the one at this URL? \nhttps://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/709160\n\nExample notebook for meta-analysis : \nhttps://www.kaggle.com/code/myso1987/ptcg-ai-battle-leaderboard-deck-meta-by-score-band"
+    },
+    {
+      "id": 3505347,
+      "postDate": "2026-07-29T22:30:50.043Z",
+      "content": "<p><a href=\"https://www.kaggle.com/addisonhoward\" target=\"_blank\">@addisonhoward</a> is it possible we can have a full rerun to baseline the public scripts and have an opporutnity for additional publications and revamping of local environments with updated knowledge before the dadline</p>",
+      "rawMarkdown": "@addisonhoward is it possible we can have a full rerun to baseline the public scripts and have an opporutnity for additional publications and revamping of local environments with updated knowledge before the dadline"
+    },
+    {
+      "id": 3504716,
+      "postDate": "2026-07-28T16:23:09.107Z",
+      "content": "<p>if we are not doing this on kaggle notebooks does this affect us at all?</p>",
+      "rawMarkdown": "if we are not doing this on kaggle notebooks does this affect us at all?"
+    },
+    {
+      "id": 3504208,
+      "postDate": "2026-07-27T14:35:40.117Z",
+      "content": "<p>Inshalla Good </p>",
+      "rawMarkdown": "Inshalla Good "
+    },
+    {
+      "id": 3504207,
+      "postDate": "2026-07-27T14:33:46.330Z",
+      "content": "<p>Live with purpose, love deeply, do good, and leave behind a legacy that truly matters✌️🙌</p>",
+      "rawMarkdown": "Live with purpose, love deeply, do good, and leave behind a legacy that truly matters✌️🙌"
+    },
+    {
+      "id": 3502763,
+      "postDate": "2026-07-24T19:44:50.783Z",
+      "content": "<p>Are you going to change bo1 to bo3? or other changes for a more stable rating?</p>",
+      "rawMarkdown": "Are you going to change bo1 to bo3? or other changes for a more stable rating?",
+      "replies": [
+        {
+          "id": 3502765,
+          "postDate": "2026-07-24T19:47:07.223Z",
+          "content": "<p>I'm very grateful that the top has a very high battle frequency, but the volatility in this competition is much greater than in Orbit Wars.</p>",
+          "rawMarkdown": "I'm very grateful that the top has a very high battle frequency, but the volatility in this competition is much greater than in Orbit Wars.",
+          "votes": 1
+        },
+        {
+          "id": 3502801,
+          "postDate": "2026-07-24T20:51:57.530Z",
+          "content": "<p>We're not planning on changing from Bo1 to Bo3 in this iteration. We do plan on increasing episode frequency after the deadline</p>",
+          "rawMarkdown": "We're not planning on changing from Bo1 to Bo3 in this iteration. We do plan on increasing episode frequency after the deadline",
+          "votes": 1,
+          "replies": [
+            {
+              "id": 3502965,
+              "postDate": "2026-07-25T07:07:49.687Z",
+              "content": "<p>By increasing the frequency of episodes further, you simply increase the frequency of fluctuations by +-25 rating points, which occurs after a certain number of games</p>",
+              "rawMarkdown": "By increasing the frequency of episodes further, you simply increase the frequency of fluctuations by +-25 rating points, which occurs after a certain number of games",
+              "votes": -1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

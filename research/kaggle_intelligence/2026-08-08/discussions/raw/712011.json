@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 712011,
+    "title": "[Dataset+Notebook] 16 Decks That Actually Won Real Pokémon Tournaments — Ready-to-Use deck.csv",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712011",
+    "votes": 8,
+    "postDate": "2026-06-22T09:21:29.543702400Z",
+    "lastCommentPostDate": "2026-06-22T09:21:29.543333300Z"
+  },
+  "messages": [
+    {
+      "id": 3478066,
+      "postDate": "2026-06-22T09:21:29.543Z",
+      "content": "<p>Shared a dataset of 16 real Japanese City League top-cut decks, already converted to this\ncompetition's own card-id format (drop-in <code>deck.csv</code>, no conversion needed), plus a notebook\nthat validates legality and breaks down composition/staple cards/type distribution:</p>\n<p>🔗 Notebook: <a href=\"https://www.kaggle.com/code/yu0307/16-real-city-league-top-cut-decks-deck-csv\" target=\"_blank\">https://www.kaggle.com/code/yu0307/16-real-city-league-top-cut-decks-deck-csv</a></p>\n<p>🔗 Dataset: <a href=\"https://www.kaggle.com/datasets/yu0307/deck-csv/data\" target=\"_blank\">https://www.kaggle.com/datasets/yu0307/deck-csv/data</a></p>\n<p>Hope it saves someone some deck-building time.</p>",
+      "rawMarkdown": "Shared a dataset of 16 real Japanese City League top-cut decks, already converted to this\ncompetition's own card-id format (drop-in `deck.csv`, no conversion needed), plus a notebook\nthat validates legality and breaks down composition/staple cards/type distribution:\n\n🔗 Notebook: [https://www.kaggle.com/code/yu0307/16-real-city-league-top-cut-decks-deck-csv](https://www.kaggle.com/code/yu0307/16-real-city-league-top-cut-decks-deck-csv)\n\n🔗 Dataset: [https://www.kaggle.com/datasets/yu0307/deck-csv/data](https://www.kaggle.com/datasets/yu0307/deck-csv/data)\n\nHope it saves someone some deck-building time.",
+      "votes": 8
+    }
+  ]
+}

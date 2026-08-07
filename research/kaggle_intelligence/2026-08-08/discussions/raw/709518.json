@@ -1,0 +1,52 @@
+{
+  "topic": {
+    "id": 709518,
+    "title": "[Solved] Suspected Serious Regulation Violation (Account sharing)",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709518",
+    "commentCount": 4,
+    "votes": 3,
+    "postDate": "2026-06-19T03:02:03.708649Z",
+    "lastCommentPostDate": "2026-06-19T12:27:40.733333300Z"
+  },
+  "messages": [
+    {
+      "id": 3474939,
+      "postDate": "2026-06-19T04:20:29.100Z",
+      "content": "<p>Thank you for raising this concern.</p>\n<p>I would like to clarify that this Kaggle account is not shared among multiple people. I am the sole person with access to this Kaggle account, and all submissions from this account have been made by me personally. The account credentials have not been shared with anyone else.</p>\n<p>“カドラバ Kadoraba” is used as a display/team name and affiliation, not as a shared corporate account. The current model/agent has been developed by me individually. Within the company, I am currently the only person working on the development of this competition agent, and there has been no internal sharing of competition data, submission files, private code, or model development work with a company team.</p>\n<p>I understand that our social media wording may have caused confusion, and we will be more careful to describe the participation accurately. If additional individuals participate as competition team members in the future, they will register individually on Kaggle and join the official Kaggle Team through Kaggle’s team system, in accordance with the competition rules.</p>",
+      "rawMarkdown": "Thank you for raising this concern.\n\nI would like to clarify that this Kaggle account is not shared among multiple people. I am the sole person with access to this Kaggle account, and all submissions from this account have been made by me personally. The account credentials have not been shared with anyone else.\n\n“カドラバ Kadoraba” is used as a display/team name and affiliation, not as a shared corporate account. The current model/agent has been developed by me individually. Within the company, I am currently the only person working on the development of this competition agent, and there has been no internal sharing of competition data, submission files, private code, or model development work with a company team.\n\nI understand that our social media wording may have caused confusion, and we will be more careful to describe the participation accurately. If additional individuals participate as competition team members in the future, they will register individually on Kaggle and join the official Kaggle Team through Kaggle’s team system, in accordance with the competition rules.",
+      "votes": 6,
+      "replies": [
+        {
+          "id": 3474943,
+          "postDate": "2026-06-19T04:35:32.920Z",
+          "content": "<p>I would also like to add that all testing and code development for this competition have been done on my own computer, and submissions have also been made from my own computer.</p>\n<p>Within the company, I am acting as the representative individual for this competition, not as part of a shared-account corporate team. Non-public competition-related materials, including private code, submission files, testing data, and replay analysis, have not been shared internally within the company.</p>\n<p>Internal discussions, if any, have been limited to publicly available information such as the competition rules and public Kaggle pages.</p>\n<p>We respect Kaggle’s competition rules and terms. If additional company members participate in the future, they will register individually on Kaggle and join through Kaggle’s official team system, in accordance with the competition rules.</p>",
+          "rawMarkdown": "I would also like to add that all testing and code development for this competition have been done on my own computer, and submissions have also been made from my own computer.\n\nWithin the company, I am acting as the representative individual for this competition, not as part of a shared-account corporate team. Non-public competition-related materials, including private code, submission files, testing data, and replay analysis, have not been shared internally within the company.\n\nInternal discussions, if any, have been limited to publicly available information such as the competition rules and public Kaggle pages.\n\nWe respect Kaggle’s competition rules and terms. If additional company members participate in the future, they will register individually on Kaggle and join through Kaggle’s official team system, in accordance with the competition rules.",
+          "votes": 4,
+          "replies": [
+            {
+              "id": 3475074,
+              "postDate": "2026-06-19T09:42:58.537Z",
+              "content": "<p>Thank you for your reply. I'm relieved.\nLet's do our best in a fair and serious competition!</p>",
+              "rawMarkdown": "Thank you for your reply. I'm relieved.\nLet's do our best in a fair and serious competition!",
+              "votes": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3474910,
+      "postDate": "2026-06-19T03:02:03.710Z",
+      "content": "<p>“カドラバ Kadoraba” team has posted the following on social media.\nThis suggests that they are “participating as a team using a single account.”\n<a href=\"https://x.com/kadoraba/status/2067509937488715783?s=20\" target=\"_blank\">https://x.com/kadoraba/status/2067509937488715783?s=20</a></p>\n<p>The rules for this competition include the following provision, and “sharing a single account among multiple people” violates it.</p>\n<blockquote>\n  <p>b. Teams. If permitted under the Competition Website guidelines, multiple individuals may collaborate as a Team; however, you may join or form only one Team. <strong>Each Team member must be a single individual with a separate Kaggle account.</strong> You must register individually for the Competition before joining a Team. You must confirm your Team membership to make it official by responding to the Team notification message sent to your Kaggle account. Team membership may not exceed the Maximum Team Size stated on the Competition Website.</p>\n</blockquote>",
+      "rawMarkdown": "“カドラバ Kadoraba” team has posted the following on social media.\nThis suggests that they are “participating as a team using a single account.”\nhttps://x.com/kadoraba/status/2067509937488715783?s=20\n\nThe rules for this competition include the following provision, and “sharing a single account among multiple people” violates it.\n\n> b. Teams. If permitted under the Competition Website guidelines, multiple individuals may collaborate as a Team; however, you may join or form only one Team. **Each Team member must be a single individual with a separate Kaggle account.** You must register individually for the Competition before joining a Team. You must confirm your Team membership to make it official by responding to the Team notification message sent to your Kaggle account. Team membership may not exceed the Maximum Team Size stated on the Competition Website.",
+      "votes": 3
+    },
+    {
+      "id": 3475133,
+      "postDate": "2026-06-19T12:27:40.733Z",
+      "content": "<p>In the event a team suspects someone else of cheating, you may <a href=\"https://www.kaggle.com/contact#/competitions/cheating\" target=\"_blank\">report it directly to Kaggle's Compliance team</a> and we will investigate.</p>",
+      "rawMarkdown": "In the event a team suspects someone else of cheating, you may [report it directly to Kaggle's Compliance team](https://www.kaggle.com/contact#/competitions/cheating) and we will investigate.",
+      "votes": 1
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 730355,
+    "title": "[Question]: Parallel Environments",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730355",
+    "votes": 1,
+    "postDate": "2026-07-28T19:52:34.299252100Z",
+    "lastCommentPostDate": "2026-07-28T19:52:34.300Z"
+  },
+  "messages": [
+    {
+      "id": 3504835,
+      "postDate": "2026-07-28T19:52:34.300Z",
+      "content": "<p>I am a beginner with RL and C/C++ and had a few basic question about the environment:</p>\n<ol>\n<li><p>I am currently using the provided cg.dll.  I noticed I can create multiple game instances by passing a unique <code>battle_ptr</code> to <code>lib.GetBattleData(...)</code>.  Is this the intended way to run multiple environments in parallel, or could this cause other issues like memory corruption?</p></li>\n<li><p>Why did some participants request access to the game engine source files?  Was it primarily to reduce the overhead of transferring data and/or allocating memory?</p></li>\n</ol>",
+      "rawMarkdown": "I am a beginner with RL and C/C++ and had a few basic question about the environment:\n \n1. I am currently using the provided cg.dll.  I noticed I can create multiple game instances by passing a unique `battle_ptr` to `lib.GetBattleData(...)`.  Is this the intended way to run multiple environments in parallel, or could this cause other issues like memory corruption?\n\n2.  Why did some participants request access to the game engine source files?  Was it primarily to reduce the overhead of transferring data and/or allocating memory?",
+      "votes": 1
+    }
+  ]
+}

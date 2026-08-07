@@ -1,0 +1,35 @@
+{
+  "topic": {
+    "id": 724637,
+    "title": "Can RL and MCTS Build Mathematical Theories?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724637",
+    "commentCount": 2,
+    "votes": 3,
+    "postDate": "2026-07-12T12:07:24.829285900Z",
+    "lastCommentPostDate": "2026-07-12T12:14:15.520Z"
+  },
+  "messages": [
+    {
+      "id": 3495495,
+      "postDate": "2026-07-12T12:07:24.830Z",
+      "content": "<h2>Pokemon Moves</h2>\n<p>While looking at the move combinations in Pokémon cards, a thought suddenly occurred to me:</p>\n<p>“Isn’t this structure somewhat similar to a <strong>mathematical theory</strong>?”</p>\n<p>If so, perhaps playing cards is not simply about using moves.<br>\nIt could also be seen as the process of developing and unfolding a mathematical theory.</p>\n<hr>\n<h3>1. N’s Zorua — Scratch</h3>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4808143%2F6201bd90a2dd5f80d035844a3ba10586%2F0292_N_s_Zorua.jpeg?generation=1783856779572813&amp;alt=media\" alt=\"zorua\"></p>\n<pre><code>def nsZoruaScratch : AttackDef :=  \n{  \n  name := \"Scratch\"  \n  cost := { required := [.darkness] }  \n  effect := .dealDamage .opponentActive (.fixed 20)  \n}\n</code></pre>\n<hr>\n<h3>2. N’s Zoroark ex — Trade</h3>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4808143%2F6f990bc716c7640525425d2373ed88c0%2F0293_N_s_Zoroark_ex.jpeg?generation=1783856790816226&amp;alt=media\" alt=\"zoroark\"></p>\n<pre><code>def tradeAbility : AbilityDef :=  \n{  \n  name := \"Trade\"  \n  timing := .duringOwnTurn  \n  usageLimit := .oncePerTurnPerInstance  \n  activation := .always  \n  effect := .sequence [  \n    .discardFromHand .p1 1,  \n    .draw .p1 2  \n  ]  \n}\n</code></pre>\n<hr>\n<h2>Representing Moves as State Transitions</h2>\n<p>For example, <strong>Scratch</strong> increases the damage on the opponent's Active Pokémon by 20.</p>\n<p>$$ d'_s(p) = d_s(p) + 20 $$</p>\n<p><strong>Trade</strong> is a composition of two operations: discarding one card and then drawing two cards.</p>\n<p>$$ \\mathrm{Trade} = \\mathrm{Draw}_2 \\circ \\mathrm{Discard}_1 $$</p>\n<p>The composition operator <code>∘</code> indicates that the operation on the right is executed first. Therefore, one card is discarded first, and then two cards are drawn.</p>\n<p>A combo consists of executing a sequence of such state transitions.</p>\n<p>$$ s_0 \\xrightarrow{a_1} s_1 \\xrightarrow{a_2} \\cdots \\xrightarrow{a_n} s_n $$  </p>\n<p>Then, what does it really mean for two players to compete against each other in a Pokémon battle?</p>\n<p>Could general mathematical theories be represented through competitive card-game battles?</p>\n<p>It would be fascinating if reinforcement learning and MCTS could also be used to develop mathematical theory.</p>",
+      "rawMarkdown": "## Pokemon Moves\n\nWhile looking at the move combinations in Pokémon cards, a thought suddenly occurred to me:\n\n“Isn’t this structure somewhat similar to a **mathematical theory**?”\n\nIf so, perhaps playing cards is not simply about using moves.   \nIt could also be seen as the process of developing and unfolding a mathematical theory.\n\n\n---\n\n### 1. N’s Zorua — Scratch\n\n![zorua](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4808143%2F6201bd90a2dd5f80d035844a3ba10586%2F0292_N_s_Zorua.jpeg?generation=1783856779572813&alt=media)\n\n``` text\ndef nsZoruaScratch : AttackDef :=  \n{  \n  name := \"Scratch\"  \n  cost := { required := [.darkness] }  \n  effect := .dealDamage .opponentActive (.fixed 20)  \n}\n```\n\n---\n\n### 2. N’s Zoroark ex — Trade\n\n![zoroark](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4808143%2F6f990bc716c7640525425d2373ed88c0%2F0293_N_s_Zoroark_ex.jpeg?generation=1783856790816226&alt=media)\n\n```text\ndef tradeAbility : AbilityDef :=  \n{  \n  name := \"Trade\"  \n  timing := .duringOwnTurn  \n  usageLimit := .oncePerTurnPerInstance  \n  activation := .always  \n  effect := .sequence [  \n    .discardFromHand .p1 1,  \n    .draw .p1 2  \n  ]  \n}\n```\n\n---\n\n## Representing Moves as State Transitions\n\nFor example, **Scratch** increases the damage on the opponent's Active Pokémon by 20.\n\n$$ d'_s(p) = d_s(p) + 20 $$\n\n**Trade** is a composition of two operations: discarding one card and then drawing two cards.\n\n$$ \\mathrm{Trade} = \\mathrm{Draw}_2 \\circ \\mathrm{Discard}_1 $$\n\nThe composition operator `∘` indicates that the operation on the right is executed first. Therefore, one card is discarded first, and then two cards are drawn.\n\nA combo consists of executing a sequence of such state transitions.\n\n$$ s_0 \\xrightarrow{a_1} s_1 \\xrightarrow{a_2} \\cdots \\xrightarrow{a_n} s_n $$  \n\n\n\nThen, what does it really mean for two players to compete against each other in a Pokémon battle?\n\nCould general mathematical theories be represented through competitive card-game battles?\n\nIt would be fascinating if reinforcement learning and MCTS could also be used to develop mathematical theory.\n\n",
+      "votes": 3
+    },
+    {
+      "id": 3495496,
+      "postDate": "2026-07-12T12:10:07.850Z",
+      "rawMarkdown": "",
+      "votes": 2,
+      "isDeleted": true,
+      "replies": [
+        {
+          "id": 3495499,
+          "postDate": "2026-07-12T12:14:15.520Z",
+          "content": "  <p></p>\n<p>Honestly, the competition was so tough that   </p>\n<p>I decided to just turn the entire Pokémon card game into a mathematical theory.</p>\n<ul>\n<li><p>(1) The advantage of this approach is that we can extract theories from strong plays in replays. </p></li>\n<li><p>(2) Then, based on those theories, we can use LLMs to develop new variations and extensions of them.</p></li>\n</ul>",
+          "rawMarkdown": "![](https://www.youtube.com/watch?v=l3SCK6V-BFw)  \n\nHonestly, the competition was so tough that   \n\nI decided to just turn the entire Pokémon card game into a mathematical theory.\n\n- (1) The advantage of this approach is that we can extract theories from strong plays in replays. \n\n- (2) Then, based on those theories, we can use LLMs to develop new variations and extensions of them.\n\n"
+        }
+      ]
+    }
+  ]
+}

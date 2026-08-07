@@ -1,0 +1,43 @@
+{
+  "topic": {
+    "id": 716050,
+    "title": "Episode replays return \"Too many requests\" (429) for ~3 days — Pokémon TCG AI Battle",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/716050",
+    "commentCount": 3,
+    "votes": 1,
+    "postDate": "2026-06-30T00:57:55.555746400Z",
+    "lastCommentPostDate": "2026-06-30T07:17:16.453333300Z"
+  },
+  "messages": [
+    {
+      "id": 3484123,
+      "postDate": "2026-06-30T04:12:24.993Z",
+      "content": "<p>I also met a similar situation when I participated in another competition (I crawled kaggle notebooks), and at that time it had remained for at least one year.\nI don't know whether the block has been finally unlocked because I have moved from my past place before unlocking.</p>\n<p>The term must be case-dependent, but the extreme case it could be perma-ban.</p>",
+      "rawMarkdown": "I also met a similar situation when I participated in another competition (I crawled kaggle notebooks), and at that time it had remained for at least one year.\nI don't know whether the block has been finally unlocked because I have moved from my past place before unlocking.\n\nThe term must be case-dependent, but the extreme case it could be perma-ban.",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3484167,
+          "postDate": "2026-06-30T05:13:59.477Z",
+          "content": "<p>Thank you! How would I know? Did anyone reach out saying your account caused any issues / violated some ToS? Anyone emailed or messaged you from Kaggle?</p>",
+          "rawMarkdown": "Thank you! How would I know? Did anyone reach out saying your account caused any issues / violated some ToS? Anyone emailed or messaged you from Kaggle?",
+          "replies": [
+            {
+              "id": 3484267,
+              "postDate": "2026-06-30T07:17:16.453Z",
+              "content": "<p>In my case there is no message or warning except the API error response.</p>",
+              "rawMarkdown": "In my case there is no message or warning except the API error response."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3484071,
+      "postDate": "2026-06-30T00:57:55.557Z",
+      "content": "<p>Hi,\nI'm in the Pokémon TCG AI Battle simulation competition (username: dcallega).\nWhile downloading episode replays for analysis via the public API\n(<code>kaggle competitions replay</code>), I triggered a rate limit on the episode-replay\nendpoint. It's now been ~3 days and it hasn't cleared: I get HTTP 429 /\n\"Too many requests\" not only from the API but also when trying to view episode\nreplays in the browser on the competition site.\nCould you help me understand:</p>\n<ol>\n<li>Is a multi-day cooldown expected here, or might my account be stuck?</li>\n<li>What are the intended rate limits for episode-replay downloads, so I can\nstay within them going forward?</li>\n<li>Is there a sanctioned way to bulk-access episodes for analysis? (I'm aware of\nand using the official daily <code>pokemon-tcg-ai-battle-episodes-YYYY-MM-DD</code>\ndatasets.)\nI'm not trying to bypass any limits: I just want to view episodes again and\nrespect the proper ones. Thanks!</li>\n</ol>",
+      "rawMarkdown": "\nHi,\n\nI'm in the Pokémon TCG AI Battle simulation competition (username: dcallega).\nWhile downloading episode replays for analysis via the public API\n(`kaggle competitions replay`), I triggered a rate limit on the episode-replay\nendpoint. It's now been ~3 days and it hasn't cleared: I get HTTP 429 /\n\"Too many requests\" not only from the API but also when trying to view episode\nreplays in the browser on the competition site.\n\nCould you help me understand:\n1. Is a multi-day cooldown expected here, or might my account be stuck?\n2. What are the intended rate limits for episode-replay downloads, so I can\n   stay within them going forward?\n3. Is there a sanctioned way to bulk-access episodes for analysis? (I'm aware of\n   and using the official daily `pokemon-tcg-ai-battle-episodes-YYYY-MM-DD`\n   datasets.)\n\nI'm not trying to bypass any limits: I just want to view episodes again and\nrespect the proper ones. Thanks!\n",
+      "votes": 1
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "topic": {
+    "id": 709320,
+    "title": "Clarification on the “Reasonableness Standard” for Excessive Costs",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709320",
+    "commentCount": 1,
+    "postDate": "2026-06-18T08:02:57.864477600Z",
+    "lastCommentPostDate": "2026-06-18T17:44:29.066666700Z"
+  },
+  "messages": [
+    {
+      "id": 3474557,
+      "postDate": "2026-06-18T08:02:57.863Z",
+      "content": "<p>Hi Host Team,</p>\n<p>Could you clarify the “Reasonableness Standard” for tool/model costs? Is there an approximate USD amount or cost range that would generally be considered accessible/reasonable for participants?</p>\n<p>Thanks!</p>",
+      "rawMarkdown": "Hi Host Team,\n\nCould you clarify the “Reasonableness Standard” for tool/model costs? Is there an approximate USD amount or cost range that would generally be considered accessible/reasonable for participants?\n\nThanks!"
+    },
+    {
+      "id": 3474765,
+      "postDate": "2026-06-18T17:44:29.067Z",
+      "content": "<p>The Reasonableness Standard is designed specifically to address the purchase of external datasets, such that someone with access to a cost-prohibitive but publicly accessible dataset that could provide a significant advantage isn't able to beat someone without the means. We understand there are plenty of very inexpensive subscriptions (like Substacks) that aren't intended to be covered here. For example - if you subscribed to a monthly newsletter that covered the PTCG meta every week, that would be fine. </p>\n<p>While LLMs/models <em>are</em> trained on large datasets, the rules as written don't address their use directly, and we welcome the use of things like Claude Code, Codex, Antigravity, etc. The bigger concern around tool/model use is whether you can appropriately license your submission and any needed tools to run your submission. e.g. if your submission requires a tool that has a copy-left restriction on it, that may impact your ability to open source the solution.</p>",
+      "rawMarkdown": "The Reasonableness Standard is designed specifically to address the purchase of external datasets, such that someone with access to a cost-prohibitive but publicly accessible dataset that could provide a significant advantage isn't able to beat someone without the means. We understand there are plenty of very inexpensive subscriptions (like Substacks) that aren't intended to be covered here. For example - if you subscribed to a monthly newsletter that covered the PTCG meta every week, that would be fine. \n\nWhile LLMs/models *are* trained on large datasets, the rules as written don't address their use directly, and we welcome the use of things like Claude Code, Codex, Antigravity, etc. The bigger concern around tool/model use is whether you can appropriately license your submission and any needed tools to run your submission. e.g. if your submission requires a tool that has a copy-left restriction on it, that may impact your ability to open source the solution."
+    }
+  ]
+}

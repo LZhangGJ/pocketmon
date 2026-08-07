@@ -1,0 +1,32 @@
+{
+  "topic": {
+    "id": 710545,
+    "title": "Curious how to interpret replays",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/710545",
+    "commentCount": 2,
+    "postDate": "2026-06-20T12:10:37.777647400Z",
+    "lastCommentPostDate": "2026-07-30T04:48:49.776666700Z"
+  },
+  "messages": [
+    {
+      "id": 3505401,
+      "postDate": "2026-07-30T04:48:01.667Z",
+      "content": "<p>This is a Python code that I use myself, which can be used to translate the replay into readable text, and then you can give the text to AI to let it translate for you.(You should rename the replay \"log.json\".my English is not so good)</p>\n<p>`import json</p>\n<p>def describe(log):\n    t = log.get('type')\n    p = log.get('playerIndex')\n    if t == 10:\n        return f\"Player {p} drew a card.\"\n    if t == 8:\n        return f\"Player {p} switched active Pokemon.\"\n    if t == 15:\n        return f\"Player {p} attacked (Card ID {log.get('cardId')}).\"\n    if t == 16:\n        return f\"Player {p}'s Pokemon took {abs(log.get('value', 0))} damage.\"\n    if t == 6:\n        c, f, to = log.get('cardId'), log.get('fromArea'), log.get('toArea')\n        if f == 1 and to == 2:\n            return f\"Player {p} played card {c}.\"\n        if f == 4 and to == 3:\n            return f\"Player {p}'s card {c} was knocked out.\"\n        return f\"Player {p} moved card {c} (area {f}-&gt;{to}).\"\n    return None</p>\n<h1>读取文件</h1>\n<p>with open('log.json', 'r', encoding='utf-8') as f:\n    data = json.load(f)</p>\n<h1>----- 递归遍历所有字典和列表，收集所有 'logs' 列表 -----</h1>\n<p>all_logs = []</p>\n<p>def collect_logs(obj):\n    if isinstance(obj, dict):\n        for key, value in obj.items():\n            if key == 'logs' and isinstance(value, list):\n                all_logs.extend(value)\n            else:\n                collect_logs(value)\n    elif isinstance(obj, list):\n        for item in obj:\n            collect_logs(item)</p>\n<p>collect_logs(data)\nprint(f\"✅ 共收集到 {len(all_logs)} 条日志\")</p>\n<h1>过滤并输出</h1>\n<p>filtered = []\nfor log in all_logs:\n    desc = describe(log)\n    if desc:\n        filtered.append(desc)</p>\n<p>print(f\"✅ 过滤后保留 {len(filtered)} 条事件\\n\")\nfor desc in filtered:\n    print(desc)`</p>",
+      "rawMarkdown": "This is a Python code that I use myself, which can be used to translate the replay into readable text, and then you can give the text to AI to let it translate for you.(You should rename the replay \"log.json\".my English is not so good)\n\n`import json\n\ndef describe(log):\n    t = log.get('type')\n    p = log.get('playerIndex')\n    if t == 10:\n        return f\"Player {p} drew a card.\"\n    if t == 8:\n        return f\"Player {p} switched active Pokemon.\"\n    if t == 15:\n        return f\"Player {p} attacked (Card ID {log.get('cardId')}).\"\n    if t == 16:\n        return f\"Player {p}'s Pokemon took {abs(log.get('value', 0))} damage.\"\n    if t == 6:\n        c, f, to = log.get('cardId'), log.get('fromArea'), log.get('toArea')\n        if f == 1 and to == 2:\n            return f\"Player {p} played card {c}.\"\n        if f == 4 and to == 3:\n            return f\"Player {p}'s card {c} was knocked out.\"\n        return f\"Player {p} moved card {c} (area {f}->{to}).\"\n    return None\n\n# 读取文件\nwith open('log.json', 'r', encoding='utf-8') as f:\n    data = json.load(f)\n\n# ----- 递归遍历所有字典和列表，收集所有 'logs' 列表 -----\nall_logs = []\n\ndef collect_logs(obj):\n    if isinstance(obj, dict):\n        for key, value in obj.items():\n            if key == 'logs' and isinstance(value, list):\n                all_logs.extend(value)\n            else:\n                collect_logs(value)\n    elif isinstance(obj, list):\n        for item in obj:\n            collect_logs(item)\n\ncollect_logs(data)\nprint(f\"✅ 共收集到 {len(all_logs)} 条日志\")\n\n# 过滤并输出\nfiltered = []\nfor log in all_logs:\n    desc = describe(log)\n    if desc:\n        filtered.append(desc)\n\nprint(f\"✅ 过滤后保留 {len(filtered)} 条事件\\n\")\nfor desc in filtered:\n    print(desc)`",
+      "replies": [
+        {
+          "id": 3505402,
+          "postDate": "2026-07-30T04:48:49.777Z",
+          "content": "<p>Why is my format out of order?</p>",
+          "rawMarkdown": "Why is my format out of order?"
+        }
+      ]
+    },
+    {
+      "id": 3476233,
+      "postDate": "2026-06-20T12:10:37.777Z",
+      "content": "<p>In this replay: <a href=\"https://ptcgvis.heroz.jp/Visualizer/Replay/80872571/0\" target=\"_blank\">https://ptcgvis.heroz.jp/Visualizer/Replay/80872571/0</a></p>\n<p>It looks like the Mega Lucario deck wins but when I check the W/L record on the board it says that the lucario player lost? </p>",
+      "rawMarkdown": "In this replay: https://ptcgvis.heroz.jp/Visualizer/Replay/80872571/0\n\nIt looks like the Mega Lucario deck wins but when I check the W/L record on the board it says that the lucario player lost? "
+    }
+  ]
+}

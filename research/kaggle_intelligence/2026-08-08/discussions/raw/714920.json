@@ -1,0 +1,24 @@
+{
+  "topic": {
+    "id": 714920,
+    "title": "[Bug Report] AI Agents are completely blind during Deck Searches (No Card IDs provided in observation)",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/714920",
+    "commentCount": 1,
+    "postDate": "2026-06-27T10:45:01.461688300Z",
+    "lastCommentPostDate": "2026-06-27T14:15:40.433333300Z"
+  },
+  "messages": [
+    {
+      "id": 3482483,
+      "postDate": "2026-06-27T10:45:01.463Z",
+      "content": "<p>Hi everyone,</p>\n<p>I've been analyzing the game logs to understand why my AI (both MCTS and Heuristic) makes irrational choices when playing cards like Ultra Ball, Pokegear 3.0, or Bug-Catching Set. I discovered a critical issue in the environment's observation payload.</p>\n<p>When a card effect allows a player to search the deck or look at the top X cards of the deck, the environment provides options in the observation[\"select\"][\"option\"] array. However, these options only contain the index and do not include the actual cardId or id.</p>\n<p>For example, when searching the deck, the options simply look like this: {\"type\": 3, \"area\": 1, \"index\": 0, \"playerIndex\": 0}</p>\n<p>Furthermore, the deck array itself is never exposed in the observation payload (only deckCount is provided). This makes it physically impossible for the agent to map the index back to the actual card it represents.</p>\n<p>Because of this, the AI is effectively picking cards completely blind. It cannot distinguish between a Boss's Orders or a Basic Energy during a deck search, forcing both Neural Networks and heuristic bots to make random, uneducated choices.</p>\n<p>Has anyone else noticed this issue? Is there a known workaround to get the card IDs during these phases, or is a fix planned in a future environment update?</p>\n<p>Thanks!</p>",
+      "rawMarkdown": "Hi everyone,\n\nI've been analyzing the game logs to understand why my AI (both MCTS and Heuristic) makes irrational choices when playing cards like Ultra Ball, Pokegear 3.0, or Bug-Catching Set. I discovered a critical issue in the environment's observation payload.\n\nWhen a card effect allows a player to search the deck or look at the top X cards of the deck, the environment provides options in the observation[\"select\"][\"option\"] array. However, these options only contain the index and do not include the actual cardId or id.\n\nFor example, when searching the deck, the options simply look like this: {\"type\": 3, \"area\": 1, \"index\": 0, \"playerIndex\": 0}\n\nFurthermore, the deck array itself is never exposed in the observation payload (only deckCount is provided). This makes it physically impossible for the agent to map the index back to the actual card it represents.\n\nBecause of this, the AI is effectively picking cards completely blind. It cannot distinguish between a Boss's Orders or a Basic Energy during a deck search, forcing both Neural Networks and heuristic bots to make random, uneducated choices.\n\nHas anyone else noticed this issue? Is there a known workaround to get the card IDs during these phases, or is a fix planned in a future environment update?\n\nThanks!"
+    },
+    {
+      "id": 3482601,
+      "postDate": "2026-06-27T14:15:40.433Z",
+      "content": "<p>Hi!</p>\n<p>Have you checked observation.select.deck? During a search, the options only carry an index, but the actual cards are in select.deck — a full array of Card objects, where option.index points right into it:</p>\n<p>card_id = observation.select.deck[option.index].id</p>\n<p>So it's not blind — your bot just needs to read select.deck instead of only the option list. Hope that helps!</p>",
+      "rawMarkdown": "Hi!\n\nHave you checked observation.select.deck? During a search, the options only carry an index, but the actual cards are in select.deck — a full array of Card objects, where option.index points right into it:\n\ncard_id = observation.select.deck[option.index].id\n\nSo it's not blind — your bot just needs to read select.deck instead of only the option list. Hope that helps!"
+    }
+  ]
+}

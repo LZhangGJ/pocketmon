@@ -1,0 +1,55 @@
+{
+  "topic": {
+    "id": 728695,
+    "title": "Why Can Identical Strategies Receive Very Different Scores?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728695",
+    "commentCount": 5,
+    "votes": 2,
+    "postDate": "2026-07-24T07:45:08.114614700Z",
+    "lastCommentPostDate": "2026-07-25T08:44:35.283333300Z"
+  },
+  "messages": [
+    {
+      "id": 3502402,
+      "postDate": "2026-07-24T07:59:44.657Z",
+      "content": "<p>I've run into the exact same issue. In the first few hours of rating/matching, the score fluctuates wildly—you can gain or lose 80–100 points in a single match. But after a few hours, the score changes become extremely slow, basically fluctuating by just tens or even single digits. So, the high-rated agents are basically the ones that performed well early on, because even if they lose more matches later on, the point deduction is minimal.</p>",
+      "rawMarkdown": "I've run into the exact same issue. In the first few hours of rating/matching, the score fluctuates wildly—you can gain or lose 80–100 points in a single match. But after a few hours, the score changes become extremely slow, basically fluctuating by just tens or even single digits. So, the high-rated agents are basically the ones that performed well early on, because even if they lose more matches later on, the point deduction is minimal.",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3503024,
+          "postDate": "2026-07-25T08:44:35.283Z",
+          "content": "<p>Thank you for sharing your experience. This matches what I observed as well.</p>",
+          "rawMarkdown": "Thank you for sharing your experience. This matches what I observed as well.\n"
+        }
+      ]
+    },
+    {
+      "id": 3502399,
+      "postDate": "2026-07-24T07:45:08.113Z",
+      "content": "<p>Hi everyone,</p>\n<p>I have a question about the scoring and evaluation process in <strong>The Pokémon Company – PTCG AI Battle Challenge Simulation</strong>.</p>\n<p>I submitted two agents that use essentially the same strategy. Their deck lists, decision logic, and code are identical, or at least functionally equivalent. However, their leaderboard scores have differed significantly.</p>\n<p>I understand that the matches involve randomness, including card draws, starting positions, and possibly different opponents. Still, the difference between the two scores seems larger than I expected for identical strategies.</p>\n<p>Could this result mainly from factors such as:</p>\n<ul>\n<li>Different opponents or matchmaking sequences</li>\n<li>First-player versus second-player advantage</li>\n<li>Random card draws and game-state variance</li>\n<li>A relatively small number of evaluated matches</li>\n<li>Rating uncertainty or the leaderboard’s score-update mechanism</li>\n<li>The timing of the submissions and the available opponent pool</li>\n</ul>\n<p>Is this level of variance normal in the competition? Approximately how many matches are usually needed before an agent’s score becomes reasonably stable and representative of its actual strength?</p>\n<p>I would also appreciate any suggestions on how to evaluate strategy improvements more reliably. For example, would it be better to use multiple identical submissions, paired local matches with fixed random seeds, or confidence intervals based on a larger local benchmark?</p>\n<p>Thank you in advance for any explanations or advice. I would be very interested to hear whether other participants have observed similar score differences between identical or nearly identical submissions.</p>",
+      "rawMarkdown": "Hi everyone,\n\nI have a question about the scoring and evaluation process in **The Pokémon Company – PTCG AI Battle Challenge Simulation**.\n\nI submitted two agents that use essentially the same strategy. Their deck lists, decision logic, and code are identical, or at least functionally equivalent. However, their leaderboard scores have differed significantly.\n\nI understand that the matches involve randomness, including card draws, starting positions, and possibly different opponents. Still, the difference between the two scores seems larger than I expected for identical strategies.\n\nCould this result mainly from factors such as:\n\n* Different opponents or matchmaking sequences\n* First-player versus second-player advantage\n* Random card draws and game-state variance\n* A relatively small number of evaluated matches\n* Rating uncertainty or the leaderboard’s score-update mechanism\n* The timing of the submissions and the available opponent pool\n\nIs this level of variance normal in the competition? Approximately how many matches are usually needed before an agent’s score becomes reasonably stable and representative of its actual strength?\n\nI would also appreciate any suggestions on how to evaluate strategy improvements more reliably. For example, would it be better to use multiple identical submissions, paired local matches with fixed random seeds, or confidence intervals based on a larger local benchmark?\n\nThank you in advance for any explanations or advice. I would be very interested to hear whether other participants have observed similar score differences between identical or nearly identical submissions.\n",
+      "votes": 2
+    },
+    {
+      "id": 3502930,
+      "postDate": "2026-07-25T05:41:02.303Z",
+      "content": "<p>We observed the same issue and collected episode-rate data showing a 6–10x disparity between submissions. Kaggle has since confirmed that scheduling priority is rating-dependent—by approximately 8x from the multiplier alone—and that rating and sigma will not be reset before final evaluation.<br>\nThis may help explain why identical submissions can follow different early paths and remain at very different ratings. The related discussion and official responses are here:\n<a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/726690\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/726690</a></p>",
+      "rawMarkdown": "We observed the same issue and collected episode-rate data showing a 6–10x disparity between submissions. Kaggle has since confirmed that scheduling priority is rating-dependent—by approximately 8x from the multiplier alone—and that rating and sigma will not be reset before final evaluation.  \nThis may help explain why identical submissions can follow different early paths and remain at very different ratings. The related discussion and official responses are here:\nhttps://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/726690",
+      "replies": [
+        {
+          "id": 3503021,
+          "postDate": "2026-07-25T08:42:49.573Z",
+          "content": "<p>Thank you for sharing this information and the related discussion. I really appreciate the additional data and clarification.</p>",
+          "rawMarkdown": "Thank you for sharing this information and the related discussion. I really appreciate the additional data and clarification.\n"
+        }
+      ]
+    },
+    {
+      "id": 3502401,
+      "postDate": "2026-07-24T07:47:42.150Z",
+      "content": "<p>For example, as shown in the screenshot, both pairs of submissions use identical strategies, yet even after their scores appeared to stabilize, they converged to completely different ratings.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F29632474%2F0a1ec7d28be23a76ce68034f3ce9f391%2F2026-07-24%20154703.png?generation=1784879240643113&amp;alt=media\" alt=\"\"></p>",
+      "rawMarkdown": "For example, as shown in the screenshot, both pairs of submissions use identical strategies, yet even after their scores appeared to stabilize, they converged to completely different ratings.\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F29632474%2F0a1ec7d28be23a76ce68034f3ce9f391%2F2026-07-24%20154703.png?generation=1784879240643113&alt=media)"
+    }
+  ]
+}

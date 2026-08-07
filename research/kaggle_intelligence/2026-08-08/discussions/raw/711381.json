@@ -1,0 +1,25 @@
+{
+  "topic": {
+    "id": 711381,
+    "title": "Which official TCG format does the competition's Card Pool map to?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711381",
+    "commentCount": 1,
+    "postDate": "2026-06-21T11:37:12.099755400Z",
+    "lastCommentPostDate": "2026-06-22T15:44:47.536666700Z"
+  },
+  "messages": [
+    {
+      "id": 3478329,
+      "postDate": "2026-06-22T15:44:47.537Z",
+      "content": "<p>Hi there,</p>\n<p>The tournament card pool is specifically defined for this competition and may differ from the current in-person Pokémon Trading Card Game card pool. The card pool is also intended to remain fixed for the duration of the tournament, unless a rebalance becomes necessary.</p>\n<p>All matches in the Pokémon Trading Card Game AI Battle Challenge will use rules and regulations based on the Standard format, but uniquely tailored for this tournament. Only cards included in the designated card list provided by the sponsors may be used.</p>",
+      "rawMarkdown": "Hi there,\n\nThe tournament card pool is specifically defined for this competition and may differ from the current in-person Pokémon Trading Card Game card pool. The card pool is also intended to remain fixed for the duration of the tournament, unless a rebalance becomes necessary.\n\nAll matches in the Pokémon Trading Card Game AI Battle Challenge will use rules and regulations based on the Standard format, but uniquely tailored for this tournament. Only cards included in the designated card list provided by the sponsors may be used.",
+      "votes": 1
+    },
+    {
+      "id": 3477242,
+      "postDate": "2026-06-21T11:37:12.100Z",
+      "content": "<p>Hi everyone,</p>\n<p>As a complete beginner to the Pokémon TCG, I'm trying to better understand the card pool provided in the dataset (Card_ID_List_EN.pdf / EN Card Data.csv).</p>\n<p>Could anyone clarify which official format or regulation these available cards correspond to? Specifically, I'm curious if this pool represents:</p>\n<ul>\n<li>The current Standard format</li>\n<li>A past Standard format (defined by a specific range of Expansions)</li>\n<li>A custom curated card pool unique to this competition</li>\n</ul>\n<p>Knowing this would really help me figure out the right keywords to use when searching for relevant decklists and strategy information. Thanks in advance!</p>",
+      "rawMarkdown": "Hi everyone,\n\nAs a complete beginner to the Pokémon TCG, I'm trying to better understand the card pool provided in the dataset (Card_ID_List_EN.pdf / EN Card Data.csv).\n\nCould anyone clarify which official format or regulation these available cards correspond to? Specifically, I'm curious if this pool represents:\n\n- The current Standard format\n- A past Standard format (defined by a specific range of Expansions)\n- A custom curated card pool unique to this competition\n\nKnowing this would really help me figure out the right keywords to use when searching for relevant decklists and strategy information. Thanks in advance!"
+    }
+  ]
+}
