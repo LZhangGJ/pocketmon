@@ -1,6 +1,9 @@
+import tempfile
 import unittest
+from pathlib import Path
+from unittest.mock import patch
 
-from scripts.download_ptcg_data import resolve_daily_slug, select_episodes
+from scripts.download_ptcg_data import download_dataset, resolve_daily_slug, select_episodes
 
 
 class DownloadPtcgDataTests(unittest.TestCase):
@@ -20,6 +23,17 @@ class DownloadPtcgDataTests(unittest.TestCase):
         ])
         self.assertEqual(date, "2026-08-05")
         self.assertEqual(slug, "kaggle/latest")
+
+    def test_bulk_download_uses_one_unzip_request(self):
+        with tempfile.TemporaryDirectory() as temp:
+            target = Path(temp)
+
+            def fake_run(*args: str) -> None:
+                (target / "manifest.csv").write_text("episode_id\n1\n", encoding="utf-8")
+
+            with patch("scripts.download_ptcg_data.run_kaggle", side_effect=fake_run) as mocked:
+                self.assertEqual(download_dataset("owner/daily", target), target / "manifest.csv")
+            mocked.assert_called_once_with("datasets", "download", "owner/daily", "-p", str(target), "--unzip")
 
 
 if __name__ == "__main__":

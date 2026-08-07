@@ -75,6 +75,16 @@ def download_file(
     raise RuntimeError(f"Failed to download {file_name} from {slug} after {max_retries} retries: {last_error}")
 
 
+def download_dataset(slug: str, target_dir: Path) -> Path:
+    """Download and unzip a full daily dataset with one Kaggle API request."""
+    target_dir.mkdir(parents=True, exist_ok=True)
+    run_kaggle("datasets", "download", slug, "-p", str(target_dir), "--unzip")
+    manifest = target_dir / MANIFEST
+    if not manifest.is_file():
+        raise FileNotFoundError(f"{MANIFEST} was not found after bulk download from {slug}")
+    return manifest
+
+
 def read_manifest(path: Path) -> list[dict[str, str]]:
     with path.open("r", encoding="utf-8", newline="") as f:
         return list(csv.DictReader(f))
@@ -128,7 +138,11 @@ def main() -> None:
     date, daily_slug = resolve_daily_slug(args.date, index_rows)
     day_dir = data_dir / date
 
-    daily_manifest = download_file(daily_slug, MANIFEST, day_dir, force=True)
+    daily_manifest = (
+        download_dataset(daily_slug, day_dir)
+        if args.max_episodes == 0
+        else download_file(daily_slug, MANIFEST, day_dir, force=True)
+    )
     episodes = read_manifest(daily_manifest)
 
     score_key = next((k for k in ("avg_score", "score", "top_avg_score") if episodes and k in episodes[0]), None)
