@@ -578,6 +578,8 @@ def ensure_action_q_checkpoint(
         "--seed", str(config["base_seed"] + generation * 1000 + 811),
         "--device", "auto",
     ]
+    if bool(config.get("action_q_dueling_advantage", False)):
+        command.append("--dueling-advantage")
     previous = Path(state["champion_package"]) / "action_q.pt"
     if previous.is_file():
         command.extend(["--initialize-from", str(previous)])
@@ -606,8 +608,6 @@ def q_materialization_arguments(config: dict[str, Any]) -> list[str]:
         "--q-min-validation-rows", str(config.get("q_min_validation_rows", 500)),
         "--q-max-validation-mae", str(config.get("q_max_validation_mae", 0.30)),
     ]
-    if bool(config.get("action_q_dueling_advantage", False)):
-        command.append("--dueling-advantage")
 
 
 def ensure_search_distilled_checkpoint(
