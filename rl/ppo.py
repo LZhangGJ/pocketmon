@@ -10,17 +10,24 @@ import torch
 from torch.nn import functional as F
 
 from .bc import action_is_legal, collate_rows
-from .features import action_features, state_features, structured_observation_features
+from .features import (
+    action_features,
+    enhanced_context_features,
+    state_features,
+    structured_observation_features,
+)
 from .model import (
     MaskedPointerActorCritic,
     StructuredMaskedPointerActorCritic,
     StructuredTransformerMaskedPointerActorCritic,
+    TemporalResourceBeliefTransformerActorCritic,
     legal_choice_mask,
 )
 
 
 STRUCTURED_ARCHITECTURE = "structured_card_attack_deepsets_deck_masked_pointer_with_stop"
 STRUCTURED_TRANSFORMER_ARCHITECTURE = "structured_card_attack_transformer_text_deck_masked_pointer_with_stop"
+V31_ARCHITECTURE = "structured_temporal_resource_belief_transformer_masked_pointer_with_stop"
 
 
 def sha256_file(path: Path) -> str:
@@ -38,14 +45,24 @@ def load_checkpoint(path: Path, device: torch.device) -> tuple[MaskedPointerActo
         checkpoint = torch.load(path, map_location=device)
     config = checkpoint.get("config") or {}
     architecture = config.get("architecture")
-    if architecture not in (STRUCTURED_ARCHITECTURE, STRUCTURED_TRANSFORMER_ARCHITECTURE):
+    if architecture not in (STRUCTURED_ARCHITECTURE, STRUCTURED_TRANSFORMER_ARCHITECTURE, V31_ARCHITECTURE):
         raise ValueError(f"PPO requires a structured checkpoint, got {architecture!r}")
-    model_class = (
-        StructuredTransformerMaskedPointerActorCritic
-        if architecture == STRUCTURED_TRANSFORMER_ARCHITECTURE else
-        StructuredMaskedPointerActorCritic
-    )
-    model = model_class(int(checkpoint["hidden_dim"]))
+    if architecture == V31_ARCHITECTURE:
+        model = TemporalResourceBeliefTransformerActorCritic(
+            int(checkpoint["hidden_dim"]),
+            history_length=max(1, int(config.get("history_length", 0))),
+            use_history=bool(config.get("history_encoder", False)),
+            use_resources=bool(config.get("v31_use_resources", False)),
+            use_opponent_belief=bool(config.get("v31_use_opponent_belief", False)),
+        )
+        model.opponent_deck_prototypes = list(config.get("opponent_deck_prototypes") or [])
+    else:
+        model_class = (
+            StructuredTransformerMaskedPointerActorCritic
+            if architecture == STRUCTURED_TRANSFORMER_ARCHITECTURE else
+            StructuredMaskedPointerActorCritic
+        )
+        model = model_class(int(checkpoint["hidden_dim"]))
     model.load_state_dict(checkpoint["model"])
     model.to(device)
     return model, checkpoint
@@ -55,6 +72,10 @@ def model_row_from_observation(
     observation: dict[str, Any],
     deck: list[int],
     action: list[int] | None = None,
+    *,
+    history: list[list[float]] | None = None,
+    enhanced_context: bool = False,
+    opponent_prototypes: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     select = observation.get("select")
     if not isinstance(select, dict):
@@ -78,7 +99,7 @@ def model_row_from_observation(
             for index, option in enumerate(options)
         ],
         "action": action,
-        "history": [],
+        "history": list(history or []),
         "min_count": min_count,
         "max_count": max_count,
         "outcome": 0.0,
@@ -87,7 +108,39 @@ def model_row_from_observation(
     }
     row.update(structured_observation_features(observation, options))
     row["deck_card_ids"] = list(deck)
+    if enhanced_context:
+        row.update(enhanced_context_features(
+            observation, options, deck, opponent_prototypes
+        ))
     return row
+
+
+def _runtime_context(model, history: list[list[float]] | None) -> dict[str, Any]:
+    enhanced = isinstance(model, TemporalResourceBeliefTransformerActorCritic) and (
+        model.use_resources or model.use_opponent_belief
+    )
+    return {
+        "history": list(history or []) if isinstance(model, TemporalResourceBeliefTransformerActorCritic) else [],
+        "enhanced_context": enhanced,
+        "opponent_prototypes": list(getattr(model, "opponent_deck_prototypes", []) or []),
+    }
+
+
+def model_row_for_model(
+    model,
+    observation: dict[str, Any],
+    deck: list[int],
+    action: list[int] | None = None,
+    history: list[list[float]] | None = None,
+) -> dict[str, Any]:
+    """Create the exact row expected by a loaded legacy or V3.1 actor."""
+
+    return model_row_from_observation(
+        observation,
+        deck,
+        action,
+        **_runtime_context(model, history),
+    )
 
 
 def to_device(batch: dict[str, Any], device: torch.device) -> dict[str, Any]:
@@ -154,10 +207,11 @@ def sample_action(
     deck: list[int],
     device: torch.device,
     temperature: float = 1.0,
+    history: list[list[float]] | None = None,
 ) -> tuple[list[int], float, float, float]:
     """Sample one legal autoregressive action and record exact behavior statistics."""
 
-    row = model_row_from_observation(observation, deck, action=[])
+    row = model_row_for_model(model, observation, deck, action=[], history=history)
     batch = to_device(collate_rows([row]), device)
     state, encoded_options, values = model.encode_batch(batch)
     max_options = batch["option_mask"].shape[1]
@@ -202,10 +256,11 @@ def rank_single_actions(
     deck: list[int],
     device: torch.device,
     top_k: int,
+    history: list[list[float]] | None = None,
 ) -> list[int]:
     """Rank legal option indices for a required single-select decision."""
 
-    row = model_row_from_observation(observation, deck, action=[])
+    row = model_row_for_model(model, observation, deck, action=[], history=history)
     if row["min_count"] != 1 or row["max_count"] != 1:
         return []
     batch = to_device(collate_rows([row]), device)
@@ -224,8 +279,9 @@ def predict_state_value(
     observation: dict[str, Any],
     deck: list[int],
     device: torch.device,
+    history: list[list[float]] | None = None,
 ) -> float:
-    row = model_row_from_observation(observation, deck, action=[])
+    row = model_row_for_model(model, observation, deck, action=[], history=history)
     batch = to_device(collate_rows([row]), device)
     _, _, values = model.encode_batch(batch)
     return float(values[0].item())

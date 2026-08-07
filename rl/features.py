@@ -4,6 +4,7 @@ import hashlib
 import json
 import math
 import re
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -20,6 +21,9 @@ ATTACK_VOCAB_SIZE = 2048
 ENTITY_ZONE_COUNT = 16
 MAX_VISIBLE_ENTITIES = 96
 MAX_DECK_SIZE = 60
+MAX_CONTEXT_CARDS = 60
+RESOURCE_DIM = 8
+BELIEF_DIM = 4
 
 
 # AreaType values from the official SDK. Keeping the integers here avoids a
@@ -328,6 +332,150 @@ def card_text_embedding_table(
     return table
 
 
+def _visible_card_counter(player: dict[str, Any], *, include_private: bool) -> Counter[int]:
+    """Count card identities visible to the acting player, including attachments."""
+
+    zones = ["active", "bench", "discard"]
+    if include_private:
+        zones.extend(("hand", "prize"))
+    visible: Counter[int] = Counter()
+    for zone in zones:
+        for card in _as_cards(player.get(zone)):
+            card_id = _safe_id(card.get("id"), CARD_VOCAB_SIZE)
+            if card_id:
+                visible[card_id] += 1
+            for key in ("energyCards", "tools", "preEvolution"):
+                for attached in _as_cards(card.get(key)):
+                    attached_id = _safe_id(attached.get("id"), CARD_VOCAB_SIZE)
+                    if attached_id:
+                        visible[attached_id] += 1
+    return visible
+
+
+def _remaining_multiset(deck: list[int], known: Counter[int]) -> list[int]:
+    counts = Counter(_safe_id(card_id, CARD_VOCAB_SIZE) for card_id in deck)
+    counts.pop(0, None)
+    remaining: list[int] = []
+    for card_id in sorted(counts):
+        remaining.extend([card_id] * max(0, counts[card_id] - known[card_id]))
+    return remaining[:MAX_CONTEXT_CARDS]
+
+
+def _normalized_entropy(probabilities: list[float]) -> float:
+    if len(probabilities) <= 1:
+        return 0.0
+    entropy = -sum(value * math.log(max(value, 1e-12)) for value in probabilities)
+    return entropy / math.log(len(probabilities))
+
+
+def opponent_deck_belief(
+    observation: dict[str, Any],
+    prototypes: list[dict[str, Any]] | None,
+) -> tuple[list[int], list[float], dict[str, Any]]:
+    """Infer a frozen deck prototype from public opponent cards only.
+
+    The returned deck is a belief context, not the hidden submitted deck.  A
+    combinatorial likelihood rewards prototypes capable of producing the
+    observed multiset, while impossible copy counts receive a finite penalty.
+    """
+
+    prototypes = list(prototypes or [])
+    if not prototypes:
+        return [], [0.0] * BELIEF_DIM, {"prototype": None, "confidence": 0.0}
+    current = observation.get("current") or {}
+    players = current.get("players") or []
+    your_index = int(current.get("yourIndex", 0) or 0)
+    opponent = players[1 - your_index] if len(players) > 1 and isinstance(players[1 - your_index], dict) else {}
+    observed = _visible_card_counter(opponent, include_private=False)
+    observed_total = sum(observed.values())
+    logits: list[float] = []
+    normalized: list[tuple[str, list[int], float]] = []
+    for index, item in enumerate(prototypes):
+        deck = [
+            _safe_id(card_id, CARD_VOCAB_SIZE)
+            for card_id in item.get("deck", [])
+        ]
+        if len(deck) != MAX_DECK_SIZE or not all(deck):
+            raise ValueError(f"opponent prototype {index} must contain 60 valid card ids")
+        counts = Counter(deck)
+        log_likelihood = math.log(max(float(item.get("prior", 1.0)), 1e-12))
+        for card_id, seen in observed.items():
+            available = counts[card_id]
+            if seen > available:
+                log_likelihood -= 30.0 * (seen - available)
+            elif seen:
+                log_likelihood += math.lgamma(available + 1) - math.lgamma(seen + 1) - math.lgamma(available - seen + 1)
+        normalized.append((str(item.get("name") or f"prototype_{index:03d}"), deck, log_likelihood))
+        logits.append(log_likelihood)
+    maximum = max(logits)
+    weights = [math.exp(value - maximum) for value in logits]
+    denominator = sum(weights)
+    probabilities = [value / denominator for value in weights]
+    best_index = max(range(len(probabilities)), key=lambda index: (probabilities[index], -index))
+    name, best_deck, _ = normalized[best_index]
+    best_counts = Counter(best_deck)
+    covered = sum(min(count, best_counts[card_id]) for card_id, count in observed.items())
+    confidence = probabilities[best_index]
+    features = [
+        confidence,
+        _normalized_entropy(probabilities),
+        observed_total / 60.0,
+        covered / max(1, observed_total),
+    ]
+    return sorted(best_deck), features, {
+        "prototype": name,
+        "confidence": confidence,
+        "entropy": features[1],
+        "observed_cards": observed_total,
+        "coverage": features[3],
+    }
+
+
+def enhanced_context_features(
+    observation: dict[str, Any],
+    options: list[Any],
+    deck: list[int],
+    opponent_prototypes: list[dict[str, Any]] | None,
+) -> dict[str, Any]:
+    """Build leakage-safe remaining-card, draw-probability and belief inputs."""
+
+    if len(deck) != MAX_DECK_SIZE:
+        raise ValueError("enhanced context requires a 60-card acting deck")
+    current = observation.get("current") or {}
+    players = current.get("players") or []
+    your_index = int(current.get("yourIndex", 0) or 0)
+    yours = players[your_index] if len(players) > your_index and isinstance(players[your_index], dict) else {}
+    known = _visible_card_counter(yours, include_private=True)
+    remaining = _remaining_multiset(deck, known)
+    remaining_counts = Counter(remaining)
+    option_ids = {
+        option_identity_features(observation, option if isinstance(option, dict) else {})[0]
+        for option in options
+    }
+    option_ids.discard(0)
+    unknown_prizes = sum(card is None for card in (yours.get("prize") or []))
+    deck_count = max(0, int(_num(yours.get("deckCount"))))
+    top_count = max(remaining_counts.values(), default=0)
+    option_count = sum(remaining_counts[card_id] for card_id in option_ids)
+    resource = [
+        deck_count / 60.0,
+        len(remaining) / 60.0,
+        unknown_prizes / 6.0,
+        sum(known.values()) / 60.0,
+        len(remaining_counts) / 60.0,
+        deck_count / max(1, len(remaining)),
+        top_count / max(1, len(remaining)),
+        option_count / max(1, len(remaining)),
+    ]
+    belief_deck, belief, audit = opponent_deck_belief(observation, opponent_prototypes)
+    assert len(resource) == RESOURCE_DIM and len(belief) == BELIEF_DIM
+    return {
+        "remaining_card_ids": remaining,
+        "resource_features": resource,
+        "opponent_belief_card_ids": belief_deck,
+        "opponent_belief_features": belief,
+        "opponent_belief_audit": audit,
+    }
 def history_features(state: list[float], options: list[list[float]], action: list[int]) -> list[float]:
     """Encode one completed prior decision without using any later-row information."""
 

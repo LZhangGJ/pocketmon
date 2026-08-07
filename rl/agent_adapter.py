@@ -8,12 +8,19 @@ from typing import Any, Callable
 import torch
 
 from .bc import action_is_legal, collate_rows, greedy_decode_with_confidence
-from .action_q import ActionValueEnsemble, q_mean_and_std
-from .features import action_features, history_features, state_features, structured_observation_features
+from .action_q import ActionValueEnsemble, DuelingActionValueEnsemble, q_mean_and_std
+from .features import (
+    action_features,
+    enhanced_context_features,
+    history_features,
+    state_features,
+    structured_observation_features,
+)
 from .model import (
     MaskedPointerActorCritic,
     StructuredMaskedPointerActorCritic,
     StructuredTransformerMaskedPointerActorCritic,
+    TemporalResourceBeliefTransformerActorCritic,
 )
 
 
@@ -21,6 +28,7 @@ STATELESS_ARCHITECTURE = "stateless_masked_autoregressive_candidate_pointer_with
 HISTORY_ARCHITECTURE = "causal_gru_history_masked_autoregressive_candidate_pointer_with_stop"
 STRUCTURED_ARCHITECTURE = "structured_card_attack_deepsets_deck_masked_pointer_with_stop"
 STRUCTURED_TRANSFORMER_ARCHITECTURE = "structured_card_attack_transformer_text_deck_masked_pointer_with_stop"
+V31_ARCHITECTURE = "structured_temporal_resource_belief_transformer_masked_pointer_with_stop"
 
 
 def conservative_q_choice(
@@ -89,7 +97,7 @@ class RLBCPolicyAdapter:
         self.device = torch.device(device)
         self._model: MaskedPointerActorCritic | None = None
         self._q_checkpoint_path = Path(q_checkpoint_path) if q_checkpoint_path else None
-        self._q_model: ActionValueEnsemble | None = None
+        self._q_model: ActionValueEnsemble | DuelingActionValueEnsemble | None = None
         self._q_top_k = max(1, int(q_top_k))
         self._q_uncertainty_penalty = float(q_uncertainty_penalty)
         self._q_auto_margin = q_min_margin is None
@@ -128,6 +136,8 @@ class RLBCPolicyAdapter:
         self._history_enabled = False
         self._history_length = 0
         self._history: list[list[float]] = []
+        self._opponent_deck_prototypes: list[dict[str, Any]] = []
+        self._enhanced_context = False
         self._load_attempted = False
         self._last_turn: int | None = None
         self._diagnostics = {
@@ -170,10 +180,19 @@ class RLBCPolicyAdapter:
                 HISTORY_ARCHITECTURE,
                 STRUCTURED_ARCHITECTURE,
                 STRUCTURED_TRANSFORMER_ARCHITECTURE,
+                V31_ARCHITECTURE,
             ):
                 raise ValueError(f"unsupported checkpoint architecture: {architecture}")
-            self._history_enabled = architecture == HISTORY_ARCHITECTURE
-            self._structured = architecture in (STRUCTURED_ARCHITECTURE, STRUCTURED_TRANSFORMER_ARCHITECTURE)
+            self._history_enabled = architecture == HISTORY_ARCHITECTURE or (
+                architecture == V31_ARCHITECTURE and bool(config.get("history_encoder", False))
+            )
+            self._structured = architecture in (
+                STRUCTURED_ARCHITECTURE, STRUCTURED_TRANSFORMER_ARCHITECTURE, V31_ARCHITECTURE
+            )
+            self._enhanced_context = architecture == V31_ARCHITECTURE and bool(
+                config.get("v31_use_resources", False) or config.get("v31_use_opponent_belief", False)
+            )
+            self._opponent_deck_prototypes = list(config.get("opponent_deck_prototypes") or [])
             self._history_length = int(config.get("history_length", 0)) if self._history_enabled else 0
             if self._history_enabled and self._history_length <= 0:
                 raise ValueError("history checkpoint has no positive history_length")
@@ -184,7 +203,15 @@ class RLBCPolicyAdapter:
             )
             if not 0.0 <= self._confidence_threshold <= 1.0:
                 raise ValueError("confidence threshold must be in [0, 1]")
-            if architecture == STRUCTURED_TRANSFORMER_ARCHITECTURE:
+            if architecture == V31_ARCHITECTURE:
+                model = TemporalResourceBeliefTransformerActorCritic(
+                    int(checkpoint["hidden_dim"]),
+                    history_length=max(1, int(config.get("history_length", 0))),
+                    use_history=self._history_enabled,
+                    use_resources=bool(config.get("v31_use_resources", False)),
+                    use_opponent_belief=bool(config.get("v31_use_opponent_belief", False)),
+                )
+            elif architecture == STRUCTURED_TRANSFORMER_ARCHITECTURE:
                 model = StructuredTransformerMaskedPointerActorCritic(int(checkpoint["hidden_dim"]))
             elif architecture == STRUCTURED_ARCHITECTURE:
                 model = StructuredMaskedPointerActorCritic(int(checkpoint["hidden_dim"]))
@@ -205,7 +232,18 @@ class RLBCPolicyAdapter:
                     actor_sha = hashlib.sha256(self.checkpoint_path.read_bytes()).hexdigest()
                     if q_checkpoint.get("actor_checkpoint_sha256") != actor_sha:
                         raise ValueError("action-Q checkpoint was trained for a different actor")
-                    q_model = ActionValueEnsemble(
+                    q_kind = q_checkpoint.get("kind", "counterfactual_action_q_ensemble")
+                    q_class = (
+                        DuelingActionValueEnsemble
+                        if q_kind == "counterfactual_dueling_action_q_ensemble" else
+                        ActionValueEnsemble
+                    )
+                    if q_kind not in {
+                        "counterfactual_action_q_ensemble",
+                        "counterfactual_dueling_action_q_ensemble",
+                    }:
+                        raise ValueError(f"unsupported action-Q kind: {q_kind!r}")
+                    q_model = q_class(
                         int(q_checkpoint["hidden_dim"]), int(q_checkpoint["heads"])
                     ).to(self.device)
                     q_model.load_state_dict(q_checkpoint["model"])
@@ -286,6 +324,10 @@ class RLBCPolicyAdapter:
         if self._structured:
             row.update(structured_observation_features(observation, options))
             row["deck_card_ids"] = list(self._deck)
+        if self._enhanced_context:
+            row.update(enhanced_context_features(
+                observation, options, self._deck, self._opponent_deck_prototypes
+            ))
         batch = collate_rows([row])
         batch = {
             key: value.to(self.device) if isinstance(value, torch.Tensor) else value
@@ -412,6 +454,8 @@ class RLBCPolicyAdapter:
             "history_enabled": self._history_enabled,
             "history_tokens": len(self._history),
             "structured": self._structured,
+            "enhanced_context": self._enhanced_context,
+            "opponent_deck_prototypes": len(self._opponent_deck_prototypes),
             "deck_cards": len(self._deck),
             "confidence_threshold": self._confidence_threshold,
             "last_confidence": self._last_confidence,

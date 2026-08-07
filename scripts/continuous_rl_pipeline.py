@@ -305,9 +305,7 @@ def exclusive_evaluation_lock(config: dict[str, Any], *, label: str):
     if not lock_value:
         yield
         return
-
     import fcntl
-
     lock_path = Path(lock_value)
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     with lock_path.open("a+", encoding="utf-8") as handle:
@@ -389,8 +387,12 @@ def run_distributed_schedule(
 ) -> list[dict[str, Any]]:
     with exclusive_evaluation_lock(config, label=label):
         return _run_distributed_schedule_unlocked(
-            config=config, root=root, schedule=schedule,
-            learners=learners, opponents=opponents, label=label,
+            config=config,
+            root=root,
+            schedule=schedule,
+            learners=learners,
+            opponents=opponents,
+            label=label,
         )
 
 
@@ -571,6 +573,8 @@ def ensure_action_q_checkpoint(
         "--batch-size", str(config["action_q_batch_size"]),
         "--learning-rate", str(config["action_q_learning_rate"]),
         "--heads", str(config["action_q_heads"]),
+        "--advantage-loss-weight", str(config.get("action_q_advantage_loss_weight", 0.5)),
+        "--loss-priority-weight", str(config.get("action_q_loss_priority_weight", 1.0)),
         "--seed", str(config["base_seed"] + generation * 1000 + 811),
         "--device", "auto",
     ]
@@ -602,6 +606,8 @@ def q_materialization_arguments(config: dict[str, Any]) -> list[str]:
         "--q-min-validation-rows", str(config.get("q_min_validation_rows", 500)),
         "--q-max-validation-mae", str(config.get("q_max_validation_mae", 0.30)),
     ]
+    if bool(config.get("action_q_dueling_advantage", False)):
+        command.append("--dueling-advantage")
 
 
 def ensure_search_distilled_checkpoint(
@@ -681,6 +687,15 @@ def ensure_gate(
     if report_path.is_file():
         return json.loads(report_path.read_text(encoding="utf-8"))
     public_items = load_manifest(Path(config["public_opponent_pool"]))
+    if config.get("gate_stages"):
+        return ensure_staged_gate(
+            config=config,
+            state=state,
+            generation=generation,
+            paths=paths,
+            candidate_package=candidate_package,
+            public_items=public_items,
+        )
     public_names = [str(item["name"]) for item in public_items]
     candidate_name = f"candidate_g{generation:05d}"
     parent_name = f"parent_g{generation - 1:05d}"
@@ -721,6 +736,254 @@ def ensure_gate(
     return report
 
 
+def _stage_thresholds(config: dict[str, Any], stage: dict[str, Any]) -> dict[str, float]:
+    return {
+        "min_head_to_head_score": float(stage.get(
+            "min_head_to_head_score", config["min_head_to_head_score"]
+        )),
+        "min_head_to_head_wilson": float(stage.get(
+            "min_head_to_head_wilson", config["min_head_to_head_wilson"]
+        )),
+        "min_public_delta": float(stage.get("min_public_delta", config["min_public_delta"])),
+        "max_worst_matchup_regression": float(stage.get(
+            "max_worst_matchup_regression", config["max_worst_matchup_regression"]
+        )),
+        "max_seat_gap": float(stage.get("max_seat_gap", config["max_seat_gap"])),
+    }
+
+
+def staged_gate_game_count(stage: dict[str, Any]) -> int:
+    opponents = int(stage["opponent_count"])
+    games_per_public = int(stage["games_per_public"])
+    parent_games = int(stage["parent_games"])
+    return 2 * opponents * games_per_public + parent_games
+
+
+def ensure_cross_deck_validation(
+    *,
+    config: dict[str, Any],
+    state: dict[str, Any],
+    paths: dict[str, Path],
+    candidate_package: Path,
+    public_items: list[dict[str, Any]],
+    generation: int,
+) -> dict[str, Any] | None:
+    specs = list(config.get("cross_deck_validation") or [])
+    if not specs:
+        return None
+    root = paths["gate"] / "cross_deck"
+    report_path = root / "report.json"
+    if report_path.is_file():
+        return json.loads(report_path.read_text(encoding="utf-8"))
+    root.mkdir(parents=True, exist_ok=True)
+    parent_package = Path(state["champion_package"])
+    learners: list[dict[str, Any]] = []
+    pairs = []
+
+    def package(source: Path, deck: Path, output: Path, name: str) -> None:
+        if (output / "agent_manifest.json").is_file():
+            return
+        command = [
+            config["python"], str(Path(config["code_root"]) / "scripts" / "materialize_rl_specialist_agent.py"),
+            "--checkpoint", str(source / "checkpoint.pt"),
+            "--deck", str(deck),
+            "--output", str(output),
+            "--name", name,
+        ]
+        q_checkpoint = source / "action_q.pt"
+        if q_checkpoint.is_file():
+            command.extend(["--q-checkpoint", str(q_checkpoint)])
+            command.extend(q_materialization_arguments(config))
+        run_process(
+            host=config["local_host"], local_host=config["local_host"], command=command,
+            log_path=root / "materialize.log",
+        )
+
+    for index, spec in enumerate(specs):
+        deck_name = str(spec["name"])
+        deck = Path(spec["deck"])
+        candidate_name = f"cross_{index:02d}_{deck_name}_candidate"
+        parent_name = f"cross_{index:02d}_{deck_name}_parent"
+        candidate_output = root / "packages" / candidate_name
+        parent_output = root / "packages" / parent_name
+        package(candidate_package, deck, candidate_output, candidate_name)
+        package(parent_package, deck, parent_output, parent_name)
+        learners.extend([
+            {"name": candidate_name, "agent_dir": str(candidate_output)},
+            {"name": parent_name, "agent_dir": str(parent_output)},
+        ])
+        pairs.append((deck_name, candidate_name, parent_name))
+    opponent_count = int(config.get("cross_deck_opponent_count", min(8, len(public_items))))
+    opponents = public_items[:opponent_count]
+    opponent_names = [str(item["name"]) for item in opponents]
+    learner_names = [str(item["name"]) for item in learners]
+    schedule = build_common_opponent_schedule(
+        learners=learner_names,
+        opponents=opponent_names,
+        games_per_opponent=int(config.get("cross_deck_games_per_opponent", 4)),
+        seed=int(config["base_seed"]) + generation * 100_000 + 950_000,
+    )
+    rows = run_distributed_schedule(
+        config=config,
+        root=root / "games",
+        schedule=schedule,
+        learners=learners,
+        opponents=opponents,
+        label="cross_deck_validation",
+    )
+    ranking = evaluate_common_opponent_screen(
+        rows, learners=learner_names, opponents=opponent_names,
+    )
+    by_name = {str(item["learner"]): item for item in ranking}
+    max_regression = float(config.get("cross_deck_max_regression", 0.15))
+    comparisons = []
+    for deck_name, candidate_name, parent_name in pairs:
+        candidate = by_name[candidate_name]
+        parent = by_name[parent_name]
+        delta = float(candidate["score_rate"]) - float(parent["score_rate"])
+        comparisons.append({
+            "deck": deck_name,
+            "candidate": candidate,
+            "parent": parent,
+            "delta": delta,
+            "passed": candidate["failures"] == 0 and delta >= -max_regression,
+        })
+    report = {
+        "passed": all(item["passed"] for item in comparisons),
+        "games": len(rows),
+        "max_regression": max_regression,
+        "comparisons": comparisons,
+        "completed_at": now(),
+    }
+    atomic_json(report_path, report)
+    return report
+
+
+def ensure_staged_gate(
+    *,
+    config: dict[str, Any],
+    state: dict[str, Any],
+    generation: int,
+    paths: dict[str, Path],
+    candidate_package: Path,
+    public_items: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Run 20 -> 200 -> 400 games, then a seed-independent 400-game copy."""
+
+    final_path = paths["gate"] / "promotion.json"
+    if final_path.is_file():
+        return json.loads(final_path.read_text(encoding="utf-8"))
+    stages = [dict(item) for item in config.get("gate_stages") or []]
+    if [int(item.get("target_games", -1)) for item in stages] != [20, 200, 400]:
+        raise ValueError("staged gate must declare exact 20, 200 and 400 game targets")
+    if any(staged_gate_game_count(item) != int(item["target_games"]) for item in stages):
+        raise ValueError("staged gate schedule does not match its target game count")
+    if not public_items:
+        raise ValueError("staged gate requires a frozen public opponent pool")
+    candidate_name = f"candidate_g{generation:05d}"
+    parent_name = f"parent_g{generation - 1:05d}"
+    learners = [
+        {"name": candidate_name, "agent_dir": str(candidate_package)},
+        {"name": parent_name, "agent_dir": state["champion_package"]},
+    ]
+    reports = []
+
+    def run_one(stage: dict[str, Any], seed_offset: int, name_suffix: str = "") -> dict[str, Any]:
+        stage_name = str(stage["name"]) + name_suffix
+        root = paths["gate"] / stage_name
+        report_path = root / "report.json"
+        if report_path.is_file():
+            return json.loads(report_path.read_text(encoding="utf-8"))
+        opponent_count = int(stage["opponent_count"])
+        if opponent_count > len(public_items):
+            raise ValueError(f"stage {stage_name} requests too many opponents")
+        selected = public_items[:opponent_count]
+        public_names = [str(item["name"]) for item in selected]
+        schedule = build_promotion_schedule(
+            candidate=candidate_name,
+            parent=parent_name,
+            public_opponents=public_names,
+            games_per_public=int(stage["games_per_public"]),
+            parent_games=int(stage["parent_games"]),
+            seed=int(config["base_seed"]) + generation * 100_000 + seed_offset,
+        )
+        if len(schedule) != int(stage["target_games"]):
+            raise AssertionError(f"stage {stage_name} built {len(schedule)} games")
+        rows = run_distributed_schedule(
+            config=config,
+            root=root,
+            schedule=schedule,
+            learners=learners,
+            opponents=selected + [{"name": parent_name, "agent_dir": state["champion_package"]}],
+            label=f"staged_gate:{stage_name}",
+        )
+        report = evaluate_promotion(
+            rows,
+            candidate=candidate_name,
+            parent=parent_name,
+            public_opponents=public_names,
+            **_stage_thresholds(config, stage),
+        )
+        report.update({
+            "stage": stage_name,
+            "target_games": int(stage["target_games"]),
+            "games": len(rows),
+            "seed_offset": seed_offset,
+            "completed_at": now(),
+        })
+        atomic_json(report_path, report)
+        return report
+
+    for index, stage in enumerate(stages):
+        report = run_one(stage, 10_000 * (index + 1))
+        reports.append(report)
+        if not report["promote"]:
+            final = {
+                **report,
+                "promote": False,
+                "generation": generation,
+                "failed_stage": report["stage"],
+                "stages": reports,
+                "independent_replication": None,
+                "completed_at": now(),
+            }
+            atomic_json(final_path, final)
+            return final
+
+    replication = run_one(stages[-1], 910_000, "_independent_replica")
+    cross_deck = None
+    if reports[-1]["promote"] and replication["promote"]:
+        cross_deck = ensure_cross_deck_validation(
+            config=config,
+            state=state,
+            paths=paths,
+            candidate_package=candidate_package,
+            public_items=public_items,
+            generation=generation,
+        )
+    promote = bool(
+        reports[-1]["promote"] and replication["promote"]
+        and (cross_deck is None or cross_deck["passed"])
+    )
+    final = {
+        **reports[-1],
+        "promote": promote,
+        "generation": generation,
+        "failed_stage": (
+            None if promote else
+            "cross_deck" if cross_deck is not None and not cross_deck["passed"] else
+            replication["stage"]
+        ),
+        "stages": reports,
+        "independent_replication": replication,
+        "replication_kind": "independent_evaluation_seed_table",
+        "cross_deck_validation": cross_deck,
+        "completed_at": now(),
+    }
+    atomic_json(final_path, final)
+    return final
+
+
 def ensure_deck_evolution(
     *,
     config: dict[str, Any],
@@ -731,7 +994,8 @@ def ensure_deck_evolution(
     """Mutate the champion deck, quick-screen variants, then strictly confirm one."""
 
     every = int(config.get("deck_evolution_every", 0))
-    if every <= 0 or generation % every:
+    start = int(config.get("deck_evolution_start_generation", 1))
+    if every <= 0 or generation < start or generation % every:
         return None
     root = paths["deck"]
     report_path = root / "promotion.json"

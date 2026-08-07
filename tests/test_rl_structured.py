@@ -12,6 +12,7 @@ from rl.agent_adapter import (
     RLBCPolicyAdapter,
     STRUCTURED_ARCHITECTURE,
     STRUCTURED_TRANSFORMER_ARCHITECTURE,
+    V31_ARCHITECTURE,
 )
 from rl.bc import batch_loss, collate_rows, greedy_decode, load_deck_map
 from rl.features import (
@@ -19,10 +20,17 @@ from rl.features import (
     STATE_DIM,
     action_features,
     card_text_embedding_table,
+    enhanced_context_features,
+    history_features,
+    opponent_deck_belief,
     state_features,
     structured_observation_features,
 )
-from rl.model import StructuredMaskedPointerActorCritic, StructuredTransformerMaskedPointerActorCritic
+from rl.model import (
+    StructuredMaskedPointerActorCritic,
+    StructuredTransformerMaskedPointerActorCritic,
+    TemporalResourceBeliefTransformerActorCritic,
+)
 
 
 def observation() -> dict:
@@ -70,6 +78,60 @@ def compact_structured_row() -> dict:
 
 
 class StructuredRLTests(unittest.TestCase):
+    def test_remaining_cards_and_belief_use_no_hidden_opponent_cards(self) -> None:
+        obs = observation()
+        deck = [10, 11, 12, 13] * 15
+        prototypes = [
+            {"name": "visible_match", "deck": [20] * 30 + [21] * 30},
+            {"name": "other", "deck": [22] * 60},
+        ]
+        context = enhanced_context_features(obs, obs["select"]["option"], deck, prototypes)
+        self.assertEqual(len(context["resource_features"]), 8)
+        self.assertEqual(len(context["opponent_belief_features"]), 4)
+        self.assertEqual(context["opponent_belief_audit"]["prototype"], "visible_match")
+        self.assertEqual(len(context["remaining_card_ids"]), 56)
+        first = opponent_deck_belief(obs, prototypes)
+        obs["current"]["players"][1]["hand"] = [{"id": 22}] * 20
+        obs["current"]["players"][1]["prize"] = [{"id": 22}] * 6
+        second = opponent_deck_belief(obs, prototypes)
+        self.assertEqual(first, second)
+
+    def test_v31_temporal_resource_belief_model_and_adapter(self) -> None:
+        obs = observation()
+        options = obs["select"]["option"]
+        deck = [10, 11, 12, 13] * 15
+        prototypes = [{"name": "p", "deck": [20] * 30 + [21] * 30}]
+        row = compact_structured_row()
+        row.update(enhanced_context_features(obs, options, deck, prototypes))
+        row["deck_card_ids"] = deck
+        row["history"] = [history_features(row["state"], row["options"], [0])]
+        batch = collate_rows([row, row])
+        model = TemporalResourceBeliefTransformerActorCritic(
+            32, history_length=8, use_history=True,
+            use_resources=True, use_opponent_belief=True,
+        )
+        loss, _ = batch_loss(model, batch)
+        self.assertTrue(torch.isfinite(loss))
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "v31.pt"
+            torch.save({
+                "model": model.state_dict(),
+                "hidden_dim": 32,
+                "config": {
+                    "architecture": V31_ARCHITECTURE,
+                    "history_encoder": True,
+                    "history_length": 8,
+                    "v31_use_resources": True,
+                    "v31_use_opponent_belief": True,
+                    "opponent_deck_prototypes": prototypes,
+                },
+            }, path)
+            adapter = RLBCPolicyAdapter(path, fallback=lambda _: [2], deck=deck)
+            action = adapter.act(obs)
+        self.assertEqual(len(action), 1)
+        self.assertEqual(adapter.diagnostics()["load_errors"], 0)
+        self.assertTrue(adapter.diagnostics()["enhanced_context"])
+
     def test_visible_entities_exclude_hidden_opponent_hand_and_prize(self) -> None:
         value = structured_observation_features(observation(), observation()["select"]["option"])
         self.assertNotIn(999, value["entity_card_ids"])

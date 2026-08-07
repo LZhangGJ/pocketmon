@@ -21,6 +21,7 @@ if str(ROOT) not in sys.path:
 
 from rl.bc import TrajectoryDataset, make_loader
 from rl.ppo import evaluate_action_sequences, load_checkpoint, sha256_file, to_device
+from rl.reproducibility import seed_deterministically
 
 
 def git_sha() -> str:
@@ -165,8 +166,7 @@ def main() -> None:
         raise ValueError("invalid search-distillation training configuration")
     if not args.allow_dirty_smoke:
         assert_clean_worktree()
-    random.seed(args.seed)
-    torch.manual_seed(args.seed)
+    seed_deterministically(args.seed)
     device = torch.device("cuda:0" if args.device == "auto" and torch.cuda.is_available() else (
         "cpu" if args.device == "auto" else args.device
     ))

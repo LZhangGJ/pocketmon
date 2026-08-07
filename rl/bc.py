@@ -16,11 +16,15 @@ from torch.utils.data import DataLoader, Dataset
 
 from .features import (
     ACTION_DIM,
+    BELIEF_DIM,
     ENTITY_DIM,
     HISTORY_DIM,
+    MAX_CONTEXT_CARDS,
     MAX_DECK_SIZE,
+    RESOURCE_DIM,
     STATE_DIM,
     action_features,
+    enhanced_context_features,
     history_features,
     state_features,
     structured_observation_features,
@@ -52,6 +56,11 @@ STRUCTURED_MODEL_INPUT_FIELDS = MODEL_INPUT_FIELDS | {
     "observation.select.option.card_attack_identity",
     "episode.acting_player_submitted_deck",
 }
+V31_MODEL_INPUT_FIELDS = STRUCTURED_MODEL_INPUT_FIELDS | HISTORY_MODEL_INPUT_FIELDS | {
+    "episode.acting_player_remaining_unseen_multiset",
+    "observation.current.public_opponent_deck_belief",
+    "observation.current.draw_probability_summary",
+}
 
 
 def sha256_file(path: Path) -> str:
@@ -66,7 +75,14 @@ def _context_key(value: Any) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
 
-def compact_replay_row(raw: dict[str, Any], structured: bool = False) -> dict[str, Any]:
+def compact_replay_row(
+    raw: dict[str, Any],
+    structured: bool = False,
+    *,
+    acting_deck: list[int] | None = None,
+    opponent_prototypes: list[dict[str, Any]] | None = None,
+    enhanced_context: bool = False,
+) -> dict[str, Any]:
     """Validate one schema-v2 row and retain only compact pre-action inputs plus labels."""
 
     if raw.get("schema_version") != 2:
@@ -133,6 +149,12 @@ def compact_replay_row(raw: dict[str, Any], structured: bool = False) -> dict[st
     }
     if structured:
         row.update(structured_observation_features(observation, options))
+    if enhanced_context:
+        if not structured or acting_deck is None:
+            raise ValueError("enhanced context requires structured inputs and an acting deck")
+        row.update(enhanced_context_features(
+            observation, options, acting_deck, opponent_prototypes
+        ))
     return row
 
 
@@ -373,6 +395,8 @@ def load_replay_dataset(
     deck_map_path: Path | None = None,
     structured: bool = False,
     bias_correction: dict[str, float] | None = None,
+    enhanced_context: bool = False,
+    opponent_prototypes: list[dict[str, Any]] | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     if structured and deck_map_path is None:
         raise ValueError("structured dataset requires a deck map")
@@ -386,7 +410,16 @@ def load_replay_dataset(
     with gzip.open(path, "rt", encoding="utf-8") as handle:
         for line_number, line in enumerate(handle, 1):
             try:
-                row = compact_replay_row(json.loads(line), structured=structured)
+                raw = json.loads(line)
+                raw_key = (str(raw.get("episode_id")), raw.get("player"))
+                acting_deck = deck_map.get(raw_key) if structured else None
+                row = compact_replay_row(
+                    raw,
+                    structured=structured,
+                    acting_deck=acting_deck,
+                    opponent_prototypes=opponent_prototypes,
+                    enhanced_context=enhanced_context,
+                )
             except Exception as exc:
                 raise ValueError(f"invalid replay row {line_number}: {exc}") from exc
             if structured:
@@ -410,6 +443,7 @@ def load_replay_dataset(
     bias_audit = apply_replay_bias_correction(rows, deck_map, **(bias_correction or {}))
     episodes = {row["episode_id"] for row in rows}
     model_input_fields = (
+        V31_MODEL_INPUT_FIELDS if enhanced_context else
         STRUCTURED_MODEL_INPUT_FIELDS if structured else
         HISTORY_MODEL_INPUT_FIELDS if history_length else MODEL_INPUT_FIELDS
     )
@@ -432,6 +466,11 @@ def load_replay_dataset(
         "forbidden_model_fields_used": sorted(model_input_fields & FORBIDDEN_MODEL_FIELDS),
         "history": history_audit,
         "structured": structured,
+        "enhanced_context": {
+            "enabled": enhanced_context,
+            "opponent_prototypes": len(opponent_prototypes or []),
+            "hidden_opponent_cards_used": False,
+        },
         "deck_map": deck_audit,
         "bias_correction": bias_audit,
     }
@@ -584,6 +623,42 @@ def collate_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
             "entity_mask": entity_mask,
             "deck_card_ids": deck_card_ids,
             "deck_mask": deck_mask,
+        })
+    if all("resource_features" in row for row in rows):
+        max_remaining = max(1, min(
+            MAX_CONTEXT_CARDS, max(len(row.get("remaining_card_ids") or []) for row in rows)
+        ))
+        max_belief = max(1, min(
+            MAX_CONTEXT_CARDS, max(len(row.get("opponent_belief_card_ids") or []) for row in rows)
+        ))
+        remaining_card_ids = torch.zeros((batch, max_remaining), dtype=torch.long)
+        remaining_card_mask = torch.zeros((batch, max_remaining), dtype=torch.bool)
+        opponent_belief_card_ids = torch.zeros((batch, max_belief), dtype=torch.long)
+        opponent_belief_card_mask = torch.zeros((batch, max_belief), dtype=torch.bool)
+        for index, row in enumerate(rows):
+            remaining = list(row.get("remaining_card_ids") or [])[:max_remaining]
+            belief_deck = list(row.get("opponent_belief_card_ids") or [])[:max_belief]
+            if remaining:
+                remaining_card_ids[index, :len(remaining)] = torch.tensor(remaining)
+                remaining_card_mask[index, :len(remaining)] = True
+            if belief_deck:
+                opponent_belief_card_ids[index, :len(belief_deck)] = torch.tensor(belief_deck)
+                opponent_belief_card_mask[index, :len(belief_deck)] = True
+        resource_features = torch.tensor(
+            [row["resource_features"] for row in rows], dtype=torch.float32
+        )
+        opponent_belief_features = torch.tensor(
+            [row["opponent_belief_features"] for row in rows], dtype=torch.float32
+        )
+        if resource_features.shape[1] != RESOURCE_DIM or opponent_belief_features.shape[1] != BELIEF_DIM:
+            raise ValueError("enhanced-context feature dimension mismatch")
+        result.update({
+            "remaining_card_ids": remaining_card_ids,
+            "remaining_card_mask": remaining_card_mask,
+            "resource_features": resource_features,
+            "opponent_belief_card_ids": opponent_belief_card_ids,
+            "opponent_belief_card_mask": opponent_belief_card_mask,
+            "opponent_belief_features": opponent_belief_features,
         })
     return result
 

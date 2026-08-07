@@ -15,11 +15,20 @@ from scripts.continuous_rl_pipeline import (
     generation_training_config,
     q_materialization_arguments,
     retain_candidate_in_league,
+    staged_gate_game_count,
     wait_for_files,
 )
 
 
 class ContinuousPipelineTests(unittest.TestCase):
+    def test_staged_gate_targets_are_exact(self) -> None:
+        stages = [
+            {"opponent_count": 4, "games_per_public": 2, "parent_games": 4},
+            {"opponent_count": 8, "games_per_public": 8, "parent_games": 72},
+            {"opponent_count": 16, "games_per_public": 10, "parent_games": 80},
+        ]
+        self.assertEqual([staged_gate_game_count(stage) for stage in stages], [20, 200, 400])
+
     def test_q_materialization_uses_conservative_defaults(self) -> None:
         arguments = q_materialization_arguments({})
         paired = dict(zip(arguments[::2], arguments[1::2]))

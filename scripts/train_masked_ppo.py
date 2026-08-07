@@ -29,6 +29,7 @@ from rl.ppo import (
     sha256_file,
     to_device,
 )
+from rl.reproducibility import seed_deterministically
 
 
 def git_sha() -> str:
@@ -123,10 +124,7 @@ def main() -> None:
     if not args.allow_dirty_smoke:
         assert_clean_worktree()
 
-    random.seed(args.seed)
-    torch.manual_seed(args.seed)
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed_all(args.seed)
+    seed_deterministically(args.seed)
     device = torch.device("cuda:0" if args.device == "auto" and torch.cuda.is_available() else (
         "cpu" if args.device == "auto" else args.device
     ))

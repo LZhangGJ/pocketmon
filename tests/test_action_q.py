@@ -5,7 +5,7 @@ import unittest
 
 import torch
 
-from rl.action_q import ActionValueEnsemble, q_mean_and_std
+from rl.action_q import ActionValueEnsemble, DuelingActionValueEnsemble, q_mean_and_std
 from rl.agent_adapter import apply_q_override_budget, conservative_q_choice
 from rl.counterfactual import sample_hidden_zones, terminal_value
 
@@ -38,6 +38,13 @@ class ActionQTests(unittest.TestCase):
         self.assertEqual(tuple(values.shape), (2, 5, 3))
         self.assertEqual(tuple(mean.shape), (2, 5))
         self.assertTrue(torch.isfinite(std).all())
+
+    def test_dueling_q_exposes_action_advantage(self) -> None:
+        model = DuelingActionValueEnsemble(hidden_dim=8, heads=5)
+        q, advantage = model.q_and_advantage(torch.randn(2, 8), torch.randn(2, 4, 8))
+        self.assertEqual(tuple(q.shape), (2, 4, 5))
+        self.assertEqual(tuple(advantage.shape), (2, 4, 5))
+        self.assertTrue(torch.isfinite(q).all())
 
     def test_q_override_budget_caps_takeover_rate(self) -> None:
         credit = 0.0

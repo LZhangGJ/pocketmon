@@ -65,6 +65,12 @@ def materialize(
         actor_hash = sha256(checkpoint)
         if q_payload.get("actor_checkpoint_sha256") != actor_hash:
             raise ValueError("action-Q checkpoint was trained for a different actor")
+        q_kind = q_payload.get("kind", "counterfactual_action_q_ensemble")
+        if q_kind not in {
+            "counterfactual_action_q_ensemble",
+            "counterfactual_dueling_action_q_ensemble",
+        }:
+            raise ValueError(f"unsupported action-Q checkpoint kind: {q_kind!r}")
         validation = q_payload.get("validation") or {}
         validation_rows = int(validation.get("rows", 0))
         validation_mae = float(validation.get("mae", float("inf")))
@@ -88,6 +94,7 @@ def materialize(
             "max_validation_mae": q_max_validation_mae,
             "observed_validation_rows": validation_rows,
             "observed_validation_mae": validation_mae,
+            "head_kind": q_kind,
         }
     output.parent.mkdir(parents=True, exist_ok=True)
     staging = Path(tempfile.mkdtemp(prefix=f".{output.name}-", dir=output.parent))

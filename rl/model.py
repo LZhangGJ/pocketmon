@@ -10,9 +10,11 @@ from .features import (
     CARD_METADATA_DIM,
     CARD_TEXT_EMBEDDING_DIM,
     CARD_VOCAB_SIZE,
+    BELIEF_DIM,
     ENTITY_DIM,
     ENTITY_ZONE_COUNT,
     HISTORY_DIM,
+    RESOURCE_DIM,
     STATE_DIM,
 )
 
@@ -296,4 +298,107 @@ class StructuredTransformerMaskedPointerActorCritic(StructuredMaskedPointerActor
             need_weights=False,
         )
         encoded_options = self.option_context_norm(option_queries + attended)
+        return state, encoded_options, self.value(state).squeeze(-1)
+
+
+class TemporalResourceBeliefTransformerActorCritic(StructuredTransformerMaskedPointerActorCritic):
+    """Structured Transformer with independently switchable causal contexts.
+
+    Keeping the three contexts switchable makes the Gold V3.1 experiments true
+    one-factor ablations while preserving one checkpoint architecture.
+    """
+
+    def __init__(
+        self,
+        hidden_dim: int = 192,
+        card_metadata: torch.Tensor | None = None,
+        attack_metadata: torch.Tensor | None = None,
+        card_text_embeddings: torch.Tensor | None = None,
+        *,
+        history_length: int = 32,
+        use_history: bool = True,
+        use_resources: bool = True,
+        use_opponent_belief: bool = True,
+        transformer_heads: int = 4,
+        transformer_layers: int = 2,
+    ) -> None:
+        super().__init__(
+            hidden_dim=hidden_dim,
+            card_metadata=card_metadata,
+            attack_metadata=attack_metadata,
+            card_text_embeddings=card_text_embeddings,
+            transformer_heads=transformer_heads,
+            transformer_layers=transformer_layers,
+        )
+        if history_length <= 0 or history_length > 128:
+            raise ValueError("history_length must be in [1, 128]")
+        self.history_length = int(history_length)
+        self.use_history = bool(use_history)
+        self.use_resources = bool(use_resources)
+        self.use_opponent_belief = bool(use_opponent_belief)
+        self.history_token_encoder = nn.Sequential(nn.Linear(HISTORY_DIM, hidden_dim), nn.Tanh())
+        self.history_position = nn.Embedding(self.history_length, hidden_dim)
+        history_layer = nn.TransformerEncoderLayer(
+            d_model=hidden_dim,
+            nhead=transformer_heads,
+            dim_feedforward=hidden_dim * 4,
+            dropout=0.0,
+            activation="gelu",
+            batch_first=True,
+        )
+        self.history_transformer = nn.TransformerEncoder(history_layer, num_layers=2)
+        card_repr_dim = 32 + 16 + 16
+        self.remaining_encoder = nn.Sequential(nn.Linear(card_repr_dim, hidden_dim), nn.Tanh())
+        self.resource_encoder = nn.Sequential(nn.Linear(RESOURCE_DIM, hidden_dim), nn.Tanh())
+        self.belief_deck_encoder = nn.Sequential(nn.Linear(card_repr_dim, hidden_dim), nn.Tanh())
+        self.belief_feature_encoder = nn.Sequential(nn.Linear(BELIEF_DIM, hidden_dim), nn.Tanh())
+        self.v31_context_norm = nn.LayerNorm(hidden_dim)
+        self.v31_option_norm = nn.LayerNorm(hidden_dim)
+
+    def _history_context(self, batch: dict[str, torch.Tensor], state: torch.Tensor) -> torch.Tensor:
+        if not self.use_history:
+            return torch.zeros_like(state)
+        histories = batch["histories"][:, -self.history_length:]
+        mask = batch["history_mask"][:, -self.history_length:].clone()
+        empty = ~mask.any(dim=1)
+        mask[empty, 0] = True
+        positions = torch.arange(histories.shape[1], device=histories.device)
+        tokens = self.history_token_encoder(histories) + self.history_position(positions)[None, :, :]
+        tokens = tokens.masked_fill(~mask[..., None], 0.0)
+        causal = torch.triu(
+            torch.ones((histories.shape[1], histories.shape[1]), dtype=torch.bool, device=histories.device),
+            diagonal=1,
+        )
+        encoded = self.history_transformer(tokens, mask=causal, src_key_padding_mask=~mask)
+        lengths = mask.sum(dim=1).clamp_min(1) - 1
+        context = encoded[torch.arange(len(encoded), device=encoded.device), lengths]
+        return torch.where(empty[:, None], torch.zeros_like(context), context)
+
+    def _card_context(
+        self,
+        ids: torch.Tensor,
+        mask: torch.Tensor,
+        encoder: nn.Module,
+    ) -> torch.Tensor:
+        safe_mask = mask.clone()
+        safe_mask[~safe_mask.any(dim=1), 0] = True
+        encoded = encoder(self._card_repr(ids))
+        encoded = encoded.masked_fill(~safe_mask[..., None], 0.0)
+        return self._masked_mean(encoded, safe_mask)
+
+    def encode_batch(self, batch: dict[str, torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        state, encoded_options, _ = super().encode_batch(batch)
+        context = self._history_context(batch, state)
+        if self.use_resources:
+            context = context + self._card_context(
+                batch["remaining_card_ids"], batch["remaining_card_mask"], self.remaining_encoder
+            ) + self.resource_encoder(batch["resource_features"])
+        if self.use_opponent_belief:
+            context = context + self._card_context(
+                batch["opponent_belief_card_ids"],
+                batch["opponent_belief_card_mask"],
+                self.belief_deck_encoder,
+            ) + self.belief_feature_encoder(batch["opponent_belief_features"])
+        state = self.v31_context_norm(state + context)
+        encoded_options = self.v31_option_norm(encoded_options + context[:, None, :])
         return state, encoded_options, self.value(state).squeeze(-1)

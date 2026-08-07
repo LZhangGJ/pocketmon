@@ -35,13 +35,16 @@ from rl.model import (
     MaskedPointerActorCritic,
     StructuredMaskedPointerActorCritic,
     StructuredTransformerMaskedPointerActorCritic,
+    TemporalResourceBeliefTransformerActorCritic,
 )
+from rl.reproducibility import seed_deterministically
 
 
 ARCHITECTURE = "stateless_masked_autoregressive_candidate_pointer_with_stop"
 HISTORY_ARCHITECTURE = "causal_gru_history_masked_autoregressive_candidate_pointer_with_stop"
 STRUCTURED_ARCHITECTURE = "structured_card_attack_deepsets_deck_masked_pointer_with_stop"
 STRUCTURED_TRANSFORMER_ARCHITECTURE = "structured_card_attack_transformer_text_deck_masked_pointer_with_stop"
+V31_ARCHITECTURE = "structured_temporal_resource_belief_transformer_masked_pointer_with_stop"
 
 
 def peak_ram_mb() -> float:
@@ -96,14 +99,7 @@ def choose_device(value: str) -> torch.device:
 
 
 def seed_everything(seed: int) -> None:
-    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
-    random.seed(seed); torch.manual_seed(seed)
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed_all(seed)
-    try:
-        torch.use_deterministic_algorithms(True, warn_only=True)
-    except TypeError:
-        torch.use_deterministic_algorithms(True)
+    seed_deterministically(seed)
 
 
 def git_sha() -> str:
@@ -148,7 +144,13 @@ def actual_fingerprint_payload(
     initialization: str = "random",
     initialization_checkpoint_sha256: str | None = None,
 ) -> dict[str, Any]:
-    history_enabled = architecture == HISTORY_ARCHITECTURE
+    history_enabled = architecture == HISTORY_ARCHITECTURE or (
+        architecture == V31_ARCHITECTURE and history_length > 0
+    )
+    history_encoder = (
+        "gru" if architecture == HISTORY_ARCHITECTURE else
+        "causal_transformer" if history_enabled else "none"
+    )
     payload = {
         "code_commit": code_commit,
         "input_sha256": input_sha256,
@@ -161,7 +163,7 @@ def actual_fingerprint_payload(
         "architecture": architecture,
         "history": {
             "enabled": history_enabled,
-            "encoder": "gru" if history_enabled else "none",
+            "encoder": history_encoder,
             "max_length": history_length if history_enabled else 0,
         },
         "initialization": initialization,
@@ -361,10 +363,14 @@ def main() -> None:
             HISTORY_ARCHITECTURE,
             STRUCTURED_ARCHITECTURE,
             STRUCTURED_TRANSFORMER_ARCHITECTURE,
+            V31_ARCHITECTURE,
         ),
         default=ARCHITECTURE,
     )
     parser.add_argument("--history-length", type=int, default=0)
+    parser.add_argument("--v31-use-resources", action="store_true")
+    parser.add_argument("--v31-use-opponent-belief", action="store_true")
+    parser.add_argument("--opponent-prototypes", type=Path)
     parser.add_argument("--deck-map", default="data/processed/replay_decks_2026-08-05.jsonl.gz")
     parser.add_argument("--card-database", default="data/reference/official_cards.json")
     parser.add_argument("--attack-database", default="data/reference/official_attacks.json")
@@ -404,13 +410,31 @@ def main() -> None:
         torch.cuda.set_device(0 if device.index is None else device.index)
         torch.cuda.reset_peak_memory_stats()
 
-    history_enabled = args.architecture == HISTORY_ARCHITECTURE
-    structured_enabled = args.architecture in (STRUCTURED_ARCHITECTURE, STRUCTURED_TRANSFORMER_ARCHITECTURE)
-    transformer_enabled = args.architecture == STRUCTURED_TRANSFORMER_ARCHITECTURE
+    v31_enabled = args.architecture == V31_ARCHITECTURE
+    history_enabled = args.architecture == HISTORY_ARCHITECTURE or (
+        v31_enabled and args.history_length > 0
+    )
+    structured_enabled = args.architecture in (
+        STRUCTURED_ARCHITECTURE, STRUCTURED_TRANSFORMER_ARCHITECTURE, V31_ARCHITECTURE
+    )
+    transformer_enabled = args.architecture in (STRUCTURED_TRANSFORMER_ARCHITECTURE, V31_ARCHITECTURE)
     if history_enabled and args.history_length <= 0:
         raise ValueError("history architecture requires --history-length > 0")
     if not history_enabled and args.history_length != 0:
         raise ValueError("stateless architecture requires --history-length 0")
+    if not v31_enabled and (args.v31_use_resources or args.v31_use_opponent_belief or args.opponent_prototypes):
+        raise ValueError("V3.1 context flags require the V3.1 architecture")
+    if args.v31_use_opponent_belief and args.opponent_prototypes is None:
+        raise ValueError("opponent belief requires --opponent-prototypes")
+    if args.opponent_prototypes and not args.opponent_prototypes.is_file():
+        raise FileNotFoundError(args.opponent_prototypes)
+    opponent_prototypes: list[dict[str, Any]] = []
+    if args.opponent_prototypes:
+        prototype_payload = json.loads(args.opponent_prototypes.read_text(encoding="utf-8"))
+        opponent_prototypes = list(
+            prototype_payload.get("prototypes", [])
+            if isinstance(prototype_payload, dict) else prototype_payload
+        )
     if not 0.0 <= args.confidence_threshold <= 1.0:
         raise ValueError("confidence threshold must be in [0, 1]")
     bias_enabled = any(value > 0 for value in (
@@ -434,6 +458,8 @@ def main() -> None:
         Path(args.input), history_length=args.history_length,
         deck_map_path=Path(args.deck_map) if structured_enabled else None,
         structured=structured_enabled,
+        enhanced_context=bool(args.v31_use_resources or args.v31_use_opponent_belief),
+        opponent_prototypes=opponent_prototypes,
         bias_correction={
             key: value for key, value in (sampling or {}).items()
             if key not in {"opponent_identity", "agent_id_available"}
@@ -451,6 +477,17 @@ def main() -> None:
             "attack_database_sha256": sha256_file(Path(args.attack_database)),
             "confidence_threshold": args.confidence_threshold,
         }
+        if v31_enabled:
+            structured_assets.update({
+                "temporal_history": history_enabled,
+                "remaining_card_context": bool(args.v31_use_resources),
+                "opponent_deck_belief": bool(args.v31_use_opponent_belief),
+                "hidden_opponent_cards_used": False,
+                "opponent_prototype_count": len(opponent_prototypes),
+                "opponent_prototypes_sha256": (
+                    sha256_file(args.opponent_prototypes) if args.opponent_prototypes else None
+                ),
+            })
     initialization = "resume" if args.resume else ("warm_start" if args.initialize_from else "random")
     initialization_checkpoint_sha256 = (
         checkpoint_sha256(Path(args.initialize_from).resolve()) if args.initialize_from else None
@@ -480,7 +517,20 @@ def main() -> None:
     validation = TrajectoryDataset([row for row in rows if row["episode_id"] in validation_ids])
     train_loader = make_loader(train, args.batch_size, True, args.seed)
     validation_loader = make_loader(validation, args.batch_size, False, args.seed)
-    if transformer_enabled:
+    if v31_enabled:
+        model = TemporalResourceBeliefTransformerActorCritic(
+            args.hidden_dim,
+            card_metadata=torch.tensor(card_metadata_table(Path(args.card_database))),
+            attack_metadata=torch.tensor(attack_metadata_table(Path(args.attack_database))),
+            card_text_embeddings=torch.tensor(card_text_embedding_table(
+                Path(args.card_database), Path(args.attack_database)
+            )),
+            history_length=max(1, args.history_length),
+            use_history=history_enabled,
+            use_resources=args.v31_use_resources,
+            use_opponent_belief=args.v31_use_opponent_belief,
+        ).to(device)
+    elif transformer_enabled:
         model = StructuredTransformerMaskedPointerActorCritic(
             args.hidden_dim,
             card_metadata=torch.tensor(card_metadata_table(Path(args.card_database))),
@@ -508,12 +558,30 @@ def main() -> None:
             raise ValueError(
                 f"warm-start hidden_dim mismatch: checkpoint={source_hidden_dim}, requested={args.hidden_dim}"
             )
-        model.load_state_dict(checkpoint["model"], strict=True)
+        if v31_enabled:
+            incompatible = model.load_state_dict(checkpoint["model"], strict=False)
+            allowed_missing = (
+                "history_token_encoder.", "history_position.", "history_transformer.",
+                "remaining_encoder.", "resource_encoder.", "belief_deck_encoder.",
+                "belief_feature_encoder.", "v31_context_norm.", "v31_option_norm.",
+            )
+            unexpected = list(incompatible.unexpected_keys)
+            disallowed = [
+                key for key in incompatible.missing_keys
+                if not key.startswith(allowed_missing)
+            ]
+            if unexpected or disallowed:
+                raise ValueError(
+                    f"unsafe V3.1 warm start: unexpected={unexpected}, missing={disallowed}"
+                )
+        else:
+            model.load_state_dict(checkpoint["model"], strict=True)
         warm_start = {
             "path": str(source_path),
             "sha256": checkpoint_sha256(source_path),
             "git_sha": checkpoint.get("git_sha"),
             "experiment_fingerprint": checkpoint.get("experiment_fingerprint"),
+            "partial_backbone_transfer": v31_enabled,
         }
     if args.resume:
         checkpoint = load_torch_checkpoint(args.resume, device)
@@ -524,11 +592,15 @@ def main() -> None:
         state = restore_training_state(checkpoint)
 
     actual_config = vars(args).copy()
+    actual_config["opponent_prototypes"] = (
+        str(args.opponent_prototypes) if args.opponent_prototypes else None
+    )
     actual_config.update({
         "code_commit": code_commit, "dirty_at_start": bool(initial_dirty), "input_sha256": audit["input_sha256"],
         "device_resolved": str(device), "stateless": not history_enabled, "architecture": args.architecture,
         "history_encoder": history_enabled, "history_length": args.history_length,
         "structured": structured_assets,
+        "opponent_deck_prototypes": opponent_prototypes,
         "sampling": sampling,
         "initialization": initialization, "warm_start": warm_start,
         "policy_rows": "winner_only", "value_rows": "both_players",

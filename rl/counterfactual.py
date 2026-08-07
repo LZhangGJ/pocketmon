@@ -7,7 +7,8 @@ from typing import Any
 
 import torch
 
-from .ppo import predict_state_value, rank_single_actions, sample_action
+from .features import history_features
+from .ppo import model_row_for_model, predict_state_value, rank_single_actions, sample_action
 
 
 def _card_id(value: Any) -> int | None:
@@ -116,13 +117,16 @@ def counterfactual_action_values(
     candidates: int = 4,
     determinizations: int = 2,
     horizon: int = 16,
+    history: list[list[float]] | None = None,
 ) -> list[dict[str, float | int]]:
     """Estimate Q(s,a) by branching official Search API states."""
 
     from cg.api import search_begin, search_end, search_step, to_observation_class
 
     root_player = int((observation.get("current") or {})["yourIndex"])
-    ranked = rank_single_actions(model, observation, decks[root_player], device, candidates)
+    ranked = rank_single_actions(
+        model, observation, decks[root_player], device, candidates, history=history
+    )
     if len(ranked) < 2:
         return []
     totals = {index: [] for index in ranked}
@@ -137,18 +141,43 @@ def counterfactual_action_values(
                 branch = search_step(root.searchId, [option_index])
                 current = _as_dict(branch.observation)
                 search_id = branch.searchId
+                branch_histories = {root_player: list(history or []), 1 - root_player: []}
+                root_row = model_row_for_model(
+                    model, observation, decks[root_player], [option_index], branch_histories[root_player]
+                )
+                branch_histories[root_player].append(history_features(
+                    root_row["state"], root_row["options"], [option_index]
+                ))
                 for _step in range(horizon):
                     terminal = terminal_value(current, root_player)
                     if terminal is not None:
                         break
                     player = int((current.get("current") or {})["yourIndex"])
-                    action, _, _, _ = sample_action(model, current, decks[player], device, temperature=0.7)
+                    action, _, _, _ = sample_action(
+                        model,
+                        current,
+                        decks[player],
+                        device,
+                        temperature=0.7,
+                        history=branch_histories[player],
+                    )
+                    action_row = model_row_for_model(
+                        model, current, decks[player], action, branch_histories[player]
+                    )
+                    branch_histories[player].append(history_features(
+                        action_row["state"], action_row["options"], action
+                    ))
+                    maximum = int(getattr(model, "history_length", 0) or 0)
+                    if maximum:
+                        branch_histories[player] = branch_histories[player][-maximum:]
                     branch = search_step(search_id, action)
                     current, search_id = _as_dict(branch.observation), branch.searchId
                 target = terminal_value(current, root_player)
                 if target is None:
                     player = int((current.get("current") or {})["yourIndex"])
-                    bootstrap = predict_state_value(model, current, decks[player], device)
+                    bootstrap = predict_state_value(
+                        model, current, decks[player], device, history=branch_histories[player]
+                    )
                     target = bootstrap if player == root_player else -bootstrap
                 totals[option_index].append(float(max(-1.0, min(1.0, target))))
         finally:

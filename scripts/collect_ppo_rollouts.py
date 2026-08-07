@@ -21,7 +21,8 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from rl.counterfactual import counterfactual_action_values
-from rl.ppo import load_checkpoint, model_row_from_observation, sample_action, sha256_file
+from rl.features import history_features
+from rl.ppo import load_checkpoint, model_row_for_model, sample_action, sha256_file
 
 
 def read_deck(path: Path, attempts: int = 20, retry_seconds: float = 0.1) -> list[int]:
@@ -133,6 +134,16 @@ def finish_trajectory(rows: list[dict[str, Any]], winner: int) -> None:
         group[-1]["reward"] = float(group[-1]["outcome"])
 
 
+def finish_counterfactual_rows(rows: list[dict[str, Any]], winner: int) -> None:
+    """Mark real losses without changing the engine-derived Q target."""
+
+    for row in rows:
+        player = int(row["player"])
+        outcome = 0.0 if winner == 2 else (1.0 if winner == player else -1.0)
+        row["root_outcome"] = outcome
+        row["loss_priority"] = outcome < 0.0
+
+
 def play_episode(
     *,
     model,
@@ -176,12 +187,14 @@ def play_episode(
     trajectory: list[dict[str, Any]] = []
     counterfactual_rows: list[dict[str, Any]] = []
     counterfactual_errors = 0
+    learner_history: list[list[float]] = []
     try:
         for step in range(max_decisions):
             current = observation.get("current") or {}
             result = int(current.get("result", -1))
             if result != -1:
                 finish_trajectory(trajectory, result)
+                finish_counterfactual_rows(counterfactual_rows, result)
                 return trajectory, counterfactual_rows, result, opponent_name, counterfactual_errors
             player = int(current.get("yourIndex", step % 2))
             select = observation.get("select")
@@ -200,10 +213,13 @@ def play_episode(
                             candidates=counterfactual_candidates,
                             determinizations=counterfactual_determinizations,
                             horizon=counterfactual_horizon,
+                            history=learner_history,
                         )
                         for label in labels:
                             option_index = int(label["option_index"])
-                            q_row = model_row_from_observation(observation, learner_deck, [option_index])
+                            q_row = model_row_for_model(
+                                model, observation, learner_deck, [option_index], learner_history
+                            )
                             q_row.update({
                                 "schema_version": 1,
                                 "rollout_format": "counterfactual_action_q_v1",
@@ -226,9 +242,11 @@ def play_episode(
                     except Exception:
                         counterfactual_errors += 1
                 action, log_probability, value, entropy = sample_action(
-                    model, observation, learner_deck, device, temperature
+                    model, observation, learner_deck, device, temperature, history=learner_history
                 )
-                row = model_row_from_observation(observation, learner_deck, action)
+                row = model_row_for_model(
+                    model, observation, learner_deck, action, learner_history
+                )
                 row.update({
                     "schema_version": 3,
                     "rollout_format": "masked_ppo_v1",
@@ -252,6 +270,10 @@ def play_episode(
                     "outcome": 0.0,
                 })
                 trajectory.append(row)
+                learner_history.append(history_features(row["state"], row["options"], action))
+                maximum = int(getattr(model, "history_length", 0) or 0)
+                if maximum:
+                    learner_history = learner_history[-maximum:]
             else:
                 if opponent_module is None:
                     raise RuntimeError("missing rollout opponent module")
