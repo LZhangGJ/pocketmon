@@ -13,6 +13,7 @@ from rl.bc import (
     MODEL_INPUT_FIELDS,
     TrajectoryDataset,
     action_is_legal,
+    apply_replay_bias_correction,
     batch_loss,
     build_causal_histories,
     collate_rows,
@@ -126,11 +127,52 @@ class RLBehaviorCloningTests(unittest.TestCase):
         _, parts = batch_loss(model, collate_rows([compact([0], 1, 1, 1.0), compact([1], 1, 1, 0.0)]))
         self.assertEqual(parts["value_count"], 2.0)
 
+    def test_sample_weight_scales_policy_and_value_loss_mass(self) -> None:
+        row = compact([0], 1, 1)
+        row["sample_weight"] = 0.5
+        _, parts = batch_loss(MaskedPointerActorCritic(16), collate_rows([row]))
+        self.assertEqual(parts["policy_count"], 1.0)  # candidate plus STOP, each weighted 0.5
+        self.assertEqual(parts["value_count"], 0.5)
+
+    def test_replay_bias_correction_uses_recency_rating_and_both_decks(self) -> None:
+        rows = []
+        deck_map = {}
+        metadata = (
+            ("old-a", "2026-08-05T00:00:00Z", 1000.0, [1] * 60, [2] * 60),
+            ("old-b", "2026-08-05T01:00:00Z", 1000.0, [1] * 60, [2] * 60),
+            ("new", "2026-08-06T23:00:00Z", 1200.0, [3] * 60, [4] * 60),
+        )
+        for episode, created_at, rating, deck0, deck1 in metadata:
+            for player in (0, 1):
+                row = compact([0], 1, 1, episode=episode)
+                row.update({"player": player, "created_at": created_at, "average_rating": rating})
+                rows.append(row)
+            deck_map[(episode, 0)] = deck0
+            deck_map[(episode, 1)] = deck1
+        audit = apply_replay_bias_correction(
+            rows,
+            deck_map,
+            recency_half_life_days=2.0,
+            deck_stratification_alpha=0.5,
+            rating_stratification_alpha=0.5,
+            min_sample_weight=0.1,
+            max_sample_weight=10.0,
+        )
+        weights = {(row["episode_id"], row["player"]): row["sample_weight"] for row in rows}
+        self.assertGreater(weights[("new", 0)], weights[("old-a", 0)])
+        self.assertGreater(weights[("new", 1)], weights[("old-a", 1)])
+        self.assertEqual(audit["own_deck_strata"], 4)
+        self.assertEqual(audit["opponent_deck_strata"], 4)
+        self.assertEqual(audit["rating_strata"], 2)
+        self.assertEqual(audit["opponent_identity"], "submitted_deck_sha256_proxy")
+        self.assertFalse(audit["agent_id_available"])
+
     def test_model_inputs_exclude_labels_and_logs(self) -> None:
         self.assertFalse(MODEL_INPUT_FIELDS & FORBIDDEN_MODEL_FIELDS)
         self.assertNotIn("winner", MODEL_INPUT_FIELDS)
         self.assertNotIn("outcome", MODEL_INPUT_FIELDS)
         self.assertNotIn("action_status", MODEL_INPUT_FIELDS)
+        self.assertIn("sample_weight", FORBIDDEN_MODEL_FIELDS)
 
     def test_checkpoint_reload_has_identical_output(self) -> None:
         torch.manual_seed(9)
@@ -231,6 +273,12 @@ class RLBehaviorCloningTests(unittest.TestCase):
             **common, architecture=HISTORY_ARCHITECTURE, history_length=16
         ))
         self.assertNotEqual(stateless, history)
+        weighted = experiment_fingerprint(actual_fingerprint_payload(
+            **common,
+            architecture=ARCHITECTURE,
+            sampling={"recency_half_life_days": 2.0},
+        ))
+        self.assertNotEqual(stateless, weighted)
         rows = [
             {"seed": "17", "experiment_fingerprint": stateless, "config_matched": "True"},
             {"seed": "42", "experiment_fingerprint": history, "config_matched": "True"},

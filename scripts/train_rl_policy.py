@@ -139,6 +139,7 @@ def actual_fingerprint_payload(
     value_loss_weight: float, gradient_clip_norm: float, architecture: str = ARCHITECTURE,
     history_length: int = 0, experiment_id: str | None = None,
     structured: dict[str, Any] | None = None,
+    sampling: dict[str, Any] | None = None,
     initialization: str = "random",
     initialization_checkpoint_sha256: str | None = None,
 ) -> dict[str, Any]:
@@ -170,6 +171,8 @@ def actual_fingerprint_payload(
         })
     if structured is not None:
         payload["structured"] = structured
+    if sampling is not None:
+        payload["sampling"] = sampling
     if experiment_id is not None:
         payload["experiment_id"] = experiment_id
     return payload
@@ -206,6 +209,9 @@ def current_config_matches(planned: dict[str, Any], actual: dict[str, Any]) -> t
     if "structured" in planned:
         for field, expected in planned["structured"].items():
             checks[f"structured_{field}"] = actual.get("structured", {}).get(field) == expected
+    if "sampling" in planned:
+        for field, expected in planned["sampling"].items():
+            checks[f"sampling_{field}"] = actual.get("sampling", {}).get(field) == expected
     if "experiment_id" in planned:
         checks["experiment_id"] = actual.get("experiment_id") == planned["experiment_id"]
     if "random_initialization" in planned:
@@ -353,6 +359,12 @@ def main() -> None:
     parser.add_argument("--card-database", default="data/reference/official_cards.json")
     parser.add_argument("--attack-database", default="data/reference/official_attacks.json")
     parser.add_argument("--confidence-threshold", type=float, default=0.55)
+    parser.add_argument("--recency-half-life-days", type=float, default=0.0)
+    parser.add_argument("--deck-stratification-alpha", type=float, default=0.0)
+    parser.add_argument("--rating-stratification-alpha", type=float, default=0.0)
+    parser.add_argument("--rating-bin-width", type=float, default=100.0)
+    parser.add_argument("--min-sample-weight", type=float, default=0.25)
+    parser.add_argument("--max-sample-weight", type=float, default=4.0)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--checkpoint-dir", default="checkpoints/rl_bc_001")
     parser.add_argument("--metrics-output", default="results/rl_bc_001_metrics.json")
@@ -390,10 +402,31 @@ def main() -> None:
         raise ValueError("stateless architecture requires --history-length 0")
     if not 0.0 <= args.confidence_threshold <= 1.0:
         raise ValueError("confidence threshold must be in [0, 1]")
+    bias_enabled = any(value > 0 for value in (
+        args.recency_half_life_days,
+        args.deck_stratification_alpha,
+        args.rating_stratification_alpha,
+    ))
+    if args.deck_stratification_alpha > 0 and not structured_enabled:
+        raise ValueError("deck stratification requires the structured architecture and deck map")
+    sampling = None if not bias_enabled else {
+        "recency_half_life_days": args.recency_half_life_days,
+        "deck_stratification_alpha": args.deck_stratification_alpha,
+        "rating_stratification_alpha": args.rating_stratification_alpha,
+        "rating_bin_width": args.rating_bin_width,
+        "min_sample_weight": args.min_sample_weight,
+        "max_sample_weight": args.max_sample_weight,
+        "opponent_identity": "submitted_deck_sha256_proxy",
+        "agent_id_available": False,
+    }
     rows, audit = load_replay_dataset(
         Path(args.input), history_length=args.history_length,
         deck_map_path=Path(args.deck_map) if structured_enabled else None,
         structured=structured_enabled,
+        bias_correction={
+            key: value for key, value in (sampling or {}).items()
+            if key not in {"opponent_identity", "agent_id_available"}
+        },
     )
     structured_assets = None
     if structured_enabled:
@@ -418,6 +451,7 @@ def main() -> None:
         architecture=args.architecture, history_length=args.history_length,
         experiment_id=args.experiment_id,
         structured=structured_assets,
+        sampling=sampling,
         initialization=initialization,
         initialization_checkpoint_sha256=initialization_checkpoint_sha256,
     )
@@ -474,6 +508,7 @@ def main() -> None:
         "device_resolved": str(device), "stateless": not history_enabled, "architecture": args.architecture,
         "history_encoder": history_enabled, "history_length": args.history_length,
         "structured": structured_assets,
+        "sampling": sampling,
         "initialization": initialization, "warm_start": warm_start,
         "policy_rows": "winner_only", "value_rows": "both_players",
         "value_loss_weight": args.value_loss_weight, "gradient_clip_norm": args.gradient_clip_norm,

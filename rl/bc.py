@@ -6,6 +6,7 @@ import json
 import math
 import random
 from collections import Counter, defaultdict
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -31,7 +32,8 @@ SPLIT_SEED = 20260720
 VALIDATION_FRACTION = 0.20
 FORBIDDEN_MODEL_FIELDS = {
     "winner", "outcome", "policy_weight", "value_weight", "source_path", "source_sha256",
-    "action_status", "observation.logs", "action",
+    "action_status", "observation.logs", "action", "sample_weight", "manifest.avg_score",
+    "manifest.create_time",
 }
 MODEL_INPUT_FIELDS = {
     "observation.current.visible_state",
@@ -100,6 +102,14 @@ def compact_replay_row(raw: dict[str, Any], structured: bool = False) -> dict[st
         raise ValueError("policy weight must select winner rows only")
     if not math.isfinite(outcome):
         raise ValueError("non-finite outcome")
+    manifest = raw.get("manifest") or {}
+    if not isinstance(manifest, dict):
+        raise ValueError("manifest must be an object when present")
+    average_rating = manifest.get("avg_score")
+    if average_rating not in (None, ""):
+        average_rating = float(average_rating)
+        if not math.isfinite(average_rating):
+            raise ValueError("manifest avg_score must be finite")
     encoded_options = [action_features(option if isinstance(option, dict) else {}, index) for index, option in enumerate(options)]
     row = {
         "episode_id": str(raw.get("episode_id")),
@@ -114,6 +124,9 @@ def compact_replay_row(raw: dict[str, Any], structured: bool = False) -> dict[st
         "outcome": outcome,
         "policy_weight": policy_weight,
         "value_weight": value_weight,
+        "sample_weight": 1.0,
+        "created_at": manifest.get("create_time"),
+        "average_rating": average_rating,
         "select_type": select.get("type"),
         "select_context": _context_key(select.get("context")),
         "source_sha256": str(raw.get("source_sha256")),
@@ -121,6 +134,160 @@ def compact_replay_row(raw: dict[str, Any], structured: bool = False) -> dict[st
     if structured:
         row.update(structured_observation_features(observation, options))
     return row
+
+
+def _deck_fingerprint(deck: list[int]) -> str:
+    return hashlib.sha256(",".join(str(card_id) for card_id in sorted(deck)).encode("ascii")).hexdigest()
+
+
+def _parse_created_at(value: Any) -> datetime:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError("recency weighting requires manifest.create_time")
+    parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def apply_replay_bias_correction(
+    rows: list[dict[str, Any]],
+    deck_map: dict[tuple[str, int], list[int]],
+    *,
+    recency_half_life_days: float = 0.0,
+    deck_stratification_alpha: float = 0.0,
+    rating_stratification_alpha: float = 0.0,
+    min_sample_weight: float = 0.25,
+    max_sample_weight: float = 4.0,
+    rating_bin_width: float = 100.0,
+) -> dict[str, Any]:
+    """Attach audited metadata-only loss weights at episode/player granularity.
+
+    Public daily episodes are selected using participant rating.  Agent IDs are
+    not published, so acting/opponent submitted-deck fingerprints are the only
+    stable public proxy for opponent strata.  No outcome or chosen action is
+    used to construct these weights.
+    """
+
+    parameters = (
+        recency_half_life_days,
+        deck_stratification_alpha,
+        rating_stratification_alpha,
+    )
+    if any(value < 0 for value in parameters):
+        raise ValueError("bias-correction parameters must be non-negative")
+    if not 0 < min_sample_weight <= max_sample_weight:
+        raise ValueError("sample-weight bounds must satisfy 0 < min <= max")
+    if rating_bin_width <= 0:
+        raise ValueError("rating_bin_width must be positive")
+    enabled = any(value > 0 for value in parameters)
+    if not rows:
+        raise ValueError("cannot weight an empty replay dataset")
+    if not enabled:
+        for row in rows:
+            row["sample_weight"] = 1.0
+        return {
+            "enabled": False,
+            "method": "none",
+            "row_weight": {"min": 1.0, "max": 1.0, "mean": 1.0},
+        }
+
+    units: dict[tuple[str, int], dict[str, Any]] = {}
+    for row in rows:
+        player = row.get("player")
+        if not isinstance(player, int) or isinstance(player, bool) or player not in (0, 1):
+            raise ValueError("bias correction requires player identity 0 or 1")
+        key = (row["episode_id"], player)
+        candidate = {
+            "created_at": row.get("created_at"),
+            "average_rating": row.get("average_rating"),
+        }
+        if key in units and units[key] != candidate:
+            raise ValueError(f"conflicting weighting metadata for {key}")
+        units[key] = candidate
+
+    own_fingerprint: dict[tuple[str, int], str] = {}
+    opponent_fingerprint: dict[tuple[str, int], str] = {}
+    if deck_stratification_alpha > 0:
+        for episode_id, player in units:
+            own_key, opponent_key = (episode_id, player), (episode_id, 1 - player)
+            if own_key not in deck_map or opponent_key not in deck_map:
+                raise ValueError(f"deck stratification requires both submitted decks for episode {episode_id}")
+            own_fingerprint[own_key] = _deck_fingerprint(deck_map[own_key])
+            opponent_fingerprint[own_key] = _deck_fingerprint(deck_map[opponent_key])
+    own_counts = Counter(own_fingerprint.values())
+    opponent_counts = Counter(opponent_fingerprint.values())
+
+    rating_stratum: dict[tuple[str, int], int] = {}
+    if rating_stratification_alpha > 0:
+        for key, metadata in units.items():
+            rating = metadata["average_rating"]
+            if rating is None:
+                raise ValueError("rating stratification requires manifest.avg_score")
+            rating_stratum[key] = int(math.floor(float(rating) / rating_bin_width))
+    rating_counts = Counter(rating_stratum.values())
+
+    timestamps: dict[tuple[str, int], datetime] = {}
+    if recency_half_life_days > 0:
+        timestamps = {key: _parse_created_at(metadata["created_at"]) for key, metadata in units.items()}
+        reference_time = max(timestamps.values())
+    else:
+        reference_time = None
+
+    raw_weights: dict[tuple[str, int], float] = {}
+    for key in units:
+        weight = 1.0
+        if reference_time is not None:
+            age_days = max(0.0, (reference_time - timestamps[key]).total_seconds() / 86400.0)
+            weight *= 2.0 ** (-age_days / recency_half_life_days)
+        if deck_stratification_alpha > 0:
+            # Split the exponent over own and opponent deck frequencies so the
+            # combined correction remains deck_stratification_alpha.
+            half_alpha = deck_stratification_alpha / 2.0
+            weight *= own_counts[own_fingerprint[key]] ** (-half_alpha)
+            weight *= opponent_counts[opponent_fingerprint[key]] ** (-half_alpha)
+        if rating_stratification_alpha > 0:
+            weight *= rating_counts[rating_stratum[key]] ** (-rating_stratification_alpha)
+        raw_weights[key] = weight
+    mean_raw = sum(raw_weights.values()) / len(raw_weights)
+    normalized = {
+        key: min(max_sample_weight, max(min_sample_weight, value / mean_raw))
+        for key, value in raw_weights.items()
+    }
+    for row in rows:
+        row["sample_weight"] = normalized[(row["episode_id"], row["player"])]
+    row_weights = [float(row["sample_weight"]) for row in rows]
+    unit_weights = list(normalized.values())
+    effective_units = sum(unit_weights) ** 2 / sum(value * value for value in unit_weights)
+    return {
+        "enabled": True,
+        "method": "metadata_loss_weighting",
+        "recency_half_life_days": recency_half_life_days,
+        "deck_stratification_alpha": deck_stratification_alpha,
+        "rating_stratification_alpha": rating_stratification_alpha,
+        "rating_bin_width": rating_bin_width,
+        "min_sample_weight": min_sample_weight,
+        "max_sample_weight": max_sample_weight,
+        "episode_player_units": len(units),
+        "effective_episode_player_units": effective_units,
+        "own_deck_strata": len(own_counts),
+        "opponent_deck_strata": len(opponent_counts),
+        "rating_strata": len(rating_counts),
+        "opponent_identity": "submitted_deck_sha256_proxy",
+        "agent_id_available": False,
+        "rating_source": "manifest.avg_score",
+        "recency_source": "manifest.create_time",
+        "reference_time_utc": reference_time.isoformat() if reference_time else None,
+        "unit_weight": {
+            "min": min(unit_weights),
+            "max": max(unit_weights),
+            "mean": sum(unit_weights) / len(unit_weights),
+        },
+        "row_weight": {
+            "min": min(row_weights),
+            "max": max(row_weights),
+            "mean": sum(row_weights) / len(row_weights),
+        },
+    }
 
 
 def build_causal_histories(rows: list[dict[str, Any]], max_history: int) -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -205,6 +372,7 @@ def load_replay_dataset(
     history_length: int = 0,
     deck_map_path: Path | None = None,
     structured: bool = False,
+    bias_correction: dict[str, float] | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     if structured and deck_map_path is None:
         raise ValueError("structured dataset requires a deck map")
@@ -239,6 +407,7 @@ def load_replay_dataset(
         for row in rows:
             row["history"] = []
             row["history_steps"] = []
+    bias_audit = apply_replay_bias_correction(rows, deck_map, **(bias_correction or {}))
     episodes = {row["episode_id"] for row in rows}
     model_input_fields = (
         STRUCTURED_MODEL_INPUT_FIELDS if structured else
@@ -264,6 +433,7 @@ def load_replay_dataset(
         "history": history_audit,
         "structured": structured,
         "deck_map": deck_audit,
+        "bias_correction": bias_audit,
     }
     return rows, audit
 
@@ -373,6 +543,7 @@ def collate_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "outcome": torch.tensor([row["outcome"] for row in rows], dtype=torch.float32),
         "policy_weight": torch.tensor([row["policy_weight"] for row in rows], dtype=torch.float32),
         "value_weight": torch.tensor([row["value_weight"] for row in rows], dtype=torch.float32),
+        "sample_weight": torch.tensor([row.get("sample_weight", 1.0) for row in rows], dtype=torch.float32),
         "rows": rows,
     }
     if all("option_card_ids" in row for row in rows):
@@ -449,7 +620,7 @@ def batch_loss(model: MaskedPointerActorCritic, batch: dict[str, Any], value_los
         if not bool(legal[active, targets[active]].all()):
             raise ValueError("teacher-forcing target is masked as illegal")
         per_row = F.cross_entropy(logits, targets, reduction="none")
-        weights = batch["policy_weight"] * active.to(batch["policy_weight"].dtype)
+        weights = batch["policy_weight"] * batch["sample_weight"] * active.to(batch["policy_weight"].dtype)
         policy_sum = policy_sum + (per_row * weights).sum()
         policy_count = policy_count + weights.sum()
         if bool(choosing.any()):
@@ -463,8 +634,9 @@ def batch_loss(model: MaskedPointerActorCritic, batch: dict[str, Any], value_los
             selected = selected | updates
     policy_loss = policy_sum / policy_count.clamp_min(1.0)
     value_errors = F.mse_loss(values, batch["outcome"], reduction="none")
-    value_sum = (value_errors * batch["value_weight"]).sum()
-    value_count = batch["value_weight"].sum()
+    weighted_value = batch["value_weight"] * batch["sample_weight"]
+    value_sum = (value_errors * weighted_value).sum()
+    value_count = weighted_value.sum()
     value_loss = value_sum / value_count.clamp_min(1.0)
     loss = policy_loss + value_loss_weight * value_loss
     return loss, {
