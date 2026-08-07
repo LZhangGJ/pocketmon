@@ -11,6 +11,14 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+ZERO_DIAGNOSTIC_FIELDS = (
+    "load_errors",
+    "inference_errors",
+    "illegal_model_actions",
+    "fallback_actions",
+    "illegal_fallback_actions",
+    "emergency_legal_actions",
+)
 
 
 def now() -> str:
@@ -85,6 +93,22 @@ def validate_metrics(metrics: dict, checkpoint: Path) -> dict:
     return report
 
 
+def validate_smoke_diagnostics(row: dict) -> None:
+    diagnostics = row.get("agent_diagnostics")
+    if not isinstance(diagnostics, list) or len(diagnostics) != 2:
+        raise RuntimeError("smoke match did not return diagnostics for both seats")
+    for seat, diagnostic in enumerate(diagnostics):
+        if not isinstance(diagnostic, dict):
+            raise RuntimeError(f"smoke diagnostic for seat {seat} is malformed")
+        failures = {
+            field: diagnostic.get(field)
+            for field in ZERO_DIAGNOSTIC_FIELDS
+            if diagnostic.get(field, 0) != 0
+        }
+        if failures:
+            raise RuntimeError(f"agent diagnostic errors at seat {seat}: {failures}")
+
+
 def run_smoke(
     *, python: str, code_root: Path, candidate: Path, parent: Path, cg_dir: Path, seed: int
 ) -> list[dict]:
@@ -110,10 +134,7 @@ def run_smoke(
         )
         row = json.loads(completed.stdout.strip().splitlines()[-1])
         row["candidate_seat"] = candidate_seat
-        diagnostics = row.get("agent_diagnostics") or []
-        for diagnostic in diagnostics:
-            if diagnostic.get("load_error") or diagnostic.get("inference_error"):
-                raise RuntimeError(f"agent diagnostic error: {diagnostic}")
+        validate_smoke_diagnostics(row)
         rows.append(row)
     return rows
 
