@@ -28,6 +28,22 @@ from rl.promotion import (
 )
 
 
+PBT_MUTABLE_KEYS = {
+    "frozen_league_fraction",
+    "rollout_temperature",
+    "ppo_epochs",
+    "ppo_learning_rate",
+    "gamma",
+    "gae_lambda",
+    "clip_ratio",
+    "value_clip",
+    "value_coefficient",
+    "entropy_coefficient",
+    "gradient_clip_norm",
+    "target_kl",
+}
+
+
 def now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -60,6 +76,66 @@ def build_rollout_pool(
     if not population_items:
         raise ValueError("frozen PPO league requires at least one population checkpoint")
     return public_items + population_items
+
+
+def generation_training_config(
+    config: dict[str, Any], generation: int,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Apply a deterministic PBT hyperparameter mutation for one generation."""
+
+    effective = dict(config)
+    variants = list(config.get("pbt_variants") or [])
+    if not variants:
+        return effective, {"name": "base", "generation": generation, "overrides": {}}
+    variant = dict(variants[(generation - 1) % len(variants)])
+    name = str(variant.get("name") or f"variant_{(generation - 1) % len(variants):02d}")
+    overrides = dict(variant.get("overrides") or {})
+    multipliers = dict(variant.get("multipliers") or {})
+    unsupported = (set(overrides) | set(multipliers)) - PBT_MUTABLE_KEYS
+    if unsupported:
+        raise ValueError(f"unsupported PBT mutation keys: {sorted(unsupported)}")
+    applied: dict[str, Any] = {}
+    for key, multiplier in multipliers.items():
+        value = float(effective[key]) * float(multiplier)
+        if key == "ppo_epochs":
+            value = max(1, round(value))
+        effective[key] = value
+        applied[key] = value
+    for key, value in overrides.items():
+        effective[key] = int(value) if key == "ppo_epochs" else float(value)
+        applied[key] = effective[key]
+    for key in ("frozen_league_fraction", "gamma", "gae_lambda"):
+        if key in effective and not 0.0 <= float(effective[key]) <= 1.0:
+            raise ValueError(f"PBT mutation {key} must be in [0, 1]")
+    for key in (
+        "rollout_temperature", "ppo_learning_rate", "clip_ratio", "value_clip",
+        "value_coefficient", "gradient_clip_norm", "target_kl",
+    ):
+        if key in effective and float(effective[key]) <= 0.0:
+            raise ValueError(f"PBT mutation {key} must be positive")
+    if int(effective.get("ppo_epochs", 0)) <= 0 or float(effective.get("entropy_coefficient", 0.0)) < 0.0:
+        raise ValueError("PBT mutation produced invalid PPO epochs or entropy coefficient")
+    return effective, {
+        "name": name,
+        "generation": generation,
+        "variant_index": (generation - 1) % len(variants),
+        "overrides": applied,
+    }
+
+
+def retain_candidate_in_league(config: dict[str, Any], report: dict[str, Any]) -> bool:
+    """Keep safe behavioral variants for training without promoting them."""
+
+    if not bool(config.get("retain_rejected_in_league", False)):
+        return False
+    if not bool((report.get("checks") or {}).get("zero_failures", False)):
+        return False
+    public_score = float((report.get("candidate_public") or {}).get("score_rate", 0.0))
+    worst_regression = float(report.get("worst_matchup_delta", -1.0))
+    return (
+        public_score >= float(config.get("league_retention_min_public_score", 0.0))
+        and worst_regression >= -float(config.get("league_retention_max_worst_regression", 1.0))
+    )
 
 
 def remote_command(command: list[str], environment: dict[str, str] | None = None) -> str:
@@ -705,20 +781,22 @@ def run_generation(config: dict[str, Any], state: dict[str, Any], run_root: Path
         state.pop(stale, None)
     paths = generation_paths(run_root, generation)
     paths["root"].mkdir(parents=True, exist_ok=True)
+    training_config, mutation = generation_training_config(config, generation)
+    atomic_json(paths["root"] / "policy_mutation.json", mutation)
     event_log_path = run_root / "events.jsonl"
     events: list[dict[str, Any]] = []
     state.update({"status": "collecting_rollouts", "active_generation": generation, "updated_at": now()})
     atomic_json(run_root / "state.json", state)
-    rollouts = ensure_rollouts(config=config, state=state, generation=generation, paths=paths)
+    rollouts = ensure_rollouts(config=training_config, state=state, generation=generation, paths=paths)
     state.update({"status": "training_ppo", "updated_at": now()})
     atomic_json(run_root / "state.json", state)
     checkpoint = ensure_candidate_checkpoint(
-        config=config, state=state, generation=generation, paths=paths, rollouts=rollouts, log=events
+        config=training_config, state=state, generation=generation, paths=paths, rollouts=rollouts, log=events
     )
     state.update({"status": "training_action_q", "updated_at": now()})
     atomic_json(run_root / "state.json", state)
     q_checkpoint = ensure_action_q_checkpoint(
-        config=config, state=state, generation=generation, paths=paths,
+        config=training_config, state=state, generation=generation, paths=paths,
         actor_checkpoint=checkpoint, events=events,
     )
     state.update({"status": "packaging_candidate", "updated_at": now()})
@@ -739,6 +817,10 @@ def run_generation(config: dict[str, Any], state: dict[str, Any], run_root: Path
         working_state["champion_package"] = str(candidate)
         working_state["champion_checkpoint_sha256"] = sha256_file(candidate / "checkpoint.pt")
         working_population.append(str(candidate))
+    league_retained = False
+    if not report["promote"] and retain_candidate_in_league(config, report):
+        working_population.append(str(candidate))
+        league_retained = True
     state.update({"status": "deck_evolution", "updated_at": now()})
     atomic_json(run_root / "state.json", state)
     deck_report = ensure_deck_evolution(
@@ -761,6 +843,8 @@ def run_generation(config: dict[str, Any], state: dict[str, Any], run_root: Path
         "candidate_package": str(candidate),
         "parent_package": previous,
         "promoted": bool(report["promote"]),
+        "pbt_variant": mutation,
+        "league_retained": league_retained,
         "promotion_report": str(paths["gate"] / "promotion.json"),
         "deck_evolution_run": deck_report is not None,
         "deck_promoted": bool(deck_report and deck_report["promote"]),

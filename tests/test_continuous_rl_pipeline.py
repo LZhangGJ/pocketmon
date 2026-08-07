@@ -8,7 +8,13 @@ from pathlib import Path
 
 from unittest.mock import patch
 
-from scripts.continuous_rl_pipeline import build_rollout_pool, choose_trainer, wait_for_files
+from scripts.continuous_rl_pipeline import (
+    build_rollout_pool,
+    choose_trainer,
+    generation_training_config,
+    retain_candidate_in_league,
+    wait_for_files,
+)
 
 
 class ContinuousPipelineTests(unittest.TestCase):
@@ -23,6 +29,51 @@ class ContinuousPipelineTests(unittest.TestCase):
     def test_rollout_pool_rejects_missing_frozen_population(self) -> None:
         with self.assertRaisesRegex(ValueError, "at least one population"):
             build_rollout_pool([], [])
+
+    def test_pbt_variants_rotate_deterministically(self) -> None:
+        config = {
+            "ppo_learning_rate": 1e-5,
+            "entropy_coefficient": 0.01,
+            "ppo_epochs": 2,
+            "frozen_league_fraction": 0.6,
+            "rollout_temperature": 1.0,
+            "gamma": 0.997,
+            "gae_lambda": 0.95,
+            "clip_ratio": 0.1,
+            "value_clip": 0.2,
+            "value_coefficient": 0.5,
+            "gradient_clip_norm": 0.5,
+            "target_kl": 0.03,
+            "pbt_variants": [
+                {"name": "base"},
+                {"name": "explore", "multipliers": {"ppo_learning_rate": 1.5},
+                 "overrides": {"rollout_temperature": 1.1}},
+            ],
+        }
+        first, first_record = generation_training_config(config, 1)
+        second, second_record = generation_training_config(config, 2)
+        third, third_record = generation_training_config(config, 3)
+        self.assertEqual((first_record["name"], second_record["name"], third_record["name"]),
+                         ("base", "explore", "base"))
+        self.assertEqual(first["ppo_learning_rate"], 1e-5)
+        self.assertAlmostEqual(second["ppo_learning_rate"], 1.5e-5)
+        self.assertEqual(second["rollout_temperature"], 1.1)
+        self.assertEqual(third["rollout_temperature"], 1.0)
+
+    def test_rejected_safe_candidate_can_join_training_league(self) -> None:
+        config = {
+            "retain_rejected_in_league": True,
+            "league_retention_min_public_score": 0.2,
+            "league_retention_max_worst_regression": 0.75,
+        }
+        report = {
+            "checks": {"zero_failures": True},
+            "candidate_public": {"score_rate": 0.3},
+            "worst_matchup_delta": -0.5,
+        }
+        self.assertTrue(retain_candidate_in_league(config, report))
+        report["checks"]["zero_failures"] = False
+        self.assertFalse(retain_candidate_in_league(config, report))
 
     def test_waits_for_delayed_shared_artifact(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

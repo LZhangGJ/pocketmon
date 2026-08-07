@@ -22,6 +22,43 @@
   "rollout_episodes_per_worker": 64,
   "frozen_league_fraction": 0.60,
   "rollout_temperature": 1.0,
+  "pbt_variants": [
+    {
+      "name": "balanced"
+    },
+    {
+      "name": "conservative",
+      "multipliers": {
+        "ppo_learning_rate": 0.60,
+        "entropy_coefficient": 0.60
+      },
+      "overrides": {
+        "frozen_league_fraction": 0.75,
+        "rollout_temperature": 0.90
+      }
+    },
+    {
+      "name": "explorer",
+      "multipliers": {
+        "ppo_learning_rate": 1.50,
+        "entropy_coefficient": 1.50
+      },
+      "overrides": {
+        "frozen_league_fraction": 0.55,
+        "rollout_temperature": 1.10
+      }
+    },
+    {
+      "name": "public_exploiter",
+      "multipliers": {
+        "ppo_learning_rate": 1.20
+      },
+      "overrides": {
+        "frozen_league_fraction": 0.30,
+        "rollout_temperature": 1.00
+      }
+    }
+  ],
   "counterfactual_rate": 0.002,
   "counterfactual_candidates": 4,
   "counterfactual_determinizations": 2,
@@ -70,6 +107,9 @@
   "deck_max_worst_matchup_regression": 0.50,
   "deck_max_seat_gap": 0.35,
   "population_limit": 8,
+  "retain_rejected_in_league": true,
+  "league_retention_min_public_score": 0.15,
+  "league_retention_max_worst_regression": 0.75,
   "base_seed": 20260807100,
   "max_generations": 0,
   "max_consecutive_failures": 3,
