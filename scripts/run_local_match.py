@@ -20,7 +20,31 @@ def install_cg_package(cg_dir: Path) -> None:
     sys.modules["cg"] = package
 
 
+def purge_agent_modules(path: Path) -> None:
+    """Remove import names owned by an agent before loading its package.
+
+    Notebook agents are intentionally self-contained and commonly ship top-level
+    packages such as ``rl``.  Loading two submissions in one interpreter would
+    otherwise make the second agent reuse the first agent's package from
+    ``sys.modules``.  Existing objects keep references to their original module
+    objects, so removing the import cache here isolates subsequent imports
+    without invalidating the first loaded policy.
+    """
+    owned_names: set[str] = set()
+    for child in path.iterdir():
+        if child.name.startswith("."):
+            continue
+        if child.is_dir() and (child / "__init__.py").is_file():
+            owned_names.add(child.name)
+        elif child.is_file() and child.suffix == ".py" and child.stem != "main":
+            owned_names.add(child.stem)
+    for module_name in list(sys.modules):
+        if any(module_name == name or module_name.startswith(f"{name}.") for name in owned_names):
+            del sys.modules[module_name]
+
+
 def load_agent(path: Path, module_name: str):
+    purge_agent_modules(path)
     spec = importlib.util.spec_from_file_location(module_name, path / "main.py")
     if spec is None or spec.loader is None:
         raise ImportError(f"Cannot load agent from {path}")
