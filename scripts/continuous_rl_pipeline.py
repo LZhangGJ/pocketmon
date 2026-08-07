@@ -369,6 +369,7 @@ def generation_paths(run_root: Path, generation: int) -> dict[str, Path]:
         "root": root,
         "rollouts": root / "rollouts",
         "train": root / "train",
+        "distill": root / "search_distillation",
         "q_train": root / "action_q",
         "candidate": root / "candidate_agent",
         "gate": root / "gate",
@@ -539,6 +540,51 @@ def ensure_action_q_checkpoint(
         command=command,
         log_path=paths["q_train"] / "train.log",
         environment=environment,
+    )
+    wait_for_files([output, metrics])
+    return output
+
+
+def ensure_search_distilled_checkpoint(
+    *, config: dict[str, Any], generation: int, paths: dict[str, Path],
+    actor_checkpoint: Path, events: list[dict[str, Any]],
+) -> Path:
+    epochs = int(config.get("search_distillation_epochs", 0))
+    if epochs <= 0:
+        return actor_checkpoint
+    output = paths["distill"] / "candidate.pt"
+    metrics = paths["distill"] / "metrics.json"
+    if output.is_file() and metrics.is_file():
+        return output
+    rows = sorted(paths["rollouts"].glob("shard_*.counterfactual.jsonl.gz"))
+    if not rows:
+        raise RuntimeError("search distillation has no counterfactual shards")
+    trainer, gpu, availability = choose_trainer(config)
+    events.append({
+        "event": "search_distillation_trainer_selected", "generation": generation,
+        "host": trainer, "gpu": gpu, "free_memory": availability, "time": now(),
+    })
+    command = [
+        config["python"], str(Path(config["code_root"]) / "scripts" / "train_search_distilled_actor.py"),
+        "--rows", *[str(path) for path in rows],
+        "--initialize-from", str(actor_checkpoint),
+        "--output", str(output),
+        "--metrics-output", str(metrics),
+        "--epochs", str(epochs),
+        "--batch-size", str(config.get("search_distillation_batch_size", 512)),
+        "--learning-rate", str(config.get("search_distillation_learning_rate", 3e-6)),
+        "--min-margin", str(config.get("search_distillation_min_margin", 0.15)),
+        "--max-target-std", str(config.get("search_distillation_max_target_std", 0.75)),
+        "--anchor-coefficient", str(config.get("search_distillation_anchor_coefficient", 0.5)),
+        "--entropy-coefficient", str(config.get("search_distillation_entropy_coefficient", 0.001)),
+        "--gradient-clip-norm", str(config.get("search_distillation_gradient_clip_norm", 0.5)),
+        "--seed", str(config["base_seed"] + generation * 10_000 + 29),
+        "--device", f"cuda:{gpu}",
+    ]
+    run_process(
+        host=trainer, local_host=config["local_host"], command=command,
+        log_path=paths["distill"] / "train.log",
+        environment=config.get("host_environment", {}).get(trainer),
     )
     wait_for_files([output, metrics])
     return output
@@ -792,6 +838,12 @@ def run_generation(config: dict[str, Any], state: dict[str, Any], run_root: Path
     atomic_json(run_root / "state.json", state)
     checkpoint = ensure_candidate_checkpoint(
         config=training_config, state=state, generation=generation, paths=paths, rollouts=rollouts, log=events
+    )
+    state.update({"status": "training_search_distillation", "updated_at": now()})
+    atomic_json(run_root / "state.json", state)
+    checkpoint = ensure_search_distilled_checkpoint(
+        config=training_config, generation=generation, paths=paths,
+        actor_checkpoint=checkpoint, events=events,
     )
     state.update({"status": "training_action_q", "updated_at": now()})
     atomic_json(run_root / "state.json", state)
