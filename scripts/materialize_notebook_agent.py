@@ -11,8 +11,20 @@ import tarfile
 from pathlib import Path
 
 
-ALLOWED_OUTPUTS = {"main.py", "deck.csv", "requirements.txt"}
+SAFE_OUTPUT_SUFFIXES = {".py", ".json", ".txt", ".csv"}
 MAX_EMBEDDED_FILE_BYTES = 8 * 1024 * 1024
+
+
+def allowed_output_name(name: str) -> bool:
+    path = Path(name)
+    return (
+        bool(name)
+        and not path.is_absolute()
+        and len(path.parts) == 1
+        and path.name == name
+        and path.suffix.lower() in SAFE_OUTPUT_SUFFIXES
+        and re.fullmatch(r"[A-Za-z0-9_.-]+", name) is not None
+    )
 
 
 def extract_literal_deck(payload: dict) -> list[int] | None:
@@ -123,7 +135,7 @@ def extract_embedded_agent(payload: dict) -> dict[str, bytes] | None:
                     if member_path.is_absolute() or ".." in member_path.parts:
                         continue
                     name = member_path.name
-                    if name not in ALLOWED_OUTPUTS:
+                    if not allowed_output_name(name):
                         continue
                     handle = archive.extractfile(member)
                     if handle is not None:
@@ -153,10 +165,13 @@ def materialize(notebook: Path, output: Path, fallback_deck: Path | None = None)
         if not lines or not lines[0].startswith("%%writefile "):
             continue
         name = lines[0].removeprefix("%%writefile ").strip()
-        if name not in ALLOWED_OUTPUTS:
+        if not allowed_output_name(name):
             continue
         target = output / name
-        target.write_text("".join(lines[1:]), encoding="utf-8")
+        content = "".join(lines[1:])
+        if len(content.encode("utf-8")) > MAX_EMBEDDED_FILE_BYTES:
+            raise ValueError(f"Notebook output is too large: {name}")
+        target.write_text(content, encoding="utf-8")
         written.append(target)
     names = {path.name for path in written}
     if not names >= {"main.py", "deck.csv"}:
@@ -182,7 +197,8 @@ def materialize(notebook: Path, output: Path, fallback_deck: Path | None = None)
         names.add("deck.csv")
     if not names >= {"main.py", "deck.csv"}:
         raise ValueError(f"Notebook does not contain main.py and deck.csv writefile cells: {notebook}")
-    py_compile.compile(str(output / "main.py"), doraise=True)
+    for source in sorted(output.glob("*.py")):
+        py_compile.compile(str(source), doraise=True)
     return written
 
 
