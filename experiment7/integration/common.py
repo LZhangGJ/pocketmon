@@ -21,7 +21,7 @@ REFERENCE_ARCHIVE_BYTES = 94_038
 REFERENCE_ARCHIVE_SHA256 = (
     "9c0d24067eacee8abc38223dba28d893e5d1e4e9b75204a9ce92a03093558229"
 )
-DEFAULT_SOURCE_BRANCH = "agent/experiment7-multideck-ready-20260809"
+DEFAULT_SOURCE_BRANCH = "agent/experiment7-training-ready-20260809"
 DEFAULT_WORK_BRANCH = "codex/experiment7-multideck-run-20260809"
 
 

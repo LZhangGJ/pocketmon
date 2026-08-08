@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "LZhangGJ/pocketmon",
-  "sourceBranch": "agent/experiment7-multideck-ready-20260809",
+  "sourceBranch": "agent/experiment7-training-ready-20260809",
   "workBranch": "codex/experiment7-multideck-run-20260809",
   "linux": {
     "repository": "/homes/lzhang/pocketmon",

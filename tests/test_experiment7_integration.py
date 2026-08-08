@@ -51,10 +51,15 @@ class Experiment7IntegrationTests(unittest.TestCase):
             )
         )
         self.assertEqual(payload["repository"], "LZhangGJ/pocketmon")
-        self.assertEqual(payload["branch"], "agent/experiment7-multideck-ready-20260809")
-        self.assertGreaterEqual(len(payload["servers"]), 6)
-        self.assertEqual(payload["historyLength"], 8)
-        self.assertEqual(payload["desiredDecks"], 6)
+        self.assertEqual(
+            payload["sourceBranch"], "agent/experiment7-training-ready-20260809"
+        )
+        self.assertEqual(
+            payload["workBranch"], "codex/experiment7-multideck-run-20260809"
+        )
+        self.assertGreaterEqual(len(payload["linux"]["servers"]), 6)
+        self.assertEqual(payload["model"]["historyLength"], 8)
+        self.assertEqual(payload["deckSelection"]["desired"], 6)
 
     def test_reference_model_deck_multiset_invariance(self) -> None:
         from deck_identity_model import (
