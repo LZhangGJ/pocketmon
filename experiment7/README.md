@@ -1,6 +1,6 @@
 # Experiment 7 multi-deck Challenger handoff
 
-This directory contains the teammate-provided high-scoring Experiment 7 source snapshot and the orchestration contract for training several deck-conditioned Challenger Agents.
+This directory contains the teammate-provided high-scoring Experiment 7 training contract and the orchestration files for training several deck-conditioned Challenger Agents.
 
 ## Exact repository context
 
@@ -31,18 +31,36 @@ agents/lucario_rule/deck.csv
 
 The detailed procedure is in `CODEX_TRAINING_PROMPT.md`; machine-readable constants are in `MULTIDECK_CHALLENGER_PLAN.json`.
 
-## Source artifact
+## Source artifact and transport status
 
-- Expected archive: `source/experiment7_code_for_gpt_2026-08-08.zip`
-- Expected SHA-256: `9c0d24067eacee8abc38223dba28d893e5d1e4e9b75204a9ce92a03093558229`
-- Entries: 39 total; 38 files listed in `PACKAGE_MANIFEST.csv`
-- Expected static check: all 38 manifest entries match and all 29 Python files compile.
+Verified teammate archive:
+
+```text
+filename: experiment7_code_for_gpt_2026-08-08.zip
+bytes:    94038
+sha256:   9c0d24067eacee8abc38223dba28d893e5d1e4e9b75204a9ce92a03093558229
+```
+
+The current GitHub binary copy is known to be transport-truncated and must not be used. See `SOURCE_ARCHIVE_STATUS.json`. The Windows controller must use the original verified ZIP and copy it with `scp` to a non-Git Linux path, preferably:
+
+```text
+/homes/lzhang/pocketmon/data/imports/experiment7_code_for_gpt_2026-08-08.zip
+```
+
+`unpack_source.sh` checks both byte size and SHA-256 and refuses any other file. This avoids silently training from a damaged archive.
 
 The archive intentionally excludes checkpoints, portable weights, engine/card catalogs, replays, generated caches, opponent packages, Arena logs and credentials. Those assets must be regenerated on the Linux servers and must not be committed.
 
 ## Windows start
 
-Open PowerShell 7 and follow `CODEX_START_HERE.md`. The Windows host must not attempt to access `/homes/...` locally and must not perform training. It pushes an immutable commit, then starts server jobs through OpenSSH.
+Open PowerShell 7 and read `CODEX_START_HERE.md`. The recommended bootstrap is:
+
+```powershell
+.\experiment7\WINDOWS_REMOTE_BOOTSTRAP.ps1 `
+  -ArchivePath "$HOME\Downloads\experiment7_code_for_gpt_2026-08-08.zip"
+```
+
+The script verifies the local archive, probes SSH/GPU availability, copies the archive to the coordinator, pushes the immutable work branch and initializes a Linux worktree. The Windows host must not attempt to access `/homes/...` locally and must not perform training.
 
 ## Linux unpack
 
@@ -50,6 +68,7 @@ On a remote Linux worktree created from the fixed commit:
 
 ```bash
 export PYTHON=/homes/lzhang/mypath/new/envs/trans/bin/python
+export EXPERIMENT7_ARCHIVE=/homes/lzhang/pocketmon/data/imports/experiment7_code_for_gpt_2026-08-08.zip
 bash experiment7/unpack_source.sh
 ```
 
