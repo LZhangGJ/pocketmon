@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "decks": {
+    "c20a8a46f5c635773754f03103652f5c534b13dc622448ed2255a97234c103af": "behavior_cloning/agents/grimmsnarl_sequence_bc_h8_pre12_v1/deck.csv",
+    "9776cca97f42b067cb0944225edde3ebb95c1f875e2e8a40d9bbdbc15041e82e": "behavior_cloning/agents/grimmsnarl_flg_mlp_v1/deck.csv"
+  }
+}
