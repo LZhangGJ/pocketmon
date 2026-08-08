@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "experiment": 7,
+  "title": "Exact own-deck encoding and actor-visible opponent-deck evidence",
+  "status": "PASS_DECK_CONDITIONED_POLICY_REJECT_AUXILIARY_IDENTIFIER",
+  "model": {
+    "parameters": 864177,
+    "stateDim": 320,
+    "optionDim": 176,
+    "entityNumericDim": 12,
+    "cardVocabulary": 1600,
+    "modelWidth": 128,
+    "attentionHeads": 4,
+    "transformerLayers": 3,
+    "feedForwardDim": 384,
+    "historyLength": 8,
+    "deckSize": 60,
+    "dropout": 0.05
+  },
+  "privacyBoundary": "Opponent catalog hashes are training labels only. Runtime opponent evidence is restricted to actor-visible entity tokens.",
+  "offline": {
+    "chronologicalHoldoutMacroExactSemanticDelta": 0.02183915862006436,
+    "portableDecisionsChecked": 500,
+    "portableRankingMismatches": 0,
+    "meanPortableMillisecondsOneThread": 3.661215999862179
+  },
+  "arena200GamesPerOpponent": {
+    "tetsutani": 0.73,
+    "biohack44": 0.495,
+    "romanrozen": 0.8,
+    "macro": 0.675,
+    "controlMacro": 0.6158333333333333,
+    "errors": 0,
+    "fallbacks": 0
+  },
+  "arena400GamesPerOpponentIndependentReplication": {
+    "tetsutani": 0.7,
+    "biohack44": 0.5075,
+    "romanrozen": 0.7525,
+    "macro": 0.6533333333333333,
+    "controlMacro": 0.6158333333333333,
+    "errors": 0,
+    "fallbacks": 0
+  },
+  "excludedFromArchive": [
+    "weights and checkpoints",
+    "replays and generated caches",
+    "engine catalog and opponent class map",
+    "per-game Arena logs",
+    "Kaggle submission packages and credentials"
+  ]
+}

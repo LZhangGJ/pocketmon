@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "repository": "LZhangGJ/pocketmon",
+  "source_branch": "agent/experiment7-multideck-ready-20260808",
+  "windows_work_branch": "codex/experiment7-multideck-run-20260808",
+  "linux": {
+    "repository": "/homes/lzhang/pocketmon",
+    "python": "/homes/lzhang/mypath/new/envs/trans/bin/python",
+    "replay_dir": "/homes/lzhang/pocketmon/data/raw/replays/2026-08-06",
+    "ladder_analysis": "/homes/lzhang/pocketmon/analysis/outputs/top_ladder_2026_08_07_20260808",
+    "run_root": "/homes/lzhang/pocketmon/runs/experiment7-multideck-20260808",
+    "servers": ["doraemon02", "doraemon03", "doraemon15", "doraemon16", "doraemon19", "doraemon20"]
+  },
+  "selection": {
+    "desired_decks": 6,
+    "minimum_decks": 4,
+    "minimum_actor_episodes": 40,
+    "minimum_nonforced_policy_decisions": 800,
+    "exclude_primary_target_exact_deck": true
+  },
+  "model": {
+    "state_dim": 320,
+    "option_dim": 176,
+    "entity_numeric_dim": 12,
+    "history_length": 8,
+    "d_model": 128,
+    "attention_heads": 4,
+    "transformer_blocks": 3,
+    "ff_dim": 384,
+    "dropout": 0.05,
+    "opponent_auxiliary_loss_weight": 0.05
+  },
+  "training": {
+    "seeds": [20260808, 20260809, 20260810],
+    "pretrain_epochs": 12,
+    "pretrain_batch": 128,
+    "pretrain_learning_rate": 0.0003,
+    "finetune_epochs": 6,
+    "finetune_batch_per_deck": 48,
+    "finetune_learning_rate": 0.0001,
+    "checkpoint_selection": "unweighted_macro_calibration_exactSemantic"
+  },
+  "arena": {
+    "target_agent": "agents/lucario_rule",
+    "smoke_games": 20,
+    "screening_games": 100,
+    "confirmation_games": 200,
+    "success_score_rate": 0.55,
+    "success_wilson_lower_bound": 0.5,
+    "minimum_each_seat_score_rate": 0.45,
+    "required_successful_distinct_archetypes": 2
+  }
+}
