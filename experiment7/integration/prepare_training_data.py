@@ -103,11 +103,15 @@ def build_standard_caches(
 ) -> tuple[Path, Path]:
     token_cache = dataset_root / "token_cache"
     sequence_cache = dataset_root / "sequence_cache"
-    vendor_command(
-        python,
-        reference_root,
-        "build_token_cache.py",
+    token_adapter = Path(__file__).resolve().parent / "run_reference_token_cache.py"
+    run_checked(
         [
+            python,
+            str(token_adapter),
+            "--reference-root",
+            str(reference_root),
+            "--maximum-supported-actions",
+            "128",
             "--decisions",
             str(dataset_root / "decisions.jsonl.gz"),
             "--features",
@@ -117,7 +121,9 @@ def build_standard_caches(
             "--output-dir",
             str(token_cache),
         ],
-        log_root / f"{dataset_root.name}_token_cache.log",
+        cwd=reference_root / "data_pipeline",
+        env={"PYTHONPATH": str(reference_root / "data_pipeline")},
+        log_path=log_root / f"{dataset_root.name}_token_cache.log",
     )
     vendor_command(
         python,
