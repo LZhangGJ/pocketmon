@@ -1,0 +1,184 @@
+{
+  "schema_version": 2,
+  "task": "experiment7_multideck_challengers",
+  "control_plane": {
+    "host_os": "windows",
+    "responsibilities": [
+      "code_editing",
+      "git_commit_and_push",
+      "ssh_orchestration",
+      "small_summary_collection"
+    ],
+    "forbidden_execution": [
+      "replay_processing",
+      "gpu_training",
+      "official_engine_matches",
+      "linux_latency_benchmarks"
+    ],
+    "required_tools": [
+      "PowerShell_7",
+      "git",
+      "OpenSSH_Client"
+    ]
+  },
+  "repository": {
+    "full_name": "LZhangGJ/pocketmon",
+    "remote": "https://github.com/LZhangGJ/pocketmon.git",
+    "source_branch": "agent/experiment7-multideck-challengers-20260808",
+    "working_branch": "codex/experiment7-multideck-challengers-20260808",
+    "linux_canonical_checkout": "/homes/lzhang/pocketmon"
+  },
+  "execution_plane": {
+    "host_os": "linux",
+    "servers": [
+      "doraemon02",
+      "doraemon03",
+      "doraemon15",
+      "doraemon16",
+      "doraemon19",
+      "doraemon20"
+    ],
+    "python": "/homes/lzhang/mypath/new/envs/trans/bin/python",
+    "shared_storage": true,
+    "worktree_root": "/homes/lzhang/worktrees",
+    "run_root": "/homes/lzhang/pocketmon/runs/experiment7-multideck",
+    "gpu_discovery": "nvidia-smi",
+    "maximum_formal_jobs_per_gpu": 1,
+    "do_not_preempt_existing_jobs": true,
+    "shared_cache_single_writer": true,
+    "worker_source": "immutable_git_commit"
+  },
+  "inputs": {
+    "ladder_analysis": "/homes/lzhang/pocketmon/analysis/outputs/top_ladder_2026_08_07_20260808",
+    "replays": "/homes/lzhang/pocketmon/data/raw/replays/2026-08-06",
+    "experiment7_archive": "experiment7/source/experiment7_code_for_gpt_2026-08-08.zip",
+    "experiment7_archive_sha256": "9c0d24067eacee8abc38223dba28d893e5d1e4e9b75204a9ce92a03093558229",
+    "unpacked_source": "runs/experiment7/source"
+  },
+  "implementation_policy": {
+    "primary_reference": "teammate_high_score_experiment7_code",
+    "preserve_vendor_source": true,
+    "adapter_directory": "experiment7/integration",
+    "do_not_substitute_simplified_rl_bc_004": true,
+    "do_not_redesign_model_before_baseline_reproduction": true,
+    "if_native_arbitrary_K_supported": "use_balanced_K_deck_finetune",
+    "if_native_only_two_arms": "share_one_pretrain_and_run_multiple_native_two_deck_balanced_jobs",
+    "forbidden_before_bc_gates": [
+      "PPO",
+      "AWR",
+      "IQL",
+      "self_play",
+      "Action_Q"
+    ]
+  },
+  "target": {
+    "agent_dir": "agents/lucario_rule",
+    "deck": "agents/lucario_rule/deck.csv",
+    "immutable_during_experiment": true
+  },
+  "candidate_selection": {
+    "desired_decks": 6,
+    "minimum_decks": 4,
+    "maximum_decks": 6,
+    "minimum_distinct_archetypes": 4,
+    "minimum_exact_deck_actor_episodes": 40,
+    "minimum_nonforced_policy_decisions": 800,
+    "require_nonempty_fit_calibration_holdout": true,
+    "chronological_split": true,
+    "selection_signals": [
+      "ladder_performance",
+      "exact_deck_legality",
+      "replay_support",
+      "archetype_diversity"
+    ],
+    "forbidden_selection_signals": [
+      "sealed_holdout",
+      "final_target_match_results"
+    ]
+  },
+  "model": {
+    "state_dim": 320,
+    "option_dim": 176,
+    "entity_numeric_dim": 12,
+    "history_length": 8,
+    "d_model": 128,
+    "attention_heads": 4,
+    "transformer_blocks": 3,
+    "ff_dim": 384,
+    "dropout": 0.05,
+    "opponent_auxiliary_loss_weight": 0.05,
+    "opponent_auxiliary_runtime_gating": false
+  },
+  "training": {
+    "pretrain": {
+      "epochs": 12,
+      "batch_size": 128,
+      "learning_rate": 0.0003,
+      "optimizer": "AdamW",
+      "weight_decay": 0.0001,
+      "build_once": true
+    },
+    "finetune": {
+      "batch_per_deck": 48,
+      "learning_rate": 0.0001,
+      "formal_seeds": [
+        20260808,
+        20260809,
+        20260810
+      ],
+      "checkpoint_selection": "unweighted_macro_calibration_exactSemantic",
+      "holdout": "sealed_until_checkpoint_frozen_then_evaluate_once"
+    },
+    "optional_specialist": {
+      "maximum_decks": 3,
+      "epochs_min": 1,
+      "epochs_max": 3,
+      "allowed_after": "20_game_runtime_smoke"
+    }
+  },
+  "arena": {
+    "primary_matchup": "challenger_deck_and_policy_vs_frozen_lucario_rule_agent",
+    "seat_balanced": true,
+    "smoke_games_per_challenger": 20,
+    "screening_games_per_challenger": 100,
+    "confirmation_games_per_top_challenger": 200,
+    "confirmation_top_n": 3,
+    "success_score_rate": 0.55,
+    "success_wilson_lower_bound": 0.5,
+    "minimum_each_seat_score_rate": 0.45,
+    "required_failure_count": 0,
+    "required_distinct_successful_archetypes": 2,
+    "automatic_400_game_confirmation": false,
+    "automatic_kaggle_submission": false
+  },
+  "information_boundary": {
+    "own_exact_60_card_deck_allowed": true,
+    "visible_opponent_evidence_allowed": true,
+    "opponent_hidden_hand_forbidden": true,
+    "opponent_hidden_deck_forbidden": true,
+    "opponent_prize_identity_forbidden": true,
+    "future_information_forbidden": true,
+    "final_outcome_as_runtime_feature_forbidden": true,
+    "player_identity_forbidden": true
+  },
+  "git_policy": {
+    "modify_main": false,
+    "force_push_main": false,
+    "submit_kaggle": false,
+    "commit_allowed": [
+      "source_code",
+      "tests",
+      "configuration_templates",
+      "small_audit_summaries"
+    ],
+    "commit_forbidden": [
+      "replays",
+      "caches",
+      "checkpoints",
+      "portable_npz",
+      "engine",
+      "credentials",
+      "large_per_game_logs"
+    ]
+  }
+}
