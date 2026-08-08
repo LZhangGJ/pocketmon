@@ -1,0 +1,34 @@
+{
+  "topic": {
+    "id": 709005,
+    "title": "My Notes on Rules & Strategy — What's Your Approach?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709005",
+    "commentCount": 2,
+    "votes": 6,
+    "postDate": "2026-06-17T11:04:00.988454600Z",
+    "lastCommentPostDate": "2026-06-17T11:44:53.153333300Z"
+  },
+  "messages": [
+    {
+      "id": 3474035,
+      "postDate": "2026-06-17T11:04:00.990Z",
+      "content": "<p>Sharing my getting-started notes as a one-page visual summary (in Japanese) — the rules, the constraints that actually shape strategy, and a rough roadmap.\n<img src=\"https://storage.googleapis.com/kaggle-forum-message-attachments/3474035/45676/file_000000009b6472099186dc94ca32ca37.png\" alt=\"\">\nQuick gloss of the main points.<br>\n• You submit two coupled things: a policy (main.py) + a deck (deck.csv).<br>\n• No ingress/egress during episodes → the agent must be self-contained (no live LLM calls).<br>\n• The engine hands you the legal moves each turn, so a first working agent is easier than it looks.<br>\n• Win/loss TrueSkill, latest 2 subs count → consistency beats blowouts.</p>\n<p>How are you approaching it? Net-decking a known Standard list or building from scratch? Heuristics + search, imitation from the exported top episodes, or full self-play RL? What's your approach?</p>",
+      "rawMarkdown": "Sharing my getting-started notes as a one-page visual summary (in Japanese) — the rules, the constraints that actually shape strategy, and a rough roadmap.\n![](https://storage.googleapis.com/kaggle-forum-message-attachments/3474035/45676/file_000000009b6472099186dc94ca32ca37.png)\nQuick gloss of the main points.  \n• You submit two coupled things: a policy (main.py) + a deck (deck.csv).   \n• No ingress/egress during episodes → the agent must be self-contained (no live LLM calls).   \n• The engine hands you the legal moves each turn, so a first working agent is easier than it looks.   \n• Win/loss TrueSkill, latest 2 subs count → consistency beats blowouts.\n\nHow are you approaching it? Net-decking a known Standard list or building from scratch? Heuristics + search, imitation from the exported top episodes, or full self-play RL? What's your approach?",
+      "votes": 6
+    },
+    {
+      "id": 3474042,
+      "postDate": "2026-06-17T11:15:34.157Z",
+      "content": "<p>how do you export top episodes? do you have to download it one by one manually?</p>",
+      "rawMarkdown": "how do you export top episodes? do you have to download it one by one manually?",
+      "replies": [
+        {
+          "id": 3474058,
+          "postDate": "2026-06-17T11:44:53.153Z",
+          "content": "<p>Good question! Not one by one — the organizers are posting a daily export of the top-rated episodes in the forums, and you can pull replays via the Kaggle CLI/MCP rather than the UI (docs: <a href=\"https://github.com/Kaggle/kaggle-cli/blob/main/docs/simulation_competitions.md)\" target=\"_blank\">https://github.com/Kaggle/kaggle-cli/blob/main/docs/simulation_competitions.md)</a>.</p>\n<p>And maybe automating that whole fetch → parse → train loop is itself part of the winning play. Could be a job for an agent too.</p>",
+          "rawMarkdown": "Good question! Not one by one — the organizers are posting a daily export of the top-rated episodes in the forums, and you can pull replays via the Kaggle CLI/MCP rather than the UI (docs: https://github.com/Kaggle/kaggle-cli/blob/main/docs/simulation_competitions.md).\n\nAnd maybe automating that whole fetch → parse → train loop is itself part of the winning play. Could be a job for an agent too."
+        }
+      ]
+    }
+  ]
+}

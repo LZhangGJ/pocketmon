@@ -1,0 +1,17 @@
+{
+  "topic": {
+    "id": 728287,
+    "title": "BUG: \"Player 1's deck error\" at Step 0 with mathematically valid 60-card deck",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728287",
+    "postDate": "2026-07-22T18:31:01.655529400Z",
+    "lastCommentPostDate": "2026-07-22T18:31:01.656666700Z"
+  },
+  "messages": [
+    {
+      "id": 3501753,
+      "postDate": "2026-07-22T18:31:01.657Z",
+      "content": "<p>Hello team,</p>\n<p>I am encountering an immediate crash when submitting my agent. The simulation terminates at Step 0 with the following JSON output:</p>\n<p><code>\"status\": \"INVALID\",\n\"error\": \"Player 1's deck error.\"</code></p>\n<p>I have attached my exact deck list in the deck.py file. I have manually verified that the list strictly follows all official TCG rules:</p>\n<ul>\n<li>Exactly 60 cards (16 Pokémon, 34 Trainers, 10 Basic Energies)</li>\n<li>Maximum of 4 copies per card name (I specifically balanced the Mega Charizard X and Y IDs so they do not exceed 4 copies combined).</li>\n<li>Exactly 1 ACE SPEC (Precious Trolley - ID 1126).</li>\n</ul>\n<p>Any insights into how the engine is parsing these specific IDs would be greatly appreciated. </p>\n<p>Thank you!</p>",
+      "rawMarkdown": "Hello team,\n\nI am encountering an immediate crash when submitting my agent. The simulation terminates at Step 0 with the following JSON output:\n\n`\"status\": \"INVALID\",\n\"error\": \"Player 1's deck error.\"`\n\nI have attached my exact deck list in the deck.py file. I have manually verified that the list strictly follows all official TCG rules:\n\n- Exactly 60 cards (16 Pokémon, 34 Trainers, 10 Basic Energies)\n- Maximum of 4 copies per card name (I specifically balanced the Mega Charizard X and Y IDs so they do not exceed 4 copies combined).\n- Exactly 1 ACE SPEC (Precious Trolley - ID 1126).\n\nAny insights into how the engine is parsing these specific IDs would be greatly appreciated. \n\nThank you!"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 727094,
+    "title": "Updated game engine, sample submission file",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/727094",
+    "votes": 10,
+    "postDate": "2026-07-17T19:21:29.915444600Z",
+    "lastCommentPostDate": "2026-07-17T19:21:29.916666700Z"
+  },
+  "messages": [
+    {
+      "id": 3499702,
+      "postDate": "2026-07-17T19:21:29.917Z",
+      "content": "<p>Hey all,</p>\n<p>Based on the bug identified <a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/717141#3495412\" target=\"_blank\">here</a> we've made a minor update to the game engine and sample submission file to fix it.</p>\n<p>Thanks!</p>",
+      "rawMarkdown": "Hey all,\n\nBased on the bug identified [here](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/717141#3495412) we've made a minor update to the game engine and sample submission file to fix it.\n\nThanks!",
+      "votes": 10
+    }
+  ]
+}

@@ -1,0 +1,354 @@
+{
+  "competition": "pokemon-tcg-ai-battle",
+  "generated_at": "2026-08-08",
+  "selection_policy": "Interleave scoreDescending, recency (dateCreated/dateRun), and explicit strategy signals; do not treat stale high scores as current strength.",
+  "notebooks": [
+    {
+      "ref": "aristophanivan/probablity-v2",
+      "selection_reasons": [
+        "scoreDescending#1",
+        "run 2026-06-24; stale high-score anchor, time-decayed"
+      ]
+    },
+    {
+      "ref": "llccqq624/ptcg-meta-a-stable-submit",
+      "selection_reasons": [
+        "scoreDescending#2",
+        "stable meta agent; run 2026-07-08"
+      ]
+    },
+    {
+      "ref": "nursrijan/pokemon-ai-battle-agent-mega-lucario",
+      "selection_reasons": [
+        "scoreDescending#3",
+        "Mega Lucario architecture anchor; run 2026-06-18"
+      ]
+    },
+    {
+      "ref": "lucifer19/battlecore-compact-agent",
+      "selection_reasons": [
+        "scoreDescending#4",
+        "compact general agent; run 2026-07-09"
+      ]
+    },
+    {
+      "ref": "romanrozen/strong-start-baseline-agent-v10-lb-950",
+      "selection_reasons": [
+        "scoreDescending#5",
+        "run 2026-08-03",
+        "title reports LB950+; 189 votes"
+      ]
+    },
+    {
+      "ref": "yaroslavkholmirzayev/mega-lucario-v2-crustle-aware-best-submit",
+      "selection_reasons": [
+        "scoreDescending#6",
+        "explicit Crustle-aware counterplay"
+      ]
+    },
+    {
+      "ref": "tetsutani/grimmsnarl-ex-damage-transfer-control",
+      "selection_reasons": [
+        "scoreDescending#7",
+        "control strategy",
+        "run 2026-08-05; 104 votes"
+      ]
+    },
+    {
+      "ref": "makthanithin/improved-probabilistic-agent",
+      "selection_reasons": [
+        "scoreDescending#8",
+        "probabilistic decision strategy; run 2026-07-18"
+      ]
+    },
+    {
+      "ref": "biohack44/beating-the-day-1-1-crustle-bot-780c4c",
+      "selection_reasons": [
+        "scoreDescending#9",
+        "explicit anti-Crustle strategy"
+      ]
+    },
+    {
+      "ref": "biohack44/pok-mon-tcg-ai-battle-meta-snapshot-07-july",
+      "selection_reasons": [
+        "scoreDescending#10",
+        "meta snapshot; 144 votes"
+      ]
+    },
+    {
+      "ref": "rahuljiwane/pokemon-tcg-rahul-jiwane",
+      "selection_reasons": [
+        "scoreDescending#11",
+        "later high-score cohort; run 2026-07-24"
+      ]
+    },
+    {
+      "ref": "prvsiyan/ptcg-ai-battle-visible-grim-belief-alakazam-v21",
+      "selection_reasons": [
+        "scoreDescending#12",
+        "belief/imperfect-information strategy",
+        "run 2026-08-02"
+      ]
+    },
+    {
+      "ref": "skarin/phantom-dive-or-go-home-a-dragapult-ex-deck",
+      "selection_reasons": [
+        "scoreDescending#13",
+        "Dragapult strategy; 44 votes"
+      ]
+    },
+    {
+      "ref": "daniilkrasnovvv/pokemon-conservative-probabilistic-agent",
+      "selection_reasons": [
+        "scoreDescending#14",
+        "conservative probabilistic strategy; run 2026-07-20"
+      ]
+    },
+    {
+      "ref": "kaiwalyaatulraut/pok-mon-ai-battle-challenge-simulation-solution",
+      "selection_reasons": [
+        "scoreDescending#15",
+        "general competition solution; run 2026-07-23"
+      ]
+    },
+    {
+      "ref": "prvsiyan/ptcg-ai-battle-search-audited-alakazam-v9",
+      "selection_reasons": [
+        "scoreDescending#18",
+        "search-audited policy",
+        "run 2026-08-02"
+      ]
+    },
+    {
+      "ref": "jazivxt/rising-tide-fixed-metal-v15-reproducible-agent",
+      "selection_reasons": [
+        "scoreDescending#19",
+        "reproducible Metal strategy; run 2026-07-28"
+      ]
+    },
+    {
+      "ref": "kojimar/simple-baseline-matchup-tests",
+      "selection_reasons": [
+        "scoreDescending#21",
+        "matchup testing methodology; 260 votes"
+      ]
+    },
+    {
+      "ref": "jazivxt/a-better-hand-alakazam-rising-tide-v21",
+      "selection_reasons": [
+        "scoreDescending#22",
+        "hand-quality/Alakazam strategy; run 2026-07-28"
+      ]
+    },
+    {
+      "ref": "aristophanivan/multiply-agent-best-940-lb",
+      "selection_reasons": [
+        "scoreDescending#26",
+        "historical LB940 anchor"
+      ]
+    },
+    {
+      "ref": "jazivxt/garchomp-gpu-v28-agents-only",
+      "selection_reasons": [
+        "scoreDescending#27",
+        "run 2026-07-29; Garchomp architecture diversity"
+      ]
+    },
+    {
+      "ref": "jazivxt/archaludon-metal-gpu-v28-agents-only",
+      "selection_reasons": [
+        "scoreDescending#28",
+        "run 2026-07-29; Metal architecture diversity"
+      ]
+    },
+    {
+      "ref": "samrishb/unified-ptcg-framework-v2",
+      "selection_reasons": [
+        "scoreDescending#30",
+        "unified agent framework; run 2026-07-22"
+      ]
+    },
+    {
+      "ref": "ryotasueyoshi/rule-based-not-psychic-alakazam-best-5th",
+      "selection_reasons": [
+        "scoreDescending#31",
+        "rule-based strategy; title reports best 5th; 90 votes"
+      ]
+    },
+    {
+      "ref": "pilkwang/pok-mon-tcg-ai-battle-meta-snapshot-18-july",
+      "selection_reasons": [
+        "scoreDescending#32",
+        "18 July meta snapshot; 180 votes"
+      ]
+    },
+    {
+      "ref": "raunakdey07/pok-mon-tcg-advanced-heuristic-agent",
+      "selection_reasons": [
+        "scoreDescending#36",
+        "advanced heuristic; run 2026-07-29"
+      ]
+    },
+    {
+      "ref": "makthanithin/pokemon-tcg-ai-battle-1084-5-baseline",
+      "selection_reasons": [
+        "scoreDescending#39",
+        "dateRun#1; run 2026-08-07",
+        "title reports 1084.5 baseline"
+      ]
+    },
+    {
+      "ref": "soutasakurai/max-elo-1208-libraryout-w-crustle-great-tusk",
+      "selection_reasons": [
+        "scoreDescending#45",
+        "title reports Max Elo1208",
+        "Library-Out control"
+      ]
+    },
+    {
+      "ref": "prvsiyan/ptcg-844-4-observable-meta-router-visuals",
+      "selection_reasons": [
+        "scoreDescending#48",
+        "observable meta router",
+        "run 2026-08-02"
+      ]
+    },
+    {
+      "ref": "myso1987/ptcg-ai-battle-leaderboard-deck-meta-by-score-band",
+      "selection_reasons": [
+        "dateRun#5; run 2026-08-06",
+        "meta analysis by score band"
+      ]
+    },
+    {
+      "ref": "busyaprime/what-actually-wins-on-the-ladder",
+      "selection_reasons": [
+        "dateRun#19; run 2026-08-01",
+        "ladder win strategy; 32 votes"
+      ]
+    },
+    {
+      "ref": "toshikomiyake/rl-mcts-text-embedding-model4",
+      "selection_reasons": [
+        "dateCreated#1; dateRun#10",
+        "RL/MCTS strategy; run 2026-08-02"
+      ]
+    },
+    {
+      "ref": "keidroid/ptcg-ai-battle-rating-and-matchmaking-analysis",
+      "selection_reasons": [
+        "dateCreated#2; dateRun#12",
+        "explains rating/score time variance"
+      ]
+    },
+    {
+      "ref": "samoilovmikhail/eda-the-anatomy-of-a-winning-turn",
+      "selection_reasons": [
+        "dateCreated#3; dateRun#16",
+        "winning-turn strategy analysis"
+      ]
+    },
+    {
+      "ref": "citerne/from-30k-decks-to-a-pokemon-tcg-agent",
+      "selection_reasons": [
+        "dateCreated#5; dateRun#18",
+        "method from 30K decks to an agent"
+      ]
+    },
+    {
+      "ref": "kirvk013/ptcg-22-decks-one-meta",
+      "selection_reasons": [
+        "dateCreated#11; run 2026-07-29",
+        "22-deck meta coverage"
+      ]
+    },
+    {
+      "ref": "faheemgurkani/dragapult-ucb1-search-baseline-establishment",
+      "selection_reasons": [
+        "dateCreated#17; dateRun#33",
+        "Dragapult UCB1 search strategy"
+      ]
+    },
+    {
+      "ref": "jazivxt/crustle-counter-al220-v29-agents-only",
+      "selection_reasons": [
+        "dateCreated#8; dateRun#27",
+        "recent explicit counter agent"
+      ]
+    },
+    {
+      "ref": "prvsiyan/ptcg-ai-battle-control-v11-meta-portfolio",
+      "selection_reasons": [
+        "dateRun#26; run 2026-07-30",
+        "control/meta portfolio strategy"
+      ]
+    },
+    {
+      "ref": "hitoshimochizuki/live-opponent-deck-prediction-from-revealed-cards",
+      "selection_reasons": [
+        "dateCreated top60",
+        "opponent deck inference from revealed cards"
+      ]
+    },
+    {
+      "ref": "weipingyan/imperfect-information-agent-core",
+      "selection_reasons": [
+        "dateCreated#23; dateRun#45",
+        "imperfect-information agent"
+      ]
+    },
+    {
+      "ref": "busyaprime/test-your-agent-a-local-matchup-harness",
+      "selection_reasons": [
+        "dateCreated top60",
+        "local matchup evaluation harness"
+      ]
+    },
+    {
+      "ref": "jazivxt/codex-sol-eclipse-alakazam",
+      "selection_reasons": [
+        "matched deck/search/counter/belief queries",
+        "run 2026-07-30; 60 votes"
+      ]
+    },
+    {
+      "ref": "premaananda108/daily-meta-deck-win-rate-analysis",
+      "selection_reasons": [
+        "dateRun top60; run 2026-07-25",
+        "daily meta/deck win-rate analysis"
+      ]
+    },
+    {
+      "ref": "meetparekh1/know-your-bracket-the-ptcg-meta-at-your-rating",
+      "selection_reasons": [
+        "dateCreated#36; dateRun top60",
+        "rating-bracket meta strategy"
+      ]
+    },
+    {
+      "ref": "torusuke/ptcg-ai-battle-replay-viewer-watch-game",
+      "selection_reasons": [
+        "matched meta/deck/counter/replay queries",
+        "replay visualization for qualitative strategy review"
+      ]
+    },
+    {
+      "ref": "ravi123a321at/codex-sol-eclipse-alakazam-20a31c",
+      "selection_reasons": [
+        "preserved from current scoreDescending top20"
+      ]
+    },
+    {
+      "ref": "ravi123a321at/battlecore-compact-agent",
+      "selection_reasons": [
+        "preserved from current scoreDescending top20"
+      ]
+    },
+    {
+      "ref": "biohack44/beating-the-day-2-new",
+      "selection_reasons": [
+        "preserved from current scoreDescending top20"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "topic": {
+    "id": 732469,
+    "title": "Official replay viewer is currently unreachable",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/732469",
+    "commentCount": 1,
+    "votes": 6,
+    "postDate": "2026-08-03T07:18:12.877773500Z",
+    "lastCommentPostDate": "2026-08-03T08:49:10.270Z"
+  },
+  "messages": [
+    {
+      "id": 3507931,
+      "postDate": "2026-08-03T07:18:12.877Z",
+      "content": "<p>Hi organizers,\nThe official replay viewer at <a href=\"https://ptcgvis.heroz.jp/\" target=\"_blank\">https://ptcgvis.heroz.jp/</a> appears to be unreachable.\nAs of August 3, 2026, around 07:08 UTC (16:08 JST):</p>\n<ul>\n<li>The hostname resolves normally to 54.199.209.208.</li>\n<li>TCP connections to both ports 80 and 443 time out before an HTTP response or TLS handshake is established.</li>\n<li>The problem affects both the base URL and individual replay URLs.</li>\n<li>Kaggle itself and the Kaggle Episode Replay API remain accessible.</li>\n<li>External TCP checks from multiple locations, including Tokyo, Hong Kong, and Singapore, also time out.</li>\n</ul>\n<p>External connectivity check:\n<a href=\"https://check-host.net/check-report/464023adk33\" target=\"_blank\">https://check-host.net/check-report/464023adk33</a></p>\n<p>Could you please confirm whether the replay viewer is currently under maintenance or experiencing an outage? If this is unintentional, could you investigate the viewer server or its network configuration?\nThank you.</p>",
+      "rawMarkdown": "Hi organizers,\nThe official replay viewer at https://ptcgvis.heroz.jp/ appears to be unreachable.\nAs of August 3, 2026, around 07:08 UTC (16:08 JST):\n- The hostname resolves normally to 54.199.209.208.\n- TCP connections to both ports 80 and 443 time out before an HTTP response or TLS handshake is established.\n- The problem affects both the base URL and individual replay URLs.\n- Kaggle itself and the Kaggle Episode Replay API remain accessible.\n- External TCP checks from multiple locations, including Tokyo, Hong Kong, and Singapore, also time out.\n\nExternal connectivity check:\nhttps://check-host.net/check-report/464023adk33\n\nCould you please confirm whether the replay viewer is currently under maintenance or experiencing an outage? If this is unintentional, could you investigate the viewer server or its network configuration?\nThank you.",
+      "votes": 6
+    },
+    {
+      "id": 3507958,
+      "postDate": "2026-08-03T08:49:10.270Z",
+      "content": "<p>The issue has been resolved in my environment. Thank you.</p>",
+      "rawMarkdown": "The issue has been resolved in my environment. Thank you."
+    }
+  ]
+}

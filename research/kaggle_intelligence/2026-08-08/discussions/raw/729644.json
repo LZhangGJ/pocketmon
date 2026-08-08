@@ -1,0 +1,114 @@
+{
+  "topic": {
+    "id": 729644,
+    "title": " Are top agents mostly heuristic, or are people successfully using RL/BC?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/729644",
+    "commentCount": 14,
+    "votes": 4,
+    "postDate": "2026-07-26T08:58:52.437813800Z",
+    "lastCommentPostDate": "2026-07-29T04:45:06.703333300Z"
+  },
+  "messages": [
+    {
+      "id": 3503676,
+      "postDate": "2026-07-26T08:58:52.437Z",
+      "content": "<p>Hi everyone,</p>\n<p>I’m curious about what kinds of agents people are currently using in this competition.</p>\n<p>My current agent is mainly rule-based/heuristic, with some matchup-specific routing and planning. Its leaderboard rating is usually around the 850-900 range, although the score can fluctuate quite a bit.</p>\n<p>I have experimented with behavior cloning and rollout-based plan selection, but so far their offline improvements have not transferred reliably to the live leaderboard. I’m wondering whether higher-rated agents—especially those around 1000–1100—are mainly based on:</p>\n<ul>\n<li><p>Hand-written heuristics</p></li>\n<li><p>Search or simulation</p></li>\n<li><p>Behavior cloning / imitation learning</p></li>\n<li><p>Reinforcement learning or self-play</p></li>\n<li><p>A hybrid of these approaches</p>\n<p>If you are comfortable sharing, I would also be interested in:</p></li>\n<li><p>Your approximate rating range</p></li>\n<li><p>Whether your method performs consistently online</p></li>\n<li><p>Whether BC or RL actually improved over a strong heuristic baseline</p></li>\n<li><p>How much search you can realistically run within the time limit</p></li>\n<li><p>Whether matchup-specific routing has been useful</p>\n<p>There is no need to reveal code, deck lists, or private strategy details. Broad approach categories and approximate rating bands would already be very helpful.</p>\n<p>Thanks! I’d love to understand what approaches are working for others and whether strong heuristics are still  competitive with learned policies.</p></li>\n</ul>",
+      "rawMarkdown": "Hi everyone,\n\n  I’m curious about what kinds of agents people are currently using in this competition.\n\n  My current agent is mainly rule-based/heuristic, with some matchup-specific routing and planning. Its leaderboard rating is usually around the 850-900 range, although the score can fluctuate quite a bit.\n\n  I have experimented with behavior cloning and rollout-based plan selection, but so far their offline improvements have not transferred reliably to the live leaderboard. I’m wondering whether higher-rated agents—especially those around 1000–1100—are mainly based on:\n\n  - Hand-written heuristics\n  - Search or simulation\n  - Behavior cloning / imitation learning\n  - Reinforcement learning or self-play\n  - A hybrid of these approaches\n\n  If you are comfortable sharing, I would also be interested in:\n\n  1. Your approximate rating range\n  2. Whether your method performs consistently online\n  3. Whether BC or RL actually improved over a strong heuristic baseline\n  4. How much search you can realistically run within the time limit\n  5. Whether matchup-specific routing has been useful\n\n  There is no need to reveal code, deck lists, or private strategy details. Broad approach categories and approximate rating bands would already be very helpful.\n\n  Thanks! I’d love to understand what approaches are working for others and whether strong heuristics are still  competitive with learned policies.",
+      "votes": 4
+    },
+    {
+      "id": 3503680,
+      "postDate": "2026-07-26T09:09:17.967Z",
+      "content": "<p>A hybrid method combining expert behavioral cloning (BC) and rule guards.Current score is around 1000 points.</p>",
+      "rawMarkdown": "A hybrid method combining expert behavioral cloning (BC) and rule guards.Current score is around 1000 points.",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3503681,
+          "postDate": "2026-07-26T09:11:32.967Z",
+          "content": "<p>Wow, That's impressive</p>",
+          "rawMarkdown": "Wow, That's impressive"
+        },
+        {
+          "id": 3504973,
+          "postDate": "2026-07-29T04:44:02.293Z",
+          "rawMarkdown": "",
+          "isDeleted": true
+        },
+        {
+          "id": 3504974,
+          "postDate": "2026-07-29T04:45:06.703Z",
+          "content": "<p>Can I join your work? I need a strong behavioral cloning (BC) to bootstrap my RL.</p>",
+          "rawMarkdown": "Can I join your work? I need a strong behavioral cloning (BC) to bootstrap my RL."
+        }
+      ]
+    },
+    {
+      "id": 3503748,
+      "postDate": "2026-07-26T10:18:25.670Z",
+      "content": "<p>please combine tree search and BC(policy and value) and then try PUCT method. if you increase tree search number and depth, accuracy is getting better. selfplay is also good, because your model can learn how to play different two decks at a time</p>",
+      "rawMarkdown": "please combine tree search and BC(policy and value) and then try PUCT method. if you increase tree search number and depth, accuracy is getting better. selfplay is also good, because your model can learn how to play different two decks at a time",
+      "votes": 2,
+      "replies": [
+        {
+          "id": 3503762,
+          "postDate": "2026-07-26T10:32:29.777Z",
+          "content": "<blockquote>\n  <p>please combine tree search and BC(policy and value) and then try PUCT method</p>\n</blockquote>\n<p>Yeah. I thought of it yesterday. I was trying to train V(s) over millions of replays to later use it with MCTS. However, I realized that it wasn't learning anything. Mainly because the rewards are too sparse and differentiating a state from another gets extremely difficult. </p>",
+          "rawMarkdown": ">please combine tree search and BC(policy and value) and then try PUCT method\n\nYeah. I thought of it yesterday. I was trying to train V(s) over millions of replays to later use it with MCTS. However, I realized that it wasn't learning anything. Mainly because the rewards are too sparse and differentiating a state from another gets extremely difficult. ",
+          "replies": [
+            {
+              "id": 3503779,
+              "postDate": "2026-07-26T11:16:50.277Z",
+              "content": "<p>how did you encode observation?\nif you encode obs in very detail, model start finding out common features and difference from others, and then they can play well. and reward should be given to all steps winner chosed or stayed, not only in the end of state.</p>",
+              "rawMarkdown": "how did you encode observation?\nif you encode obs in very detail, model start finding out common features and difference from others, and then they can play well. and reward should be given to all steps winner chosed or stayed, not only in the end of state."
+            },
+            {
+              "id": 3503780,
+              "postDate": "2026-07-26T11:17:57.780Z",
+              "content": "<p>and did you choose decks? if you didn't fix your deck, model can't learn how to play that, so please fix that</p>",
+              "rawMarkdown": "and did you choose decks? if you didn't fix your deck, model can't learn how to play that, so please fix that"
+            },
+            {
+              "id": 3503781,
+              "postDate": "2026-07-26T11:27:19.707Z",
+              "content": "<p>Obviously. I fixed Alakazam when I did PPO but my state representation was horrible. I am reading papers that worked on imperfect information games to learn how they encoded it better. </p>",
+              "rawMarkdown": "Obviously. I fixed Alakazam when I did PPO but my state representation was horrible. I am reading papers that worked on imperfect information games to learn how they encoded it better. "
+            },
+            {
+              "id": 3503785,
+              "postDate": "2026-07-26T11:42:36.707Z",
+              "content": "<p>you should separate them into 4 parts like global which represents entire field, and entities which represents cards, and action or options and static card and attack features. like skills, text based features shouln't be encoded, instead you can use search. also,\nif you try selfplay, you shouldn't fix opponent deck. I mean you have to fix self deck and opponent deck, but change them repeatedly. please check HDBSCAN. at first, analyze existing decks and classify them using this statistics. and use two of those cluster.</p>",
+              "rawMarkdown": "you should separate them into 4 parts like global which represents entire field, and entities which represents cards, and action or options and static card and attack features. like skills, text based features shouln't be encoded, instead you can use search. also,\nif you try selfplay, you shouldn't fix opponent deck. I mean you have to fix self deck and opponent deck, but change them repeatedly. please check HDBSCAN. at first, analyze existing decks and classify them using this statistics. and use two of those cluster."
+            }
+          ]
+        },
+        {
+          "id": 3504159,
+          "postDate": "2026-07-27T12:21:53.607Z",
+          "content": "<p>How do you do tree search with imperfect information like this game? Do it to the extent possible?</p>",
+          "rawMarkdown": "How do you do tree search with imperfect information like this game? Do it to the extent possible?",
+          "replies": [
+            {
+              "id": 3504170,
+              "postDate": "2026-07-27T12:42:49.253Z",
+              "content": "<p>your have to predlct opponent deck, then generate plausible opponent deck, hand, bech candidates, after that, put them into search engine repeatedly and collect their average result for measuring mean, finally model can determine which action is better than others.</p>",
+              "rawMarkdown": "your have to predlct opponent deck, then generate plausible opponent deck, hand, bech candidates, after that, put them into search engine repeatedly and collect their average result for measuring mean, finally model can determine which action is better than others."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3504687,
+      "postDate": "2026-07-28T15:11:48.237Z",
+      "content": "<p>There are time-spending logs in the leaderboard data. Here is the top 20 on July 27th, with my claude code guessing the algo by average action time:</p>\n<ul>\n<li>0.05s: pure rule base</li>\n<li>0.4s: shallow search</li>\n<li>0.8s: deeper search or small budget MCTS</li>\n<li>3s+: heavy MCTS/AlphaZero-style</li>\n</ul>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1533932%2F65504906282f6f62edeadc83b3af581a%2Favg_decision_time.png?generation=1785251491951009&amp;alt=media\" alt=\"\"></p>",
+      "rawMarkdown": "There are time-spending logs in the leaderboard data. Here is the top 20 on July 27th, with my claude code guessing the algo by average action time:\n- 0.05s: pure rule base\n- 0.4s: shallow search\n- 0.8s: deeper search or small budget MCTS\n- 3s+: heavy MCTS/AlphaZero-style\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1533932%2F65504906282f6f62edeadc83b3af581a%2Favg_decision_time.png?generation=1785251491951009&alt=media)"
+    },
+    {
+      "id": 3503733,
+      "postDate": "2026-07-26T10:10:11.440Z",
+      "content": "<p>I have never played this game before, so crafting a heuristic would be horrendous. I am trying to exploit BC/IL but its not cake. I would need to create a decent state representation.</p>",
+      "rawMarkdown": "I have never played this game before, so crafting a heuristic would be horrendous. I am trying to exploit BC/IL but its not cake. I would need to create a decent state representation."
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "topic": {
+    "id": 731933,
+    "title": "about matching frequency in score band segmentation",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/731933",
+    "commentCount": 3,
+    "votes": 1,
+    "postDate": "2026-08-01T14:41:46.333988Z",
+    "lastCommentPostDate": "2026-08-02T02:47:32.770Z"
+  },
+  "messages": [
+    {
+      "id": 3507395,
+      "postDate": "2026-08-01T22:58:01.847Z",
+      "content": "<p>there's been extended discussion on this. check for example <a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/726690\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/726690</a></p>",
+      "rawMarkdown": "there's been extended discussion on this. check for example https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/726690",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3507424,
+          "postDate": "2026-08-02T02:47:32.770Z",
+          "content": "<p>thanks you much!</p>",
+          "rawMarkdown": "thanks you much!"
+        }
+      ]
+    },
+    {
+      "id": 3507159,
+      "postDate": "2026-08-01T14:41:46.333Z",
+      "content": "<p>I have been submitting various agents which were scored in for each 800~, 900~, 1000~, 1100~ and what I found is, between 800 to 1000, there are rarely games that my agent only could match though 1100~ model was frequently matching with other users.</p>\n<p>anyone know the reasons why this is happening?</p>",
+      "rawMarkdown": "I have been submitting various agents which were scored in for each 800~, 900~, 1000~, 1100~ and what I found is, between 800 to 1000, there are rarely games that my agent only could match though 1100~ model was frequently matching with other users.\n\nanyone know the reasons why this is happening?",
+      "votes": 1
+    },
+    {
+      "id": 3507161,
+      "postDate": "2026-08-01T14:45:33.480Z",
+      "content": "<p>ex) submitted 8 hours ago, but 3 to 4 matching and still climbing the ladder board. is it only because my model just converged?</p>",
+      "rawMarkdown": "ex) submitted 8 hours ago, but 3 to 4 matching and still climbing the ladder board. is it only because my model just converged?"
+    }
+  ]
+}

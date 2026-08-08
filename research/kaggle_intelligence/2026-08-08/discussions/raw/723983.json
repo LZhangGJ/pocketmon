@@ -1,0 +1,32 @@
+{
+  "topic": {
+    "id": 723983,
+    "title": "About \"five (5) Submissions per day\"",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/723983",
+    "commentCount": 2,
+    "postDate": "2026-07-09T01:03:07.279281700Z",
+    "lastCommentPostDate": "2026-07-10T02:14:07.046666700Z"
+  },
+  "messages": [
+    {
+      "id": 3494223,
+      "postDate": "2026-07-09T12:56:48.087Z",
+      "content": "<p>Error messages do not count against your submission limit in this competition. They do in prediction competitions, where errors may be able to provide information about the test set.</p>",
+      "rawMarkdown": "Error messages do not count against your submission limit in this competition. They do in prediction competitions, where errors may be able to provide information about the test set.",
+      "replies": [
+        {
+          "id": 3494450,
+          "postDate": "2026-07-10T02:14:07.047Z",
+          "content": "<p>Thank you!!</p>",
+          "rawMarkdown": "Thank you!!"
+        }
+      ]
+    },
+    {
+      "id": 3494018,
+      "postDate": "2026-07-09T01:03:07.280Z",
+      "content": "<p>According to the Rules, it states: “You may submit a maximum of five (5) Submissions per day.”</p>\n<p>If a submission results in an ERROR after being submitted, does that submission still count toward the daily limit of five submissions?</p>",
+      "rawMarkdown": "According to the Rules, it states: “You may submit a maximum of five (5) Submissions per day.”\n\nIf a submission results in an ERROR after being submitted, does that submission still count toward the daily limit of five submissions?"
+    }
+  ]
+}

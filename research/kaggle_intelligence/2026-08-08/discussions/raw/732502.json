@@ -1,0 +1,48 @@
+{
+  "topic": {
+    "id": 732502,
+    "title": "Unable to load episode replay（Too many requests）",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/732502",
+    "commentCount": 4,
+    "votes": 1,
+    "postDate": "2026-08-03T11:37:49.620735400Z",
+    "lastCommentPostDate": "2026-08-04T03:05:03.630Z"
+  },
+  "messages": [
+    {
+      "id": 3507990,
+      "postDate": "2026-08-03T11:37:49.620Z",
+      "content": "<p>This morning, I originally intended to use an API to retrieve some match data for training my own model.\nHowever, I'm getting a \"Too many requests\" error. The situation now is that not only is the API unusable, but I can't even view the contest submissions I've made; this makes it impossible for me to debug when a submission fails.\nDoes anyone know how to solve this problem?</p>",
+      "rawMarkdown": "This morning, I originally intended to use an API to retrieve some match data for training my own model.\nHowever, I'm getting a \"Too many requests\" error. The situation now is that not only is the API unusable, but I can't even view the contest submissions I've made; this makes it impossible for me to debug when a submission fails.\nDoes anyone know how to solve this problem?\n",
+      "votes": 1
+    },
+    {
+      "id": 3508247,
+      "postDate": "2026-08-04T03:05:03.630Z",
+      "content": "<p>I have been using my notebook to get specific replays for 5 days now. I have managed to collect 4700 \"gold\" replays so far (alongwith the daily ones). I never knew there was a limit to downloading replays.</p>",
+      "rawMarkdown": "I have been using my notebook to get specific replays for 5 days now. I have managed to collect 4700 \"gold\" replays so far (alongwith the daily ones). I never knew there was a limit to downloading replays."
+    },
+    {
+      "id": 3508038,
+      "postDate": "2026-08-03T15:07:49.130Z",
+      "content": "<p>Yes, this is what happens when you hit the rate limit. Once the rate limit window passes, you should be able to view your submissions again. If you want to get match data for training you can use the official top replay dataset which has been compiled here <a href=\"https://www.kaggle.com/datasets/kaggle/pokemon-tcg-ai-battle-episodes-index\" target=\"_blank\">https://www.kaggle.com/datasets/kaggle/pokemon-tcg-ai-battle-episodes-index</a></p>",
+      "rawMarkdown": "Yes, this is what happens when you hit the rate limit. Once the rate limit window passes, you should be able to view your submissions again. If you want to get match data for training you can use the official top replay dataset which has been compiled here https://www.kaggle.com/datasets/kaggle/pokemon-tcg-ai-battle-episodes-index",
+      "replies": [
+        {
+          "id": 3508041,
+          "postDate": "2026-08-03T15:12:31.270Z",
+          "content": "<p>Thank you. May I ask if the reset window is one day?</p>",
+          "rawMarkdown": "Thank you. May I ask if the reset window is one day?",
+          "replies": [
+            {
+              "id": 3508061,
+              "postDate": "2026-08-03T16:06:13.617Z",
+              "content": "<p>From prior experience it should be less than an hour.</p>",
+              "rawMarkdown": "From prior experience it should be less than an hour."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

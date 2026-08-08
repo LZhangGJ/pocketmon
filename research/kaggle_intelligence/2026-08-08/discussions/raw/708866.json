@@ -1,0 +1,26 @@
+{
+  "topic": {
+    "id": 708866,
+    "title": "Preliminary Question about Decks",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708866",
+    "commentCount": 1,
+    "votes": 3,
+    "postDate": "2026-06-17T05:20:06.702654900Z",
+    "lastCommentPostDate": "2026-06-18T08:42:29.096666700Z"
+  },
+  "messages": [
+    {
+      "id": 3473817,
+      "postDate": "2026-06-17T05:20:06.703Z",
+      "content": "<p>Hi,</p>\n<p>I have been reading through the documentation and it is a bit unclear to me.</p>\n<p>Is the purpose that any deck.csv can be loaded and the agent wins its battle?</p>\n<p>Or does the deck provided by the team is always used in the agent’s battles? </p>",
+      "rawMarkdown": "Hi,\n\nI have been reading through the documentation and it is a bit unclear to me.\n\nIs the purpose that any deck.csv can be loaded and the agent wins its battle?\n\nOr does the deck provided by the team is always used in the agent’s battles? ",
+      "votes": 3
+    },
+    {
+      "id": 3474577,
+      "postDate": "2026-06-18T08:42:29.097Z",
+      "content": "<p>I think the deck submitted by each team is fixed and is the only deck used in battles.</p>",
+      "rawMarkdown": "I think the deck submitted by each team is fixed and is the only deck used in battles."
+    }
+  ]
+}

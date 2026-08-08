@@ -1,0 +1,61 @@
+{
+  "topic": {
+    "id": 718688,
+    "title": "\"Player 1's deck does not have 60 cards.\",",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/718688",
+    "commentCount": 6,
+    "votes": 2,
+    "postDate": "2026-07-04T00:00:18.446682Z",
+    "lastCommentPostDate": "2026-07-05T20:41:55.343333300Z"
+  },
+  "messages": [
+    {
+      "id": 3488836,
+      "postDate": "2026-07-05T09:05:54.990Z",
+      "content": "<p>Had a similar issue and it was due to the agent() function not being the last one in main.py. Took me way too many attempts to figure it out haha</p>",
+      "rawMarkdown": "Had a similar issue and it was due to the agent() function not being the last one in main.py. Took me way too many attempts to figure it out haha",
+      "votes": 2
+    },
+    {
+      "id": 3487545,
+      "postDate": "2026-07-04T00:00:18.447Z",
+      "content": "<p>I am trying to do my first submission.  I am getting \"deck does not have 6 cards\" but I have deck.csv with 60 rows.  Here are the 1st 20.  What am I doing wrong?</p>\n<p>6\n6\n6\n6\n6\n6\n6\n6\n6\n6\n6\n6\n6\n673\n673\n674\n674\n675\n675\n676</p>",
+      "rawMarkdown": "I am trying to do my first submission.  I am getting \"deck does not have 6 cards\" but I have deck.csv with 60 rows.  Here are the 1st 20.  What am I doing wrong?\n\n6\n6\n6\n6\n6\n6\n6\n6\n6\n6\n6\n6\n6\n673\n673\n674\n674\n675\n675\n676",
+      "votes": 2
+    },
+    {
+      "id": 3487827,
+      "postDate": "2026-07-04T09:59:43.140Z",
+      "content": "<p>Hey, </p>\n<p>Sounds about right, i've attached a deck.csv file that works for me, feel free to test/compare</p>",
+      "rawMarkdown": "Hey, \n\nSounds about right, i've attached a deck.csv file that works for me, feel free to test/compare",
+      "replies": [
+        {
+          "id": 3488044,
+          "postDate": "2026-07-04T14:07:27.077Z",
+          "content": "<p>I can't download it from this discussion.  I copy/pasted your deck into a new file and got the same error.  What encoding are you using?  I wonder if my MacBook is throwing some random EOF character in there.</p>",
+          "rawMarkdown": "I can't download it from this discussion.  I copy/pasted your deck into a new file and got the same error.  What encoding are you using?  I wonder if my MacBook is throwing some random EOF character in there.",
+          "replies": [
+            {
+              "id": 3488050,
+              "postDate": "2026-07-04T14:13:32.193Z",
+              "content": "<p>Just to doublecheck, are you sure its not saved as a .numbers file with just the naming being.csv?</p>",
+              "rawMarkdown": "Just to doublecheck, are you sure its not saved as a .numbers file with just the naming being.csv?"
+            },
+            {
+              "id": 3489657,
+              "postDate": "2026-07-05T18:56:30.343Z",
+              "content": "<p>let me verify</p>",
+              "rawMarkdown": "let me verify\n"
+            }
+          ]
+        },
+        {
+          "id": 3489764,
+          "postDate": "2026-07-05T20:41:55.343Z",
+          "content": "<p>I am still getting the same errors and Claude and Copilot are 0 help\nI created a simple agent in main.py</p>\n<p>import os</p>\n<p>def load_deck():\n    path = os.path.join(os.path.dirname(<strong>file</strong>), \"deck.csv\")\n    with open(path, \"r\", encoding=\"utf-8\") as f:\n        return [int(line.strip()) for line in f if line.strip()]</p>\n<p>def agent(obs_dict):\n    # Deck-selection phase: step == 0 → return 60-card deck\n    if obs_dict.get(\"step\", 0) == 0:\n        return load_deck()</p>\n<pre><code>select = obs_dict.get(\"select\")\nif not isinstance(select, dict):\n    return []\n\noptions = select.get(\"option\") or []\nif not options:\n    return []\n\n# Always pick the first legal option\nreturn [0]\n</code></pre>\n<p>And it still fails.  Is there a template somewhere that I can use to submit the most basic agent possible?</p>",
+          "rawMarkdown": "I am still getting the same errors and Claude and Copilot are 0 help\nI created a simple agent in main.py\n\nimport os\n\ndef load_deck():\n    path = os.path.join(os.path.dirname(__file__), \"deck.csv\")\n    with open(path, \"r\", encoding=\"utf-8\") as f:\n        return [int(line.strip()) for line in f if line.strip()]\n\ndef agent(obs_dict):\n    # Deck-selection phase: step == 0 → return 60-card deck\n    if obs_dict.get(\"step\", 0) == 0:\n        return load_deck()\n\n    select = obs_dict.get(\"select\")\n    if not isinstance(select, dict):\n        return []\n\n    options = select.get(\"option\") or []\n    if not options:\n        return []\n\n    # Always pick the first legal option\n    return [0]\n\nAnd it still fails.  Is there a template somewhere that I can use to submit the most basic agent possible?\n"
+        }
+      ]
+    }
+  ]
+}

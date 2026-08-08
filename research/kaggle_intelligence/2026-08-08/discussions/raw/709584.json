@@ -1,0 +1,33 @@
+{
+  "topic": {
+    "id": 709584,
+    "title": "\"Gouging Fire\" is missing from the card pool.",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709584",
+    "commentCount": 2,
+    "postDate": "2026-06-19T08:03:58.598197900Z",
+    "lastCommentPostDate": "2026-07-03T04:33:06.350Z"
+  },
+  "messages": [
+    {
+      "id": 3478332,
+      "postDate": "2026-06-22T15:45:34.107Z",
+      "content": "<p>Hi there,</p>\n<p>The tournament card pool is specifically defined for this competition and may differ from the current in-person Pokémon Trading Card Game card pool. The card pool is also intended to remain fixed for the duration of the tournament, unless a rebalance becomes necessary.</p>\n<p>All matches in the Pokémon Trading Card Game AI Battle Challenge will use rules and regulations based on the Standard format, but uniquely tailored for this tournament. Only cards included in the designated card list provided by the sponsors may be used.</p>",
+      "rawMarkdown": "Hi there,\n\nThe tournament card pool is specifically defined for this competition and may differ from the current in-person Pokémon Trading Card Game card pool. The card pool is also intended to remain fixed for the duration of the tournament, unless a rebalance becomes necessary.\n\nAll matches in the Pokémon Trading Card Game AI Battle Challenge will use rules and regulations based on the Standard format, but uniquely tailored for this tournament. Only cards included in the designated card list provided by the sponsors may be used.",
+      "replies": [
+        {
+          "id": 3486842,
+          "postDate": "2026-07-03T04:33:06.350Z",
+          "content": "<p>Thank you for the reply!\nI understand the rules now, and I plan to make the most of the current card pool.</p>",
+          "rawMarkdown": "Thank you for the reply!\nI understand the rules now, and I plan to make the most of the current card pool.",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "id": 3475036,
+      "postDate": "2026-06-19T08:03:58.597Z",
+      "content": "<p>This is my first post, so apologies if I'm breaking any rules.\n(I'm Japanese and I'm writing this using machine translation.)</p>\n<p>I get the impression that the non-ex \"Gouging Fire\" does not exist in the data files JP_Card_Data.csv or EN_Card_Data.csv. It's a \"Regulation H\" card originally included in \"Paradise Dragona\" (楽園ドラゴーナ), and I believe it should be part of the card pool.</p>\n<p>I'd love to share information on whether there are other cards like this as well!</p>",
+      "rawMarkdown": "This is my first post, so apologies if I'm breaking any rules.\n(I'm Japanese and I'm writing this using machine translation.)\n\nI get the impression that the non-ex \"Gouging Fire\" does not exist in the data files JP_Card_Data.csv or EN_Card_Data.csv. It's a \"Regulation H\" card originally included in \"Paradise Dragona\" (楽園ドラゴーナ), and I believe it should be part of the card pool.\n\nI'd love to share information on whether there are other cards like this as well!"
+    }
+  ]
+}

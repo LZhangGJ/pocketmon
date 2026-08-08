@@ -1,0 +1,33 @@
+{
+  "metadata": {
+    "id": 129492418,
+    "ref": "toshikomiyake/rl-mcts-text-embedding-model4",
+    "title": "RL&MCTS+text_embedding_model4",
+    "author": "Toshiko Miyake",
+    "slug": "rl-mcts-text-embedding-model4",
+    "lastRunTime": "2026-08-04T18:50:08.657850400Z",
+    "language": "python",
+    "kernelType": "notebook",
+    "isPrivate": false,
+    "enableGpu": false,
+    "enableInternet": true,
+    "datasetDataSources": [
+      "",
+      "kiyotah/cg-lib"
+    ],
+    "competitionDataSources": [
+      "pokemon-tcg-ai-battle"
+    ],
+    "totalVotes": 2,
+    "enableTpu": false,
+    "currentVersionNumber": 4,
+    "dockerImage": "gcr.io/kaggle-images/python@sha256:e5452ce6268c2e8345cfe5141f31ca7ff47032aca46a7ea532bbb87481281d0c",
+    "machineShape": "None"
+  },
+  "blob": {
+    "source": "{\"metadata\":{\"kernelspec\":{\"language\":\"python\",\"display_name\":\"Python 3\",\"name\":\"python3\"},\"language_info\":{\"name\":\"python\",\"version\":\"3.12.13\",\"mimetype\":\"text/x-python\",\"codemirror_mode\":{\"name\":\"ipython\",\"version\":3},\"pygments_lexer\":\"ipython3\",\"nbconvert_exporter\":\"python\",\"file_extension\":\".py\"},\"kaggle\":{\"accelerator\":\"none\",\"dataSources\":[],\"dockerImageVersionId\":28755,\"isInternetEnabled\":false,\"language\":\"python\",\"sourceType\":\"notebook\",\"isGpuEnabled\":false}},\"nbformat_minor\":4,\"nbformat\":4,\"cells\":[{\"cell_type\":\"markdown\",\"source\":\"## 概要\\nMega Lucario ex デッキ用のAIエージェントです。Reinforcement Learning and MCTS sample code\\nhttps://www.kaggle.com/code/kiyotah/reinforcement-learning-and-mcts-sample-codeを元にした強化学習(自己対戦)+ MCTS(モンテカルロ木探索)のTransformerモデルをベースに、カードのテキスト情報を追加で取り込む改造を加えています。\\n\\n### 元のアプローチ\\nベースとなったサンプルコードは、盤面状態(ベンチ・バトルポケモン・手札・スタジアムなど)やカードをすべてカードIDのone-hot的な埋め込み(EmbeddingBag)として表現し、Transformerエンコーダ・デコーダで盤面価値(value)と各行動の評価値(policy)を出力する構成でした。\\n\\n### このNotebookでの追加点: カード効果テキストの埋め込み\\nこのNotebookでの主な変更点は、**カードに書かれている技の説明文(効果テキスト)を、事前計算した埋め込みベクトルとしてモデルに追加で取り込んでいる**ことです。\\n\\n- カードごとの効果テキストを別途埋め込みモデルでベクトル化し、`card_id -> 128次元ベクトル` の対応表として事前計算(学習時は固定・凍結)。\\n- モデル側には、この128次元ベクトルをモデルの次元数に変換する学習可能な射影層(Linear層)を1つだけ追加。エンコーダ・デコーダで同じ射影層を共有している。\\n- 盤面上の各ポケモン(エンコーダ側)や、行動選択肢が参照するカード(デコーダ側)ごとに、対応するカードのテキスト埋め込みを射影後、既存のカードID埋め込みに加算する形で合成。技を複数持つカードなど、対象カードが複数の効果を持つ場合は埋め込みを合計する設計。\\n- 狙いは、カードIDだけでは自己対戦データから間接的にしか学習できない「その技が具体的に何をするか」という情報を、テキストの意味表現として直接モデルに渡すこと。特に対戦頻度が低いカードでも、テキストが似ていれば近い表現を持ちやすくなり、データが少ないカードの評価精度が上がることを期待している。\\n\\n### 現状\\n学習・改善を継続中です。ご意見・フィードバック歓迎です。\",\"metadata\":{}},{\"cell_type\":\"markdown\",\"source\":\"## Overview\\nAn AI agent for the Mega Lucario ex deck. This notebook is a fork/extension of Reinforcement Learning and MCTS sample code https://www.kaggle.com/code/kiyotah/reinforcement-learning-and-mcts-sample-code, a Transformer-based reinforcement learning (self-play) + MCTS (Monte Carlo Tree Search) sample, with an added modification that folds in card text information.\\n\\n### Original approach\\nThe base sample code represented the entire board state (bench, active Pokemon, hand, stadium, etc.) and all cards as one-hot-style card-ID embeddings (via EmbeddingBag), and used a Transformer encoder/decoder to output a board value estimate and a per-action policy score.\\n\\n### What this notebook adds: card effect-text embeddings\\nThe main addition in this notebook is folding in the **card's move/effect description text** as a precomputed embedding vector, on top of the existing card-ID embeddings.\\n\\n- Each card's effect text is embedded offline with a separate text-embedding model into a `card_id -> 128-dim vector` lookup table (frozen/fixed during training).\\n- A single small learnable projection layer (a Linear layer) maps this 128-dim text vector into the model's hidden dimension. This projection is shared between the encoder and the decoder.\\n- For each Pokemon on the board (encoder side) and each card referenced by an action option (decoder side), the corresponding card's projected text embedding is added on top of the existing card-ID embedding. When a card has multiple effects/attacks, their text vectors are summed.\\n- The goal is to give the model direct access to *what a move actually does*, expressed as a semantic text representation, rather than relying purely on card-ID embeddings that can only learn this indirectly from self-play data. This should help especially for cards that appear less often in self-play: cards with similar wording can share a similar representation even with limited direct experience.\\n\\n### Status\\nStill training / iterating. Feedback and comments are very welcome!\\n```\\n\",\"metadata\":{}},{\"cell_type\":\"code\",\"source\":\"import sys\\nimport glob\\n\\nsys.path.append(glob.glob('/kaggle/input/**/cg-lib', recursive=True)[0])\\nsys.path.append('/kaggle/input/datasets/toshikomiyake/model4')\\ndeck_csv_path = glob.glob('/kaggle/input/datasets/toshikomiyake/model4/Mega_Lucario_ex.csv', recursive=True)[0]\\n\\n\\n\\nfrom model4 import run_training\\n\\nrun_training(\\n    deck_csv=deck_csv_path, \\n    output_dir = \\\"out_mega_luca\\\",\\n    iterations=10,\\n    selfplay_games=512,\\n    search_count=20,\\n    num_heads = 4,\\n    num_layers_encoder = 4,\\n    num_layers_decoder = 4,\\n    temperature = 1.0,\\n    temperature_turns = 15\\n)\\n\\n\",\"metadata\":{\"trusted\":true},\"outputs\":[],\"execution_count\":null}]}",
+    "language": "python",
+    "kernelType": "notebook",
+    "slug": "rl-mcts-text-embedding-model4"
+  }
+}

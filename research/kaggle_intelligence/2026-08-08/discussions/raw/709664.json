@@ -1,0 +1,17 @@
+{
+  "topic": {
+    "id": 709664,
+    "title": "Hop’s bag issues",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709664",
+    "postDate": "2026-06-19T15:01:39.993828400Z",
+    "lastCommentPostDate": "2026-06-19T15:01:39.993333300Z"
+  },
+  "messages": [
+    {
+      "id": 3475197,
+      "postDate": "2026-06-19T15:01:39.993Z",
+      "content": "<p>Hello, I am trying to use hop’s bag in my deck but it never searches for multiple pokemon, what gives? I am using the rule-based agent so is there a different rule I need to write for it? </p>",
+      "rawMarkdown": "Hello, I am trying to use hop’s bag in my deck but it never searches for multiple pokemon, what gives? I am using the rule-based agent so is there a different rule I need to write for it? "
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "topic": {
+    "id": 727912,
+    "title": "How long does it typically take for the agent's score to stabilize? ",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/727912",
+    "commentCount": 3,
+    "postDate": "2026-07-21T08:41:36.096643200Z",
+    "lastCommentPostDate": "2026-07-21T14:14:39.250Z"
+  },
+  "messages": [
+    {
+      "id": 3501081,
+      "postDate": "2026-07-21T10:00:28.240Z",
+      "content": "<p>it depends on agents i see mine would stabilise in about 5h</p>",
+      "rawMarkdown": "it depends on agents i see mine would stabilise in about 5h",
+      "votes": 1
+    },
+    {
+      "id": 3501074,
+      "postDate": "2026-07-21T09:33:46.683Z",
+      "content": "<p>id say at least one day</p>",
+      "rawMarkdown": "id say at least one day",
+      "votes": 1
+    },
+    {
+      "id": 3501168,
+      "postDate": "2026-07-21T14:14:39.250Z",
+      "content": "<p>It depends. But I agree with Volodymir that the first 5 hours are quite unstable</p>",
+      "rawMarkdown": "It depends. But I agree with Volodymir that the first 5 hours are quite unstable"
+    },
+    {
+      "id": 3501064,
+      "postDate": "2026-07-21T08:41:36.097Z",
+      "content": "<p>I feel that the matchmaking frequency decreases over time.</p>",
+      "rawMarkdown": "I feel that the matchmaking frequency decreases over time."
+    }
+  ]
+}

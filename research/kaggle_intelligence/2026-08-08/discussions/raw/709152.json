@@ -1,0 +1,51 @@
+{
+  "topic": {
+    "id": 709152,
+    "title": "Memory Leak in libcg.so during continuous RL Training loops (battle_start)",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709152",
+    "commentCount": 5,
+    "votes": 14,
+    "postDate": "2026-06-17T18:30:27.738339400Z",
+    "lastCommentPostDate": "2026-06-29T11:23:16.120Z"
+  },
+  "messages": [
+    {
+      "id": 3474287,
+      "postDate": "2026-06-17T18:30:27.740Z",
+      "content": "<p>Hello Kaggle team and fellow competitors,</p>\n<p>I am currently building a Deep Reinforcement Learning pipeline (PPO via Stable-Baselines3) to train an agent locally/in notebooks via self-play against a heuristic opponent. However, I have run into a severe memory leak originating from the competition's C++ bindings.</p>\n<p><strong>The Issue</strong>: When running continuous, sequential matches in a single Python process, the system's RAM slowly but permanently increases over time. After roughly 50,000 simulated matches (~1,000,000 env.step actions), the process completely exhausts the 30GB Kaggle Notebook RAM limit and the kernel crashes (OOM).\nContext:</p>\n<p><strong>The issue</strong> occurs even if the Neural Network is kept entirely isolated.\nIt appears that cg.game.battle_start() and battle_select() allocate memory in the C++ engine (libcg.so) that is never properly freed or hooked to the Python garbage collector when the match finishes and a new one is initialized.\nBecause the C++ engine retains orphaned data from previous matches, the RAM usage scales linearly with the number of games played.\nTemporary Workaround: For anyone else training RL models, the only current workaround is to implement a CheckpointCallback to save your model every 100k steps, allow the kernel to crash, restart the session to flush the RAM, and resume training from the checkpoint.</p>\n<p>**Request: **Could the engineers please check the libcg.so source code for any missing destructors, orphaned pointers, or memory cleanup issues when a match concludes? A patch for this in the starter kit would be immensely appreciated by everyone trying to train machine learning models!</p>\n<p>Thank you!</p>",
+      "rawMarkdown": "Hello Kaggle team and fellow competitors,\n\nI am currently building a Deep Reinforcement Learning pipeline (PPO via Stable-Baselines3) to train an agent locally/in notebooks via self-play against a heuristic opponent. However, I have run into a severe memory leak originating from the competition's C++ bindings.\n\n**The Issue**: When running continuous, sequential matches in a single Python process, the system's RAM slowly but permanently increases over time. After roughly 50,000 simulated matches (~1,000,000 env.step actions), the process completely exhausts the 30GB Kaggle Notebook RAM limit and the kernel crashes (OOM).\nContext:\n\n**The issue** occurs even if the Neural Network is kept entirely isolated.\nIt appears that cg.game.battle_start() and battle_select() allocate memory in the C++ engine (libcg.so) that is never properly freed or hooked to the Python garbage collector when the match finishes and a new one is initialized.\nBecause the C++ engine retains orphaned data from previous matches, the RAM usage scales linearly with the number of games played.\nTemporary Workaround: For anyone else training RL models, the only current workaround is to implement a CheckpointCallback to save your model every 100k steps, allow the kernel to crash, restart the session to flush the RAM, and resume training from the checkpoint.\n\n**Request: **Could the engineers please check the libcg.so source code for any missing destructors, orphaned pointers, or memory cleanup issues when a match concludes? A patch for this in the starter kit would be immensely appreciated by everyone trying to train machine learning models!\n\nThank you!",
+      "votes": 14
+    },
+    {
+      "id": 3474903,
+      "postDate": "2026-06-19T02:43:01.870Z",
+      "content": "<p>I may have found a related or possibly separate leak source.</p>\n<p>In the stack trace I encountered, the crash happens during <code>finish()</code> when visualization data is generated:</p>\n<pre><code>File \"kaggle_environments/envs/cabt/cabt.py\", line 90, in finish\n    vis = json.loads(visualize_data())\n\nFile \"kaggle_environments/envs/cabt/cg/game.py\", line 75, in visualize_data\n    return lib.VisualizeData(Battle.battle_ptr).decode()\n</code></pre>\n<p>The related binding appears to be:</p>\n<pre><code>lib.VisualizeData.restype = ctypes.c_char_p\n\ndef visualize_data() -&gt; str:\n    return lib.VisualizeData(Battle.battle_ptr).decode()\n</code></pre>\n<p>If the native <code>VisualizeData()</code> function allocates and returns a new <code>char*</code> buffer for the visualization JSON, using <code>ctypes.c_char_p</code> as the return type can cause a memory leak.</p>\n<p>With <code>ctypes.c_char_p</code>, Python converts the returned pointer into a Python bytes/string object. However, the original native pointer is no longer available on the Python side, so it cannot be passed back to the C++ library for deallocation.</p>\n<p>Since the visualization JSON can become several MB depending on match length, this could accumulate quickly during long sequential self-play or RL loops. This may explain why memory usage keeps increasing across matches and eventually ends in <code>MemoryError</code>, <code>std::bad_alloc</code>, or <code>WinError 0xe06d7363</code>.</p>\n<p>A safer binding would be something like this, assuming the native side exposes a matching free function:</p>\n<pre><code>lib.VisualizeData.restype = ctypes.c_void_p\nlib.FreeStringData.argtypes = [ctypes.c_void_p]\nlib.FreeStringData.restype = None\n\ndef visualize_data() -&gt; str:\n    ptr = lib.VisualizeData(Battle.battle_ptr)\n    try:\n        return ctypes.string_at(ptr).decode(\"utf-8\")\n    finally:\n        lib.FreeStringData(ptr)\n</code></pre>\n<p>The important point is that the returned buffer should be freed by a native function using the same allocator that created it.</p>\n<p>Another useful workaround would be to skip <code>visualize_data()</code> generation entirely when visualization/debug output is not needed. For long local RL/self-play training, avoiding visualization JSON generation could significantly reduce memory pressure even if this is not the only leak source.</p>\n<p>This may not be the only issue in <code>libcg.so</code>, but <code>VisualizeData()</code> looks like a concrete place worth checking.</p>",
+      "rawMarkdown": "I may have found a related or possibly separate leak source.\n\nIn the stack trace I encountered, the crash happens during `finish()` when visualization data is generated:\n\n```python\nFile \"kaggle_environments/envs/cabt/cabt.py\", line 90, in finish\n    vis = json.loads(visualize_data())\n\nFile \"kaggle_environments/envs/cabt/cg/game.py\", line 75, in visualize_data\n    return lib.VisualizeData(Battle.battle_ptr).decode()\n```\n\nThe related binding appears to be:\n\n```python\nlib.VisualizeData.restype = ctypes.c_char_p\n\ndef visualize_data() -> str:\n    return lib.VisualizeData(Battle.battle_ptr).decode()\n```\n\nIf the native `VisualizeData()` function allocates and returns a new `char*` buffer for the visualization JSON, using `ctypes.c_char_p` as the return type can cause a memory leak.\n\nWith `ctypes.c_char_p`, Python converts the returned pointer into a Python bytes/string object. However, the original native pointer is no longer available on the Python side, so it cannot be passed back to the C++ library for deallocation.\n\nSince the visualization JSON can become several MB depending on match length, this could accumulate quickly during long sequential self-play or RL loops. This may explain why memory usage keeps increasing across matches and eventually ends in `MemoryError`, `std::bad_alloc`, or `WinError 0xe06d7363`.\n\nA safer binding would be something like this, assuming the native side exposes a matching free function:\n\n```python\nlib.VisualizeData.restype = ctypes.c_void_p\nlib.FreeStringData.argtypes = [ctypes.c_void_p]\nlib.FreeStringData.restype = None\n\ndef visualize_data() -> str:\n    ptr = lib.VisualizeData(Battle.battle_ptr)\n    try:\n        return ctypes.string_at(ptr).decode(\"utf-8\")\n    finally:\n        lib.FreeStringData(ptr)\n```\n\nThe important point is that the returned buffer should be freed by a native function using the same allocator that created it.\n\nAnother useful workaround would be to skip `visualize_data()` generation entirely when visualization/debug output is not needed. For long local RL/self-play training, avoiding visualization JSON generation could significantly reduce memory pressure even if this is not the only leak source.\n\nThis may not be the only issue in `libcg.so`, but `VisualizeData()` looks like a concrete place worth checking.\n\n",
+      "votes": 2
+    },
+    {
+      "id": 3483689,
+      "postDate": "2026-06-29T11:23:16.120Z",
+      "content": "<p>I am encountering Memory crashes too on Kaggle kernels during RL</p>",
+      "rawMarkdown": "I am encountering Memory crashes too on Kaggle kernels during RL"
+    },
+    {
+      "id": 3475661,
+      "postDate": "2026-06-20T04:36:51.043Z",
+      "content": "<p>same issue here</p>",
+      "rawMarkdown": "same issue here"
+    },
+    {
+      "id": 3474302,
+      "postDate": "2026-06-17T19:11:36.650Z",
+      "content": "<p>Even better, if source code could be released so that we could build a version for ARM based machines. And possibly further optimize the engine ourselves. </p>",
+      "rawMarkdown": "Even better, if source code could be released so that we could build a version for ARM based machines. And possibly further optimize the engine ourselves. "
+    },
+    {
+      "id": 3474898,
+      "postDate": "2026-06-19T02:38:57.670Z",
+      "rawMarkdown": "",
+      "isDeleted": true
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "topic": {
+    "id": 712811,
+    "title": "Issue with the Unfair Stamp's behavior",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712811",
+    "postDate": "2026-06-23T14:12:25.802154800Z",
+    "lastCommentPostDate": "2026-06-23T14:12:25.803333300Z"
+  },
+  "messages": [
+    {
+      "id": 3479187,
+      "postDate": "2026-06-23T14:12:25.803Z",
+      "content": "<p>I have noticed an issue in Game History where the Unfaire Stamp card's behavior differs from what is described on the card.</p>\n<p>Currently, both players draw cards until they have 5 cards in their hand and 2 cards in theirs, without returning any cards to their hand. If a player already has more than the specified number of cards, they do not draw any more. Because the hand is not returned to the deck, the card has become extremely weak.</p>\n<p>I would appreciate it if you could fix this.</p>\n<p>（日本語）\nGame History上でUnfaire Stampのカードの動作がカード記載の内容と異なる現象を見つけました。\n今の動作は、お互いのプレーヤーが手札を戻さずに、自分は手札が5枚、相手は手札が2枚になるようにカードを引きます。すでに手札が指定枚数以上なら、カードは引かない、という動作でした。手札を山札に戻さない挙動のため、非常に弱いカードになってしまっています。。。。\n改善いただけると嬉しいです。</p>",
+      "rawMarkdown": "I have noticed an issue in Game History where the Unfaire Stamp card's behavior differs from what is described on the card.\n\nCurrently, both players draw cards until they have 5 cards in their hand and 2 cards in theirs, without returning any cards to their hand. If a player already has more than the specified number of cards, they do not draw any more. Because the hand is not returned to the deck, the card has become extremely weak.\n\nI would appreciate it if you could fix this.\n\n（日本語）\nGame History上でUnfaire Stampのカードの動作がカード記載の内容と異なる現象を見つけました。\n今の動作は、お互いのプレーヤーが手札を戻さずに、自分は手札が5枚、相手は手札が2枚になるようにカードを引きます。すでに手札が指定枚数以上なら、カードは引かない、という動作でした。手札を山札に戻さない挙動のため、非常に弱いカードになってしまっています。。。。\n改善いただけると嬉しいです。"
+    }
+  ]
+}

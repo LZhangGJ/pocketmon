@@ -1,0 +1,27 @@
+{
+  "topic": {
+    "id": 708493,
+    "title": "Important Information About this Challenge",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708493",
+    "commentCount": 1,
+    "votes": 16,
+    "postDate": "2026-06-15T20:27:53.488492600Z",
+    "lastCommentPostDate": "2026-06-20T11:35:09.523333300Z",
+    "isSticky": true
+  },
+  "messages": [
+    {
+      "id": 3473125,
+      "postDate": "2026-06-15T20:27:53.490Z",
+      "content": "<p>We are excited to bring you the Pokémon TCG AI Battle Challenge series alongside The Pokémon Company! We’ve been working hard at making these two competitions as exciting as possible for the Kaggle community and we’re looking forward to what you come up with!</p>\n<p>A few things to note that are specific to this competition</p>\n<h3>Points, Medals and Prizes</h3>\n<p>You may have noticed that the Simulation competition has points, medals, and no prizes, but the Hackathon competition has prizes. This is intentional. While a hyper-optimized simulation agent is interesting, it doesn’t tell the whole story behind the Pokémon TCG, gameplay, deckcrafting, and underlying strategic decisions that go into playing a top tier deck. You may enter the Simulation competition for Kaggle points and medals without Hackathon participation, but participation in the Simulation is an input for Hackathon scoring.</p>\n<p>Also, please check your local laws and regulations that may apply to you to ensure you are eligible to participate in this type of competition. The host teams are unable to make legal interpretations on your behalf.</p>\n<h3>Simulation Balance Changes</h3>\n<p>We always test simulation competitions before they’re released to look for any obvious exploits or any significant balance issues that could impact competitiveness. However, it’s impossible to do this perfectly. Should we discover that the competition needs a balance change in order for it to operate as intended, we reserve the right to do so. We don’t intend to make these changes, and make such decisions with significant thought toward being the least disruptive as possible, but it’s sometimes necessary.</p>\n<p>Happy Modeling!</p>\n<p>Kaggle Team</p>",
+      "rawMarkdown": "We are excited to bring you the Pokémon TCG AI Battle Challenge series alongside The Pokémon Company! We’ve been working hard at making these two competitions as exciting as possible for the Kaggle community and we’re looking forward to what you come up with\\!\n\nA few things to note that are specific to this competition\n\n### Points, Medals and Prizes\n\nYou may have noticed that the Simulation competition has points, medals, and no prizes, but the Hackathon competition has prizes. This is intentional. While a hyper-optimized simulation agent is interesting, it doesn’t tell the whole story behind the Pokémon TCG, gameplay, deckcrafting, and underlying strategic decisions that go into playing a top tier deck. You may enter the Simulation competition for Kaggle points and medals without Hackathon participation, but participation in the Simulation is an input for Hackathon scoring.\n\nAlso, please check your local laws and regulations that may apply to you to ensure you are eligible to participate in this type of competition. The host teams are unable to make legal interpretations on your behalf.\n\n### Simulation Balance Changes\n\nWe always test simulation competitions before they’re released to look for any obvious exploits or any significant balance issues that could impact competitiveness. However, it’s impossible to do this perfectly. Should we discover that the competition needs a balance change in order for it to operate as intended, we reserve the right to do so. We don’t intend to make these changes, and make such decisions with significant thought toward being the least disruptive as possible, but it’s sometimes necessary.\n\nHappy Modeling!\n\nKaggle Team",
+      "votes": 16
+    },
+    {
+      "id": 3476191,
+      "postDate": "2026-06-20T11:35:09.523Z",
+      "content": "<p>Hey, I think I understood the instructions well. That when developing, an agent should not use predetermined moves. The agent should be able to think in different situations and I think that requires <strong>ML</strong>, <strong>RL</strong> for a functional brain. I developed an Agent v1 that has failed the <strong>validation process</strong>, even after trying to fix the errors noted in the report. I don't understand why </p>",
+      "rawMarkdown": "Hey, I think I understood the instructions well. That when developing, an agent should not use predetermined moves. The agent should be able to think in different situations and I think that requires **ML**, **RL** for a functional brain. I developed an Agent v1 that has failed the **validation process**, even after trying to fix the errors noted in the report. I don't understand why "
+    }
+  ]
+}

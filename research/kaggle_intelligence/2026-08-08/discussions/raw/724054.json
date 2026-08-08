@@ -1,0 +1,34 @@
+{
+  "topic": {
+    "id": 724054,
+    "title": "Can we play this game in browser just like orbit wars was there ? ",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724054",
+    "commentCount": 2,
+    "postDate": "2026-07-09T09:26:30.123818200Z",
+    "lastCommentPostDate": "2026-07-09T11:01:17.763333300Z"
+  },
+  "messages": [
+    {
+      "id": 3494173,
+      "postDate": "2026-07-09T10:04:48.383Z",
+      "content": "<p><a href=\"https://tcg.pokemon.com/en-us/tcgl/\" target=\"_blank\">https://tcg.pokemon.com/en-us/tcgl/</a></p>\n<p>I felt that TCG Live had the card pool and meta that most closely resembled this comp.</p>",
+      "rawMarkdown": "https://tcg.pokemon.com/en-us/tcgl/\n\nI felt that TCG Live had the card pool and meta that most closely resembled this comp.\n",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3494189,
+          "postDate": "2026-07-09T11:01:17.763Z",
+          "content": "<p>Okay i will try that </p>",
+          "rawMarkdown": "Okay i will try that ",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "id": 3494156,
+      "postDate": "2026-07-09T09:26:30.123Z",
+      "content": "<p><a href=\"https://www.kaggle.com/bovard\" target=\"_blank\">@bovard</a> Is there option like we can manually play this game in browser to get more idea about how the game actually works </p>",
+      "rawMarkdown": "@bovard Is there option like we can manually play this game in browser to get more idea about how the game actually works "
+    }
+  ]
+}

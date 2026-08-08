@@ -1,0 +1,106 @@
+{
+  "topic": {
+    "id": 714030,
+    "title": "[RESOLVED] Possible Infinite Move by Opponent Agent and Unfair Rating",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/714030",
+    "commentCount": 13,
+    "votes": 11,
+    "postDate": "2026-06-25T14:24:13.515600400Z",
+    "lastCommentPostDate": "2026-06-30T07:24:32.380Z"
+  },
+  "messages": [
+    {
+      "id": 3481025,
+      "postDate": "2026-06-25T14:24:13.517Z",
+      "content": "<p>I would like to report a possible infinite-loop issue that occurred in one of my matches.</p>\n<p>In the match log <a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54040280&amp;episodeId=81821288#\" target=\"_blank\"><code>81821288</code></a>, my opponent’s agent appears to have entered a non-terminating loop involving Mega Venusaur ex’s ability, Solar Transfer.</p>\n<p>From the log, after evolving into Mega Venusaur ex around turn 6, the opponent repeatedly moved the same Grass Energy back and forth between two Pokémon:</p>\n<ul>\n<li>Teal Mask Ogerpon ex → Mega Venusaur ex</li>\n<li>Mega Venusaur ex → Teal Mask Ogerpon ex</li>\n</ul>\n<p>This same reversible action sequence continued until the step limit was reached. The match did not progress normally after that point. The log ended with both players marked as <code>DONE</code>, rewards <code>[0, 0]</code> which means tie, and no proper game result. Since my opponent had a lower rating than me, this draw resulted in a decrease in my rating<strong>(me: 600 &gt; 547, opp: 486 &gt; 488)</strong>, which I believe is particularly unfair given that the outcome was caused by the opponent agent’s behavior.</p>\n<p>Based on my inspection, the repeated energy transfer happened hundreds of times, without changing the game state in a meaningful way. This looks like an agent-side loop caused by repeatedly selecting a legal but non-progressing action.</p>\n<p>My concern is that this match negatively affected my rating even though the game result was caused by the opponent agent’s non-terminating behavior, not by normal gameplay. I believe this is unfair to the player who did not cause the loop.</p>\n<p>Could the competition organizers please clarify how such matches are handled for rating purposes? In particular, I would like to request that matches which end in a draw due to one agent repeatedly performing non-progressing reversible actions (effectively an infinite loop) should not provide any advantage to that agent, and should not negatively impact the other player's rating.</p>\n<p>From a fairness perspective, it seems unreasonable that an agent could benefit from forcing a draw via an infinite loop. I would appreciate it if such cases could either incur a penalty for the looping agent or be excluded from rating calculations altogether.</p>\n<p>Caution! The log JSON is quite large (75.5 MB)!!\nThank you for reading.</p>",
+      "rawMarkdown": "I would like to report a possible infinite-loop issue that occurred in one of my matches.\n\nIn the match log [`81821288`](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54040280&episodeId=81821288# ), my opponent’s agent appears to have entered a non-terminating loop involving Mega Venusaur ex’s ability, Solar Transfer.\n\nFrom the log, after evolving into Mega Venusaur ex around turn 6, the opponent repeatedly moved the same Grass Energy back and forth between two Pokémon:\n\n* Teal Mask Ogerpon ex → Mega Venusaur ex\n* Mega Venusaur ex → Teal Mask Ogerpon ex\n\nThis same reversible action sequence continued until the step limit was reached. The match did not progress normally after that point. The log ended with both players marked as `DONE`, rewards `[0, 0]` which means tie, and no proper game result. Since my opponent had a lower rating than me, this draw resulted in a decrease in my rating**(me: 600 > 547, opp: 486 > 488)**, which I believe is particularly unfair given that the outcome was caused by the opponent agent’s behavior.\n\nBased on my inspection, the repeated energy transfer happened hundreds of times, without changing the game state in a meaningful way. This looks like an agent-side loop caused by repeatedly selecting a legal but non-progressing action.\n\nMy concern is that this match negatively affected my rating even though the game result was caused by the opponent agent’s non-terminating behavior, not by normal gameplay. I believe this is unfair to the player who did not cause the loop.\n\nCould the competition organizers please clarify how such matches are handled for rating purposes? In particular, I would like to request that matches which end in a draw due to one agent repeatedly performing non-progressing reversible actions (effectively an infinite loop) should not provide any advantage to that agent, and should not negatively impact the other player's rating.\n\nFrom a fairness perspective, it seems unreasonable that an agent could benefit from forcing a draw via an infinite loop. I would appreciate it if such cases could either incur a penalty for the looping agent or be excluded from rating calculations altogether.\n\n\nCaution! The log JSON is quite large (75.5 MB)!!\nThank you for reading.\n",
+      "votes": 11
+    },
+    {
+      "id": 3481133,
+      "postDate": "2026-06-25T16:39:03.170Z",
+      "content": "<p>Hahaha infinity loop, sounds like a great strategy! 🤣\nSomeone need to make a deck dedicated to infinite loop 😂\nDraw with everyone hahaha</p>",
+      "rawMarkdown": "Hahaha infinity loop, sounds like a great strategy! 🤣\nSomeone need to make a deck dedicated to infinite loop 😂\nDraw with everyone hahaha",
+      "replies": [
+        {
+          "id": 3481145,
+          "postDate": "2026-06-25T16:54:36.933Z",
+          "content": "<p>Yes😇 Some infinity combo loop is strong! I have no idea how to loop to win with cards in the card-pool, but I hope to find the one 😂</p>",
+          "rawMarkdown": "Yes😇 Some infinity combo loop is strong! I have no idea how to loop to win with cards in the card-pool, but I hope to find the one 😂"
+        }
+      ]
+    },
+    {
+      "id": 3481074,
+      "postDate": "2026-06-25T15:24:07.490Z",
+      "content": "<p>Thank you for reporting this and for the detailed explanation.</p>\n<p>We would like to review the situation in more detail. Could you please share the match log or a link to the relevant replay/log where this behavior can be confirmed?</p>\n<p>In particular, it would be helpful if you could provide the portion of the log around the repeated Solar Transfer actions, or any steps where the same Grass Energy is repeatedly moved back and forth between Pokémon.</p>\n<p>Once we can confirm the behavior from the log, we will look into how this case was handled.</p>",
+      "rawMarkdown": "Thank you for reporting this and for the detailed explanation.\n\nWe would like to review the situation in more detail. Could you please share the match log or a link to the relevant replay/log where this behavior can be confirmed?\n\nIn particular, it would be helpful if you could provide the portion of the log around the repeated Solar Transfer actions, or any steps where the same Grass Energy is repeatedly moved back and forth between Pokémon.\n\nOnce we can confirm the behavior from the log, we will look into how this case was handled.",
+      "replies": [
+        {
+          "id": 3481079,
+          "postDate": "2026-06-25T15:35:16.233Z",
+          "content": "<p>Thank you very much for your reply and for looking into this.\nHere is the relevant match log / replay link: <a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54040280&amp;episodeId=81821288#\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54040280&amp;episodeId=81821288#</a></p>\n<p>I am not sure whether this link is accessible from your side, but this is the match where I observed the repeated Solar Transfer behavior.</p>",
+          "rawMarkdown": "Thank you very much for your reply and for looking into this.\nHere is the relevant match log / replay link: [https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54040280&episodeId=81821288#](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=54040280&episodeId=81821288# )\n\nI am not sure whether this link is accessible from your side, but this is the match where I observed the repeated Solar Transfer behavior.",
+          "replies": [
+            {
+              "id": 3481083,
+              "postDate": "2026-06-25T15:38:58.430Z",
+              "content": "<p>Thank you for sharing the link.</p>\n<p>Unfortunately, we are not able to access the match log from that link on our side. \nIt may require permissions that are only available to the participant or through the Kaggle interface.</p>\n<p>Could you please share one of the following so that we can investigate further?</p>\n<ul>\n<li>the downloaded log JSON file, if possible</li>\n<li>the relevant step numbers where the repeated energy transfers begin and continue</li>\n</ul>\n<p>Once we can review the actual log contents, we will look into the behavior and how this case was handled.</p>",
+              "rawMarkdown": "Thank you for sharing the link.\n\nUnfortunately, we are not able to access the match log from that link on our side. \nIt may require permissions that are only available to the participant or through the Kaggle interface.\n\nCould you please share one of the following so that we can investigate further?\n- the downloaded log JSON file, if possible\n- the relevant step numbers where the repeated energy transfers begin and continue\n\nOnce we can review the actual log contents, we will look into the behavior and how this case was handled."
+            },
+            {
+              "id": 3481095,
+              "postDate": "2026-06-25T16:00:29.587Z",
+              "rawMarkdown": "",
+              "isDeleted": true
+            },
+            {
+              "id": 3481096,
+              "postDate": "2026-06-25T16:00:49.590Z",
+              "content": "<p>I'm sorry for sharing an invalid link.</p>\n<p>The issue appears to start at step 41 and continues until step 2996. I was able to download the log, but the file is too large for me to open manually, so I inspected it with ChatGPT.</p>\n<p>I have uploaded the zip file to Google Drive so that you can download it here:</p>\n<p><a href=\"https://drive.google.com/file/d/1IDqcKyeuTaa2nrlrs90nxb-rRdvrIgfy/view?usp=sharing\" target=\"_blank\">https://drive.google.com/file/d/1IDqcKyeuTaa2nrlrs90nxb-rRdvrIgfy/view?usp=sharing</a> </p>",
+              "rawMarkdown": "I'm sorry for sharing an invalid link.\n\nThe issue appears to start at step 41 and continues until step 2996. I was able to download the log, but the file is too large for me to open manually, so I inspected it with ChatGPT.\n\nI have uploaded the zip file to Google Drive so that you can download it here:\n\nhttps://drive.google.com/file/d/1IDqcKyeuTaa2nrlrs90nxb-rRdvrIgfy/view?usp=sharing "
+            },
+            {
+              "id": 3481681,
+              "postDate": "2026-06-26T09:58:56.383Z",
+              "content": "<p>Thank you for reporting this and for sharing the log.</p>\n<p>We reviewed the log and confirmed that this match ended in a draw at 3,000 steps.</p>\n<p>The issue was that the simulator had a step limit set to 3,000. This was not the intended behavior for this type of situation. The intended behavior is that, even if an agent enters an infinite loop, the agent should eventually run out of its allotted time, and the player whose agent entered the loop should lose by timeout.</p>\n<p>We have already made a fix on the simulator side, and the updated simulator is expected to be released soon.</p>\n<p>Thank you again for helping us identify this issue.</p>",
+              "rawMarkdown": "Thank you for reporting this and for sharing the log.\n\nWe reviewed the log and confirmed that this match ended in a draw at 3,000 steps.\n\nThe issue was that the simulator had a step limit set to 3,000. This was not the intended behavior for this type of situation. The intended behavior is that, even if an agent enters an infinite loop, the agent should eventually run out of its allotted time, and the player whose agent entered the loop should lose by timeout.\n\nWe have already made a fix on the simulator side, and the updated simulator is expected to be released soon.\n\nThank you again for helping us identify this issue.",
+              "votes": 1
+            },
+            {
+              "id": 3481687,
+              "postDate": "2026-06-26T10:11:22.680Z",
+              "content": "<p>Thank you for the quick investigation and fix!</p>\n<p>I’ll do my best !</p>",
+              "rawMarkdown": "Thank you for the quick investigation and fix!\n\nI’ll do my best !"
+            },
+            {
+              "id": 3481970,
+              "postDate": "2026-06-26T16:31:02.757Z",
+              "content": "<p><a href=\"https://www.kaggle.com/shimishige\" target=\"_blank\">@shimishige</a> I apologize for the repeated messages.\nI’ve checked the JSON again, and it appears the opponent did not time out; rather, it seems they were stuck in an infinite loop while executing rapid actions. Consequently, the recent fix does not address this specific scenario, and the match still ends in a draw. I am concerned that this means the underlying issue remains unresolved.\nWhile the rules for the physical Pokémon Trading Card Game address stalling tactics, I did not see any specific mention of repetitive actions. Forcing a draw via an infinite loop—regardless of whether there is malicious intent—might be a phenomenon unique to AI agents (since they can make moves at speeds impossible for humans), but I would appreciate it if you could clarify the rules regarding this behavior.</p>\n<p>Once again, thank you for your dedicated efforts.</p>",
+              "rawMarkdown": "@shimishige I apologize for the repeated messages.\nI’ve checked the JSON again, and it appears the opponent did not time out; rather, it seems they were stuck in an infinite loop while executing rapid actions. Consequently, the recent fix does not address this specific scenario, and the match still ends in a draw. I am concerned that this means the underlying issue remains unresolved.\nWhile the rules for the physical Pokémon Trading Card Game address stalling tactics, I did not see any specific mention of repetitive actions. Forcing a draw via an infinite loop—regardless of whether there is malicious intent—might be a phenomenon unique to AI agents (since they can make moves at speeds impossible for humans), but I would appreciate it if you could clarify the rules regarding this behavior.\n\nOnce again, thank you for your dedicated efforts."
+            },
+            {
+              "id": 3484112,
+              "postDate": "2026-06-30T03:27:34.433Z",
+              "content": "<p><a href=\"https://www.kaggle.com/shimishige\" target=\"_blank\">@shimishige</a> hi !</p>\n<p>Could you please clarify whether there is, or will be, any handling for infinite loops that do not reach the time limit, but instead continue through rapid repetitive actions until the step limit is reached?</p>\n<p>In the reported match, the opponent did not appear to time out according to the JSON, so I would like to understand whether this type of non-progressing loop is covered by the simulator-side fix.</p>\n<p>Thank you.</p>",
+              "rawMarkdown": "@shimishige hi !\n\nCould you please clarify whether there is, or will be, any handling for infinite loops that do not reach the time limit, but instead continue through rapid repetitive actions until the step limit is reached?\n\nIn the reported match, the opponent did not appear to time out according to the JSON, so I would like to understand whether this type of non-progressing loop is covered by the simulator-side fix.\n\nThank you."
+            },
+            {
+              "id": 3484230,
+              "postDate": "2026-06-30T06:25:47.340Z",
+              "content": "<p>Thank you for the follow-up.</p>\n<p>As introduced in this topic, we have updated the simulator:\n<a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/716045\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/716045</a></p>\n<p>With this update, even if an agent enters an infinite loop or repeatedly performs rapid non-progressing actions, the match should no longer end in a draw due to the previous step limit. Instead, the step limit has been increased so that the agent is expected to eventually run out of its allotted time, and the player whose agent caused the loop will lose by timeout.</p>\n<p>In a real Pokémon TCG match, this type of situation would likely fall within the scope of judge rulings. However, in this competition, there is no human judge during automated simulations. Therefore, we have handled this by increasing the step limit and allowing the match to be resolved by the time limit.</p>\n<p>Please note that this update does not retroactively change matches that have already been played. However, for matches played after the simulator update, the behavior should follow the above logic.</p>",
+              "rawMarkdown": "Thank you for the follow-up.\n\nAs introduced in this topic, we have updated the simulator:\nhttps://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/716045\n\nWith this update, even if an agent enters an infinite loop or repeatedly performs rapid non-progressing actions, the match should no longer end in a draw due to the previous step limit. Instead, the step limit has been increased so that the agent is expected to eventually run out of its allotted time, and the player whose agent caused the loop will lose by timeout.\n\nIn a real Pokémon TCG match, this type of situation would likely fall within the scope of judge rulings. However, in this competition, there is no human judge during automated simulations. Therefore, we have handled this by increasing the step limit and allowing the match to be resolved by the time limit.\n\nPlease note that this update does not retroactively change matches that have already been played. However, for matches played after the simulator update, the behavior should follow the above logic.",
+              "votes": 1
+            },
+            {
+              "id": 3484272,
+              "postDate": "2026-06-30T07:24:32.380Z",
+              "content": "<p>Thank you for the clarification and for addressing this issue.</p>\n<p>I also appreciate all your efforts in organizing and maintaining this competition. I’ll continue doing my best.</p>",
+              "rawMarkdown": "Thank you for the clarification and for addressing this issue.\n\nI also appreciate all your efforts in organizing and maintaining this competition. I’ll continue doing my best."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

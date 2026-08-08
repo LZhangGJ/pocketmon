@@ -1,0 +1,38 @@
+{
+  "topic": {
+    "id": 729939,
+    "title": "My ai has been killing itself.",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/729939",
+    "commentCount": 3,
+    "postDate": "2026-07-27T10:43:44.204119800Z",
+    "lastCommentPostDate": "2026-07-28T02:48:53.040Z"
+  },
+  "messages": [
+    {
+      "id": 3504128,
+      "postDate": "2026-07-27T10:43:44.203Z",
+      "content": "<p>How did everyone deal with it? My ai always makes the mistake of drawing too hard and taking the risk of emptying my deck.😭😭😭</p>",
+      "rawMarkdown": "How did everyone deal with it? My ai always makes the mistake of drawing too hard and taking the risk of emptying my deck.😭😭😭"
+    },
+    {
+      "id": 3504422,
+      "postDate": "2026-07-28T02:26:28.523Z",
+      "content": "<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4808143%2Fe218a2d7abfc7b5ff4a9fb1b1c0196aa%2Fbbbb.png?generation=1785205584734771&amp;alt=media\" alt=\"bb\"></p>",
+      "rawMarkdown": "![bb](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4808143%2Fe218a2d7abfc7b5ff4a9fb1b1c0196aa%2Fbbbb.png?generation=1785205584734771&alt=media)"
+    },
+    {
+      "id": 3504167,
+      "postDate": "2026-07-27T12:37:54.950Z",
+      "content": "<p>Which model are you using ?</p>",
+      "rawMarkdown": "Which model are you using ?\n",
+      "replies": [
+        {
+          "id": 3504429,
+          "postDate": "2026-07-28T02:48:53.040Z",
+          "content": "<p>Archaludon ex</p>",
+          "rawMarkdown": "Archaludon ex"
+        }
+      ]
+    }
+  ]
+}

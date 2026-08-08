@@ -1,0 +1,32 @@
+{
+  "topic": {
+    "id": 708979,
+    "title": "Permissibility of Using External Data (Data from the Official Website)",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708979",
+    "commentCount": 2,
+    "votes": 5,
+    "postDate": "2026-06-17T09:34:09.930544100Z",
+    "lastCommentPostDate": "2026-06-17T16:06:32.130Z"
+  },
+  "messages": [
+    {
+      "id": 3473971,
+      "postDate": "2026-06-17T09:34:09.930Z",
+      "content": "<p>I am considering using data from the official Pokémon Card website, but given the following statement, does this mean that, strictly speaking, information from the official website cannot be used for this competition?</p>\n<blockquote>\n  <p>このサイトからは、データのコピー、複製、改変、出版、掲示、電送、配布することは固くお断りします。またこれらのデータを、他のインターネットなどの公衆ネットワーク上で利用することはできません。</p>\n</blockquote>\n<p><a href=\"https://www.pokemon-card.com/policy.html\" target=\"_blank\">https://www.pokemon-card.com/policy.html</a></p>",
+      "rawMarkdown": "I am considering using data from the official Pokémon Card website, but given the following statement, does this mean that, strictly speaking, information from the official website cannot be used for this competition?\n\n> このサイトからは、データのコピー、複製、改変、出版、掲示、電送、配布することは固くお断りします。またこれらのデータを、他のインターネットなどの公衆ネットワーク上で利用することはできません。\n\nhttps://www.pokemon-card.com/policy.html",
+      "votes": 5
+    },
+    {
+      "id": 3474188,
+      "postDate": "2026-06-17T16:06:32.130Z",
+      "content": "<p>こちらも合わせて confirm してもらえると助かります！　<a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708928\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708928</a></p>",
+      "rawMarkdown": "こちらも合わせて confirm してもらえると助かります！　https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708928"
+    },
+    {
+      "id": 3474004,
+      "postDate": "2026-06-17T10:14:47.953Z",
+      "content": "<p>I'm not sure if I should use the information on the following page.<br>\n<a href=\"https://players.pokemon-card.com/event/result/list\" target=\"_blank\">https://players.pokemon-card.com/event/result/list</a></p>",
+      "rawMarkdown": "I'm not sure if I should use the information on the following page.  \nhttps://players.pokemon-card.com/event/result/list"
+    }
+  ]
+}

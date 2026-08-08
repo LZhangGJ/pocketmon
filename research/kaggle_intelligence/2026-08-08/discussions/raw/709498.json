@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 709498,
+    "title": "Public 7 + Sample 4 matchup matrix",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709498",
+    "votes": 1,
+    "postDate": "2026-06-19T00:09:34.019056900Z",
+    "lastCommentPostDate": "2026-06-19T00:09:34.020Z"
+  },
+  "messages": [
+    {
+      "id": 3474873,
+      "postDate": "2026-06-19T00:09:34.020Z",
+      "content": "<p>I ran a small public-baseline matchup check on Kaggle resources.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F18926389%2F979095d1b3f95782381eab9a18e4ed89%2Fptcg-public7-sample4-matchup-matrix-en-v10-studio-bg.png?generation=1781827716161353&amp;alt=media\" alt=\"\"></p>\n<p>The matrix image below shows row-side win rates. Rows are the agent being evaluated, columns are the opponent.</p>\n<ul>\n<li>pool: 7 public notebook-derived agents + 4 official sample agents</li>\n<li>format: full round robin, 10 games per pair</li>\n<li>total: 11 agents / 55 pairs / 550 games</li>\n<li>errors / draws: 0 / 0</li>\n</ul>\n<p>Top overall scores:</p>\n<ol>\n<li>Kokinn Lucario: 63%</li>\n<li>Biohack Crustle: 63%</li>\n<li>Yaroslav Lucario: 62%</li>\n<li>Penguin Lucario: 58%</li>\n<li>Kacchan Lucario: 58%</li>\n<li>Roman Lucario: 56%</li>\n</ol>\n<p>This is only a 10-game-per-pair screening run, so I would treat it as a matchup map rather than a final strength ranking. It still highlights sharp matchup holes: for example Biohack Crustle finished tied for first overall, but went 0-10 into Sample Iono and 2-8 into Roman Lucario.</p>",
+      "rawMarkdown": "I ran a small public-baseline matchup check on Kaggle resources.\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F18926389%2F979095d1b3f95782381eab9a18e4ed89%2Fptcg-public7-sample4-matchup-matrix-en-v10-studio-bg.png?generation=1781827716161353&alt=media)\n\nThe matrix image below shows row-side win rates. Rows are the agent being evaluated, columns are the opponent.\n\n- pool: 7 public notebook-derived agents + 4 official sample agents\n- format: full round robin, 10 games per pair\n- total: 11 agents / 55 pairs / 550 games\n- errors / draws: 0 / 0\n\nTop overall scores:\n\n1. Kokinn Lucario: 63%\n2. Biohack Crustle: 63%\n3. Yaroslav Lucario: 62%\n4. Penguin Lucario: 58%\n5. Kacchan Lucario: 58%\n6. Roman Lucario: 56%\n\nThis is only a 10-game-per-pair screening run, so I would treat it as a matchup map rather than a final strength ranking. It still highlights sharp matchup holes: for example Biohack Crustle finished tied for first overall, but went 0-10 into Sample Iono and 2-8 into Roman Lucario.",
+      "votes": 1
+    }
+  ]
+}

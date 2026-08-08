@@ -1,0 +1,17 @@
+{
+  "topic": {
+    "id": 716378,
+    "title": "Where is the SDK mentioned in the competition description?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/716378",
+    "postDate": "2026-06-30T13:40:40.070572400Z",
+    "lastCommentPostDate": "2026-06-30T13:40:40.070Z"
+  },
+  "messages": [
+    {
+      "id": 3484523,
+      "postDate": "2026-06-30T13:40:40.070Z",
+      "content": "<p>Hi all,</p>\n<p>The competition overview mentions that participants will be provided with an SDK/toolkit for local development, but I'm a little confused about what exactly that refers to.</p>\n<p>After looking through the sample notebooks, I found the cg-lib dataset, which contains the cg package (api.py, game.py, sim.py, utils.py) along with the platform-specific libraries (libcg.so, libcg.dylib, etc.).</p>\n<p>Is cg-lib the SDK referred to in the competition description, or is there another SDK/toolkit that I'm missing?</p>\n<p>If cg-lib is the intended SDK, it might be helpful to add a link to it from the competition overview or Data page, as it wasn't immediately obvious where the SDK was located.</p>\n<p>Thanks!</p>",
+      "rawMarkdown": "Hi all,\n\nThe competition overview mentions that participants will be provided with an SDK/toolkit for local development, but I'm a little confused about what exactly that refers to.\n\nAfter looking through the sample notebooks, I found the cg-lib dataset, which contains the cg package (api.py, game.py, sim.py, utils.py) along with the platform-specific libraries (libcg.so, libcg.dylib, etc.).\n\nIs cg-lib the SDK referred to in the competition description, or is there another SDK/toolkit that I'm missing?\n\nIf cg-lib is the intended SDK, it might be helpful to add a link to it from the competition overview or Data page, as it wasn't immediately obvious where the SDK was located.\n\nThanks!"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "topic": {
+    "id": 715319,
+    "title": "How to obtain results of all episodes",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/715319",
+    "commentCount": 2,
+    "postDate": "2026-06-28T10:47:49.690517200Z",
+    "lastCommentPostDate": "2026-06-28T21:40:46.846666700Z"
+  },
+  "messages": [
+    {
+      "id": 3483037,
+      "postDate": "2026-06-28T10:47:49.690Z",
+      "content": "<p>Does anyone know how to obtain the full list of episodes of the public LB?</p>\n<p>I only need the agent_ids and the results (win/lose/tie).</p>\n<p>I though it was included in <a href=\"https://www.kaggle.com/datasets/kaggle/meta-kaggle/data\" target=\"_blank\">Meta Kaggle</a>, but it wasn't.</p>",
+      "rawMarkdown": "Does anyone know how to obtain the full list of episodes of the public LB?\n\nI only need the agent_ids and the results (win/lose/tie).\n\nI though it was included in [Meta Kaggle](https://www.kaggle.com/datasets/kaggle/meta-kaggle/data), but it wasn't."
+    },
+    {
+      "id": 3483198,
+      "postDate": "2026-06-28T14:34:14.997Z",
+      "content": "<p>I think it’s here? Inside this network packet: <a href=\"https://www.kaggle.com/api/i/competitions.EpisodeService/GetEpisode\" target=\"_blank\">https://www.kaggle.com/api/i/competitions.EpisodeService/GetEpisode</a>\nYou need to pass in the episode_id; this is very simple.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F18505507%2F19b1128eeedfc6e842515d5f72ff2de6%2F2026-06-28%20223306.png?generation=1782657227185509&amp;alt=media\" alt=\"\"></p>",
+      "rawMarkdown": "I think it’s here? Inside this network packet: https://www.kaggle.com/api/i/competitions.EpisodeService/GetEpisode\nYou need to pass in the episode_id; this is very simple.\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F18505507%2F19b1128eeedfc6e842515d5f72ff2de6%2F2026-06-28%20223306.png?generation=1782657227185509&alt=media)",
+      "votes": -1,
+      "replies": [
+        {
+          "id": 3483382,
+          "postDate": "2026-06-28T21:40:46.847Z",
+          "content": "<p>Is there a way to get a list of <code>episode_id</code>s for all of the matches?</p>",
+          "rawMarkdown": "Is there a way to get a list of `episode_id`s for all of the matches?",
+          "votes": -1
+        }
+      ]
+    }
+  ]
+}

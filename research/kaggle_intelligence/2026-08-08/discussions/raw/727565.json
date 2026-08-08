@@ -1,0 +1,89 @@
+{
+  "topic": {
+    "id": 727565,
+    "title": "Curious Questions about Submission Size",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/727565",
+    "commentCount": 10,
+    "postDate": "2026-07-19T15:05:18.244065600Z",
+    "lastCommentPostDate": "2026-07-25T18:59:08.133333300Z"
+  },
+  "messages": [
+    {
+      "id": 3500648,
+      "postDate": "2026-07-20T06:12:36.413Z",
+      "content": "<p>I currently have one version that's about 1 MB in size, and its performance has plateaued at around 900–950.</p>",
+      "rawMarkdown": "I currently have one version that's about 1 MB in size, and its performance has plateaued at around 900–950.",
+      "votes": -1,
+      "replies": [
+        {
+          "id": 3500751,
+          "postDate": "2026-07-20T12:34:36.363Z",
+          "content": "<p>That's nice, your model is better than mine, you might want to add some small model on top of it, as 1MB only makes me in 800 range, but adding more models helps me to improve a little bit.</p>",
+          "rawMarkdown": "That's nice, your model is better than mine, you might want to add some small model on top of it, as 1MB only makes me in 800 range, but adding more models helps me to improve a little bit."
+        }
+      ]
+    },
+    {
+      "id": 3500957,
+      "postDate": "2026-07-21T00:08:42.283Z",
+      "content": "<p>All of mine have been around 100MB.</p>",
+      "rawMarkdown": "All of mine have been around 100MB.",
+      "replies": [
+        {
+          "id": 3503477,
+          "postDate": "2026-07-25T18:59:08.133Z",
+          "content": "<p>Thanks, that's very nice size, haha, I do not even have enough idea to generate that size of model yet. Thanks for sharing the info.</p>",
+          "rawMarkdown": "Thanks, that's very nice size, haha, I do not even have enough idea to generate that size of model yet. Thanks for sharing the info."
+        }
+      ]
+    },
+    {
+      "id": 3500487,
+      "postDate": "2026-07-19T15:05:18.243Z",
+      "content": "<p>I see that submissions can be up to 197.7 MiB, but my submission file is only about 1 MiB. I’ve been stuck in the 800s for a while, although expanding it has helped me reach the 900s, and I may be able to push it even higher.</p>\n<p>I’m curious: how large are other people’s submission files? Does anyone actually come close to the 197.7 MiB limit?</p>",
+      "rawMarkdown": "I see that submissions can be up to 197.7 MiB, but my submission file is only about 1 MiB. I’ve been stuck in the 800s for a while, although expanding it has helped me reach the 900s, and I may be able to push it even higher.\n\nI’m curious: how large are other people’s submission files? Does anyone actually come close to the 197.7 MiB limit?"
+    },
+    {
+      "id": 3500488,
+      "postDate": "2026-07-19T15:08:38.940Z",
+      "rawMarkdown": "",
+      "votes": -1,
+      "isDeleted": true,
+      "replies": [
+        {
+          "id": 3500491,
+          "postDate": "2026-07-19T15:19:29.997Z",
+          "content": "<p>Thanks, that’s helpful! I’ll keep experimenting with the expansion and let you know whether it helps me break 1000 or if I hit another plateau…(figure crossed, hopefully not that soon to hit another plateau so soon…)</p>",
+          "rawMarkdown": "Thanks, that’s helpful! I’ll keep experimenting with the expansion and let you know whether it helps me break 1000 or if I hit another plateau...(figure crossed, hopefully not that soon to hit another plateau so soon...)"
+        },
+        {
+          "id": 3500549,
+          "postDate": "2026-07-19T19:47:23.030Z",
+          "content": "<p>My submission is around 3MiB  and scores 1000+</p>",
+          "rawMarkdown": "My submission is around 3MiB  and scores 1000+",
+          "replies": [
+            {
+              "id": 3500750,
+              "postDate": "2026-07-20T12:31:59.510Z",
+              "content": "<p>That's nice, I have to have a 10MB model in order to relatively stable around 990….</p>",
+              "rawMarkdown": "That's nice, I have to have a 10MB model in order to relatively stable around 990....",
+              "votes": 1
+            },
+            {
+              "id": 3500946,
+              "postDate": "2026-07-20T23:13:51.733Z",
+              "content": "<p>It's not always about size… ;d </p>",
+              "rawMarkdown": "It's not always about size... ;d "
+            },
+            {
+              "id": 3503476,
+              "postDate": "2026-07-25T18:58:08.710Z",
+              "content": "<p>haha, I knew, I still stuck below 1000, size does not help me at this moment already</p>",
+              "rawMarkdown": "haha, I knew, I still stuck below 1000, size does not help me at this moment already"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

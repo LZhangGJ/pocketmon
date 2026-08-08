@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 715644,
+    "title": "[Bug Report] Error occurring in search_step",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/715644",
+    "votes": 1,
+    "postDate": "2026-06-29T04:58:01.754399400Z",
+    "lastCommentPostDate": "2026-06-29T04:58:01.753333300Z"
+  },
+  "messages": [
+    {
+      "id": 3483491,
+      "postDate": "2026-06-29T04:58:01.753Z",
+      "content": "<p>When running search_step after search_begin using the provided API (cg/api.py and internal library), the program crashes with the following error. Has anyone encountered this same error or knows a workaround?</p>\n<p><strong>The Error</strong></p>\n<p>An invalid index message is printed to standard output, and a RuntimeError exception is raised on the Python side.</p>\n<p>Standard Output (Example)</p>\n<pre><code>invalid index 21 &gt;= 6\n</code></pre>\n<p>Python Traceback</p>\n<pre><code>Traceback (most recent call last):\n  ...\n  File \"cg/api.py\", line 625, in search_step\n    raise RuntimeError(f\"Unknown error code: {result.error}\")\nRuntimeError: Unknown error code: 99\n</code></pre>\n<p><strong>When It Occurs</strong></p>\n<p>This happens when search_begin and search_step are called during the YES/NO selection that occurs after looking at the opponent's hand and prize cards using card ID 1131 (Team Rocket's Bother-Bot).</p>\n<p>As shown below, the error occurs when an opponent's prize card is partially face-up (visible).</p>\n<p>State Info and SelectData right before the crash</p>\n<pre><code>=== State Info ===\n...\n  Player 1: ..., hand=Unknown, handCount=3, ..., prize=[None, None, None, None, 7, None]\n--- SelectData ---\nSelect(type=YES_NO(9), context=ACTIVATE(43), minCount=1, maxCount=1, remainDamageCounter=0, \nremainEnergyCost=0, effect=1131)\n  Option 0: Option(type=YES(1))\n  Option 1: Option(type=NO(2))\n</code></pre>\n<p>It is possible that I am simply using search_begin incorrectly. If anyone has insight into the cause of this error or knows a workaround, your help would be greatly appreciated.</p>",
+      "rawMarkdown": "When running search_step after search_begin using the provided API (cg/api.py and internal library), the program crashes with the following error. Has anyone encountered this same error or knows a workaround?\n\n**The Error**\n\nAn invalid index message is printed to standard output, and a RuntimeError exception is raised on the Python side.\n\nStandard Output (Example)\n\n```\ninvalid index 21 >= 6\n```\n\nPython Traceback\n\n```\nTraceback (most recent call last):\n  ...\n  File \"cg/api.py\", line 625, in search_step\n    raise RuntimeError(f\"Unknown error code: {result.error}\")\nRuntimeError: Unknown error code: 99\n```\n\n**When It Occurs**\n\nThis happens when search_begin and search_step are called during the YES/NO selection that occurs after looking at the opponent's hand and prize cards using card ID 1131 (Team Rocket's Bother-Bot).\n\nAs shown below, the error occurs when an opponent's prize card is partially face-up (visible).\n\nState Info and SelectData right before the crash\n\n```\n=== State Info ===\n...\n  Player 1: ..., hand=Unknown, handCount=3, ..., prize=[None, None, None, None, 7, None]\n--- SelectData ---\nSelect(type=YES_NO(9), context=ACTIVATE(43), minCount=1, maxCount=1, remainDamageCounter=0, \nremainEnergyCost=0, effect=1131)\n  Option 0: Option(type=YES(1))\n  Option 1: Option(type=NO(2))\n```\n\nIt is possible that I am simply using search_begin incorrectly. If anyone has insight into the cause of this error or knows a workaround, your help would be greatly appreciated.",
+      "votes": 1
+    }
+  ]
+}

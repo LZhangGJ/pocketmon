@@ -1,0 +1,59 @@
+{
+  "topic": {
+    "id": 711644,
+    "title": "How has your experience been with RL/PPO/MCTS in this competition so far?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711644",
+    "commentCount": 5,
+    "votes": 11,
+    "postDate": "2026-06-21T18:03:57.774053100Z",
+    "lastCommentPostDate": "2026-07-03T21:02:31.526666700Z"
+  },
+  "messages": [
+    {
+      "id": 3487277,
+      "postDate": "2026-07-03T15:36:29.423Z",
+      "content": "<p>Starting the challenge I only focused on RL and PPO and felt like my results were not worth the time I was spending training agents. I switched to only heuristic gameplay design using top ranked gameplay to guide strategy making. This switch in design strategy helped me move up the leaderboard significantly. </p>",
+      "rawMarkdown": "Starting the challenge I only focused on RL and PPO and felt like my results were not worth the time I was spending training agents. I switched to only heuristic gameplay design using top ranked gameplay to guide strategy making. This switch in design strategy helped me move up the leaderboard significantly. ",
+      "votes": 3
+    },
+    {
+      "id": 3477570,
+      "postDate": "2026-06-21T18:03:57.773Z",
+      "content": "<p>Hi everyone,</p>\n<p>With the competition in full swing and some extremely strong heuristic baselines dominating the top spots on the leaderboard (as far as visible on public notebooks), I wanted to open a thread to discuss how people are approaching machine learning methods—specifically Reinforcement Learning (PPO, DQN) and Monte Carlo Tree Search (MCTS).</p>\n<p>Since the simulation engine (<code>libcg.so</code>) is a closed-source C++ binary, we are bound to sequential CPU environments rather than massive JAX/TPU vectorization. I’ve been building an offline training pipeline and wanted to share my initial experience and ask how others are tackling these engineering bottlenecks:</p>\n<h4>1. Handling Memory Leaks &amp; Emulation</h4>\n<p>Since many of us are developing on macOS (Apple Silicon), we've been running simulation playouts inside an emulated <code>linux/amd64</code> Docker container. The simulator has some noticeable C++ memory leakage over long runs, so we implemented process-level isolation (restarting worker threads every 25-50 matches) to keep the OS memory clean during self-play rollout generation.</p>\n<h4>2. Supervised Bootstrapping (Behavioral Cloning)</h4>\n<p>To avoid the agent wasting millions of steps exploring randomly in a complex, imperfect-information card game, we pre-trained a state-transformer policy/value network (<code>MyModel</code>) to mimic the top Lucario heuristic pilot. </p>\n<ul>\n<li><strong>Validation Accuracy</strong>: Converged to around <strong>66% accuracy</strong> in predicting the exact card combination choices.</li>\n<li><strong>Direct Win Rate</strong>: Playing greedily (no search), the BC agent achieved a <strong>10% win rate</strong> against the heuristic baseline.</li>\n</ul>\n<h4>3. Self-Play RL (PPO) Fine-Tuning</h4>\n<p>We ran a 20-iteration self-play PPO loop, mixing 50% self-play matches and 50% matches against the Heuristic Agent (league training). To prevent policy collapse and catastrophic forgetting of the heuristic prior, we added a Kullback-Leibler (KL) divergence penalty between the active RL policy and the frozen BC prior.</p>\n<ul>\n<li><strong>Results</strong>: The policy optimization was very stable (KL divergence held around <code>0.01 - 0.09</code>), and the raw policy network win rate against the Heuristic Agent peaked at <strong>25.0%</strong> (without search lookahead).</li>\n</ul>\n<h4>4. The MCTS Bottleneck</h4>\n<p>The Kaggle worker environment imposes a strict <strong>1-second move timeout</strong>. In our MCTS rollout tests, this limits the search budget to roughly <strong>10 rollouts per turn</strong>. \nAt this extremely low budget, standard UCT search is practically useless because it wastes rollouts exploring random branches. We are using our trained RL policy as a prior probability distribution ($P(s, a)$ in PUCT) to focus all 10 rollouts on the top-2 or top-3 candidate moves.</p>\n<hr>\n<p>I would love to hear from other teams:</p>\n<ol>\n<li><strong>RL vs. Heuristics</strong>: Has anyone successfully trained a pure or hybrid RL model that consistently beats the 1091-scoring heuristic baselines offline?</li>\n<li><strong>Action Masking</strong>: How are you representing candidate action combinations in the policy decoder given the dynamic size of legal action sets? Are you using autoregressive selection or fixed combinations?</li>\n<li><strong>MCTS Value</strong>: Are you finding search helpful under the 1-second timeout, or is the agent relying almost entirely on the neural network's prior?</li>\n</ol>\n<p>Good luck to everyone on the leaderboard!</p>",
+      "rawMarkdown": "Hi everyone,\n\nWith the competition in full swing and some extremely strong heuristic baselines dominating the top spots on the leaderboard (as far as visible on public notebooks), I wanted to open a thread to discuss how people are approaching machine learning methods—specifically Reinforcement Learning (PPO, DQN) and Monte Carlo Tree Search (MCTS).\n\nSince the simulation engine (`libcg.so`) is a closed-source C++ binary, we are bound to sequential CPU environments rather than massive JAX/TPU vectorization. I’ve been building an offline training pipeline and wanted to share my initial experience and ask how others are tackling these engineering bottlenecks:\n\n#### 1. Handling Memory Leaks & Emulation\nSince many of us are developing on macOS (Apple Silicon), we've been running simulation playouts inside an emulated `linux/amd64` Docker container. The simulator has some noticeable C++ memory leakage over long runs, so we implemented process-level isolation (restarting worker threads every 25-50 matches) to keep the OS memory clean during self-play rollout generation.\n\n#### 2. Supervised Bootstrapping (Behavioral Cloning)\nTo avoid the agent wasting millions of steps exploring randomly in a complex, imperfect-information card game, we pre-trained a state-transformer policy/value network (`MyModel`) to mimic the top Lucario heuristic pilot. \n* **Validation Accuracy**: Converged to around **66% accuracy** in predicting the exact card combination choices.\n* **Direct Win Rate**: Playing greedily (no search), the BC agent achieved a **10% win rate** against the heuristic baseline.\n\n#### 3. Self-Play RL (PPO) Fine-Tuning\nWe ran a 20-iteration self-play PPO loop, mixing 50% self-play matches and 50% matches against the Heuristic Agent (league training). To prevent policy collapse and catastrophic forgetting of the heuristic prior, we added a Kullback-Leibler (KL) divergence penalty between the active RL policy and the frozen BC prior.\n* **Results**: The policy optimization was very stable (KL divergence held around `0.01 - 0.09`), and the raw policy network win rate against the Heuristic Agent peaked at **25.0%** (without search lookahead).\n\n#### 4. The MCTS Bottleneck\nThe Kaggle worker environment imposes a strict **1-second move timeout**. In our MCTS rollout tests, this limits the search budget to roughly **10 rollouts per turn**. \nAt this extremely low budget, standard UCT search is practically useless because it wastes rollouts exploring random branches. We are using our trained RL policy as a prior probability distribution ($P(s, a)$ in PUCT) to focus all 10 rollouts on the top-2 or top-3 candidate moves.\n\n---\n\nI would love to hear from other teams:\n1. **RL vs. Heuristics**: Has anyone successfully trained a pure or hybrid RL model that consistently beats the 1091-scoring heuristic baselines offline?\n2. **Action Masking**: How are you representing candidate action combinations in the policy decoder given the dynamic size of legal action sets? Are you using autoregressive selection or fixed combinations?\n3. **MCTS Value**: Are you finding search helpful under the 1-second timeout, or is the agent relying almost entirely on the neural network's prior?\n\nGood luck to everyone on the leaderboard!",
+      "votes": 11
+    },
+    {
+      "id": 3479619,
+      "postDate": "2026-06-24T00:33:39.853Z",
+      "content": "<p>I switched to use PPO, now I can actually beat the rule-based \"teacher\". Seems promising.</p>",
+      "rawMarkdown": "I switched to use PPO, now I can actually beat the rule-based \"teacher\". Seems promising.",
+      "votes": 3
+    },
+    {
+      "id": 3477671,
+      "postDate": "2026-06-21T21:26:14.643Z",
+      "content": "<p>I tried imitation learning, works very well like ~85% move prediction accuracy. Then I try slowly shifting it into the RL realm by learning policy &amp; gradient - it can never get better than the \"teacher\". It's still early days though. I have not tried PPO (i am doing more in the style of \"alphazero\" RL) but I have tried incorporating rollouts and MCTS</p>",
+      "rawMarkdown": "I tried imitation learning, works very well like ~85% move prediction accuracy. Then I try slowly shifting it into the RL realm by learning policy & gradient - it can never get better than the \"teacher\". It's still early days though. I have not tried PPO (i am doing more in the style of \"alphazero\" RL) but I have tried incorporating rollouts and MCTS",
+      "votes": 4,
+      "replies": [
+        {
+          "id": 3487258,
+          "postDate": "2026-07-03T15:16:37.463Z",
+          "content": "<p>How does that 85% accuracy translate into actual WR? I’ve had models reaching 90%+ move prediction accuracy when imitating the teacher, but their WR still ends up 5-10% below the teacher’s, and RL hasn’t really fixed that for me. What was your experience with it?</p>",
+          "rawMarkdown": "How does that 85% accuracy translate into actual WR? I’ve had models reaching 90%+ move prediction accuracy when imitating the teacher, but their WR still ends up 5-10% below the teacher’s, and RL hasn’t really fixed that for me. What was your experience with it?",
+          "votes": 1,
+          "replies": [
+            {
+              "id": 3487497,
+              "postDate": "2026-07-03T21:02:31.527Z",
+              "content": "<p>I imitated the Crustle rule-based bot and then PPO on top of it. The PPO version is currently sitting about +65 ELO above the rule-based version on the leaderboard and also had a higher WR against local opponents in my offline testing.</p>",
+              "rawMarkdown": "I imitated the Crustle rule-based bot and then PPO on top of it. The PPO version is currently sitting about +65 ELO above the rule-based version on the leaderboard and also had a higher WR against local opponents in my offline testing.",
+              "votes": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

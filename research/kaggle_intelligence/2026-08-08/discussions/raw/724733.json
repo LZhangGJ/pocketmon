@@ -1,0 +1,32 @@
+{
+  "topic": {
+    "id": 724733,
+    "title": "Competition eligibility requirements",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724733",
+    "commentCount": 2,
+    "postDate": "2026-07-12T19:40:49.461677Z",
+    "lastCommentPostDate": "2026-07-12T21:14:36.320Z"
+  },
+  "messages": [
+    {
+      "id": 3495785,
+      "postDate": "2026-07-12T20:02:56.017Z",
+      "content": "<p>Hope this helps.\n<a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/709223#3474417\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/709223#3474417</a></p>",
+      "rawMarkdown": "Hope this helps.\nhttps://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/709223#3474417",
+      "replies": [
+        {
+          "id": 3495829,
+          "postDate": "2026-07-12T21:14:36.320Z",
+          "content": "<p>This is helpful, thanks :)</p>",
+          "rawMarkdown": "This is helpful, thanks :)"
+        }
+      ]
+    },
+    {
+      "id": 3495781,
+      "postDate": "2026-07-12T19:40:49.463Z",
+      "content": "<p>The competition rules state that:\nTo be eligible to enter the Competition, you must be:\n    the older of 18 years old or the age of majority in your jurisdiction of residence (unless otherwise agreed to by the Host and appropriate parental/guardian consents have been obtained by the Host);</p>\n<p>I don't completely understand this rule, how can a person under 18 get permission to participate?</p>\n<p>Thanks.</p>",
+      "rawMarkdown": "The competition rules state that:\nTo be eligible to enter the Competition, you must be:\n    the older of 18 years old or the age of majority in your jurisdiction of residence (unless otherwise agreed to by the Host and appropriate parental/guardian consents have been obtained by the Host);\n\nI don't completely understand this rule, how can a person under 18 get permission to participate?\n\nThanks.\n\n\n"
+    }
+  ]
+}

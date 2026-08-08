@@ -1,0 +1,40 @@
+{
+  "topic": {
+    "id": 730107,
+    "title": "Frustrated and Desperate: Every Deck I Build Get Gutted",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730107",
+    "commentCount": 3,
+    "postDate": "2026-07-28T03:04:22.427023800Z",
+    "lastCommentPostDate": "2026-07-28T16:29:59.993333300Z"
+  },
+  "messages": [
+    {
+      "id": 3504722,
+      "postDate": "2026-07-28T16:29:59.993Z",
+      "content": "<p>Hey, so if you actually look at the card list provided in the competition's dataset, all the cards eligible are in the current regulation mark, which are H, I, and J. On this competition specifically, it ranges from the set Temporal Forces (TF) released on March 22, 2024 up until Perfect Order released on March 27, 2026. \nAs for your needs:</p>\n<ol>\n<li>Kyurem (which has the trifrost attack) is in Shrouded Fable (released on August 2, 2024) so it's absolutely there, maybe you're not looking hard enough or using the wrong Kyurem id. </li>\n<li>Special Red Card is in the set Chaos Rising (May 22, 2026), it's not in the card list. Any set beyond Perfect Order (Chaos Rising and Pitch Black) IS NOT here, yet. The organizer likely planned this competition before Chaos Rising was released so they didn't include the set.</li>\n</ol>\n<p>Hope this helps :)</p>",
+      "rawMarkdown": "Hey, so if you actually look at the card list provided in the competition's dataset, all the cards eligible are in the current regulation mark, which are H, I, and J. On this competition specifically, it ranges from the set Temporal Forces (TF) released on March 22, 2024 up until Perfect Order released on March 27, 2026. \nAs for your needs:\n1. Kyurem (which has the trifrost attack) is in Shrouded Fable (released on August 2, 2024) so it's absolutely there, maybe you're not looking hard enough or using the wrong Kyurem id. \n2. Special Red Card is in the set Chaos Rising (May 22, 2026), it's not in the card list. Any set beyond Perfect Order (Chaos Rising and Pitch Black) IS NOT here, yet. The organizer likely planned this competition before Chaos Rising was released so they didn't include the set.\n\nHope this helps :)",
+      "votes": 1
+    },
+    {
+      "id": 3504476,
+      "postDate": "2026-07-28T07:00:42.427Z",
+      "content": "<p>card id: 144<br>\nKyurem<br>\nBasic / 130 HP<br>\nTrifrost ({W}{W}{M}{M}●): Discard all Energy from this Pokémon.<br>\nThis attack does 110 damage to 3 of your opponent’s Pokémon.</p>\n<p>It looks like you’re probably trying to build a Slowking deck.  </p>\n<p>The Slowking deck doesn’t include the Metagross that deals 300 damage.<br>\nIt is the deck’s main source of firepower, and without it, the deck will struggle against Pokémon EX.</p>",
+      "rawMarkdown": "card id: 144   \nKyurem  \nBasic / 130 HP  \nTrifrost ({W}{W}{M}{M}●): Discard all Energy from this Pokémon.   \nThis attack does 110 damage to 3 of your opponent’s Pokémon.\n\n\nIt looks like you’re probably trying to build a Slowking deck.  \n\nThe Slowking deck doesn’t include the Metagross that deals 300 damage.   \nIt is the deck’s main source of firepower, and without it, the deck will struggle against Pokémon EX.\n\n",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3504488,
+          "postDate": "2026-07-28T07:41:14.260Z",
+          "rawMarkdown": "",
+          "isDeleted": true
+        }
+      ]
+    },
+    {
+      "id": 3504431,
+      "postDate": "2026-07-28T03:04:22.427Z",
+      "content": "<p>This online tournament’s card pool is indeed nothing like the standard format—so many cards have been removed. But here’s the thing: every single time I settle on a deck, painstakingly tweak the list, and get ready to start putting the framework together, I check the card database and find that the deck’s core card is banned. I’ve already switched decks twice because of this mechanism.😭😭🫠🥺🥴😵‍💫😭</p>\n<p>I really need to know—are these cards actually banned, or were they never even included in the first place? I’ve searched for some of the cards I need in the documentation and got no results, but I suppose it could also be some other glitch.</p>\n<p>The banned cards I’m aware of so far: Kyurem (the one that can hit three of the opponent’s Pokémon at once), and Special Red Card (the one that causes heavy disruption). This is making me genuinely miserable.</p>\n<p>So I’m begging you all—please comment below with any other unusable cards you’ve discovered, to warn people like me before we waste more time. I’d really appreciate it.</p>",
+      "rawMarkdown": "This online tournament’s card pool is indeed nothing like the standard format—so many cards have been removed. But here’s the thing: every single time I settle on a deck, painstakingly tweak the list, and get ready to start putting the framework together, I check the card database and find that the deck’s core card is banned. I’ve already switched decks twice because of this mechanism.😭😭🫠🥺🥴😵‍💫😭\n\nI really need to know—are these cards actually banned, or were they never even included in the first place? I’ve searched for some of the cards I need in the documentation and got no results, but I suppose it could also be some other glitch.\n\nThe banned cards I’m aware of so far: Kyurem (the one that can hit three of the opponent’s Pokémon at once), and Special Red Card (the one that causes heavy disruption). This is making me genuinely miserable.\n\nSo I’m begging you all—please comment below with any other unusable cards you’ve discovered, to warn people like me before we waste more time. I’d really appreciate it."
+    }
+  ]
+}

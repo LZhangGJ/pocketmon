@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 708663,
+    "title": "[Beginner Guide] From Deck List to First Valid Submission",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708663",
+    "votes": 21,
+    "postDate": "2026-06-16T15:56:07.901493500Z",
+    "lastCommentPostDate": "2026-06-16T15:56:07.900Z"
+  },
+  "messages": [
+    {
+      "id": 3473469,
+      "postDate": "2026-06-16T15:56:07.900Z",
+      "content": "<p>I made a beginner-oriented walkthrough based on the Mega Lucario ex sample rule-based agent notebook.</p>\n<p>Notebook:\n<a href=\"https://www.kaggle.com/code/ichigoe/beginner-guide-from-deck-list-to-first-valid-sub\" target=\"_blank\">https://www.kaggle.com/code/ichigoe/beginner-guide-from-deck-list-to-first-valid-sub</a></p>\n<p>Reference notebook:\n<a href=\"https://www.kaggle.com/code/kiyotah/a-sample-rule-based-agent-mega-lucario-ex-deck/notebook\" target=\"_blank\">https://www.kaggle.com/code/kiyotah/a-sample-rule-based-agent-mega-lucario-ex-deck/notebook</a></p>\n<p>The core agent implementation is mostly based on the reference notebook.<br>\nMy goal was to add explanations around the Kaggle workflow that may be confusing for first-time participants.</p>\n<p>The notebook covers:</p>\n<ul>\n<li>how a deck is represented as 60 Card IDs</li>\n<li>how the deck can be hardcoded directly in the code</li>\n<li>how <code>deck.csv</code> can also be used</li>\n<li>how <code>/kaggle/input</code> and <code>/kaggle/working</code> are used in this competition</li>\n<li>how to create <code>submission.tar.gz</code></li>\n<li>the difference between direct Submit and Save Version → Save &amp; Run All → submit from Output</li>\n</ul>\n<p>This is not intended to be a strong solution.<br>\nIt is mainly a setup guide to help people reach their first valid submission.</p>\n<p>I hope this is useful for first-time participants. If you notice anything confusing or missing, I’d appreciate your suggestions.</p>",
+      "rawMarkdown": "I made a beginner-oriented walkthrough based on the Mega Lucario ex sample rule-based agent notebook.\n\nNotebook:\nhttps://www.kaggle.com/code/ichigoe/beginner-guide-from-deck-list-to-first-valid-sub\n\nReference notebook:\nhttps://www.kaggle.com/code/kiyotah/a-sample-rule-based-agent-mega-lucario-ex-deck/notebook\n\nThe core agent implementation is mostly based on the reference notebook.  \nMy goal was to add explanations around the Kaggle workflow that may be confusing for first-time participants.\n\nThe notebook covers:\n\n- how a deck is represented as 60 Card IDs\n- how the deck can be hardcoded directly in the code\n- how `deck.csv` can also be used\n- how `/kaggle/input` and `/kaggle/working` are used in this competition\n- how to create `submission.tar.gz`\n- the difference between direct Submit and Save Version → Save & Run All → submit from Output\n\nThis is not intended to be a strong solution.  \nIt is mainly a setup guide to help people reach their first valid submission.\n\nI hope this is useful for first-time participants. If you notice anything confusing or missing, I’d appreciate your suggestions.",
+      "votes": 21
+    }
+  ]
+}

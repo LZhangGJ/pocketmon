@@ -1,0 +1,17 @@
+{
+  "topic": {
+    "id": 709414,
+    "title": "Rule-based, RL, or agentic RLed?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709414",
+    "postDate": "2026-06-18T16:18:45.145948300Z",
+    "lastCommentPostDate": "2026-06-18T16:18:45.146666700Z"
+  },
+  "messages": [
+    {
+      "id": 3474729,
+      "postDate": "2026-06-18T16:18:45.147Z",
+      "content": "<p>I genuinely curious about which pathway now works best for you guys :)\nI am currently training a deck via rl provided by official which seems like it will not perform well on competition yet:( and am currently fine tune local llm to generate more suitable strategy via agentic rl</p>",
+      "rawMarkdown": "I genuinely curious about which pathway now works best for you guys :)\nI am currently training a deck via rl provided by official which seems like it will not perform well on competition yet:( and am currently fine tune local llm to generate more suitable strategy via agentic rl"
+    }
+  ]
+}

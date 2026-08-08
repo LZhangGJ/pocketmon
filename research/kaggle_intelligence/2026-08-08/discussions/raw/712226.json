@@ -1,0 +1,32 @@
+{
+  "topic": {
+    "id": 712226,
+    "title": "Bug Report: Engine forces minCount=2 for Mirage Barrage discard, ignoring Ignition Energy's value",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712226",
+    "commentCount": 2,
+    "postDate": "2026-06-22T16:10:21.322213300Z",
+    "lastCommentPostDate": "2026-06-24T10:25:58.196666700Z"
+  },
+  "messages": [
+    {
+      "id": 3479742,
+      "postDate": "2026-06-24T04:48:09.697Z",
+      "content": "<p>Thank you for the report.</p>\n<p>We checked this on our side, but we were not able to reproduce the reported behavior.</p>\n<p>In our test, it was possible to use Greninja ex’s Mirage Barrage by discarding only one Ignition Energy, and the attack resolved successfully.</p>\n<p>Could you please share the battle log or a minimal reproduction case?</p>",
+      "rawMarkdown": "Thank you for the report.\n\nWe checked this on our side, but we were not able to reproduce the reported behavior.\n\nIn our test, it was possible to use Greninja ex’s Mirage Barrage by discarding only one Ignition Energy, and the attack resolved successfully.\n\nCould you please share the battle log or a minimal reproduction case?",
+      "replies": [
+        {
+          "id": 3479980,
+          "postDate": "2026-06-24T10:25:58.197Z",
+          "content": "<p>Thank you very much for your prompt reply and for taking the time to investigate.</p>\n<p>Based on your response, we made some adjustments and successfully confirmed that the engine processes it without any issues.</p>\n<p>We sincerely apologize for taking up your valuable time with an incorrect report. We also deeply appreciate your generous support.</p>\n<p>Thank you once again for your hard work in running such a wonderful competition!</p>",
+          "rawMarkdown": "Thank you very much for your prompt reply and for taking the time to investigate.\n\nBased on your response, we made some adjustments and successfully confirmed that the engine processes it without any issues.\n\nWe sincerely apologize for taking up your valuable time with an incorrect report. We also deeply appreciate your generous support.\n\nThank you once again for your hard work in running such a wonderful competition!"
+        }
+      ]
+    },
+    {
+      "id": 3478358,
+      "postDate": "2026-06-22T16:10:21.323Z",
+      "content": "<p>Hi everyone and organizers,</p>\n<p>I would like to report a potential bug in the CABT game engine regarding energy discard mechanics.</p>\n<p>[Issue Description] When using Greninja ex's \"Mirage Barrage\" , the attack cost requires discarding 2 units of energy. However, when \"Ignition Energy\", which provides 3 Fighting energies, is attached, discarding just this single card should satisfy the 2-energy requirement.</p>\n<p>[Current Behavior] The engine's obs.current.selection enforces minCount: 2. If our agent selects only the Ignition Energy (submitting an array of length 1, e.g., [idx]), the engine crashes and throws an err=4 (invalid selection) IndexError. Attempting to submit the same index twice (e.g., [idx, idx]) also results in err=4.</p>\n<p>[Consequence] Because the engine strictly requires an array of at least 2 distinct indices, players are forced to discard an extra energy card (e.g., a Water Energy) alongside the Ignition Energy, which puts them at an unfair disadvantage.</p>\n<p>Could the engine be updated to evaluate the provided energy value of the selected cards rather than strictly enforcing minCount: 2 based on card count?</p>\n<p>Thank you!</p>",
+      "rawMarkdown": "Hi everyone and organizers,\n\nI would like to report a potential bug in the CABT game engine regarding energy discard mechanics.\n\n[Issue Description] When using Greninja ex's \"Mirage Barrage\" , the attack cost requires discarding 2 units of energy. However, when \"Ignition Energy\", which provides 3 Fighting energies, is attached, discarding just this single card should satisfy the 2-energy requirement.\n\n[Current Behavior] The engine's obs.current.selection enforces minCount: 2. If our agent selects only the Ignition Energy (submitting an array of length 1, e.g., [idx]), the engine crashes and throws an err=4 (invalid selection) IndexError. Attempting to submit the same index twice (e.g., [idx, idx]) also results in err=4.\n\n[Consequence] Because the engine strictly requires an array of at least 2 distinct indices, players are forced to discard an extra energy card (e.g., a Water Energy) alongside the Ignition Energy, which puts them at an unfair disadvantage.\n\nCould the engine be updated to evaluate the provided energy value of the selected cards rather than strictly enforcing minCount: 2 based on card count?\n\nThank you!"
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "topic": {
+    "id": 732331,
+    "title": "Second Round Information",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/732331",
+    "commentCount": 18,
+    "votes": 23,
+    "postDate": "2026-08-02T11:00:01.289922600Z",
+    "lastCommentPostDate": "2026-08-04T13:25:59.596666700Z",
+    "isSticky": true
+  },
+  "messages": [
+    {
+      "id": 3507674,
+      "postDate": "2026-08-02T11:00:01.290Z",
+      "content": "<p>As the Simulation Category enters its final stage, we would like to provide an overview of what comes next.</p>\n<p>The teams advancing to Second Round  will be determined based on the results of the Strategy Category in First Round.</p>\n<p>Following the conclusion of the Strategy Category, the top eight teams will advance to Second Round and compete in a tournament to determine the champion. If any qualifying team withdraws, the next highest-ranked team will be invited as a replacement.</p>\n<p>Second Round is scheduled to be held as an in-person event in Tokyo.</p>\n<h1>Qualification for Second Round</h1>\n<p>Teams aiming to advance from the Simulation Category to Second Round must also participate in the Strategy Category using the same team.</p>\n<p>Please refer to the following page for the evaluation criteria:\n<a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/overview/evaluation\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/overview/evaluation</a></p>\n<p>While your ranking in the Simulation Category will be taken into consideration, submissions will be evaluated holistically based on additional factors, including deck construction, the originality of the proposed approach, and the quality of the explanations provided in the report.</p>\n<h1>Second Round Environment</h1>\n<p>Second Round will introduce the following changes from First Round:</p>\n<ul>\n<li>Each match will be played in a best-of-three format (BO3). </li>\n<li>Teams must use the same deck and the same code throughout the match, and the first team to win two games will win the match. </li>\n<li>The games will be played sequentially rather than simultaneously. <ul>\n<li>Therefore, teams will be able to access the log from Game 1 during Game 2, and the logs from Games 1 and 2 during Game 3.</li></ul></li>\n</ul>\n<h1>Submission Resources</h1>\n<ul>\n<li>AWS p5.4xlarge (or equivalent) </li>\n<li>NVIDIA H100 GPU (80 GB VRAM) </li>\n<li>256 GiB RAM </li>\n<li>16 vCPUs</li>\n</ul>\n<h1>time limitation</h1>\n<ul>\n<li>Each team will have 30 minutes of total thinking time per game. </li>\n<li>The time limit is separate for each game in a BO3 match and cannot be carried over from one game to the next. </li>\n<li>If a team runs out of time, it will lose that game.</li>\n</ul>\n<h1>Card List</h1>\n<ul>\n<li>All cards used in First Round will remain available in Second Round.</li>\n<li>Second Round will be played with an expanded card pool that includes additional cards. <ul>\n<li>Details of the additional cards are scheduled to be announced after the final rankings for the Simulation Category have been confirmed.</li></ul></li>\n</ul>\n<h1>Additional Information</h1>\n<ul>\n<li>For more information about Second Round, please also visit the official event website:\n<a href=\"https://ptcg-abc.pokemon.co.jp/\" target=\"_blank\">https://ptcg-abc.pokemon.co.jp/</a></li>\n<li>More details—including the additional cards and other tournament logistics—will be shared in future announcements.</li>\n</ul>\n<p>We hope you continue enjoying the Simulation Category, and we look forward to seeing many of you in Second Round!</p>",
+      "rawMarkdown": "As the Simulation Category enters its final stage, we would like to provide an overview of what comes next.\n\nThe teams advancing to Second Round  will be determined based on the results of the Strategy Category in First Round.\n\nFollowing the conclusion of the Strategy Category, the top eight teams will advance to Second Round and compete in a tournament to determine the champion. If any qualifying team withdraws, the next highest-ranked team will be invited as a replacement.\n\nSecond Round is scheduled to be held as an in-person event in Tokyo.\n\n# Qualification for Second Round\nTeams aiming to advance from the Simulation Category to Second Round must also participate in the Strategy Category using the same team.\n\nPlease refer to the following page for the evaluation criteria:\nhttps://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/overview/evaluation\n\nWhile your ranking in the Simulation Category will be taken into consideration, submissions will be evaluated holistically based on additional factors, including deck construction, the originality of the proposed approach, and the quality of the explanations provided in the report.\n\n# Second Round Environment\nSecond Round will introduce the following changes from First Round:\n- Each match will be played in a best-of-three format (BO3). \n- Teams must use the same deck and the same code throughout the match, and the first team to win two games will win the match. \n- The games will be played sequentially rather than simultaneously. \n  - Therefore, teams will be able to access the log from Game 1 during Game 2, and the logs from Games 1 and 2 during Game 3.\n\n# Submission Resources\n- AWS p5.4xlarge (or equivalent) \n- NVIDIA H100 GPU (80 GB VRAM) \n- 256 GiB RAM \n- 16 vCPUs\n\n# time limitation\n- Each team will have 30 minutes of total thinking time per game. \n- The time limit is separate for each game in a BO3 match and cannot be carried over from one game to the next. \n- If a team runs out of time, it will lose that game.\n\n# Card List\n- All cards used in First Round will remain available in Second Round.\n- Second Round will be played with an expanded card pool that includes additional cards. \n  - Details of the additional cards are scheduled to be announced after the final rankings for the Simulation Category have been confirmed.\n\n# Additional Information\n- For more information about Second Round, please also visit the official event website:\nhttps://ptcg-abc.pokemon.co.jp/\n- More details—including the additional cards and other tournament logistics—will be shared in future announcements.\n\nWe hope you continue enjoying the Simulation Category, and we look forward to seeing many of you in Second Round!",
+      "votes": 23
+    },
+    {
+      "id": 3508164,
+      "postDate": "2026-08-03T20:27:21.220Z",
+      "content": "<blockquote>\n  <p>Second Round is scheduled to be held as an in-person event in Tokyo.</p>\n</blockquote>\n<p>Will there be financial support for people travelling abroad?</p>",
+      "rawMarkdown": "> Second Round is scheduled to be held as an in-person event in Tokyo.\n\nWill there be financial support for people travelling abroad?",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3508207,
+          "postDate": "2026-08-03T23:37:00.650Z",
+          "content": "<p>30K is nice financial support TBH 🤣\nThey shoud have just colored maybe half of it for this specific goal and that's it.</p>",
+          "rawMarkdown": "30K is nice financial support TBH 🤣\nThey shoud have just colored maybe half of it for this specific goal and that's it."
+        },
+        {
+          "id": 3508213,
+          "postDate": "2026-08-03T23:52:32.243Z",
+          "content": "<blockquote>\n  <p>If any qualifying team withdraws, the next highest-ranked team will be invited as a replacement.</p>\n</blockquote>\n<p>Well, some teams might withdraw.</p>",
+          "rawMarkdown": "> If any qualifying team withdraws, the next highest-ranked team will be invited as a replacement.\n\nWell, some teams might withdraw.",
+          "replies": [
+            {
+              "id": 3508221,
+              "postDate": "2026-08-04T00:53:11.443Z",
+              "content": "<p>Details regarding the Second Round, including any travel and accommodation support, will be shared directly with Second Round participants together with the First Round results. We are unable to provide further details on the support arrangements at this time. Thank you for your understanding.</p>",
+              "rawMarkdown": "Details regarding the Second Round, including any travel and accommodation support, will be shared directly with Second Round participants together with the First Round results. We are unable to provide further details on the support arrangements at this time. Thank you for your understanding.",
+              "votes": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3507896,
+      "postDate": "2026-08-03T04:22:08.563Z",
+      "content": "<p>Kind of a side question, but will there be or are you planning an official onsite event that people that are not from the invited teams can also join?</p>",
+      "rawMarkdown": "Kind of a side question, but will there be or are you planning an official onsite event that people that are not from the invited teams can also join?",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3508223,
+          "postDate": "2026-08-04T00:56:21Z",
+          "content": "<p>The Second Round will be held in Tokyo. We are not planning any other events.</p>",
+          "rawMarkdown": "The Second Round will be held in Tokyo. We are not planning any other events.",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "id": 3507751,
+      "postDate": "2026-08-02T15:21:32.453Z",
+      "content": "<p>I assume (and very hope so) that this second round will NOT change the simulation conpetition final LB ranking? \nI did not even saw it mentioned in evaluation </p>\n<p>\"Final Evaluation At the submission deadline on August 16, 2026, additional submissions will be locked. From August 16, 2026 for approximately two weeks, we will continue to run games. At the conclusion of this period, the leaderboard is final.\"</p>\n<p>And moreover, as advancing to the second round also depends on amorphic factors like 'originality' and 'quality', well, this is NOT what I signed off to.</p>",
+      "rawMarkdown": "I assume (and very hope so) that this second round will NOT change the simulation conpetition final LB ranking? \nI did not even saw it mentioned in evaluation \n\n\"Final Evaluation At the submission deadline on August 16, 2026, additional submissions will be locked. From August 16, 2026 for approximately two weeks, we will continue to run games. At the conclusion of this period, the leaderboard is final.\"\n\nAnd moreover, as advancing to the second round also depends on amorphic factors like 'originality' and 'quality', well, this is NOT what I signed off to.",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3507769,
+          "postDate": "2026-08-02T16:30:54.430Z",
+          "content": "<p>My understanding is that the outcome of the strategy competition does not affect the simulation LB, while the other does not hold.</p>",
+          "rawMarkdown": "My understanding is that the outcome of the strategy competition does not affect the simulation LB, while the other does not hold.",
+          "replies": [
+            {
+              "id": 3507870,
+              "postDate": "2026-08-03T02:22:15.913Z",
+              "content": "<p><a href=\"https://www.kaggle.com/shlomoron\" target=\"_blank\">@shlomoron</a> <a href=\"https://www.kaggle.com/cnumber\" target=\"_blank\">@cnumber</a> \nThe final Simulation Competition leaderboard will be determined after approximately two weeks of additional matches following the submission deadline on August 16. The results of the Strategy Competition will not affect or change the final Simulation leaderboard rankings.</p>\n<p>Teams advancing to the Second Round will be selected based on the results of the Strategy Competition.</p>\n<p>So yes, <a href=\"https://www.kaggle.com/cnumber\" target=\"_blank\">@cnumber</a> ’s understanding is correct.</p>",
+              "rawMarkdown": "@shlomoron @cnumber \nThe final Simulation Competition leaderboard will be determined after approximately two weeks of additional matches following the submission deadline on August 16. The results of the Strategy Competition will not affect or change the final Simulation leaderboard rankings.\n\nTeams advancing to the Second Round will be selected based on the results of the Strategy Competition.\n\nSo yes, @cnumber ’s understanding is correct.",
+              "votes": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3507708,
+      "postDate": "2026-08-02T12:44:12.880Z",
+      "content": "<p>Thank you for sharing the Second Round information.</p>\n<p>We understand that further details, including additional cards and tournament logistics, will be announced later.\nIf possible, could you clarify one point that may affect our preparation for the remaining two weeks of the Simulation Category?</p>\n<p>In Second Round, will teams be allowed to use a deck and agent code different from both of the two agents used in their final Simulation Category submission?</p>\n<p>Since additional cards will be introduced, we assume that some changes will be allowed, but we would appreciate clarification on whether the final Simulation submissions impose any restrictions on the Second Round deck or agent.</p>\n<p>We’ll keep working hard and enjoying the competition through the final two weeks of the Simulation Category. Thank you!</p>",
+      "rawMarkdown": "Thank you for sharing the Second Round information.\n\nWe understand that further details, including additional cards and tournament logistics, will be announced later.\nIf possible, could you clarify one point that may affect our preparation for the remaining two weeks of the Simulation Category?\n\nIn Second Round, will teams be allowed to use a deck and agent code different from both of the two agents used in their final Simulation Category submission?\n\nSince additional cards will be introduced, we assume that some changes will be allowed, but we would appreciate clarification on whether the final Simulation submissions impose any restrictions on the Second Round deck or agent.\n\nWe’ll keep working hard and enjoying the competition through the final two weeks of the Simulation Category. Thank you!",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3507873,
+          "postDate": "2026-08-03T02:24:50.913Z",
+          "content": "<p><a href=\"https://www.kaggle.com/tomo0608\" target=\"_blank\">@tomo0608</a> \nYes, teams may use a deck and agent code that are different from those submitted in the First Round.</p>\n<p>We also do not plan to impose any additional restrictions in the Second Round beyond those that applied in the First Round(this competition).</p>",
+          "rawMarkdown": "@tomo0608 \nYes, teams may use a deck and agent code that are different from those submitted in the First Round.\n\nWe also do not plan to impose any additional restrictions in the Second Round beyond those that applied in the First Round(this competition)."
+        }
+      ]
+    },
+    {
+      "id": 3508400,
+      "postDate": "2026-08-04T13:25:59.597Z",
+      "content": "<p>Regarding Qualification for Second Round, Kaggle allows us to have two active submissions in parallel. If we have two submissions each with its own distinct deck, are we only allowed to include one of them in our final write up for the judges to evaluate?</p>",
+      "rawMarkdown": "Regarding Qualification for Second Round, Kaggle allows us to have two active submissions in parallel. If we have two submissions each with its own distinct deck, are we only allowed to include one of them in our final write up for the judges to evaluate?"
+    },
+    {
+      "id": 3508228,
+      "postDate": "2026-08-04T01:27:33.270Z",
+      "content": "<p>Really appreciate the clear rules on BO3 and log access! The hardware specs look amazing. Good luck to everyone pushing for the top 8 in these final weeks! 🙌</p>",
+      "rawMarkdown": "Really appreciate the clear rules on BO3 and log access! The hardware specs look amazing. Good luck to everyone pushing for the top 8 in these final weeks! 🙌"
+    },
+    {
+      "id": 3508134,
+      "postDate": "2026-08-03T18:35:15.207Z",
+      "content": "<p>Best 2/3 is unfortunate. Would've much preferred best of 7 or even a much larger sample size. But the hardware upgrades and increased thinking time are a great addition!</p>",
+      "rawMarkdown": "Best 2/3 is unfortunate. Would've much preferred best of 7 or even a much larger sample size. But the hardware upgrades and increased thinking time are a great addition!"
+    },
+    {
+      "id": 3508035,
+      "postDate": "2026-08-03T14:44:42.283Z",
+      "content": "<p>How long will the second round last?</p>",
+      "rawMarkdown": "How long will the second round last?",
+      "replies": [
+        {
+          "id": 3508222,
+          "postDate": "2026-08-04T00:53:33.803Z",
+          "content": "<p>Details regarding the schedule and duration of the Second Round will be shared directly with Second Round participants together with the First Round results. We are unable to provide specific dates or further details at this time. Thank you for your understanding.</p>",
+          "rawMarkdown": "Details regarding the schedule and duration of the Second Round will be shared directly with Second Round participants together with the First Round results. We are unable to provide specific dates or further details at this time. Thank you for your understanding."
+        }
+      ]
+    },
+    {
+      "id": 3507749,
+      "postDate": "2026-08-02T15:18:03.430Z",
+      "content": "<p>Will you be introducing cards from Chaos Rising and Pitch Black? Or is the second round going to be Expanded instead of Standard play? Never played PTCG before this but have had some fun on Pokemon TCG Live as part of my research for this competition. I'm hoping to make the second round purely for the expanded card pool, should be fun! </p>",
+      "rawMarkdown": "Will you be introducing cards from Chaos Rising and Pitch Black? Or is the second round going to be Expanded instead of Standard play? Never played PTCG before this but have had some fun on Pokemon TCG Live as part of my research for this competition. I'm hoping to make the second round purely for the expanded card pool, should be fun! ",
+      "replies": [
+        {
+          "id": 3507872,
+          "postDate": "2026-08-03T02:23:47.237Z",
+          "content": "<p><a href=\"https://www.kaggle.com/jackvd\" target=\"_blank\">@jackvd</a> \nWe’re not able to share the specific additional cards at this time.</p>\n<p>However, we are not planning to introduce older cards from the Expanded format, and there are also no plans to add any original cards created specifically for this competition environment.</p>",
+          "rawMarkdown": "@jackvd \nWe’re not able to share the specific additional cards at this time.\n\nHowever, we are not planning to introduce older cards from the Expanded format, and there are also no plans to add any original cards created specifically for this competition environment."
+        }
+      ]
+    }
+  ]
+}

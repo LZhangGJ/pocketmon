@@ -1,0 +1,32 @@
+{
+  "topic": {
+    "id": 709642,
+    "title": "Question about submission file size limit",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709642",
+    "commentCount": 2,
+    "votes": 3,
+    "postDate": "2026-06-19T13:30:44.403979400Z",
+    "lastCommentPostDate": "2026-06-26T03:38:44.870Z"
+  },
+  "messages": [
+    {
+      "id": 3475161,
+      "postDate": "2026-06-19T13:30:44.403Z",
+      "content": "<p>Could you please clarify if there is a specific file size limit for the submission? I couldn't find this information in the rules or overview. Thank you!</p>",
+      "rawMarkdown": "Could you please clarify if there is a specific file size limit for the submission? I couldn't find this information in the rules or overview. Thank you!",
+      "votes": 3
+    },
+    {
+      "id": 3481447,
+      "postDate": "2026-06-26T03:38:44.870Z",
+      "rawMarkdown": "",
+      "isDeleted": true
+    },
+    {
+      "id": 3481387,
+      "postDate": "2026-06-25T23:43:55.083Z",
+      "rawMarkdown": "",
+      "isDeleted": true
+    }
+  ]
+}

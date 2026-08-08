@@ -1,0 +1,41 @@
+{
+  "topic": {
+    "id": 733267,
+    "title": "Shaymin vs Battle Cage",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/733267",
+    "commentCount": 3,
+    "votes": 2,
+    "postDate": "2026-08-06T09:41:26.793451500Z",
+    "lastCommentPostDate": "2026-08-06T23:16:24.783333300Z"
+  },
+  "messages": [
+    {
+      "id": 3509723,
+      "postDate": "2026-08-06T23:16:24.783Z",
+      "content": "<p>When text under an attack says, \"…this attack does damage…,\" then it is something Shaymin can block (Grimmsnarl Ex, Wellspring Mask Ogerpon Ex). Otherwise, what you are reading is normally 'an effect of an attack' (Dragapult Ex Phantom Dive, Munkidori Mind Bend).\nBattle Cage can stop opponent Munkidori's Adrena-brain and Dragapult's Phantom Dive on your bench. It doesn't stop Adrena-Brain to your active. If you own Froslass on your bench, it will still place damage counters <strong>on your own</strong> pokemon with abilities in between turns, because Froslass is not, per Battle Cage, \"your opponent's attacks or abilities.\"</p>",
+      "rawMarkdown": "When text under an attack says, \"...this attack does damage...,\" then it is something Shaymin can block (Grimmsnarl Ex, Wellspring Mask Ogerpon Ex). Otherwise, what you are reading is normally 'an effect of an attack' (Dragapult Ex Phantom Dive, Munkidori Mind Bend).\nBattle Cage can stop opponent Munkidori's Adrena-brain and Dragapult's Phantom Dive on your bench. It doesn't stop Adrena-Brain to your active. If you own Froslass on your bench, it will still place damage counters **on your own** pokemon with abilities in between turns, because Froslass is not, per Battle Cage, \"your opponent's attacks or abilities.\"",
+      "votes": 2
+    },
+    {
+      "id": 3509545,
+      "postDate": "2026-08-06T15:52:55.970Z",
+      "content": "<p>Shaymin is useless here. It blocks <strong>damage</strong>, not damage counters. The Grimm/Froslass deck uses Froslass + Munkidori to place counters, so adding Shaymin won't improve your odds.</p>",
+      "rawMarkdown": "Shaymin is useless here. It blocks **damage**, not damage counters. The Grimm/Froslass deck uses Froslass + Munkidori to place counters, so adding Shaymin won't improve your odds.",
+      "votes": 2
+    },
+    {
+      "id": 3509407,
+      "postDate": "2026-08-06T10:15:01.543Z",
+      "content": "<p>For the Grimm deck you will ideally need both to counter the two types of damages mentioned here. For the Dragapult deck, the battle cage alone would be enough.</p>",
+      "rawMarkdown": "For the Grimm deck you will ideally need both to counter the two types of damages mentioned here. For the Dragapult deck, the battle cage alone would be enough.",
+      "votes": 2
+    },
+    {
+      "id": 3509390,
+      "postDate": "2026-08-06T09:41:26.793Z",
+      "content": "<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4808143%2Fea2933399c901e9d4a59e9a6106efdba%2Fbattle_cage.png?generation=1786009068691515&amp;alt=media\" alt=\"\"></p>\n<p>With more attacks capable of hitting Pokémon on the Bench becoming prevalent,<br>\nI am beginning to feel the need for better Bench protection.</p>\n<p>Shaymin and Battle Cage appear to be the two main cards that can protect the Bench.<br>\nHowever, I am not entirely sure how to distinguish between them or when each card should be used.  </p>\n<table>\n<thead>\n<tr>\n<th>Card</th>\n<th>What It Prevents</th>\n<th>What It Does Not Prevent</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Battle Cage</td>\n<td>Damage counters being placed on your Benched Pokémon by the effects of your opponent’s attacks or Abilities</td>\n<td>Damage dealt directly by attacks</td>\n</tr>\n<tr>\n<td>Shaymin</td>\n<td><strong>Damage</strong> dealt by your opponent’s attacks</td>\n<td>Effects of attacks or Abilities that place damage counters</td>\n</tr>\n</tbody>\n</table>",
+      "rawMarkdown": "![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4808143%2Fea2933399c901e9d4a59e9a6106efdba%2Fbattle_cage.png?generation=1786009068691515&alt=media)\n\n\nWith more attacks capable of hitting Pokémon on the Bench becoming prevalent,   \nI am beginning to feel the need for better Bench protection.\n\nShaymin and Battle Cage appear to be the two main cards that can protect the Bench.   \nHowever, I am not entirely sure how to distinguish between them or when each card should be used.  \n\n\n\n| Card        | What It Prevents                                                                                            | What It Does Not Prevent                                   |\n| ----------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |\n| Battle Cage | Damage counters being placed on your Benched Pokémon by the effects of your opponent’s attacks or Abilities | Damage dealt directly by attacks                           |\n| Shaymin     | **Damage** dealt by your opponent’s attacks                                                                 | Effects of attacks or Abilities that place damage counters |\n",
+      "votes": 2
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "topic": {
+    "id": 731083,
+    "title": "Incorrect all_card_data() text for Team Rocket’s Great Ball (#1132)",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/731083",
+    "commentCount": 2,
+    "votes": 4,
+    "postDate": "2026-07-30T17:49:11.955306Z",
+    "lastCommentPostDate": "2026-08-03T17:18:49.766666700Z"
+  },
+  "messages": [
+    {
+      "id": 3508100,
+      "postDate": "2026-08-03T17:18:49.767Z",
+      "content": "<p>This has been updated and the data files have been updated. Thanks for reporting.</p>",
+      "rawMarkdown": "This has been updated and the data files have been updated. Thanks for reporting.",
+      "votes": 1
+    },
+    {
+      "id": 3505951,
+      "postDate": "2026-07-30T17:49:11.957Z",
+      "content": "<p>Hi,</p>\n<p>The card description returned by <code>cg.api.all_card_data()</code> for <strong>Team Rocket’s Great Ball (card ID 1132 / DRI 175)</strong> is incorrect.\n<code>all_card_data()</code> currently says:</p>\n<blockquote>\n  <p>Search your deck for a Trainer card, reveal it, and put it into your hand. Then, shuffle your deck.</p>\n</blockquote>\n<p>However, the official card effect is:</p>\n<blockquote>\n  <p>Flip a coin. If heads, search your deck for an Evolution Team Rocket’s Pokémon, reveal it, and put it into your hand. If tails, search your deck for a Basic Team Rocket’s Pokémon, reveal it, and put it into your hand. Then, shuffle your deck.</p>\n</blockquote>\n<p>The game engine already implements the official coin-flip effect correctly. I reproduced both branches with fixed seeds: one offered only Basic Team Rocket’s Pokémon and the other offered only Evolution Team Rocket’s Pokémon.\nTherefore, this appears to be a problem with the text exported by <code>all_card_data()</code>, rather than an engine implementation bug. This can materially affect agents and deck-building tools that rely on <code>all_card_data()</code> as the authoritative card description.\nCould you please update the <code>all_card_data()</code> entry—and any supplied competition CSV containing the same incorrect text—to match the official card?</p>",
+      "rawMarkdown": "Hi,\n\nThe card description returned by `cg.api.all_card_data()` for **Team Rocket’s Great Ball (card ID 1132 / DRI 175)** is incorrect.\n`all_card_data()` currently says:\n>Search your deck for a Trainer card, reveal it, and put it into your hand. Then, shuffle your deck.\n\nHowever, the official card effect is:\n>Flip a coin. If heads, search your deck for an Evolution Team Rocket’s Pokémon, reveal it, and put it into your hand. If tails, search your deck for a Basic Team Rocket’s Pokémon, reveal it, and put it into your hand. Then, shuffle your deck.\n\nThe game engine already implements the official coin-flip effect correctly. I reproduced both branches with fixed seeds: one offered only Basic Team Rocket’s Pokémon and the other offered only Evolution Team Rocket’s Pokémon.\nTherefore, this appears to be a problem with the text exported by `all_card_data()`, rather than an engine implementation bug. This can materially affect agents and deck-building tools that rely on `all_card_data()` as the authoritative card description.\nCould you please update the `all_card_data()` entry—and any supplied competition CSV containing the same incorrect text—to match the official card?",
+      "votes": 4
+    },
+    {
+      "id": 3505956,
+      "postDate": "2026-07-30T17:53:19.147Z",
+      "content": "<p><a href=\"https://www.kaggle.com/shimishige\" target=\"_blank\">@shimishige</a> any chance you could confirm this?</p>",
+      "rawMarkdown": "@shimishige any chance you could confirm this?\n"
+    }
+  ]
+}

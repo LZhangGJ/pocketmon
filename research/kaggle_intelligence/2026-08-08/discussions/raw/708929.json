@@ -1,0 +1,118 @@
+{
+  "topic": {
+    "id": 708929,
+    "title": "Game engine source code?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708929",
+    "commentCount": 14,
+    "votes": 29,
+    "postDate": "2026-06-17T07:39:43.821890800Z",
+    "lastCommentPostDate": "2026-06-19T03:20:36.056666700Z"
+  },
+  "messages": [
+    {
+      "id": 3473897,
+      "postDate": "2026-06-17T07:39:43.823Z",
+      "content": "<p>For serius RL work, we usually need to build the game engine e.g. in torch/jax. Usually we have full source code e.g. for orbit-wars, lux etc. My agent insist that for this competition we don't have source code, only wrapper around binary that is private. Is he right? Do we have any solution besides reverse-engineering the binary? Can the organizers please give as the source code if it really isn't available?</p>",
+      "rawMarkdown": "For serius RL work, we usually need to build the game engine e.g. in torch/jax. Usually we have full source code e.g. for orbit-wars, lux etc. My agent insist that for this competition we don't have source code, only wrapper around binary that is private. Is he right? Do we have any solution besides reverse-engineering the binary? Can the organizers please give as the source code if it really isn't available?",
+      "votes": 29
+    },
+    {
+      "id": 3474913,
+      "postDate": "2026-06-19T03:20:36.057Z",
+      "content": "<p>Maybe the community can create a c++ game engine together on github. Similar to what we did for the Jigsaw competition.</p>",
+      "rawMarkdown": "Maybe the community can create a c++ game engine together on github. Similar to what we did for the Jigsaw competition.",
+      "votes": 5
+    },
+    {
+      "id": 3474608,
+      "postDate": "2026-06-18T10:29:28.853Z",
+      "content": "<p>Still no replay from host. Ok. Just a reminder that if reverse engineering the game engine can provide big advantage (e.g. much faster development/research with GPU port), this competition can and most definitely will devolve to reverse-engineering competition. Good luck to all and happy kaggling…</p>",
+      "rawMarkdown": "Still no replay from host. Ok. Just a reminder that if reverse engineering the game engine can provide big advantage (e.g. much faster development/research with GPU port), this competition can and most definitely will devolve to reverse-engineering competition. Good luck to all and happy kaggling...",
+      "votes": 1
+    },
+    {
+      "id": 3474702,
+      "postDate": "2026-06-18T14:49:26.187Z",
+      "content": "<p><a href=\"https://www.kaggle.com/bovard\" target=\"_blank\">@bovard</a> Can we please get and update on this? I am not sure whether i should invest time building a game engine. I don't mind building a game engine but would rather not if possible.</p>",
+      "rawMarkdown": "@bovard Can we please get and update on this? I am not sure whether i should invest time building a game engine. I don't mind building a game engine but would rather not if possible.",
+      "votes": 2
+    },
+    {
+      "id": 3474836,
+      "postDate": "2026-06-18T20:47:10.377Z",
+      "content": "<p>No reply from the host, although they have replied in other threads. Seems like they do not plan to address this topic. I have been trying to reverse engineer the engine to create an arm64 version — not a simple task.</p>",
+      "rawMarkdown": "No reply from the host, although they have replied in other threads. Seems like they do not plan to address this topic. I have been trying to reverse engineer the engine to create an arm64 version — not a simple task.",
+      "replies": [
+        {
+          "id": 3474862,
+          "postDate": "2026-06-18T23:10:37.080Z",
+          "content": "<p>I'm on it too. With Claude code it might be possible. It currently work lets see~ if I have something good I will share with the community. I just love exposing data that should be public and host abstain from giving 🤣</p>",
+          "rawMarkdown": "I'm on it too. With Claude code it might be possible. It currently work lets see~ if I have something good I will share with the community. I just love exposing data that should be public and host abstain from giving 🤣"
+        }
+      ]
+    },
+    {
+      "id": 3473925,
+      "postDate": "2026-06-17T08:33:53.367Z",
+      "content": "<p>In the tab Data, you can click Download All at the bottom. In sample submission you can find the files in cg.</p>",
+      "rawMarkdown": "In the tab Data, you can click Download All at the bottom. In sample submission you can find the files in cg.",
+      "replies": [
+        {
+          "id": 3473938,
+          "postDate": "2026-06-17T08:47:24.300Z",
+          "content": "<p>Well yes…and what there is incide? Two binaries (cg.dll, libcg.so) and no source code so how can we port it to e.g. torch for rl?</p>",
+          "rawMarkdown": "Well yes...and what there is incide? Two binaries (cg.dll, libcg.so) and no source code so how can we port it to e.g. torch for rl?",
+          "votes": 7,
+          "replies": [
+            {
+              "id": 3474165,
+              "postDate": "2026-06-17T15:11:48.300Z",
+              "content": "<p>There is the source code in it, the python skripts in the same folder</p>",
+              "rawMarkdown": "There is the source code in it, the python skripts in the same folder",
+              "votes": -2
+            },
+            {
+              "id": 3474191,
+              "postDate": "2026-06-17T16:14:40.763Z",
+              "content": "<p>They are wrapper for the binary, not source code of the binary itself which is at the core.</p>",
+              "rawMarkdown": "They are wrapper for the binary, not source code of the binary itself which is at the core.",
+              "votes": 2
+            }
+          ]
+        },
+        {
+          "id": 3474063,
+          "postDate": "2026-06-17T11:58:16.713Z",
+          "content": "<p>I'm thinking of writing a c++ and python wrapper for parallel execution</p>",
+          "rawMarkdown": "I'm thinking of writing a c++ and python wrapper for parallel execution",
+          "replies": [
+            {
+              "id": 3474078,
+              "postDate": "2026-06-17T12:28:24.570Z",
+              "content": "<p>How will it hold against full jax implemention? 🤔</p>",
+              "rawMarkdown": "How will it hold against full jax implemention? 🤔\n"
+            },
+            {
+              "id": 3474089,
+              "postDate": "2026-06-17T12:50:57.987Z",
+              "content": "<p>I don't think it's going to be that slow, especially when it's already written in a fast language like c++/rust.</p>",
+              "rawMarkdown": "I don't think it's going to be that slow, especially when it's already written in a fast language like c++/rust."
+            },
+            {
+              "id": 3474111,
+              "postDate": "2026-06-17T13:38:12.937Z",
+              "content": "<p>It is still bound to CPU tho.\nCan't compare to full jax loop that run natively on gpu/tpu (is it possible? IDK. But if it is)</p>",
+              "rawMarkdown": "It is still bound to CPU tho.\nCan't compare to full jax loop that run natively on gpu/tpu (is it possible? IDK. But if it is)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3474505,
+      "postDate": "2026-06-18T05:00:41.490Z",
+      "rawMarkdown": "",
+      "isDeleted": true
+    }
+  ]
+}

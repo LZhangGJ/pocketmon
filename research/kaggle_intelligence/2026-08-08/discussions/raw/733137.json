@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 733137,
+    "title": "Timing of solution sharing after the deadline",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/733137",
+    "votes": 6,
+    "postDate": "2026-08-06T00:35:19.394641100Z",
+    "lastCommentPostDate": "2026-08-06T00:35:19.393333300Z"
+  },
+  "messages": [
+    {
+      "id": 3509103,
+      "postDate": "2026-08-06T00:35:19.393Z",
+      "content": "<p>This may be a bit early to ask, but I'd like to clarify when we are allowed to share our solutions after the competition ends.</p>\n<p>In typical competitions, solution write-ups start appearing right after the submission deadline. However, this competition is a bit unique — final rankings take time to be determined, and there is also the strategy track to consider.</p>\n<p>To be clear, I understand there are restrictions on what can be shared (e.g., code sharing rules and Pokémon Elements), and I intend to fully comply with them. My question is purely about the timing.</p>\n<p>Personally, I'd love to share and discuss approaches while everything is still fresh, but I can also see reasonable arguments for waiting until all results are finalized. Any guidance or comments would be appreciated. Thanks!</p>",
+      "rawMarkdown": "This may be a bit early to ask, but I'd like to clarify when we are allowed to share our solutions after the competition ends.\n\nIn typical competitions, solution write-ups start appearing right after the submission deadline. However, this competition is a bit unique — final rankings take time to be determined, and there is also the strategy track to consider.\n\nTo be clear, I understand there are restrictions on what can be shared (e.g., code sharing rules and Pokémon Elements), and I intend to fully comply with them. My question is purely about the timing.\n\nPersonally, I'd love to share and discuss approaches while everything is still fresh, but I can also see reasonable arguments for waiting until all results are finalized. Any guidance or comments would be appreciated. Thanks!",
+      "votes": 6
+    }
+  ]
+}

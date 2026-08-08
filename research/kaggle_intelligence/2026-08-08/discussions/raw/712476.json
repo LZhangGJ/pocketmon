@@ -1,0 +1,88 @@
+{
+  "topic": {
+    "id": 712476,
+    "title": "How can I keep my older agent active when submitting a new one?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712476",
+    "commentCount": 9,
+    "votes": 3,
+    "postDate": "2026-06-22T23:24:55.830409Z",
+    "lastCommentPostDate": "2026-06-23T15:45:20.750Z"
+  },
+  "messages": [
+    {
+      "id": 3478686,
+      "postDate": "2026-06-22T23:24:55.830Z",
+      "content": "<p>Hi,</p>\n<p>I would like to submit and test a new agent while keeping my older, better-performing agent active. I have already submitted two agents.</p>\n<p>My understanding is that when I submit another agent, the older of the two active agents will be deactivated automatically.</p>\n<p>In my case, the older agent is currently performing better on the leaderboard, so I am worried that submitting a new agent will deactivate my best-performing one.</p>\n<p>Is there a way to keep the older, better-performing agent active while submitting a new agent?</p>\n<p>For example, can I choose which active agent should be replaced?</p>\n<p>Thank you!</p>",
+      "rawMarkdown": "Hi,\n\nI would like to submit and test a new agent while keeping my older, better-performing agent active. I have already submitted two agents.\n\nMy understanding is that when I submit another agent, the older of the two active agents will be deactivated automatically.\n\nIn my case, the older agent is currently performing better on the leaderboard, so I am worried that submitting a new agent will deactivate my best-performing one.\n\nIs there a way to keep the older, better-performing agent active while submitting a new agent?\n\nFor example, can I choose which active agent should be replaced?\n\nThank you!",
+      "votes": 3
+    },
+    {
+      "id": 3478877,
+      "postDate": "2026-06-23T06:10:35.557Z",
+      "content": "<p>I don't think you need to worry. Before the final ranking, all scores are reset and everyone starts over from the same point. So resubmitting your old agent now won't affect your final result.</p>",
+      "rawMarkdown": "I don't think you need to worry. Before the final ranking, all scores are reset and everyone starts over from the same point. So resubmitting your old agent now won't affect your final result.",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3478909,
+          "postDate": "2026-06-23T06:50:10.210Z",
+          "content": "<p>Oh, I didn’t know that was how it worked!</p>\n<p>This is my first time participating in a Kaggle competition, so I’m still learning how the submission and final evaluation systems work. Thank you very much for the explanation!</p>",
+          "rawMarkdown": "Oh, I didn’t know that was how it worked!\n\nThis is my first time participating in a Kaggle competition, so I’m still learning how the submission and final evaluation systems work. Thank you very much for the explanation!",
+          "replies": [
+            {
+              "id": 3478923,
+              "postDate": "2026-06-23T07:08:16.693Z",
+              "content": "<p>in the past competitions I joined, scores were reset before the final ranking. But I'm not sure if this competition works the same way, so I'd recommend reading the rules to be safe.</p>\n<p><a href=\"https://www.kaggle.com/addisonhoward\" target=\"_blank\">@addisonhoward</a> \nAre skill ratings reset before the final ranking in this competition?</p>",
+              "rawMarkdown": "in the past competitions I joined, scores were reset before the final ranking. But I'm not sure if this competition works the same way, so I'd recommend reading the rules to be safe.\n\n@addisonhoward \nAre skill ratings reset before the final ranking in this competition?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3478708,
+      "postDate": "2026-06-23T00:15:54.350Z",
+      "content": "<p>We don't currently have that as an option - instead, you should resubmit an older agent if you want it to be one of your two current, active agents.</p>",
+      "rawMarkdown": "We don't currently have that as an option - instead, you should resubmit an older agent if you want it to be one of your two current, active agents.",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3478715,
+          "postDate": "2026-06-23T00:39:09.243Z",
+          "content": "<p>Thank you for the clarification.</p>\n<p>That makes sense, but in this simulation competition, the same agent may not always get the same leaderboard performance when resubmitted. In my case, my older agent is currently doing very well, and I am worried that resubmitting it might effectively reset that result and it may not perform as well again.</p>\n<p>It would be very helpful if there were a way to “pin” or keep one active agent, and only replace the other active slot when submitting a new agent.</p>\n<p>Would it be possible to consider adding such an option in the future?</p>\n<p>Thank you!</p>",
+          "rawMarkdown": "Thank you for the clarification.\n\nThat makes sense, but in this simulation competition, the same agent may not always get the same leaderboard performance when resubmitted. In my case, my older agent is currently doing very well, and I am worried that resubmitting it might effectively reset that result and it may not perform as well again.\n\nIt would be very helpful if there were a way to “pin” or keep one active agent, and only replace the other active slot when submitting a new agent.\n\nWould it be possible to consider adding such an option in the future?\n\nThank you!",
+          "votes": 1,
+          "replies": [
+            {
+              "id": 3478720,
+              "postDate": "2026-06-23T00:52:40.093Z",
+              "content": "<p>We've considered it, as well as a different scheduling/scoring function that can better equalize - but the ranking is also designed to continue running games until uncertainty approaches zero. Therefore an older agent resubmitted, all else equal, would return to the same spot. If it were still strong, it would climb. If it was actually weak, it would have fallen eventually as other models climbed.</p>",
+              "rawMarkdown": "We've considered it, as well as a different scheduling/scoring function that can better equalize - but the ranking is also designed to continue running games until uncertainty approaches zero. Therefore an older agent resubmitted, all else equal, would return to the same spot. If it were still strong, it would climb. If it was actually weak, it would have fallen eventually as other models climbed.",
+              "votes": 2
+            },
+            {
+              "id": 3478730,
+              "postDate": "2026-06-23T01:24:46.920Z",
+              "content": "<p>Thank you, that makes sense. Sorry if I misunderstood the scoring system.</p>\n<p>I understand that the ranking should converge over time. My concern is that the number of games per agent appears to be quite small at the moment, and new games seem to be added relatively slowly.</p>\n<p>Because of that, before convergence, the visible leaderboard can still be affected by short-term variance such as matchup order, the current opponent pool, and in-game RNG.</p>\n<p>So I understand the current system now, but from a participant’s perspective, resubmitting an older high-performing agent still feels a bit risky.</p>\n<p>Thank you again for the clarification.</p>",
+              "rawMarkdown": "Thank you, that makes sense. Sorry if I misunderstood the scoring system.\n\nI understand that the ranking should converge over time. My concern is that the number of games per agent appears to be quite small at the moment, and new games seem to be added relatively slowly.\n\nBecause of that, before convergence, the visible leaderboard can still be affected by short-term variance such as matchup order, the current opponent pool, and in-game RNG.\n\nSo I understand the current system now, but from a participant’s perspective, resubmitting an older high-performing agent still feels a bit risky.\n\nThank you again for the clarification."
+            },
+            {
+              "id": 3478882,
+              "postDate": "2026-06-23T06:14:06.383Z",
+              "content": "<p>This competition is different from a normal simulation competition because deck matchups and in-game luck matter a lot, so even the same agent can get very different results. Even a strong agent can easily lose to a clearly weaker opponent. For example, I submitted the same agent twice, and the two scores now differ by almost 200 points.</p>\n<p>Could you please consider running more games per agent, or giving more time for the scores to settle? Right now, a few unlucky losses after submitting can have a big impact, and my own two-submission gap shows how large this variance is.</p>",
+              "rawMarkdown": "This competition is different from a normal simulation competition because deck matchups and in-game luck matter a lot, so even the same agent can get very different results. Even a strong agent can easily lose to a clearly weaker opponent. For example, I submitted the same agent twice, and the two scores now differ by almost 200 points.\n\nCould you please consider running more games per agent, or giving more time for the scores to settle? Right now, a few unlucky losses after submitting can have a big impact, and my own two-submission gap shows how large this variance is.",
+              "votes": 4
+            },
+            {
+              "id": 3479276,
+              "postDate": "2026-06-23T15:45:20.750Z",
+              "content": "<p>Hey there,</p>\n<p>Yes, a re-submitted identical agent may take time to climb back and may settle at a slightly different score due to matchmaking randomness but given enough games, it will converge to approximately the same rating. The leaderboard reflects skill, not submission order. However, that's all else equal - it's also likely that newly made submissions are stronger and adapting to the strengths on the leaderboard, so you'll face better submissions early on (as opposed to seeing your high-ranking submission slowly erode over time).</p>\n<p>At the end of the competition we don't reset scores, but instead extend the amount of time that games are played until we are more confident. </p>\n<p>Games run continuously every few minutes, the system picks which submissions need games most (new bots and uncertain ratings first) and matches them against similarly-rated opponents. </p>",
+              "rawMarkdown": "Hey there,\n\nYes, a re-submitted identical agent may take time to climb back and may settle at a slightly different score due to matchmaking randomness but given enough games, it will converge to approximately the same rating. The leaderboard reflects skill, not submission order. However, that's all else equal - it's also likely that newly made submissions are stronger and adapting to the strengths on the leaderboard, so you'll face better submissions early on (as opposed to seeing your high-ranking submission slowly erode over time).\n\nAt the end of the competition we don't reset scores, but instead extend the amount of time that games are played until we are more confident. \n\nGames run continuously every few minutes, the system picks which submissions need games most (new bots and uncertain ratings first) and matches them against similarly-rated opponents. ",
+              "votes": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

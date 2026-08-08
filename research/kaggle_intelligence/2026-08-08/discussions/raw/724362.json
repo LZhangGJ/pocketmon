@@ -1,0 +1,101 @@
+{
+  "topic": {
+    "id": 724362,
+    "title": "Top players’ methods, revealed by 30,000 games",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724362",
+    "commentCount": 12,
+    "votes": 74,
+    "postDate": "2026-07-10T20:17:25.005571Z",
+    "lastCommentPostDate": "2026-07-17T20:01:48.790Z"
+  },
+  "messages": [
+    {
+      "id": 3494853,
+      "postDate": "2026-07-10T20:17:25.007Z",
+      "content": "<p>There's been a lot of questions around the methods people are using … so I investigated using some stats. Turns out you can learn a lot based on how long a bot takes to pick an action. I ran the numbers on 30,000 games of the top teams.</p>\n<h1>How??</h1>\n<p>The game gives every agent a big time budget (600 seconds per game) and tracks how long it thinks on each move.</p>\n<ul>\n<li>A hand written bot answers almost instantly.</li>\n<li>A neural net takes a moment to load at the very start, then plays fast and steady.</li>\n<li>A search bot thinks longer when the board gets complicated, and less when it is simple.</li>\n</ul>\n<p>So by looking at how long an agent takes to start up, and whether it thinks harder in messy positions, you can guess how it works under the hood.</p>\n<h1>What people are using</h1>\n<p>Most of the field is rule based. About half are hand written bots or copies of the public example bots.\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2825452%2Fb0d9656a2caf1e530535d0d1c675a2ef%2Fdisc_techniques.png?generation=1783715278375630&amp;alt=media\" alt=\"\"></p>\n<h1>What the top looks like</h1>\n<p>The top player is doing something different. They load a heavy model but also fully utilise the time in the game. Most likely RL + bounded search. The rest of the top don't seem to be using search at all.</p>\n<p>Left to right is how long they think per move. Bottom to top is how long they take to start up, which basically shows who is loading a trained model.\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2825452%2F164082348cab831856c00f7bddda2cc3%2Fdisc_signature.png?generation=1783715224957442&amp;alt=media\" alt=\"\"></p>\n<h1>Most act fast</h1>\n<p>One more view. Most teams answer in about three hundredths of a second per move. A small group thinks for whole seconds. There is not much in between.\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2825452%2F8e9560a36c5eb29a7c89e3dc9452e113%2Fdisc_time.png?generation=1783715234660078&amp;alt=media\" alt=\"\"></p>\n<h1>Caveat</h1>\n<p>This is all guessed from behaviour so not all of these are going to be correct. But did I get yours correct?</p>",
+      "rawMarkdown": "There's been a lot of questions around the methods people are using ... so I investigated using some stats. Turns out you can learn a lot based on how long a bot takes to pick an action. I ran the numbers on 30,000 games of the top teams.\n\n# How??\nThe game gives every agent a big time budget (600 seconds per game) and tracks how long it thinks on each move.\n- A hand written bot answers almost instantly.\n- A neural net takes a moment to load at the very start, then plays fast and steady.\n- A search bot thinks longer when the board gets complicated, and less when it is simple.\n\nSo by looking at how long an agent takes to start up, and whether it thinks harder in messy positions, you can guess how it works under the hood.\n\n# What people are using\nMost of the field is rule based. About half are hand written bots or copies of the public example bots.\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2825452%2Fb0d9656a2caf1e530535d0d1c675a2ef%2Fdisc_techniques.png?generation=1783715278375630&alt=media)\n\n# What the top looks like\nThe top player is doing something different. They load a heavy model but also fully utilise the time in the game. Most likely RL + bounded search. The rest of the top don't seem to be using search at all.\n\nLeft to right is how long they think per move. Bottom to top is how long they take to start up, which basically shows who is loading a trained model.\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2825452%2F164082348cab831856c00f7bddda2cc3%2Fdisc_signature.png?generation=1783715224957442&alt=media)\n\n# Most act fast\nOne more view. Most teams answer in about three hundredths of a second per move. A small group thinks for whole seconds. There is not much in between.\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2825452%2F8e9560a36c5eb29a7c89e3dc9452e113%2Fdisc_time.png?generation=1783715234660078&alt=media)\n\n\n# Caveat\nThis is all guessed from behaviour so not all of these are going to be correct. But did I get yours correct?\n",
+      "votes": 74
+    },
+    {
+      "id": 3496769,
+      "postDate": "2026-07-14T16:12:27.073Z",
+      "content": "<p>I believe that quite a lot of model you categorized as rule-based/search are actually RL/RL+search.</p>",
+      "rawMarkdown": "I believe that quite a lot of model you categorized as rule-based/search are actually RL/RL+search.",
+      "votes": 1
+    },
+    {
+      "id": 3494883,
+      "postDate": "2026-07-10T21:55:47.860Z",
+      "content": "<p>Great analysis! \nYou got mine right. I use RL agent, I can confirm it takes big load time up to 8 seconds for 1.7M model</p>",
+      "rawMarkdown": "Great analysis! \nYou got mine right. I use RL agent, I can confirm it takes big load time up to 8 seconds for 1.7M model",
+      "votes": 2
+    },
+    {
+      "id": 3499722,
+      "postDate": "2026-07-17T19:48:33.943Z",
+      "content": "<p>this lb is just pokemon with extra suffering</p>",
+      "rawMarkdown": "this lb is just pokemon with extra suffering"
+    },
+    {
+      "id": 3494996,
+      "postDate": "2026-07-11T08:30:18.767Z",
+      "content": "<p>Yeah, but I am not 100% sure if what I call \"Dynamic Thinking\" is working well. I see other bots crush mine with 0 thinking time. I have been using 700k param model and a heuristic search when the decision for the model is not clear.</p>",
+      "rawMarkdown": "Yeah, but I am not 100% sure if what I call \"Dynamic Thinking\" is working well. I see other bots crush mine with 0 thinking time. I have been using 700k param model and a heuristic search when the decision for the model is not clear.",
+      "replies": [
+        {
+          "id": 3495007,
+          "postDate": "2026-07-11T08:54:15.500Z",
+          "content": "<p>I believe search only works well when your able to determine the value of the states accurately. In my case search doesn't help precisely because my value head can't tell whether action A or B is better, and the raw policy's decision is often one of the best.</p>\n<p>I do think search is difficult here since it's an imperfect information game with high uncertainty.</p>",
+          "rawMarkdown": "I believe search only works well when your able to determine the value of the states accurately. In my case search doesn't help precisely because my value head can't tell whether action A or B is better, and the raw policy's decision is often one of the best.\n\nI do think search is difficult here since it's an imperfect information game with high uncertainty.",
+          "votes": 2
+        }
+      ]
+    },
+    {
+      "id": 3494929,
+      "postDate": "2026-07-11T03:30:51.100Z",
+      "content": "<p>The time needed to load may be affected by the model's size as well. Previously, I used 5m parameter model which peaked at 1032. It took 40 seconds startup time.</p>",
+      "rawMarkdown": "The time needed to load may be affected by the model's size as well. Previously, I used 5m parameter model which peaked at 1032. It took 40 seconds startup time.",
+      "replies": [
+        {
+          "id": 3495008,
+          "postDate": "2026-07-11T08:54:36.660Z",
+          "content": "<p>That's a good point, I will check if I can infer model sizes from the load time.</p>",
+          "rawMarkdown": "That's a good point, I will check if I can infer model sizes from the load time."
+        }
+      ]
+    },
+    {
+      "id": 3499736,
+      "postDate": "2026-07-17T20:01:48.790Z",
+      "rawMarkdown": "",
+      "isDeleted": true
+    },
+    {
+      "id": 3499716,
+      "postDate": "2026-07-17T19:42:56.157Z",
+      "rawMarkdown": "",
+      "isDeleted": true
+    },
+    {
+      "id": 3499648,
+      "postDate": "2026-07-17T18:07:40.277Z",
+      "rawMarkdown": "",
+      "isDeleted": true
+    },
+    {
+      "id": 3496472,
+      "postDate": "2026-07-14T00:27:52.213Z",
+      "content": "<p>thanks for the insight!</p>",
+      "rawMarkdown": "thanks for the insight!",
+      "votes": 1
+    },
+    {
+      "id": 3495002,
+      "postDate": "2026-07-11T08:50:29.590Z",
+      "content": "<p>Thank you for the data <a href=\"https://www.kaggle.com/abhyuday10\" target=\"_blank\">@abhyuday10</a> </p>",
+      "rawMarkdown": "Thank you for the data @abhyuday10 ",
+      "votes": -2
+    }
+  ]
+}

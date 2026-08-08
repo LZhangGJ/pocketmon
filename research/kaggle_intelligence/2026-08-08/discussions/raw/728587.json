@@ -1,0 +1,40 @@
+{
+  "topic": {
+    "id": 728587,
+    "title": "Minor Engine update",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728587",
+    "commentCount": 3,
+    "votes": 9,
+    "postDate": "2026-07-23T21:04:23.759002800Z",
+    "lastCommentPostDate": "2026-07-28T13:25:48.133333300Z"
+  },
+  "messages": [
+    {
+      "id": 3502244,
+      "postDate": "2026-07-23T21:04:23.760Z",
+      "content": "<p>Hi all,</p>\n<p>An update has been released to the engine that corrects the bug identified in <a href=\"https://www.kaggle.com/code/shlomoron/ptcg-engine-crash-repro-nb/notebook\" target=\"_blank\">this notebook</a>. Thanks! </p>",
+      "rawMarkdown": "Hi all,\n\nAn update has been released to the engine that corrects the bug identified in [this notebook](https://www.kaggle.com/code/shlomoron/ptcg-engine-crash-repro-nb/notebook). Thanks! ",
+      "votes": 9
+    },
+    {
+      "id": 3504634,
+      "postDate": "2026-07-28T13:25:48.133Z",
+      "content": "<p>We've just now updated the engine as well available for download from the <code>Data</code> tab!</p>",
+      "rawMarkdown": "We've just now updated the engine as well available for download from the `Data` tab!"
+    },
+    {
+      "id": 3502382,
+      "postDate": "2026-07-24T06:57:37.707Z",
+      "content": "<p>Hi, thanks for the update! Has the updated engine also been uploaded to the competition Data page, replacing the previous <code>ptcg_engine.zip</code> file?</p>",
+      "rawMarkdown": "Hi, thanks for the update! Has the updated engine also been uploaded to the competition Data page, replacing the previous `ptcg_engine.zip` file?",
+      "replies": [
+        {
+          "id": 3503828,
+          "postDate": "2026-07-26T14:15:00.633Z",
+          "rawMarkdown": "",
+          "isDeleted": true
+        }
+      ]
+    }
+  ]
+}

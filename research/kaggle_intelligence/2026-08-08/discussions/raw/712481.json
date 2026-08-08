@@ -1,0 +1,50 @@
+{
+  "topic": {
+    "id": 712481,
+    "title": "Live meta dashboard + open API for the ladder",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712481",
+    "commentCount": 4,
+    "votes": 4,
+    "postDate": "2026-06-22T23:51:07.016100900Z",
+    "lastCommentPostDate": "2026-06-23T22:17:08.096666700Z"
+  },
+  "messages": [
+    {
+      "id": 3478692,
+      "postDate": "2026-06-22T23:51:07.017Z",
+      "content": "<p><strong>What it is:</strong>\n<em>a live dashboard + open JSON API for the ladder meta</em> </p>\n<ul>\n<li>🔗 <a href=\"https://ptcg-ladder-meta.vercel.app\" target=\"_blank\">https://ptcg-ladder-meta.vercel.app</a> , API: /api (open, CORS, Swagger at /api-docs)</li>\n</ul>\n<p><strong>Video</strong></p>\n\n<a href=\"https://youtu.be/sLpVoRvqT7U\" target=\"_blank\">Link</a>\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F20697227%2Fc7dd0046e58b84e7e169ab13a69f449f%2Fptcgtn.png?generation=1782172064892143&amp;alt=media\" alt=\"image of the site\"><p></p>\n<p><strong>The honest caveat first:</strong>\nthis is the OBSERVED public surface — the host's daily TOP-episode sample. NOT the full ladder, NOT the hidden eval distribution. Sample sizes + Wilson CIs shown, thin data faded not hidden.</p>\n<p><strong>In it (6 days so far):</strong></p>\n<ul>\n<li><em>Meta over time</em> — prevalence, diversity, per-tier composition, churn</li>\n<li><em>Win-rate matrices</em> — archetype-vs-archetype + team-vs-team, with n + CIs</li>\n<li><em>Per-team pages</em> — WR trajectory, deck-version history, matchups, VISUAL decks (card images), tier staying-power</li>\n<li><em>Deck vs. agent</em> — your archetype's WR vs the field average for the SAME archetype, so you can tell empirically whether it's your deck or your agent</li>\n<li><em>Open API + Swagger docs</em> — build on it</li>\n</ul>\n<p>Corrections are welcome, if a number looks off vs your own decode, tell me, and I'll fix it.</p>\n<p><strong>Credit where it's due, this stands on a lot of community work:</strong></p>\n<ul>\n<li>The host's Daily Top Episodes Datasets ( <a href=\"https://www.kaggle.com/bovard\" target=\"_blank\">@bovard</a> , <a href=\"https://www.kaggle.com/shimishige\" target=\"_blank\">@shimishige</a> , <a href=\"https://www.kaggle.com/addisonhoward\" target=\"_blank\">@addisonhoward</a> )</li>\n<li>The existing meta site <a href=\"ptcg-kaggle-meta.vercel.app\" target=\"_blank\">ptcg-kaggle-meta.vercel.app</a> from <a href=\"https://www.kaggle.com/jonanakaiml\" target=\"_blank\">@jonanakaiml</a> </li>\n<li>The PTCG_ABCS_Visualizer ( <a href=\"https://www.kaggle.com/hiro094\" target=\"_blank\">@hiro094</a> )</li>\n<li>the deck-image-renderer notebook ( <a href=\"https://www.kaggle.com/ichigoe\" target=\"_blank\">@ichigoe</a> )</li>\n<li><a href=\"https://www.kaggle.com/yu0307\" target=\"_blank\">@yu0307</a> tournament-decks dataset · the daily public meta-note posters</li>\n<li><a href=\"https://www.kaggle.com/isakatsuyoshi\" target=\"_blank\">@isakatsuyoshi</a> matchup baselines.</li>\n</ul>",
+      "rawMarkdown": "**What it is:**\n*a live dashboard + open JSON API for the ladder meta* \n- 🔗 [https://ptcg-ladder-meta.vercel.app](https://ptcg-ladder-meta.vercel.app) , API: /api (open, CORS, Swagger at /api-docs)\n\n**Video**\n\n![Quick walkthrough](https://youtu.be/sLpVoRvqT7U)\n[Link](https://youtu.be/sLpVoRvqT7U)\n![image of the site](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F20697227%2Fc7dd0046e58b84e7e169ab13a69f449f%2Fptcgtn.png?generation=1782172064892143&alt=media)\n\n**The honest caveat first:**\nthis is the OBSERVED public surface — the host's daily TOP-episode sample. NOT the full ladder, NOT the hidden eval distribution. Sample sizes + Wilson CIs shown, thin data faded not hidden.\n\n**In it (6 days so far):**\n- *Meta over time* — prevalence, diversity, per-tier composition, churn\n- *Win-rate matrices* — archetype-vs-archetype + team-vs-team, with n + CIs\n- *Per-team pages* — WR trajectory, deck-version history, matchups, VISUAL decks (card images), tier staying-power\n- *Deck vs. agent* — your archetype's WR vs the field average for the SAME archetype, so you can tell empirically whether it's your deck or your agent\n- *Open API + Swagger docs* — build on it\n\nCorrections are welcome, if a number looks off vs your own decode, tell me, and I'll fix it.\n\n**Credit where it's due, this stands on a lot of community work:**\n  \n- The host's Daily Top Episodes Datasets ( @bovard , @shimishige , @addisonhoward )\n- The existing meta site [ptcg-kaggle-meta.vercel.app](ptcg-kaggle-meta.vercel.app) from @jonanakaiml \n- The PTCG_ABCS_Visualizer ( @hiro094 )\n- the deck-image-renderer notebook ( @ichigoe )\n- @yu0307 tournament-decks dataset · the daily public meta-note posters\n- @isakatsuyoshi matchup baselines.\n",
+      "votes": 4
+    },
+    {
+      "id": 3478722,
+      "postDate": "2026-06-23T01:03:46.307Z",
+      "content": "<p>Hi Paul, thanks for the shout! Really interesting to see another website that is trying to solve the same problem, especially the differences in our products. Best of luck to you!</p>",
+      "rawMarkdown": "Hi Paul, thanks for the shout! Really interesting to see another website that is trying to solve the same problem, especially the differences in our products. Best of luck to you!",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3478723,
+          "postDate": "2026-06-23T01:05:30.127Z",
+          "content": "<p>One question, I'm curious how you put together your leaderboard page. I couldn't find any data in the publicly posted dataset on elo's of teams. How did you retrieve this information? Did you calculate it yourself? Did you webscrape it from the leaderboard?</p>",
+          "rawMarkdown": "One question, I'm curious how you put together your leaderboard page. I couldn't find any data in the publicly posted dataset on elo's of teams. How did you retrieve this information? Did you calculate it yourself? Did you webscrape it from the leaderboard?",
+          "votes": 1,
+          "replies": [
+            {
+              "id": 3478770,
+              "postDate": "2026-06-23T03:00:38.580Z",
+              "content": "<p>Webscraped vis CDP a la browser harness.</p>\n<p>Then just Claude making metrics after that</p>",
+              "rawMarkdown": "Webscraped vis CDP a la browser harness.\n\nThen just Claude making metrics after that"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3479557,
+      "postDate": "2026-06-23T22:17:08.097Z",
+      "content": "<p>Board has been updated!</p>",
+      "rawMarkdown": "Board has been updated!"
+    }
+  ]
+}

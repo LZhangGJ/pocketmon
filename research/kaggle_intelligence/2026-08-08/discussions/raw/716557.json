@@ -1,0 +1,24 @@
+{
+  "topic": {
+    "id": 716557,
+    "title": "Clarification on Episode JSON Action/Observation Alignment for Behavioral Cloning",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/716557",
+    "commentCount": 1,
+    "postDate": "2026-06-30T17:55:33.980466600Z",
+    "lastCommentPostDate": "2026-07-30T10:02:13.623333300Z"
+  },
+  "messages": [
+    {
+      "id": 3505555,
+      "postDate": "2026-07-30T10:02:13.623Z",
+      "content": "<p>I'm facing the same issue. I find it strange that only 80% of the actions are valid — there are many invalid ones. For example, the observation only has 3 options, but the recorded action is 4. That shouldn't be possible.</p>",
+      "rawMarkdown": "I'm facing the same issue. I find it strange that only 80% of the actions are valid — there are many invalid ones. For example, the observation only has 3 options, but the recorded action is 4. That shouldn't be possible."
+    },
+    {
+      "id": 3484745,
+      "postDate": "2026-06-30T17:55:33.980Z",
+      "content": "<p>I’m trying to use the public episode JSON dataset for behavioral cloning / imitation learning, and I wanted to sanity-check the correct way to align observations and actions.\nFrom my parsing, each decision row has an <code>obs.select</code> with legal options and a logged action list. I’m currently filtering to rows where:</p>\n<ul>\n<li><code>obs.select</code> is not <code>None</code></li>\n<li><code>maxCount &gt; 0</code></li>\n<li>number of legal options &gt; 1</li>\n<li>selected indices are inside the option range</li>\n<li><code>minCount &lt;= len(action) &lt;= maxCount</code></li>\n<li>no final reward/rank/player identity is used as model input\nA few questions:</li>\n</ul>\n<ol>\n<li>Should the logged action be paired with the same step’s <code>obs.select</code>, or the previous step’s <code>obs.select</code>?</li>\n<li>Are rows with <code>action=[]</code> but <code>minCount=1</code> expected artifacts from the logging format, or am I misaligning actions/observations?</li>\n<li>Are both agents in these public episode logs generally suitable for BC, or do people filter to winner-only / specific agents / specific ranks?</li>\n<li>For behavior cloning, are people mainly training on single-choice <code>maxCount=1</code> decisions first, or including multi-select decisions from the start?</li>\n<li>Is there any official or commonly accepted interpretation of deck-return/start rows vs real decision rows in these logs?\n, just trying to avoid training on incorrectly aligned or illegal action labels. Any clarification on the dataset format would be appreciated.</li>\n</ol>",
+      "rawMarkdown": "\nI’m trying to use the public episode JSON dataset for behavioral cloning / imitation learning, and I wanted to sanity-check the correct way to align observations and actions.\n\nFrom my parsing, each decision row has an `obs.select` with legal options and a logged action list. I’m currently filtering to rows where:\n\n* `obs.select` is not `None`\n* `maxCount > 0`\n* number of legal options > 1\n* selected indices are inside the option range\n* `minCount <= len(action) <= maxCount`\n* no final reward/rank/player identity is used as model input\n\nA few questions:\n\n1. Should the logged action be paired with the same step’s `obs.select`, or the previous step’s `obs.select`?\n2. Are rows with `action=[]` but `minCount=1` expected artifacts from the logging format, or am I misaligning actions/observations?\n3. Are both agents in these public episode logs generally suitable for BC, or do people filter to winner-only / specific agents / specific ranks?\n4. For behavior cloning, are people mainly training on single-choice `maxCount=1` decisions first, or including multi-select decisions from the start?\n5. Is there any official or commonly accepted interpretation of deck-return/start rows vs real decision rows in these logs?\n\n, just trying to avoid training on incorrectly aligned or illegal action labels. Any clarification on the dataset format would be appreciated.\n"
+    }
+  ]
+}

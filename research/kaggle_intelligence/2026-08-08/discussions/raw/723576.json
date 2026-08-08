@@ -1,0 +1,136 @@
+{
+  "topic": {
+    "id": 723576,
+    "title": "Can one get good results without having played pokemen before?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/723576",
+    "commentCount": 16,
+    "votes": 13,
+    "postDate": "2026-07-07T10:43:04.194493400Z",
+    "lastCommentPostDate": "2026-07-21T09:03:54.290Z"
+  },
+  "messages": [
+    {
+      "id": 3493198,
+      "postDate": "2026-07-07T10:43:04.193Z",
+      "content": "<p>Asking for a friend…</p>\n<p>Dundertanding the domain of a competition is very often key. Is it true here?</p>",
+      "rawMarkdown": "Asking for a friend...\n\nDundertanding the domain of a competition is very often key. Is it true here?\n\n",
+      "votes": 13
+    },
+    {
+      "id": 3493252,
+      "postDate": "2026-07-07T13:06:25.543Z",
+      "content": "<p>I made it to rank 50 just watching <a href=\"https://www.youtube.com/watch?v=eKC5PlYoboE&amp;t=1s\" target=\"_blank\">https://www.youtube.com/watch?v=eKC5PlYoboE&amp;t=1s</a> and with basic RL principles I learnt from Orbit Wars. So totally possible. Going with a rule based approach probably needs quite a bit of domain knowledge though. </p>\n<p>I am however struggling a bit to identify weaknesses at this point, so having domain knowledge or teaming up with someone who does seems important.</p>",
+      "rawMarkdown": "I made it to rank 50 just watching https://www.youtube.com/watch?v=eKC5PlYoboE&t=1s and with basic RL principles I learnt from Orbit Wars. So totally possible. Going with a rule based approach probably needs quite a bit of domain knowledge though. \n\nI am however struggling a bit to identify weaknesses at this point, so having domain knowledge or teaming up with someone who does seems important.",
+      "votes": 8
+    },
+    {
+      "id": 3493223,
+      "postDate": "2026-07-07T11:51:07.627Z",
+      "content": "<p>I'm in a worse position than your friend since I'm not really familiar with neither Pokemon nor RL literature 😅</p>\n<p>As other mentioned, the rules are quite simple and the meta seems to be only a handful of decks so it's quite quick to get familiar with their mechanics. So, my gut feeling tells me that, although very useful, it's not necessary to get a good score as we can get a somewhat decent domain knowledge in a few days.</p>",
+      "rawMarkdown": "I'm in a worse position than your friend since I'm not really familiar with neither Pokemon nor RL literature 😅\n\nAs other mentioned, the rules are quite simple and the meta seems to be only a handful of decks so it's quite quick to get familiar with their mechanics. So, my gut feeling tells me that, although very useful, it's not necessary to get a good score as we can get a somewhat decent domain knowledge in a few days.",
+      "votes": 6,
+      "replies": [
+        {
+          "id": 3493245,
+          "postDate": "2026-07-07T12:45:32.707Z",
+          "content": "<p>coding agents can mitigate the lack of RL knowledge. Not sure they can mitigate the lack of Pokemon experience. We'll see.</p>",
+          "rawMarkdown": "coding agents can mitigate the lack of RL knowledge. Not sure they can mitigate the lack of Pokemon experience. We'll see.",
+          "votes": 4
+        },
+        {
+          "id": 3493901,
+          "postDate": "2026-07-08T17:28:59.410Z",
+          "content": "<p>are you good at building harnnesses and good at math because i am feel that is the core of this competion</p>",
+          "rawMarkdown": "are you good at building harnnesses and good at math because i am feel that is the core of this competion\n",
+          "replies": [
+            {
+              "id": 3494543,
+              "postDate": "2026-07-10T08:05:10.020Z",
+              "content": "<p>I'm good at math.</p>",
+              "rawMarkdown": "I'm good at math."
+            }
+          ]
+        },
+        {
+          "id": 3494812,
+          "postDate": "2026-07-10T18:14:24.863Z",
+          "rawMarkdown": "",
+          "isDeleted": true
+        }
+      ]
+    },
+    {
+      "id": 3494459,
+      "postDate": "2026-07-10T02:30:34.010Z",
+      "content": "<p>I also do not have any knowledgement about Pokemon, but I think it is possible as RL will educate itself by understanding itself</p>",
+      "rawMarkdown": "I also do not have any knowledgement about Pokemon, but I think it is possible as RL will educate itself by understanding itself",
+      "votes": 2,
+      "replies": [
+        {
+          "id": 3500724,
+          "postDate": "2026-07-20T11:08:34.430Z",
+          "content": "<p>Your rank speaks for itself, thanks.</p>",
+          "rawMarkdown": "Your rank speaks for itself, thanks.",
+          "votes": 2
+        }
+      ]
+    },
+    {
+      "id": 3493656,
+      "postDate": "2026-07-08T07:59:49.833Z",
+      "content": "<p>I got up to 12th at one point and I have never played anything besides the mobile TCG. I do collect tho :)</p>",
+      "rawMarkdown": "I got up to 12th at one point and I have never played anything besides the mobile TCG. I do collect tho :)",
+      "votes": 1
+    },
+    {
+      "id": 3493238,
+      "postDate": "2026-07-07T12:29:16.053Z",
+      "content": "<p>Play a few games yourself and you'll understand what's going on well enough to work on this</p>",
+      "rawMarkdown": "Play a few games yourself and you'll understand what's going on well enough to work on this",
+      "votes": 1
+    },
+    {
+      "id": 3493213,
+      "postDate": "2026-07-07T11:27:00.937Z",
+      "content": "<p>I sure hope so.</p>",
+      "rawMarkdown": "I sure hope so.",
+      "votes": 1
+    },
+    {
+      "id": 3493202,
+      "postDate": "2026-07-07T10:51:25.190Z",
+      "content": "<p>Absolutely! Compared to other trading card games like MTG or Yu-Gi-Oh!, the rules of the Pokémon TCG are much simpler. It's designed so that even a 10-year-old can play it. Of course, just because the rules are simple doesn't necessarily mean it'll be an easy AI task to solve, though!</p>",
+      "rawMarkdown": "Absolutely! Compared to other trading card games like MTG or Yu-Gi-Oh!, the rules of the Pokémon TCG are much simpler. It's designed so that even a 10-year-old can play it. Of course, just because the rules are simple doesn't necessarily mean it'll be an easy AI task to solve, though!",
+      "votes": 2,
+      "replies": [
+        {
+          "id": 3493244,
+          "postDate": "2026-07-07T12:44:35.270Z",
+          "content": "<p>Don't underestimate 10 years old. They beat Adults at many things.</p>",
+          "rawMarkdown": "Don't underestimate 10 years old. They beat Adults at many things.",
+          "votes": 3,
+          "replies": [
+            {
+              "id": 3493812,
+              "postDate": "2026-07-08T14:45:03.893Z",
+              "rawMarkdown": "",
+              "isDeleted": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3501070,
+      "postDate": "2026-07-21T09:03:54.290Z",
+      "content": "<p>I had never played Pokémon TCG before at all — I’ve only played Hearthstone and Magic: The Gathering. When the competition started, I spent a whole day learning the basic rules, then went offline to a Pokémon gym to find experienced players and picked up some advanced rules from them. I also got a rough idea of how the mainstream decks match up against each other and what the current meta looks like. The rest I just left to reinforcement learning, just orbit wars taught me, haha.</p>",
+      "rawMarkdown": "I had never played Pokémon TCG before at all — I’ve only played Hearthstone and Magic: The Gathering. When the competition started, I spent a whole day learning the basic rules, then went offline to a Pokémon gym to find experienced players and picked up some advanced rules from them. I also got a rough idea of how the mainstream decks match up against each other and what the current meta looks like. The rest I just left to reinforcement learning, just orbit wars taught me, haha."
+    },
+    {
+      "id": 3501051,
+      "postDate": "2026-07-21T07:56:11.587Z",
+      "content": "<p>I know nothing about Pokémon. I haven't even watched it, and it's very difficult. I had a horrible rank but still managed a bronze medal in Orbit Wars, and I thought I'd get another one here. However, it seems my RL approaches aren't intelligent enough. I've also run out of Kaggle GPU quota.</p>",
+      "rawMarkdown": "I know nothing about Pokémon. I haven't even watched it, and it's very difficult. I had a horrible rank but still managed a bronze medal in Orbit Wars, and I thought I'd get another one here. However, it seems my RL approaches aren't intelligent enough. I've also run out of Kaggle GPU quota."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "topic": {
+    "id": 722907,
+    "title": "how to solve disabled due to the competition's active submission limit",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/722907",
+    "commentCount": 1,
+    "votes": 1,
+    "postDate": "2026-07-07T02:05:54.167645Z",
+    "lastCommentPostDate": "2026-07-07T02:16:25.976666700Z"
+  },
+  "messages": [
+    {
+      "id": 3492424,
+      "postDate": "2026-07-07T02:16:25.977Z",
+      "content": "<p>You may only have two active submissions at a time - those two submissions will play episodes against others in the competition. If you submit a new one, the older ones are disabled, and your two most recent ones are active.</p>\n<p>In order to have your highest-scoring notebook active, it must be re-submitted.</p>",
+      "rawMarkdown": "You may only have two active submissions at a time - those two submissions will play episodes against others in the competition. If you submit a new one, the older ones are disabled, and your two most recent ones are active.\n\nIn order to have your highest-scoring notebook active, it must be re-submitted.",
+      "votes": 3
+    },
+    {
+      "id": 3492407,
+      "postDate": "2026-07-07T02:05:54.167Z",
+      "content": "<p>I submit 5 notebook ， My highest-scoring notebook shows \"disabled due to the competition's active submission limit.\"</p>",
+      "rawMarkdown": "I submit 5 notebook ， My highest-scoring notebook shows \"disabled due to the competition's active submission limit.\"",
+      "votes": 1
+    }
+  ]
+}

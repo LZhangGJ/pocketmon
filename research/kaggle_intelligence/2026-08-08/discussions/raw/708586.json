@@ -1,0 +1,215 @@
+{
+  "topic": {
+    "id": 708586,
+    "title": "Differences Between the Official Pokémon TCG Rules and the Simulator Behavior ",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/708586",
+    "commentCount": 27,
+    "votes": 36,
+    "postDate": "2026-06-16T10:17:04.884132300Z",
+    "lastCommentPostDate": "2026-07-31T11:34:31.063333300Z",
+    "isSticky": true
+  },
+  "messages": [
+    {
+      "id": 3501742,
+      "postDate": "2026-07-22T18:02:36.630Z",
+      "content": "<p>Slightly difference between simular and game rules</p>\n<p>The simulator contains the game rules and manages the entire game. It provides the AI agent with the current game state (observation). Based on this state, the AI agent selects the best legal action and returns its action index to the simulator. The simulator then executes the action according to the game rules, updates the game state, and sends the new state back to the AI agent. This process repeats until the game ends.</p>",
+      "rawMarkdown": "Slightly difference between simular and game rules\n\nThe simulator contains the game rules and manages the entire game. It provides the AI agent with the current game state (observation). Based on this state, the AI agent selects the best legal action and returns its action index to the simulator. The simulator then executes the action according to the game rules, updates the game state, and sends the new state back to the AI agent. This process repeats until the game ends.",
+      "votes": -2,
+      "replies": [
+        {
+          "id": 3502065,
+          "postDate": "2026-07-23T12:44:27.623Z",
+          "content": "<p>Merci pour votre clarté. J'ai une question. Pendant le partie de jeu, le simulateur peut il proposer des actions illégales ? Par exemple proposer à l'agent de faire évoluer un pokémon tandis que le pokémon en question ne peut pas être évolué.</p>",
+          "rawMarkdown": "Merci pour votre clarté. J'ai une question. Pendant le partie de jeu, le simulateur peut il proposer des actions illégales ? Par exemple proposer à l'agent de faire évoluer un pokémon tandis que le pokémon en question ne peut pas être évolué.",
+          "replies": [
+            {
+              "id": 3504188,
+              "postDate": "2026-07-27T13:27:38.723Z",
+              "content": "<p>The simulator does not suggest strategies or recommend moves. It maintains the game state and exposes the current observation, including the list of legal actions. The agent selects one of those legal actions, and the simulator updates the game state accordingly.</p>",
+              "rawMarkdown": "The simulator does not suggest strategies or recommend moves. It maintains the game state and exposes the current observation, including the list of legal actions. The agent selects one of those legal actions, and the simulator updates the game state accordingly."
+            }
+          ]
+        },
+        {
+          "id": 3506450,
+          "postDate": "2026-07-31T11:34:31.063Z",
+          "content": "<p>Merci beaucoup </p>",
+          "rawMarkdown": "Merci beaucoup "
+        }
+      ]
+    },
+    {
+      "id": 3494920,
+      "postDate": "2026-07-11T02:32:27.763Z",
+      "content": "<p>Thanks for sharing this breakdown. It’s extremely helpful for anyone building agents for the Pokémon TCG AI Battle competition. I wanted to add a few reflections on designing AI policies and evaluating model behavior in constrained rule environments.</p>\n<p>One thing that stands out is how the simulator intentionally simplifies or restricts certain attack selections compared to the official TCG rules. While the official game allows “declare‑and‑fail” scenarios, the simulator’s choice to make those attacks unselectable upfront actually removes a layer of ambiguity for AI agents. From a modeling standpoint, this reduces the need to encode edge‑case reasoning about partially resolvable effects. I agree that the gameplay impact is minimal, but the design choice meaningfully streamlines decision-making for reinforcement-learning or rule-based agents.</p>\n<p>The handling of Mega Zygarde ex’s Nullifying Zero is another interesting deviation. In the official rules, choosing the damage assignment order introduces a small but real strategic dimension. The simulator’s left‑to‑right automatic resolution removes that micro‑decision entirely. Since knockouts are processed simultaneously, the competitive impact is negligible, but it highlights how the simulator prioritizes determinism over player agency, which makes sense in AI‑vs‑AI environments.</p>\n<p>The prize‑taking order difference is probably the most consequential rule divergence, at least conceptually. In the official TCG, simultaneous knockouts create a nuanced sequence of choices that can influence board state. The simulator’s sequential processing simplifies this, but because the competition treats “both players take all prizes” as a draw, the practical effect is neutralized. It’s a clever way to avoid complex branching logic while preserving fairness.</p>\n<p>Overall, I appreciate the transparency in documenting these differences. For participants, especially those training agents that rely heavily on rule fidelity, knowing exactly how the simulator diverges from the official TCG helps avoid misaligned assumptions. If additional edge cases surface during experimentation, I’ll share them here as well.</p>",
+      "rawMarkdown": "Thanks for sharing this breakdown. It’s extremely helpful for anyone building agents for the Pokémon TCG AI Battle competition. I wanted to add a few reflections on designing AI policies and evaluating model behavior in constrained rule environments.\n\nOne thing that stands out is how the simulator intentionally simplifies or restricts certain attack selections compared to the official TCG rules. While the official game allows “declare‑and‑fail” scenarios, the simulator’s choice to make those attacks unselectable upfront actually removes a layer of ambiguity for AI agents. From a modeling standpoint, this reduces the need to encode edge‑case reasoning about partially resolvable effects. I agree that the gameplay impact is minimal, but the design choice meaningfully streamlines decision-making for reinforcement-learning or rule-based agents.\n\nThe handling of Mega Zygarde ex’s Nullifying Zero is another interesting deviation. In the official rules, choosing the damage assignment order introduces a small but real strategic dimension. The simulator’s left‑to‑right automatic resolution removes that micro‑decision entirely. Since knockouts are processed simultaneously, the competitive impact is negligible, but it highlights how the simulator prioritizes determinism over player agency, which makes sense in AI‑vs‑AI environments.\n\nThe prize‑taking order difference is probably the most consequential rule divergence, at least conceptually. In the official TCG, simultaneous knockouts create a nuanced sequence of choices that can influence board state. The simulator’s sequential processing simplifies this, but because the competition treats “both players take all prizes” as a draw, the practical effect is neutralized. It’s a clever way to avoid complex branching logic while preserving fairness.\n\nOverall, I appreciate the transparency in documenting these differences. For participants, especially those training agents that rely heavily on rule fidelity, knowing exactly how the simulator diverges from the official TCG helps avoid misaligned assumptions. If additional edge cases surface during experimentation, I’ll share them here as well.",
+      "replies": [
+        {
+          "id": 3498646,
+          "postDate": "2026-07-15T20:43:39.967Z",
+          "content": "<p>Sorry - the target selection on Mega Zygarde ex’s Nullifying Zero shouldn't matter at all. Am I missing something?</p>",
+          "rawMarkdown": "Sorry - the target selection on Mega Zygarde ex’s Nullifying Zero shouldn't matter at all. Am I missing something?"
+        }
+      ]
+    },
+    {
+      "id": 3473330,
+      "postDate": "2026-06-16T10:17:04.883Z",
+      "content": "<p>The simulator used in this competition is designed for AI-vs-AI battles, and its rules and behavior may differ in some respects from those of the official Pokémon Trading Card Game.\nBelow is a summary of the differences we are currently aware of.</p>\n<ol>\n<li><p>Some attacks may not be selectable in the simulator even when they could be declared under the official rules\nIn the official Pokémon TCG, there are cases where a player is allowed to declare an attack, but the effect cannot be fully resolved, and the turn simply ends after the attack declaration.\nIn the simulator, such attacks may instead be treated as not selectable from the beginning.\nExamples include the following cases:\nUsing an attack with an effect that puts a Basic Pokémon from the deck onto the Bench when there is no open Bench space \nUsing an attack with an effect that draws cards when the player’s deck has 0 cards remaining \nUsing an attack with an effect that interacts with the opponent’s hand when the opponent has 0 cards in hand \nAlthough the handling is different, we believe the end result is the same, and the impact on gameplay is minimal.</p></li>\n<li><p>About Nullifying Zero, the attack of Mega Zygarde ex\nFor Mega Zygarde ex’s attack, Nullifying Zero, under the official Pokémon TCG rules, the player using the attack may choose the order in which damage is assigned to the targets.\nIn the simulator, however, the target order cannot be chosen, and coins are flipped automatically from left to right.\nThis differs from the official rules, but since Knock Out processing is handled simultaneously, we believe this does not affect the competition.</p></li>\n</ol>\n<p>Prize-taking order when both players’ Pokémon are Knocked Out at the same time\nWhen both players’ Pokémon are Knocked Out at the same time, the order of taking Prize cards differs between the official Pokémon TCG rules and the simulator.</p>\n<p>Official Pokémon TCG order</p>\n<ul>\n<li>The player whose turn is next chooses their Prize cards </li>\n<li>The opposing player chooses their Prize cards </li>\n<li>Both players take their Prize cards at the same time </li>\n<li>The player whose turn is next puts a Pokémon into the Active Spot first </li>\n</ul>\n<p>Simulator order used in this competition</p>\n<ul>\n<li>The player whose turn is next chooses their Prize cards </li>\n<li>That player takes their Prize cards </li>\n<li>The opposing player chooses their Prize cards </li>\n<li>The opposing player takes their Prize cards </li>\n<li>The player whose turn is next puts a Pokémon into the Active Spot first </li>\n</ul>\n<p>This is a different processing order from the official rules. However, in this competition, even if both players ultimately take all of their Prize cards, the result is treated as a draw, so we believe this does not affect match outcomes.</p>\n<p>In this competition, please note that the simulator behavior will be treated as the correct behavior.\nIf we identify any additional points that should be announced, we will share them in the Discussion forum as needed.</p>",
+      "rawMarkdown": "The simulator used in this competition is designed for AI-vs-AI battles, and its rules and behavior may differ in some respects from those of the official Pokémon Trading Card Game.\nBelow is a summary of the differences we are currently aware of.\n\n1. Some attacks may not be selectable in the simulator even when they could be declared under the official rules\nIn the official Pokémon TCG, there are cases where a player is allowed to declare an attack, but the effect cannot be fully resolved, and the turn simply ends after the attack declaration.\nIn the simulator, such attacks may instead be treated as not selectable from the beginning.\nExamples include the following cases:\nUsing an attack with an effect that puts a Basic Pokémon from the deck onto the Bench when there is no open Bench space \nUsing an attack with an effect that draws cards when the player’s deck has 0 cards remaining \nUsing an attack with an effect that interacts with the opponent’s hand when the opponent has 0 cards in hand \nAlthough the handling is different, we believe the end result is the same, and the impact on gameplay is minimal.\n\n2. About Nullifying Zero, the attack of Mega Zygarde ex\nFor Mega Zygarde ex’s attack, Nullifying Zero, under the official Pokémon TCG rules, the player using the attack may choose the order in which damage is assigned to the targets.\nIn the simulator, however, the target order cannot be chosen, and coins are flipped automatically from left to right.\nThis differs from the official rules, but since Knock Out processing is handled simultaneously, we believe this does not affect the competition.\n\nPrize-taking order when both players’ Pokémon are Knocked Out at the same time\nWhen both players’ Pokémon are Knocked Out at the same time, the order of taking Prize cards differs between the official Pokémon TCG rules and the simulator.\n\nOfficial Pokémon TCG order\n- The player whose turn is next chooses their Prize cards \n- The opposing player chooses their Prize cards \n- Both players take their Prize cards at the same time \n- The player whose turn is next puts a Pokémon into the Active Spot first \n\nSimulator order used in this competition\n- The player whose turn is next chooses their Prize cards \n- That player takes their Prize cards \n- The opposing player chooses their Prize cards \n- The opposing player takes their Prize cards \n- The player whose turn is next puts a Pokémon into the Active Spot first \n\nThis is a different processing order from the official rules. However, in this competition, even if both players ultimately take all of their Prize cards, the result is treated as a draw, so we believe this does not affect match outcomes.\n\n\nIn this competition, please note that the simulator behavior will be treated as the correct behavior.\nIf we identify any additional points that should be announced, we will share them in the Discussion forum as needed.\n",
+      "votes": 36
+    },
+    {
+      "id": 3473362,
+      "postDate": "2026-06-16T11:58:12.793Z",
+      "content": "<p>I'm not sure I fully understand the rules.<br>\nCan participants build their own decks? 😄</p>",
+      "rawMarkdown": "I'm not sure I fully understand the rules.   \nCan participants build their own decks? 😄",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3473371,
+          "postDate": "2026-06-16T12:35:52.127Z",
+          "content": "<p>Participants can build their own decks based on the available cards listed on the Data tab </p>",
+          "rawMarkdown": "Participants can build their own decks based on the available cards listed on the Data tab ",
+          "votes": 2,
+          "replies": [
+            {
+              "id": 3475259,
+              "postDate": "2026-06-19T17:42:57.180Z",
+              "content": "<p>Merci beaucoup pour l'éclaircissement mais j'ai une par d'ombre. Les données ne s'affiche pas quand je les appell. Ça m'ait encore difficile de comprendre </p>",
+              "rawMarkdown": "Merci beaucoup pour l'éclaircissement mais j'ai une par d'ombre. Les données ne s'affiche pas quand je les appell. Ça m'ait encore difficile de comprendre "
+            },
+            {
+              "id": 3495303,
+              "postDate": "2026-07-11T23:59:30.977Z",
+              "content": "<p>Thanks for the clarification. Good to know that we can build our own decks using the cards in the Data tab. For anyone having trouble viewing the data, it might help to reload the page or check the “Data” section directly; sometimes it doesn’t appear immediately.</p>",
+              "rawMarkdown": "Thanks for the clarification. Good to know that we can build our own decks using the cards in the Data tab. For anyone having trouble viewing the data, it might help to reload the page or check the “Data” section directly; sometimes it doesn’t appear immediately."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3479048,
+      "postDate": "2026-06-23T10:00:03.600Z",
+      "content": "<p>Hi, 2 questions. </p>\n<p>One, what's the difference between an \"ABILITY\" and a \"SKILL\" as provided in OPTIONTYPE as ID 10 and 15?</p>\n<p>Second, say I have a Pokémon like Clefairy, which applies 2x weakness to Psychic on all opposing dragon types. Would my agent have to specify the activation of this ability everytime its my turn through the Options[] list, or are these kinds of abilities auto-trigger without needing agent input each turn?</p>",
+      "rawMarkdown": "Hi, 2 questions. \n\nOne, what's the difference between an \"ABILITY\" and a \"SKILL\" as provided in OPTIONTYPE as ID 10 and 15?\n\nSecond, say I have a Pokémon like Clefairy, which applies 2x weakness to Psychic on all opposing dragon types. Would my agent have to specify the activation of this ability everytime its my turn through the Options[] list, or are these kinds of abilities auto-trigger without needing agent input each turn?",
+      "replies": [
+        {
+          "id": 3479212,
+          "postDate": "2026-06-23T14:44:28.837Z",
+          "content": "<p>In OptionType, ABILITY is an explicit selectable action from an in-play Pokémon, usually something the agent must choose to use. SKILL is generally a passive/continuous effect or rule-modifying card text exposed by the simulator, not a normal “click this ability now” action in the same way.</p>\n<p>Clefairy-style continuous effects should be automatic. If the effect is already active from the Pokémon being in play, your agent should not need to re-activate it every turn through Options[]. The agent only chooses from Options[] when the simulator presents an explicit action, such as a once-per-turn activated ability.</p>",
+          "rawMarkdown": "In OptionType, ABILITY is an explicit selectable action from an in-play Pokémon, usually something the agent must choose to use. SKILL is generally a passive/continuous effect or rule-modifying card text exposed by the simulator, not a normal “click this ability now” action in the same way.\n\nClefairy-style continuous effects should be automatic. If the effect is already active from the Pokémon being in play, your agent should not need to re-activate it every turn through Options[]. The agent only chooses from Options[] when the simulator presents an explicit action, such as a once-per-turn activated ability.",
+          "replies": [
+            {
+              "id": 3479744,
+              "postDate": "2026-06-24T04:49:51.720Z",
+              "content": "<p>Yes, the explanation above is correct.</p>\n<p>In general, effects like Clefairy’s continuous effect are applied automatically by the simulator. Your agent does not need to select an option from Options[] every turn to activate that kind of effect.</p>\n<p>Your agent only needs to choose an option when the simulator explicitly presents it as a selectable action in Options[], such as an activated Ability that can be used during your turn.</p>",
+              "rawMarkdown": "Yes, the explanation above is correct.\n\nIn general, effects like Clefairy’s continuous effect are applied automatically by the simulator. Your agent does not need to select an option from Options[] every turn to activate that kind of effect.\n\nYour agent only needs to choose an option when the simulator explicitly presents it as a selectable action in Options[], such as an activated Ability that can be used during your turn."
+            },
+            {
+              "id": 3494923,
+              "postDate": "2026-07-11T02:36:56.250Z",
+              "content": "<p>Thanks for the clarification, that makes sense. ABILITY, being a selectable action, and SKILL, being a passive effect, help explain why some abilities never show up in Options[]. Good to know that continuous effects like Clefairy’s are already active and don’t need to be re‑triggered each turn. This definitely helps keep the agent’s action space cleaner.</p>",
+              "rawMarkdown": "Thanks for the clarification, that makes sense. ABILITY, being a selectable action, and SKILL, being a passive effect, help explain why some abilities never show up in Options[]. Good to know that continuous effects like Clefairy’s are already active and don’t need to be re‑triggered each turn. This definitely helps keep the agent’s action space cleaner.",
+              "votes": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3476630,
+      "postDate": "2026-06-20T18:13:38.813Z",
+      "content": "<p>Hello,</p>\n<p>I'm still testing out the simulator API manually, but I've found that in the setup phase after I've selected my active pokemon, if I have another basic pokemon in hand then the options selections list (<code>obs.select.option</code>) does not include an \"end turn\" selection and thus I am forced to bench <em>all</em> basic pokemon that I have in hand.</p>\n<p>I expect to be able to just play an active and not be forced to bench all basic pokemon in hand.</p>",
+      "rawMarkdown": "Hello,\n\nI'm still testing out the simulator API manually, but I've found that in the setup phase after I've selected my active pokemon, if I have another basic pokemon in hand then the options selections list (`obs.select.option`) does not include an \"end turn\" selection and thus I am forced to bench *all* basic pokemon that I have in hand.\n\nI expect to be able to just play an active and not be forced to bench all basic pokemon in hand.",
+      "replies": [
+        {
+          "id": 3476725,
+          "postDate": "2026-06-20T21:00:38.023Z",
+          "content": "<p>In setup bench selection, there may not be an explicit \"end turn\" option. Check <code>obs.select.minCount</code>.</p>\n<p>If <code>obs.select.context == SETUP_BENCH_POKEMON</code> and <code>minCount == 0</code>, you can skip benching by returning an empty list: <code>[]</code>.</p>\n<p><code>OptionType.END</code> is a main-turn action, not necessarily used for optional setup selections. So the absence of an \"end turn\" option does not mean you must bench all Basics.</p>\n<p>If <code>minCount</code> is 1 or higher during setup bench selection, then that would look like a simulator bug, because benching extra Basic Pokémon during setup is optional.</p>",
+          "rawMarkdown": "In setup bench selection, there may not be an explicit \"end turn\" option. Check `obs.select.minCount`.\n\nIf `obs.select.context == SETUP_BENCH_POKEMON` and `minCount == 0`, you can skip benching by returning an empty list: `[]`.\n\n`OptionType.END` is a main-turn action, not necessarily used for optional setup selections. So the absence of an \"end turn\" option does not mean you must bench all Basics.\n\nIf `minCount` is 1 or higher during setup bench selection, then that would look like a simulator bug, because benching extra Basic Pokémon during setup is optional.",
+          "votes": 1,
+          "replies": [
+            {
+              "id": 3494924,
+              "postDate": "2026-07-11T02:39:20.833Z",
+              "content": "<p>Thanks for the explanation, that clears it up. I didn’t realize the setup bench phase could be skipped by returning an empty list when minCount == 0. I was assuming the lack of an “end turn” option meant all Basics had to be benched, so this helps a lot. I’ll adjust my agent to check obs.select.context and minCount properly during setup.</p>",
+              "rawMarkdown": "Thanks for the explanation, that clears it up. I didn’t realize the setup bench phase could be skipped by returning an empty list when minCount == 0. I was assuming the lack of an “end turn” option meant all Basics had to be benched, so this helps a lot. I’ll adjust my agent to check obs.select.context and minCount properly during setup."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3475679,
+      "postDate": "2026-06-20T04:48:00.017Z",
+      "content": "<p>Hello, I have a quick question.\nUnder official rules, even if an attack has a restriction for the next turn—like Mega Lucario EX's 'Mega Brave'—retreating or switching the Pokémon to the Bench and back to the Active Spot resets the effect, allowing it to attack again. Does the simulator currently handle this rule correctly?</p>",
+      "rawMarkdown": "Hello, I have a quick question.\nUnder official rules, even if an attack has a restriction for the next turn—like Mega Lucario EX's 'Mega Brave'—retreating or switching the Pokémon to the Bench and back to the Active Spot resets the effect, allowing it to attack again. Does the simulator currently handle this rule correctly?",
+      "replies": [
+        {
+          "id": 3476065,
+          "postDate": "2026-06-20T09:32:22.350Z",
+          "content": "<p>Yes, put a Pokemon in to the bench \"clean\" all effects. If you retreat the lucario and put it as active after that, you can use the same attack again.</p>",
+          "rawMarkdown": "Yes, put a Pokemon in to the bench \"clean\" all effects. If you retreat the lucario and put it as active after that, you can use the same attack again.",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "id": 3475647,
+      "postDate": "2026-06-20T04:27:53.710Z",
+      "content": "<p>Differences Between the Rules <a href=\"https://www.kaggle.com/shimishige\" target=\"_blank\">@shimishige</a> </p>",
+      "rawMarkdown": "Differences Between the Rules @shimishige "
+    },
+    {
+      "id": 3474598,
+      "postDate": "2026-06-18T09:54:56.893Z",
+      "content": "<p>Bug: Mega Lopunny EX currently does not check properly if it has been promoted during this turn, leading Gale Thrust to not deal 170 bonus dmg.</p>\n<p>How to reproduce:</p>\n<ul>\n<li>Active pokemon with ability to shuffle itself into deck (Abra 080 TWM or Dudunsparce 129 TEF)</li>\n<li>Use ability and promote Mega Lopunny EX</li>\n<li>Attack with Gale Thrust.</li>\n</ul>\n<p>Expected behaviou by TCG rules:</p>\n<ul>\n<li>230 dmg, as Mega Lopunny has been swapped from bench to active</li>\n</ul>\n<p>Actual behaviou in simulation:</p>\n<ul>\n<li>60 dmg, as ability promotion did not register Mega Lopunny EX as changing from bench to active.</li>\n</ul>\n<p>See attached replay as an example: <a href=\"https://ptcgvis.heroz.jp/Visualizer/Replay/80444352/1\" target=\"_blank\">https://ptcgvis.heroz.jp/Visualizer/Replay/80444352/1</a></p>",
+      "rawMarkdown": "Bug: Mega Lopunny EX currently does not check properly if it has been promoted during this turn, leading Gale Thrust to not deal 170 bonus dmg.\n\nHow to reproduce:\n- Active pokemon with ability to shuffle itself into deck (Abra 080 TWM or Dudunsparce 129 TEF)\n- Use ability and promote Mega Lopunny EX\n- Attack with Gale Thrust.\n\nExpected behaviou by TCG rules:\n- 230 dmg, as Mega Lopunny has been swapped from bench to active\n\nActual behaviou in simulation:\n- 60 dmg, as ability promotion did not register Mega Lopunny EX as changing from bench to active.\n\nSee attached replay as an example: https://ptcgvis.heroz.jp/Visualizer/Replay/80444352/1",
+      "replies": [
+        {
+          "id": 3475137,
+          "postDate": "2026-06-19T12:30:05.103Z",
+          "content": "<p>Hi there,</p>\n<p>I've consulted with the the Pokémon team and upon checking the replay, Buneary was moved from the Bench to the Active Spot, then evolved into Mega Lopunny ex on that same turn, after which Gale Thrust was used.</p>\n<p>In the text “If this Pokémon moved from your Bench to the Active Spot this turn,” “this Pokémon” refers to Mega Lopunny ex, not Buneary. Therefore, the damage is 60, and the simulator’s current behavior is correct under the rules.</p>",
+          "rawMarkdown": "Hi there,\n\nI've consulted with the the Pokémon team and upon checking the replay, Buneary was moved from the Bench to the Active Spot, then evolved into Mega Lopunny ex on that same turn, after which Gale Thrust was used.\n\nIn the text “If this Pokémon moved from your Bench to the Active Spot this turn,” “this Pokémon” refers to Mega Lopunny ex, not Buneary. Therefore, the damage is 60, and the simulator’s current behavior is correct under the rules.",
+          "votes": 2
+        }
+      ]
+    },
+    {
+      "id": 3474570,
+      "postDate": "2026-06-18T08:28:26.353Z",
+      "content": "<p>Thelepatic Energy now can search for any pokemon if attached in any type pokemon, both pokemon searched goes to the hand =).</p>",
+      "rawMarkdown": "Thelepatic Energy now can search for any pokemon if attached in any type pokemon, both pokemon searched goes to the hand =)."
+    },
+    {
+      "id": 3473796,
+      "postDate": "2026-06-17T04:36:49.983Z",
+      "content": "<p>On current system, I can't play Cinderace(card ID 666) in battle preparetion turn from hand.\nIn fact, in real pokemon card format I can do that cuz of its Ability!\nCould you solve this?</p>\n<p>実際のポケモンカードではエースバーンが特性により対戦準備の時に手札から出せるはずですが\n現状のシステムでは出せません!\nご対応可能でしょうか？？</p>",
+      "rawMarkdown": "On current system, I can't play Cinderace(card ID 666) in battle preparetion turn from hand.\nIn fact, in real pokemon card format I can do that cuz of its Ability!\nCould you solve this?\n\n実際のポケモンカードではエースバーンが特性により対戦準備の時に手札から出せるはずですが\n現状のシステムでは出せません!\nご対応可能でしょうか？？",
+      "replies": [
+        {
+          "id": 3473907,
+          "postDate": "2026-06-17T07:54:33.950Z",
+          "content": "<p>Thank you for your question.</p>\n<p>It is possible to put Cinderace (card ID 666) into the Active Spot during the battle preparation turn.</p>\n<p>We checked the battle log:\n<a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/leaderboard?search=yukihiromaeda&amp;submissionId=53762151&amp;episodeId=80258186\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/leaderboard?search=yukihiromaeda&amp;submissionId=53762151&amp;episodeId=80258186</a></p>\n<p>In the observation at Step 2, the available options include the choices at index 0 and index 2. Therefore, if your agent returns [1] from the list of selectable options, Cinderace (card ID 666) should be playable during the battle preparation turn.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5486027%2F801e667534f65656e3fdbb3bfb99757c%2F2026-06-17%2016.53.43.png?generation=1781682856677698&amp;alt=media\" alt=\"\"></p>",
+          "rawMarkdown": "Thank you for your question.\n\nIt is possible to put Cinderace (card ID 666) into the Active Spot during the battle preparation turn.\n\nWe checked the battle log:\nhttps://www.kaggle.com/competitions/pokemon-tcg-ai-battle/leaderboard?search=yukihiromaeda&submissionId=53762151&episodeId=80258186\n\nIn the observation at Step 2, the available options include the choices at index 0 and index 2. Therefore, if your agent returns [1] from the list of selectable options, Cinderace (card ID 666) should be playable during the battle preparation turn.\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5486027%2F801e667534f65656e3fdbb3bfb99757c%2F2026-06-17%2016.53.43.png?generation=1781682856677698&alt=media)",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "id": 3498650,
+      "postDate": "2026-07-15T20:47:37.980Z",
+      "rawMarkdown": "",
+      "isDeleted": true
+    },
+    {
+      "id": 3479755,
+      "postDate": "2026-06-24T05:05:44.900Z",
+      "rawMarkdown": "",
+      "isDeleted": true
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "topic": {
+    "id": 724213,
+    "title": "Reliable Submission Checklist: avoid __file__, sys.path, and harness-loading pitfalls",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724213",
+    "postDate": "2026-07-10T04:25:20.795293500Z",
+    "lastCommentPostDate": "2026-07-10T04:25:20.796666700Z"
+  },
+  "messages": [
+    {
+      "id": 3494481,
+      "postDate": "2026-07-10T04:25:20.797Z",
+      "content": "<p>I put together a short checklist for making Pokémon TCG AI Battle submissions more reliable:</p>\n<p><a href=\"https://www.kaggle.com/code/koki1231/ptcg-ai-battle-reliable-submission-checklist\" target=\"_blank\">https://www.kaggle.com/code/koki1231/ptcg-ai-battle-reliable-submission-checklist</a></p>\n<p>It focuses on practical deployment issues I ran into while testing agents locally and on Kaggle:</p>\n<ul>\n<li><code>main.py</code> may be loaded without <code>__file__</code></li>\n<li>lazy imports inside <code>agent()</code> can fail if <code>sys.path</code> changes after load</li>\n<li>local tests should mimic the harness more closely than a normal <code>import main</code></li>\n<li>episode <code>remainingOverageTime</code> traces can help confirm whether expensive code actually ran</li>\n<li>every agent should have a minimal legal fallback</li>\n</ul>\n<p>The notebook does not include any competitive strategy or agent-specific logic; it is meant as submission hygiene for anyone building their own agent.</p>",
+      "rawMarkdown": "I put together a short checklist for making Pokémon TCG AI Battle submissions more reliable:\n\nhttps://www.kaggle.com/code/koki1231/ptcg-ai-battle-reliable-submission-checklist\n\nIt focuses on practical deployment issues I ran into while testing agents locally and on Kaggle:\n- `main.py` may be loaded without `__file__`\n- lazy imports inside `agent()` can fail if `sys.path` changes after load\n- local tests should mimic the harness more closely than a normal `import main`\n- episode `remainingOverageTime` traces can help confirm whether expensive code actually ran\n- every agent should have a minimal legal fallback\n\nThe notebook does not include any competitive strategy or agent-specific logic; it is meant as submission hygiene for anyone building their own agent."
+    }
+  ]
+}

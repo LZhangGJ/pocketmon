@@ -1,0 +1,36 @@
+{
+  "topic": {
+    "id": 729440,
+    "title": "Can one agent play multiple decks/tech out cards?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/729440",
+    "commentCount": 3,
+    "postDate": "2026-07-25T16:44:12.890843900Z",
+    "lastCommentPostDate": "2026-07-26T05:35:43.600Z"
+  },
+  "messages": [
+    {
+      "id": 3503600,
+      "postDate": "2026-07-26T05:35:43.600Z",
+      "content": "<p><a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/711741\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/711741</a></p>",
+      "rawMarkdown": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/711741"
+    },
+    {
+      "id": 3503583,
+      "postDate": "2026-07-26T04:51:37.173Z",
+      "content": "<p>Saw it in another thread, each submission is expected to only play one 60-card deck. You can still train the model so that it could play other decks.</p>",
+      "rawMarkdown": "Saw it in another thread, each submission is expected to only play one 60-card deck. You can still train the model so that it could play other decks."
+    },
+    {
+      "id": 3503401,
+      "postDate": "2026-07-25T16:44:12.890Z",
+      "content": "<p>I know for the submission we submit a deck.csv file. However, is the agent allowed to modify this and other internal data if it doesn't access external datasources during competition?</p>\n<p>I feel this will go against the spirit of the competition if the change is too big. For example, the deck could know a certain % of the ladder is crustle so play a hardcounter, and then transition as it rises up the ranks. Or, it could save opponent names and know the exact deck compositions and adapt accordingly.</p>\n<p>However, it feels strategic to be able to side deck tech cards against hard encounters. </p>",
+      "rawMarkdown": "I know for the submission we submit a deck.csv file. However, is the agent allowed to modify this and other internal data if it doesn't access external datasources during competition?\n\nI feel this will go against the spirit of the competition if the change is too big. For example, the deck could know a certain % of the ladder is crustle so play a hardcounter, and then transition as it rises up the ranks. Or, it could save opponent names and know the exact deck compositions and adapt accordingly.\n\nHowever, it feels strategic to be able to side deck tech cards against hard encounters. "
+    },
+    {
+      "id": 3503591,
+      "postDate": "2026-07-26T05:17:24.317Z",
+      "rawMarkdown": "",
+      "isDeleted": true
+    }
+  ]
+}

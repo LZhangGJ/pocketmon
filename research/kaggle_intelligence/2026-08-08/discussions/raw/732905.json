@@ -1,0 +1,84 @@
+{
+  "topic": {
+    "id": 732905,
+    "title": "How consistent is imitation learning in this setting?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/732905",
+    "commentCount": 9,
+    "votes": 4,
+    "postDate": "2026-08-05T02:22:26.000418100Z",
+    "lastCommentPostDate": "2026-08-06T03:41:28.296666700Z"
+  },
+  "messages": [
+    {
+      "id": 3509063,
+      "postDate": "2026-08-05T23:15:49.137Z",
+      "content": "<p>Was getting around 70% about a month ago then moved up to ~80% but have since changed to a different method. </p>",
+      "rawMarkdown": "Was getting around 70% about a month ago then moved up to ~80% but have since changed to a different method. ",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3509128,
+          "postDate": "2026-08-06T01:15:04.957Z",
+          "content": "<p>80% is insane. I am getting around 73-74. Maybe you have (more + better) replays. How many replays and decisions are you working on, if you don't mind me asking?</p>",
+          "rawMarkdown": "80% is insane. I am getting around 73-74. Maybe you have (more + better) replays. How many replays and decisions are you working on, if you don't mind me asking?",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "id": 3508743,
+      "postDate": "2026-08-05T09:00:42.127Z",
+      "content": "<p>I experimented briefly wtih imitation yesterday and got 72.8% accuracy on validation (last day) for all decks, that translate in about 600 ELO on leaderbord. I found that conditioning on player ELO gives a 2% accuracy increase out of the box, and it can somewhat extrapolate conditioning up to 2000ELO. Clearly it doesn't get an ELO of 2000, but it get a 2% win rate improvement against my rule based agents panel compared to condiyioning to 1300</p>",
+      "rawMarkdown": "I experimented briefly wtih imitation yesterday and got 72.8% accuracy on validation (last day) for all decks, that translate in about 600 ELO on leaderbord. I found that conditioning on player ELO gives a 2% accuracy increase out of the box, and it can somewhat extrapolate conditioning up to 2000ELO. Clearly it doesn't get an ELO of 2000, but it get a 2% win rate improvement against my rule based agents panel compared to condiyioning to 1300",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3509203,
+          "postDate": "2026-08-06T03:41:28.297Z",
+          "content": "<p>same here, I got precision@3 for around 90% and accuracy ~75% on validation. A week ago it got 928 elo, but now it's 700. I guess the problem is my expert has a little trajectories data when playing against several decks (lucario, etc). It's really hard to retrieve a ton of good trajectories data for my model to be consistent</p>",
+          "rawMarkdown": "same here, I got precision@3 for around 90% and accuracy ~75% on validation. A week ago it got 928 elo, but now it's 700. I guess the problem is my expert has a little trajectories data when playing against several decks (lucario, etc). It's really hard to retrieve a ton of good trajectories data for my model to be consistent"
+        }
+      ]
+    },
+    {
+      "id": 3508655,
+      "postDate": "2026-08-05T02:22:26Z",
+      "content": "<p>How consistent is imitation learning in this setting? I get about 79% consistency. With the exact same code, different submissions can end up anywhere from rank 50 to rank 150, and it all comes down to whether the initial few matches are wins.</p>",
+      "rawMarkdown": "How consistent is imitation learning in this setting? I get about 79% consistency. With the exact same code, different submissions can end up anywhere from rank 50 to rank 150, and it all comes down to whether the initial few matches are wins.",
+      "votes": 4
+    },
+    {
+      "id": 3508670,
+      "postDate": "2026-08-05T03:19:43.033Z",
+      "content": "<p>How are you measuring 79% consistency? You mean policy accuracy or how do you measure it?</p>\n<p>Also, if you mind sharing. Imitation learning is based of one deck (or set of similar decks), or many different decks and players. This also might be related to higher lower consistency as far as I can see (mixed distributions).</p>",
+      "rawMarkdown": "How are you measuring 79% consistency? You mean policy accuracy or how do you measure it?\n\nAlso, if you mind sharing. Imitation learning is based of one deck (or set of similar decks), or many different decks and players. This also might be related to higher lower consistency as far as I can see (mixed distributions).",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3508708,
+          "postDate": "2026-08-05T06:11:21.943Z",
+          "content": "<p>Yeah. I'm pretty sure they mean policy accuracy.</p>\n<blockquote>\n  <p>Also, if you mind sharing. Imitation learning is based of one deck (or set of similar decks)</p>\n</blockquote>\n<p>You're pretty close. I am using my own version of Jaccard sort of similarity for choosing close decks to my main deck.</p>",
+          "rawMarkdown": "Yeah. I'm pretty sure they mean policy accuracy.\n\n>Also, if you mind sharing. Imitation learning is based of one deck (or set of similar decks)\n\nYou're pretty close. I am using my own version of Jaccard sort of similarity for choosing close decks to my main deck."
+        }
+      ]
+    },
+    {
+      "id": 3509139,
+      "postDate": "2026-08-06T01:34:01.533Z",
+      "content": "<p>The same agent has submitted twice. ELO remains stable at around 30 and 220 respectively.</p>",
+      "rawMarkdown": "The same agent has submitted twice. ELO remains stable at around 30 and 220 respectively."
+    },
+    {
+      "id": 3508738,
+      "postDate": "2026-08-05T08:27:13.087Z",
+      "content": "<p>Is discussion on elo or imitation learning?🧐</p>",
+      "rawMarkdown": "Is discussion on elo or imitation learning?🧐"
+    },
+    {
+      "id": 3508707,
+      "postDate": "2026-08-05T06:09:01.533Z",
+      "content": "<p>Extremely inconsistent for me. I was confidently in the silver region yesterday (&lt;150) for 8 hours. When I resubmitted the same agent today, I'm in the bronze zone.</p>",
+      "rawMarkdown": "Extremely inconsistent for me. I was confidently in the silver region yesterday (<150) for 8 hours. When I resubmitted the same agent today, I'm in the bronze zone."
+    }
+  ]
+}

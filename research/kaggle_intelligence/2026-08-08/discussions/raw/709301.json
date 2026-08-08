@@ -1,0 +1,26 @@
+{
+  "topic": {
+    "id": 709301,
+    "title": "Deck Image Renderer Notebook: English / Japanese card images",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709301",
+    "commentCount": 1,
+    "votes": 6,
+    "postDate": "2026-06-18T06:18:13.302410300Z",
+    "lastCommentPostDate": "2026-06-18T13:34:50.560Z"
+  },
+  "messages": [
+    {
+      "id": 3474525,
+      "postDate": "2026-06-18T06:18:13.303Z",
+      "content": "<p>I made a small notebook to render PTCG deck images from Card IDs.</p>\n<p>Notebook link:<br>\n<a href=\"https://www.kaggle.com/code/ichigoe/deck-image-renderer-visualize-your-ptcg-deck\" target=\"_blank\">https://www.kaggle.com/code/ichigoe/deck-image-renderer-visualize-your-ptcg-deck</a></p>\n<p>It supports both:</p>\n<ul>\n<li>hardcoded deck lists in the notebook</li>\n<li>external <code>deck.csv</code></li>\n</ul>\n<p>It can generate deck images in both English and Japanese using the official card PDFs.</p>\n<p>Hope it helps when checking, sharing, or explaining decks!</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F14852316%2F6d543300c2c73f0637ce351c7a6b5957%2Fdeck_en.jpg?generation=1781763527576525&amp;alt=media\" alt=\"\"></p>",
+      "rawMarkdown": "I made a small notebook to render PTCG deck images from Card IDs.\n\nNotebook link:  \nhttps://www.kaggle.com/code/ichigoe/deck-image-renderer-visualize-your-ptcg-deck\n\nIt supports both:\n\n- hardcoded deck lists in the notebook\n- external `deck.csv`\n\nIt can generate deck images in both English and Japanese using the official card PDFs.\n\nHope it helps when checking, sharing, or explaining decks!\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F14852316%2F6d543300c2c73f0637ce351c7a6b5957%2Fdeck_en.jpg?generation=1781763527576525&alt=media)",
+      "votes": 6
+    },
+    {
+      "id": 3474669,
+      "postDate": "2026-06-18T13:34:50.560Z",
+      "content": "<p>Very nice！</p>",
+      "rawMarkdown": "Very nice！"
+    }
+  ]
+}

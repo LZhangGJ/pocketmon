@@ -1,0 +1,138 @@
+{
+  "topic": {
+    "id": 730497,
+    "title": "Submission Strategy",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/730497",
+    "commentCount": 16,
+    "votes": 4,
+    "postDate": "2026-07-29T13:10:18.097450200Z",
+    "lastCommentPostDate": "2026-08-02T09:10:23.550Z"
+  },
+  "messages": [
+    {
+      "id": 3506626,
+      "postDate": "2026-07-31T17:08:44.610Z",
+      "content": "<p>I’m playing to win and planning my submission strategy accordingly. I don’t state that to sound arrogant but because others have explicitly stated they have other goals like creatively exploring the space of possible solutions and winning isn’t their primary goal.</p>\n<p>This is a competition where it feels like gamesmanship could be highly relevant to placing well on the leaderboard. This is in contrast to the recent orbit-wars competition where it felt like there was little to lose by having your best agent on the board throughout the competition. So even divulging as little as my submission strategy is valuable intelligence. But I’ve learned a lot from the Kaggle community over the years so I will offer up my thinking here.</p>\n<p>What do I mean by gamesmanship? Other discussions have touched on this but there isn’t really one winning solution to PTCG, there are many rock-paper-scissors matchups. It’s what makes it such a fun and challenging game. Already in this Kaggle competition we’ve seen net-decking (other competitors copying exact deck lists), waves of different archetypes rising and falling as top-decks get countered.* For these reasons it may be wise not to “tip your hand” by revealing what deck you want as your final submission slot. You may even purposely put forward a deck that is meant to force other competitors to react in a way that favors your final deck. I don’t see any of this behavior as malicious, it is part of the fun in a challenge like this!</p>\n<p>The first way I used my submission slots was to verify my local training / strategy was working, i.e. local validation correlates with the Kaggle leaderboard. For that reason every team should submit at least once. However, considering the gamesmanship mentioned above there are a number of reasons you wouldn’t want your best agent to be on the leaderboard. The episode replay dataset will make your agents' games visible to all for (a) imitation learning / behavior cloning, (b) designing a deck / agent to specifically beat yours (c) net-decking, etc. So one strategy is to submit your agent, verify that your local eval correlates with Kaggle leaderboard and then go dark by submitting a “dummy” agent to take the submission slot. Given the variability in the leaderboard and the pace at which games are played I think you need to wait almost 72 hours / 300 games to get a good read on an agent. That complicates things because it means it is hard to submit a \"strong\" agent without everyone in the competition knowing about it.</p>\n<p>However, a reason to return to the Kaggle leaderboard with submissions after \"going dark\" is that even if your local eval is providing a consistent strength signal it is tough to know how any of your decks will compete against the current meta. The meta is constantly turning over so you need to adapt your decks. Also, the leaderboard has variability and there are bands of different archetypes at different levels. You can see some of this in the episode replay dataset but it is easy to lose sight of the lower tiers. In the 600-800 you will face a swarm of rules based Mega Lucario and Mega Abamasnow agents. At level 800-1000 you face Archaludon archetypes which can pose specific challenges to decks that do well at the top of the meta. You also start to face many of the other recently submitted decks that are trying to rise out of the bucket of crabs 800-1000 tier. You need to pass these tests before you even get to the top meta. The top 100 has its own stratification with various levels of strength and some lucky submission-timing lottery winners that got the right deck into the top 100 with an archetype well suited to take out the most represented archetypes in that tier.</p>\n<p>Given all this my strategy is to submit some of my mid-tier agents, using well represented decks to the leaderboard. I’m not trying to tip my hand but I need to validate that what I’m doing locally translates. I’m usually comparing my agent to other agents running the same deck. The Kaggle leaderboard is getting tougher everyday, the Red Queen's race. So I need to ensure I’m not falling behind. But of course I’m keeping a few decks and agents dark that I’m hoping could be well-suited for the final meta. We will see how this strategy works out. We only get two submission slots at the end. I will be very nervous submitting an agent that I’ve never seen compete on the Kaggle leaderboard before. Maybe I will submit one agent I’m sure will be “good” but an unlikely “winner” and another darkhorse contender? I think it wise to use two different decks as a hedge against the meta moving and by different I mean different archetypes altogether.</p>\n<p>That’s all I will share for now. I hope others find this entertaining, relevant, or useful. My submission strategy will probably continue to change as we get closer to the end. Wishing everyone luck with their models and agents.</p>\n<ul>\n<li><a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/729926\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/729926</a></li>\n</ul>",
+      "rawMarkdown": "I’m playing to win and planning my submission strategy accordingly. I don’t state that to sound arrogant but because others have explicitly stated they have other goals like creatively exploring the space of possible solutions and winning isn’t their primary goal.\n\nThis is a competition where it feels like gamesmanship could be highly relevant to placing well on the leaderboard. This is in contrast to the recent orbit-wars competition where it felt like there was little to lose by having your best agent on the board throughout the competition. So even divulging as little as my submission strategy is valuable intelligence. But I’ve learned a lot from the Kaggle community over the years so I will offer up my thinking here.\n\nWhat do I mean by gamesmanship? Other discussions have touched on this but there isn’t really one winning solution to PTCG, there are many rock-paper-scissors matchups. It’s what makes it such a fun and challenging game. Already in this Kaggle competition we’ve seen net-decking (other competitors copying exact deck lists), waves of different archetypes rising and falling as top-decks get countered.* For these reasons it may be wise not to “tip your hand” by revealing what deck you want as your final submission slot. You may even purposely put forward a deck that is meant to force other competitors to react in a way that favors your final deck. I don’t see any of this behavior as malicious, it is part of the fun in a challenge like this!\n\nThe first way I used my submission slots was to verify my local training / strategy was working, i.e. local validation correlates with the Kaggle leaderboard. For that reason every team should submit at least once. However, considering the gamesmanship mentioned above there are a number of reasons you wouldn’t want your best agent to be on the leaderboard. The episode replay dataset will make your agents' games visible to all for (a) imitation learning / behavior cloning, (b) designing a deck / agent to specifically beat yours (c) net-decking, etc. So one strategy is to submit your agent, verify that your local eval correlates with Kaggle leaderboard and then go dark by submitting a “dummy” agent to take the submission slot. Given the variability in the leaderboard and the pace at which games are played I think you need to wait almost 72 hours / 300 games to get a good read on an agent. That complicates things because it means it is hard to submit a \"strong\" agent without everyone in the competition knowing about it.\n\nHowever, a reason to return to the Kaggle leaderboard with submissions after \"going dark\" is that even if your local eval is providing a consistent strength signal it is tough to know how any of your decks will compete against the current meta. The meta is constantly turning over so you need to adapt your decks. Also, the leaderboard has variability and there are bands of different archetypes at different levels. You can see some of this in the episode replay dataset but it is easy to lose sight of the lower tiers. In the 600-800 you will face a swarm of rules based Mega Lucario and Mega Abamasnow agents. At level 800-1000 you face Archaludon archetypes which can pose specific challenges to decks that do well at the top of the meta. You also start to face many of the other recently submitted decks that are trying to rise out of the bucket of crabs 800-1000 tier. You need to pass these tests before you even get to the top meta. The top 100 has its own stratification with various levels of strength and some lucky submission-timing lottery winners that got the right deck into the top 100 with an archetype well suited to take out the most represented archetypes in that tier.\n\nGiven all this my strategy is to submit some of my mid-tier agents, using well represented decks to the leaderboard. I’m not trying to tip my hand but I need to validate that what I’m doing locally translates. I’m usually comparing my agent to other agents running the same deck. The Kaggle leaderboard is getting tougher everyday, the Red Queen's race. So I need to ensure I’m not falling behind. But of course I’m keeping a few decks and agents dark that I’m hoping could be well-suited for the final meta. We will see how this strategy works out. We only get two submission slots at the end. I will be very nervous submitting an agent that I’ve never seen compete on the Kaggle leaderboard before. Maybe I will submit one agent I’m sure will be “good” but an unlikely “winner” and another darkhorse contender? I think it wise to use two different decks as a hedge against the meta moving and by different I mean different archetypes altogether.\n\nThat’s all I will share for now. I hope others find this entertaining, relevant, or useful. My submission strategy will probably continue to change as we get closer to the end. Wishing everyone luck with their models and agents.\n\n* https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/729926\n",
+      "votes": 4,
+      "replies": [
+        {
+          "id": 3506644,
+          "postDate": "2026-07-31T17:33:02.977Z",
+          "content": "<p>Thanks for putting all that down in one place.  It mirrors a lot of what I've seen with respect to tiers of agents.  I'd add that it's much easier to train a Marnies agent that plays competitively than anything else, simply because there is so much data.  Which feeds into a cycle of ever more Marnies agents (previously Alakazam), until the concentration becomes too big a liability.  I wonder how many more cycles we have left?</p>",
+          "rawMarkdown": "Thanks for putting all that down in one place.  It mirrors a lot of what I've seen with respect to tiers of agents.  I'd add that it's much easier to train a Marnies agent that plays competitively than anything else, simply because there is so much data.  Which feeds into a cycle of ever more Marnies agents (previously Alakazam), until the concentration becomes too big a liability.  I wonder how many more cycles we have left?",
+          "votes": 2
+        }
+      ]
+    },
+    {
+      "id": 3506258,
+      "postDate": "2026-07-31T05:01:16.490Z",
+      "content": "<p>I think the objective is to collect enough your agent replay at each score band ( which unfortunately always changes ). Finding location cv correlation is most important </p>",
+      "rawMarkdown": "I think the objective is to collect enough your agent replay at each score band ( which unfortunately always changes ). Finding location cv correlation is most important ",
+      "votes": 4,
+      "replies": [
+        {
+          "id": 3506472,
+          "postDate": "2026-07-31T12:25:33.287Z",
+          "content": "<p>Agreed, better local validation is always one of those things I feel like I should be spending more time to do well.  There was a kaggle Grand Master participant in the BirdCLEF competition recently who was in something like 300th place before the shakeup, and ended up in gold medal range.  While all the rest of us were overfitting to the leaderboard, that guy stuck to his local validation.</p>",
+          "rawMarkdown": "Agreed, better local validation is always one of those things I feel like I should be spending more time to do well.  There was a kaggle Grand Master participant in the BirdCLEF competition recently who was in something like 300th place before the shakeup, and ended up in gold medal range.  While all the rest of us were overfitting to the leaderboard, that guy stuck to his local validation.",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "id": 3506114,
+      "postDate": "2026-07-30T23:46:40.760Z",
+      "content": "<p>I’m aiming for the <strong>Silver Zone</strong> in this competition,<br>\nso I’m taking a relaxed approach and focusing more on having fun than winning.</p>\n<p>By setting a more modest placement goal, I have more freedom to explore diverse and interesting strategies.<br>\nStrict goals and limited resources can easily restrict creativity, so rather than focusing only on meeting every constraint,<br>\nI want to create a submission that reflects my own ideas within the freedom available to me.</p>\n<p>That is the strategy behind my submission.</p>\n<hr>\n<p>When the metrics of a short-term competition can no longer fully capture the effort or value<br>\nbehind an individual's work, an important question emerges:  </p>\n<ul>\n<li>How should the platform recognize and reward these diverse kinds of contributions?  </li>\n</ul>\n<p>Perhaps that's one of the challenges Kaggle will need to address.</p>",
+      "rawMarkdown": "I’m aiming for the **Silver Zone** in this competition,   \nso I’m taking a relaxed approach and focusing more on having fun than winning.\n\nBy setting a more modest placement goal, I have more freedom to explore diverse and interesting strategies.   \nStrict goals and limited resources can easily restrict creativity, so rather than focusing only on meeting every constraint,   \nI want to create a submission that reflects my own ideas within the freedom available to me.\n\nThat is the strategy behind my submission.\n\n---\n\nWhen the metrics of a short-term competition can no longer fully capture the effort or value   \nbehind an individual's work, an important question emerges:  \n\n- How should the platform recognize and reward these diverse kinds of contributions?  \n\nPerhaps that's one of the challenges Kaggle will need to address.\n\n",
+      "votes": 2,
+      "replies": [
+        {
+          "id": 3507578,
+          "postDate": "2026-08-02T09:10:23.550Z",
+          "content": "<p>By diverse, do you mean you are trying out unique decks not seen in the LB? If so, what approach are you using? Is it heuristic?</p>",
+          "rawMarkdown": "By diverse, do you mean you are trying out unique decks not seen in the LB? If so, what approach are you using? Is it heuristic?",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "id": 3505076,
+      "postDate": "2026-07-29T13:10:18.097Z",
+      "content": "<p>How do you like to manage your two active submissions?<br>\nA) Submit one at a time, new submit usually same deck as one it's bumping, try to keep a 'best' up at all times\nB) Submit in pairs w/ two different decks, accept the wild leader board swings\nC)  I'm always changing strategy\nD) Something else …</p>",
+      "rawMarkdown": "How do you like to manage your two active submissions?  \nA) Submit one at a time, new submit usually same deck as one it's bumping, try to keep a 'best' up at all times\nB) Submit in pairs w/ two different decks, accept the wild leader board swings\nC)  I'm always changing strategy\nD) Something else ...",
+      "votes": 4
+    },
+    {
+      "id": 3505377,
+      "postDate": "2026-07-30T02:20:40.803Z",
+      "content": "<p>I prefer to submit two agents at a time</p>",
+      "rawMarkdown": "I prefer to submit two agents at a time",
+      "votes": 2
+    },
+    {
+      "id": 3505130,
+      "postDate": "2026-07-29T15:14:50.997Z",
+      "content": "<p>Yeah, when we don’t yet have a strong or reliable score, we have to keep changing strategies and trying different ideas.</p>\n<p>Once we achieve a good score, though, the focus shifts toward protecting position. In that case, it makes sense to keep one of best submissions active at all times while continuing to experiment with new models use another submission .</p>\n<p>The last 3 days have been a pretty wild different model submission experience for me—I’ve kept trying a new model almost every submission😅.</p>\n<p>But in the end, I guess I will submit my two strongest but different models, each using a different deck.</p>",
+      "rawMarkdown": "Yeah, when we don’t yet have a strong or reliable score, we have to keep changing strategies and trying different ideas.\n\nOnce we achieve a good score, though, the focus shifts toward protecting position. In that case, it makes sense to keep one of best submissions active at all times while continuing to experiment with new models use another submission .\n\nThe last 3 days have been a pretty wild different model submission experience for me—I’ve kept trying a new model almost every submission😅.\n\nBut in the end, I guess I will submit my two strongest but different models, each using a different deck.\n",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3505276,
+          "postDate": "2026-07-29T20:04:22.203Z",
+          "content": "<p>At this point, I'm not too worried about protecting position so much as testing out new settings/models/decks/etc..  We will likely submit x2 different decks in the end as well.  The issue I'm having right now is that my agents appear to be better at playing the high end of the leaderboard than the 800-1000 ELO range, and they can often get 'stuck'.  </p>",
+          "rawMarkdown": "At this point, I'm not too worried about protecting position so much as testing out new settings/models/decks/etc..  We will likely submit x2 different decks in the end as well.  The issue I'm having right now is that my agents appear to be better at playing the high end of the leaderboard than the 800-1000 ELO range, and they can often get 'stuck'.  ",
+          "votes": 1,
+          "replies": [
+            {
+              "id": 3505318,
+              "postDate": "2026-07-29T21:43:07.670Z",
+              "content": "<p>Yes, I felt this very often when rotating models. An agent can easily get stuck in the 800–1000 range, and the result often depends heavily on its first few hours of gameplay. It might be because of how we trained our model, though 😅.</p>\n<p>Later, as the game frequency decreases and the total game count increases, the score moves much more slowly. Unless the agent has a consistently higher win rate in the 800–1000 range, it may remain stuck there for days. At that point, we often give up and resubmit a new version.</p>\n<p>With some luck, a new submission can reach a much higher score during its first few high-activity hours and become established in a stronger leaderboard band. That is exactly the kind of \"stuck\" we want, so soon or later , we will stuck some range </p>",
+              "rawMarkdown": "Yes, I felt this very often when rotating models. An agent can easily get stuck in the 800–1000 range, and the result often depends heavily on its first few hours of gameplay. It might be because of how we trained our model, though 😅.\n\nLater, as the game frequency decreases and the total game count increases, the score moves much more slowly. Unless the agent has a consistently higher win rate in the 800–1000 range, it may remain stuck there for days. At that point, we often give up and resubmit a new version.\n\nWith some luck, a new submission can reach a much higher score during its first few high-activity hours and become established in a stronger leaderboard band. That is exactly the kind of \"stuck\" we want, so soon or later , we will stuck some range \n"
+            },
+            {
+              "id": 3505333,
+              "postDate": "2026-07-29T22:08:46.643Z",
+              "content": "<p>I agree completely.  The kaggle packaged downloads are heavily weighted towards the very upper tier of the leaderboard, which can create some issues playing against opponents that are still good (i.e. 700-1000 ELO range) but not in that very high ELO dataset.</p>",
+              "rawMarkdown": "I agree completely.  The kaggle packaged downloads are heavily weighted towards the very upper tier of the leaderboard, which can create some issues playing against opponents that are still good (i.e. 700-1000 ELO range) but not in that very high ELO dataset.\n",
+              "votes": 1
+            },
+            {
+              "id": 3505337,
+              "postDate": "2026-07-29T22:10:45.147Z",
+              "content": "<p>You're subbing festival lead which is bad into starmie, dragapult, and archaludon, which is why you're sometimes getting stuck in lower elo</p>",
+              "rawMarkdown": "You're subbing festival lead which is bad into starmie, dragapult, and archaludon, which is why you're sometimes getting stuck in lower elo",
+              "votes": 1
+            },
+            {
+              "id": 3505373,
+              "postDate": "2026-07-30T02:14:49.847Z",
+              "content": "<p>Yes, it could just be deck matchup weakness.  Will look at that closer.  Thanks</p>",
+              "rawMarkdown": "Yes, it could just be deck matchup weakness.  Will look at that closer.  Thanks"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3505550,
+      "postDate": "2026-07-30T09:51:01.277Z",
+      "content": "<p>Thank you for the Submission Strategy <a href=\"https://www.kaggle.com/decotoj\" target=\"_blank\">@decotoj</a> </p>",
+      "rawMarkdown": "Thank you for the Submission Strategy @decotoj ",
+      "votes": -5
+    },
+    {
+      "id": 3506646,
+      "postDate": "2026-07-31T17:35:18.293Z",
+      "content": "<p>Amazing, this is really great acrually. And i like it so much</p>",
+      "rawMarkdown": "Amazing, this is really great acrually. And i like it so much"
+    },
+    {
+      "id": 3505077,
+      "postDate": "2026-07-29T13:10:48.180Z",
+      "content": "<p>Option C personally</p>",
+      "rawMarkdown": "Option C personally"
+    }
+  ]
+}

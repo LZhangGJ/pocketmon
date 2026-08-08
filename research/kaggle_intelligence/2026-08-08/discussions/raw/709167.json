@@ -1,0 +1,17 @@
+{
+  "topic": {
+    "id": 709167,
+    "title": "How to test the agent implementation?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709167",
+    "postDate": "2026-06-17T19:58:09.777065500Z",
+    "lastCommentPostDate": "2026-06-17T19:58:09.776666700Z"
+  },
+  "messages": [
+    {
+      "id": 3474315,
+      "postDate": "2026-06-17T19:58:09.777Z",
+      "content": "<p>I would like to ask, how can we test the implementation (i.e. run the agent) without creating a submission?</p>",
+      "rawMarkdown": "I would like to ask, how can we test the implementation (i.e. run the agent) without creating a submission?\n\n"
+    }
+  ]
+}

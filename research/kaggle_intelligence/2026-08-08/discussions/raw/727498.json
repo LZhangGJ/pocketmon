@@ -1,0 +1,93 @@
+{
+  "topic": {
+    "id": 727498,
+    "title": "If you are both a Pokemon fan and a kaggler",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/727498",
+    "commentCount": 10,
+    "votes": 17,
+    "postDate": "2026-07-19T06:58:07.125995200Z",
+    "lastCommentPostDate": "2026-07-22T15:44:09.686666700Z"
+  },
+  "messages": [
+    {
+      "id": 3500349,
+      "postDate": "2026-07-19T06:58:07.127Z",
+      "content": "<p>Join this challenge is necessary!</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F682501%2F2be06d291e485d09d8a1fd0e9ec7e2dd%2F1.jpeg?generation=1784444121979908&amp;alt=media\" alt=\"\"></p>",
+      "rawMarkdown": "Join this challenge is necessary!\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F682501%2F2be06d291e485d09d8a1fd0e9ec7e2dd%2F1.jpeg?generation=1784444121979908&alt=media)",
+      "votes": 17
+    },
+    {
+      "id": 3500777,
+      "postDate": "2026-07-20T15:05:23.940Z",
+      "content": "<p>This is supposed to be the Pokémon competition, but somehow all the NeuroGolf people are here. Was this secretly a NeuroGolf reunion all along? 😂</p>",
+      "rawMarkdown": "This is supposed to be the Pokémon competition, but somehow all the NeuroGolf people are here. Was this secretly a NeuroGolf reunion all along? 😂",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3500996,
+          "postDate": "2026-07-21T04:26:37.743Z",
+          "content": "<p>Some kagglers take part in all challenges actually.\nFor me, I choose this one instead of ROGII because of interests</p>",
+          "rawMarkdown": "Some kagglers take part in all challenges actually.\nFor me, I choose this one instead of ROGII because of interests",
+          "votes": 2
+        }
+      ]
+    },
+    {
+      "id": 3500602,
+      "postDate": "2026-07-20T02:10:55.933Z",
+      "content": "<p>Wow, I just realized Yiheng's avatar is actually from Pokémon!</p>",
+      "rawMarkdown": "Wow, I just realized Yiheng's avatar is actually from Pokémon!",
+      "votes": 1
+    },
+    {
+      "id": 3500542,
+      "postDate": "2026-07-19T18:39:31.167Z",
+      "content": "<p>Card games like this are very fun and a lot of the meaningful decisions don't become salient until you've played a while.</p>",
+      "rawMarkdown": "Card games like this are very fun and a lot of the meaningful decisions don't become salient until you've played a while.",
+      "votes": 1
+    },
+    {
+      "id": 3500455,
+      "postDate": "2026-07-19T13:16:25.807Z",
+      "content": "<p>Kaggle Swag with Some Pokemon flavor would be an awesome reward</p>",
+      "rawMarkdown": "Kaggle Swag with Some Pokemon flavor would be an awesome reward",
+      "votes": 1
+    },
+    {
+      "id": 3500414,
+      "postDate": "2026-07-19T11:10:56.353Z",
+      "content": "<p>Haha, so you’re participating in this competition.</p>\n<p>I hope you achieve a great result and earn the Grandmaster title at this competition.</p>",
+      "rawMarkdown": "Haha, so you’re participating in this competition.\n\nI hope you achieve a great result and earn the Grandmaster title at this competition.\n",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3500420,
+          "postDate": "2026-07-19T11:21:42.350Z",
+          "content": "<p>He already did in neurogolf</p>",
+          "rawMarkdown": "He already did in neurogolf",
+          "votes": 1
+        },
+        {
+          "id": 3500421,
+          "postDate": "2026-07-19T11:22:20.510Z",
+          "content": "<p>Thanks, already get the title (will see after neurogolf's official validation).\nI may not be able to be in top 10% in this challenge, but I really hope to learn something since I'm pretty new in RL challenges</p>",
+          "rawMarkdown": "Thanks, already get the title (will see after neurogolf's official validation).\nI may not be able to be in top 10% in this challenge, but I really hope to learn something since I'm pretty new in RL challenges",
+          "votes": 2
+        }
+      ]
+    },
+    {
+      "id": 3500649,
+      "postDate": "2026-07-20T06:12:49.800Z",
+      "content": "<p>\"木木梟\"  That's his profile picture</p>",
+      "rawMarkdown": "\"木木梟\"  That's his profile picture",
+      "votes": 2
+    },
+    {
+      "id": 3501685,
+      "postDate": "2026-07-22T15:44:09.687Z",
+      "content": "<p>I wanted to try in this competition, but instead I started actually playing PTCGL and it's more fun than wrestling with an LLM.</p>",
+      "rawMarkdown": "I wanted to try in this competition, but instead I started actually playing PTCGL and it's more fun than wrestling with an LLM."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "topic": {
+    "id": 726708,
+    "title": "How much time does an agent get per round/game?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/726708",
+    "commentCount": 2,
+    "votes": 1,
+    "postDate": "2026-07-16T06:43:35.865657500Z",
+    "lastCommentPostDate": "2026-07-16T18:23:32.870Z"
+  },
+  "messages": [
+    {
+      "id": 3498908,
+      "postDate": "2026-07-16T06:43:35.867Z",
+      "content": "<p>I was wondering what the timelimit for making a decision per round or per game is.\nI read that it was 600s but I couldn't verify it.</p>",
+      "rawMarkdown": "I was wondering what the timelimit for making a decision per round or per game is.\nI read that it was 600s but I couldn't verify it.",
+      "votes": 1
+    },
+    {
+      "id": 3499088,
+      "postDate": "2026-07-16T14:32:48.793Z",
+      "content": "<p>600s per game - no time limit per move.</p>",
+      "rawMarkdown": "600s per game - no time limit per move.\n",
+      "votes": 2,
+      "replies": [
+        {
+          "id": 3499187,
+          "postDate": "2026-07-16T18:23:32.870Z",
+          "content": "<p>Thank you 👍</p>",
+          "rawMarkdown": "Thank you 👍"
+        }
+      ]
+    }
+  ]
+}

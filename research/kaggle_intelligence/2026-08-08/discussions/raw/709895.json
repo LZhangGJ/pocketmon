@@ -1,0 +1,32 @@
+{
+  "topic": {
+    "id": 709895,
+    "title": "[Solved] [Bug] Player going first can attack on Turn 1",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709895",
+    "commentCount": 2,
+    "postDate": "2026-06-20T02:28:22.852439600Z",
+    "lastCommentPostDate": "2026-06-20T12:30:45.853333300Z"
+  },
+  "messages": [
+    {
+      "id": 3475888,
+      "postDate": "2026-06-20T07:19:24.173Z",
+      "content": "<p>The replay viewer makes this a little hard to see, but looking closely it appears the dudunsparce player started their turn, drew luxurious cape, and ended the turn (you can see this happen during actions 6-7 on the bottom bar). The riolu player went second, so they are allowed to attack on their first turn.</p>",
+      "rawMarkdown": "The replay viewer makes this a little hard to see, but looking closely it appears the dudunsparce player started their turn, drew luxurious cape, and ended the turn (you can see this happen during actions 6-7 on the bottom bar). The riolu player went second, so they are allowed to attack on their first turn.",
+      "replies": [
+        {
+          "id": 3476259,
+          "postDate": "2026-06-20T12:30:45.853Z",
+          "content": "<p>Thank you so much for taking a close look at the replay!</p>\n<p>You are absolutely right. I investigated my AI's logs and realized my agent (going first) was intentionally passing its turn without playing any cards due to a bug in my heuristic evaluation (it refused to attach the cape to Dunsparce to save resources and decided to END the turn immediately instead).</p>\n<p>My turn ended so quickly that it was almost invisible on the replay viewer. Because of this, it looked exactly like the opponent was taking the very first turn of the game, which completely confused me!</p>\n<p>Thanks again for clarifying this and helping me out. I really appreciate it!</p>",
+          "rawMarkdown": "Thank you so much for taking a close look at the replay!\n\nYou are absolutely right. I investigated my AI's logs and realized my agent (going first) was intentionally passing its turn without playing any cards due to a bug in my heuristic evaluation (it refused to attach the cape to Dunsparce to save resources and decided to END the turn immediately instead).\n\nMy turn ended so quickly that it was almost invisible on the replay viewer. Because of this, it looked exactly like the opponent was taking the very first turn of the game, which completely confused me!\n\nThanks again for clarifying this and helping me out. I really appreciate it!"
+        }
+      ]
+    },
+    {
+      "id": 3475499,
+      "postDate": "2026-06-20T02:28:22.853Z",
+      "content": "<p>Hello,</p>\n<p>I noticed a critical bug in the simulation environment where the player going first is able to declare an attack on Turn 1, which violates the official Pokémon TCG rules.</p>\n<p>You can verify this bug in the following episode log, where the opponent (going first) executes an attack on their very first turn:\n<a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=53865835&amp;episodeId=80784802\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=53865835&amp;episodeId=80784802</a></p>\n<p>Could the team please look into this and update the simulator to prevent Turn 1 attacks for the first player? </p>\n<p>Thank you!</p>",
+      "rawMarkdown": "Hello,\n\nI noticed a critical bug in the simulation environment where the player going first is able to declare an attack on Turn 1, which violates the official Pokémon TCG rules.\n\nYou can verify this bug in the following episode log, where the opponent (going first) executes an attack on their very first turn:\nhttps://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=53865835&episodeId=80784802\n\nCould the team please look into this and update the simulator to prevent Turn 1 attacks for the first player? \n\nThank you!"
+    }
+  ]
+}

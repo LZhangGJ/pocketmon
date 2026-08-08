@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 709390,
+    "title": "Revenge KOs implementation ",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709390",
+    "votes": 1,
+    "postDate": "2026-06-18T13:41:48.543484Z",
+    "lastCommentPostDate": "2026-06-18T13:41:48.543333300Z"
+  },
+  "messages": [
+    {
+      "id": 3474675,
+      "postDate": "2026-06-18T13:41:48.543Z",
+      "content": "<p>Hello, I was wondering how one can detect if a KO occurred the previous turn? And could I also be shown where you found the info, I tried looking at the cg files and while helpful I couldn’t find what I needed.</p>",
+      "rawMarkdown": "Hello, I was wondering how one can detect if a KO occurred the previous turn? And could I also be shown where you found the info, I tried looking at the cg files and while helpful I couldn’t find what I needed.",
+      "votes": 1
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "topic": {
+    "id": 717093,
+    "title": "How Do I Collect Human Played Gameplay Examples?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/717093",
+    "commentCount": 1,
+    "postDate": "2026-07-01T13:36:05.659069500Z",
+    "lastCommentPostDate": "2026-07-31T23:38:43.436666700Z"
+  },
+  "messages": [
+    {
+      "id": 3506800,
+      "postDate": "2026-07-31T23:38:43.437Z",
+      "content": "<p>You can try ptcgLive,it can export your battle logs.</p>",
+      "rawMarkdown": "You can try ptcgLive,it can export your battle logs."
+    },
+    {
+      "id": 3485454,
+      "postDate": "2026-07-01T13:36:05.660Z",
+      "content": "<p>I have a specific gameplay strategy that I want to teach my agent. To do that I need to give it a bunch of examples of me playing. Is it possible to make a playable version of the simulator, so I can play a bunch of matches, pull the battle log, and use that as training data? If so, how?</p>\n<p>If it is possible to play the simulator, is it possible for me to expose normally hidden variables like what cards are in the deck, what cards are in the prize cards, and what cards are in the other hand? I want to have a specific level of control over the game, so I can correctly teach the specific strategy.</p>\n<p>If it isn't possible to play the simulator? What is the best way to capture human played games so that the battle log is in the same format as the simulator?</p>",
+      "rawMarkdown": "I have a specific gameplay strategy that I want to teach my agent. To do that I need to give it a bunch of examples of me playing. Is it possible to make a playable version of the simulator, so I can play a bunch of matches, pull the battle log, and use that as training data? If so, how?\n\nIf it is possible to play the simulator, is it possible for me to expose normally hidden variables like what cards are in the deck, what cards are in the prize cards, and what cards are in the other hand? I want to have a specific level of control over the game, so I can correctly teach the specific strategy.\n\nIf it isn't possible to play the simulator? What is the best way to capture human played games so that the battle log is in the same format as the simulator?"
+    }
+  ]
+}

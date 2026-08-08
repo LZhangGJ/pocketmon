@@ -1,0 +1,87 @@
+{
+  "topic": {
+    "id": 710361,
+    "title": "A Vibecoded Website to View Metas and Cards",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/710361",
+    "commentCount": 10,
+    "votes": 31,
+    "postDate": "2026-06-20T08:49:33.082259300Z",
+    "lastCommentPostDate": "2026-07-05T22:33:42.103333300Z"
+  },
+  "messages": [
+    {
+      "id": 3476013,
+      "postDate": "2026-06-20T08:49:33.083Z",
+      "content": "<p><a href=\"https://ptcg-kaggle-meta.vercel.app/\" target=\"_blank\">https://ptcg-kaggle-meta.vercel.app/</a></p>\n<p>Check out this website I made to view deck metas and card usage! Let me know if you would like to see anything else!</p>",
+      "rawMarkdown": "https://ptcg-kaggle-meta.vercel.app/\n\nCheck out this website I made to view deck metas and card usage! Let me know if you would like to see anything else!",
+      "votes": 31
+    },
+    {
+      "id": 3477361,
+      "postDate": "2026-06-21T13:50:13.917Z",
+      "content": "<p>Isn't it an issue that your link uses the  attribute without rel = \"noopener, noreferrer\"?</p>",
+      "rawMarkdown": "Isn't it an issue that your link uses the <target = \"_blank\"> attribute without rel = \"noopener, noreferrer\"?",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3477641,
+          "postDate": "2026-06-21T20:16:49.740Z",
+          "content": "<p>Thank you, I just changed that</p>",
+          "rawMarkdown": "Thank you, I just changed that",
+          "votes": -1
+        }
+      ]
+    },
+    {
+      "id": 3476762,
+      "postDate": "2026-06-20T22:44:38.900Z",
+      "content": "<p>Thanks for sharing. Based on the first deck # and percentage, I saw that the total number of decks decreased over the past few days. I'm assuming the meta is reading every submitted deck on the leaderboard. A decreasing total number seems odd - I wonder if people are un-submitting their deck, or if it's something else? \nFrom day 0 to now, the total decks submitted per the website are 2,555 , 15,632 , 13,040 , &amp; 10,855 decks.</p>",
+      "rawMarkdown": "Thanks for sharing. Based on the first deck # and percentage, I saw that the total number of decks decreased over the past few days. I'm assuming the meta is reading every submitted deck on the leaderboard. A decreasing total number seems odd - I wonder if people are un-submitting their deck, or if it's something else? \nFrom day 0 to now, the total decks submitted per the website are 2,555 , 15,632 , 13,040 , & 10,855 decks.",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3476769,
+          "postDate": "2026-06-20T23:19:26.137Z",
+          "content": "<p>Hi Ryan, great observation. This website does not contain every single matchup in the competition. The competition hosts post daily datasets containing top matchups in the competition <a href=\"https://www.kaggle.com/datasets/kaggle/pokemon-tcg-ai-battle-episodes-index\" target=\"_blank\">here</a>. They do not post every single submission and matchup in the competition, only top ranked matchups. The website is a way to visualize this data. </p>\n<p>Your math was spot on. If you check episode count in the dataset, each episode contains two players battling each other. Meaning two deck appearances per episode. The number of decks you calculated are 2x the number of episodes they posted for each date. Not really sure why they’re posting less matchups each day.</p>\n<p>Hope that answers your question! Let me know if you have any suggestions!</p>",
+          "rawMarkdown": "Hi Ryan, great observation. This website does not contain every single matchup in the competition. The competition hosts post daily datasets containing top matchups in the competition [here](https://www.kaggle.com/datasets/kaggle/pokemon-tcg-ai-battle-episodes-index). They do not post every single submission and matchup in the competition, only top ranked matchups. The website is a way to visualize this data. \n\nYour math was spot on. If you check episode count in the dataset, each episode contains two players battling each other. Meaning two deck appearances per episode. The number of decks you calculated are 2x the number of episodes they posted for each date. Not really sure why they’re posting less matchups each day.\n\nHope that answers your question! Let me know if you have any suggestions!"
+        }
+      ]
+    },
+    {
+      "id": 3489848,
+      "postDate": "2026-07-05T22:33:42.103Z",
+      "content": "<p>The website is great, for some reason it stopped working :/</p>",
+      "rawMarkdown": "The website is great, for some reason it stopped working :/"
+    },
+    {
+      "id": 3480544,
+      "postDate": "2026-06-25T00:22:32.330Z",
+      "content": "<p>6/24 posted now: <a href=\"https://ptcg-kaggle-meta.vercel.app/2026-06-24\" target=\"_blank\">https://ptcg-kaggle-meta.vercel.app/2026-06-24</a></p>",
+      "rawMarkdown": "6/24 posted now: https://ptcg-kaggle-meta.vercel.app/2026-06-24"
+    },
+    {
+      "id": 3480290,
+      "postDate": "2026-06-24T16:54:35.130Z",
+      "content": "<p>6/23 is posted: <a href=\"https://ptcg-kaggle-meta.vercel.app/2026-06-23\" target=\"_blank\">https://ptcg-kaggle-meta.vercel.app/2026-06-23</a></p>",
+      "rawMarkdown": "6/23 is posted: https://ptcg-kaggle-meta.vercel.app/2026-06-23"
+    },
+    {
+      "id": 3479739,
+      "postDate": "2026-06-24T04:45:09.980Z",
+      "content": "<p>6/23 is up: <a href=\"https://ptcg-kaggle-meta.vercel.app/2026-06-23\" target=\"_blank\">https://ptcg-kaggle-meta.vercel.app/2026-06-23</a></p>",
+      "rawMarkdown": "6/23 is up: https://ptcg-kaggle-meta.vercel.app/2026-06-23"
+    },
+    {
+      "id": 3478718,
+      "postDate": "2026-06-23T00:45:15.910Z",
+      "content": "<p>6/22: <a href=\"https://ptcg-kaggle-meta.vercel.app/2026-06-22\" target=\"_blank\">https://ptcg-kaggle-meta.vercel.app/2026-06-22</a></p>",
+      "rawMarkdown": "6/22: https://ptcg-kaggle-meta.vercel.app/2026-06-22"
+    },
+    {
+      "id": 3477743,
+      "postDate": "2026-06-22T01:25:34.543Z",
+      "content": "<p>6/21 results are available here: <a href=\"https://ptcg-kaggle-meta.vercel.app/2026-06-21\" target=\"_blank\">https://ptcg-kaggle-meta.vercel.app/2026-06-21</a></p>",
+      "rawMarkdown": "6/21 results are available here: https://ptcg-kaggle-meta.vercel.app/2026-06-21"
+    }
+  ]
+}

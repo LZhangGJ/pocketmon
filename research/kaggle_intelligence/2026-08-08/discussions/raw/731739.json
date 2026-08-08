@@ -1,0 +1,88 @@
+{
+  "topic": {
+    "id": 731739,
+    "title": "Why is there so much grimmsnarl",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/731739",
+    "commentCount": 10,
+    "votes": 3,
+    "postDate": "2026-08-01T01:04:41.788393Z",
+    "lastCommentPostDate": "2026-08-05T15:37:51.796666700Z"
+  },
+  "messages": [
+    {
+      "id": 3508198,
+      "postDate": "2026-08-03T22:50:22.257Z",
+      "content": "<p>Grimmsnarl is favored into Alakazam and has good lines into beating Crustle, both of which made up the majority of the top of the leaderboard for a while (based on the kaggle replay data, and the images here: <a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/729926)\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/729926)</a>.</p>",
+      "rawMarkdown": "Grimmsnarl is favored into Alakazam and has good lines into beating Crustle, both of which made up the majority of the top of the leaderboard for a while (based on the kaggle replay data, and the images here: https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/729926).",
+      "votes": 3,
+      "replies": [
+        {
+          "id": 3508214,
+          "postDate": "2026-08-04T00:00:26.067Z",
+          "content": "<p>That makes sense, it's just based on playing ptcg the deck doesn't seem that good</p>",
+          "rawMarkdown": "That makes sense, it's just based on playing ptcg the deck doesn't seem that good",
+          "replies": [
+            {
+              "id": 3508218,
+              "postDate": "2026-08-04T00:42:52.377Z",
+              "content": "<p>If you're playing on PTCG Live, they are in a different format with many different cards and decks. But in both the current format and the Kaggle competition format, I agree that the Grimmsnarl deck is not so strong. In particular, Dragapult Crushing Hammers is a powerful deck into Grimmsnarl. But in the Kaggle meta, there are very few good Hammer pult agents, so Grimm can run freely into these lists.</p>\n<p>I'm still trying to figure out how to get my ML loop to work successfully :P I think I have some good ideas for decks that can run better if you ever want to chat more on it. I recommend a Hammer Pult deck with Unfair Stamp, in general, if your agent is capable of running such a list.</p>",
+              "rawMarkdown": "If you're playing on PTCG Live, they are in a different format with many different cards and decks. But in both the current format and the Kaggle competition format, I agree that the Grimmsnarl deck is not so strong. In particular, Dragapult Crushing Hammers is a powerful deck into Grimmsnarl. But in the Kaggle meta, there are very few good Hammer pult agents, so Grimm can run freely into these lists.\n\nI'm still trying to figure out how to get my ML loop to work successfully :P I think I have some good ideas for decks that can run better if you ever want to chat more on it. I recommend a Hammer Pult deck with Unfair Stamp, in general, if your agent is capable of running such a list.",
+              "votes": 1
+            },
+            {
+              "id": 3508226,
+              "postDate": "2026-08-04T01:16:51.807Z",
+              "content": "<p>I dont like live, i would lose a bunch of games and then win a large in person event with the exact same deck. I have been running only pult and have tried hammers but it hasn’t worked super well</p>",
+              "rawMarkdown": "I dont like live, i would lose a bunch of games and then win a large in person event with the exact same deck. I have been running only pult and have tried hammers but it hasn’t worked super well"
+            },
+            {
+              "id": 3508233,
+              "postDate": "2026-08-04T01:47:14.660Z",
+              "content": "<p>The competition and skill can vary a lot between online and in person. The hammer deck has to have exponentially more complexity with how a heads or tails on a Crushing Hammer coin flip can change your strategy within each turn, so I imagine that is part of why many players are not submitting Dragapult. Along with the strategy needed by Pult to win into some of the single prize decks (using Jet Headbutt to buy a turn before using Boss's Orders to take a multi-turn KO, for example).</p>",
+              "rawMarkdown": "The competition and skill can vary a lot between online and in person. The hammer deck has to have exponentially more complexity with how a heads or tails on a Crushing Hammer coin flip can change your strategy within each turn, so I imagine that is part of why many players are not submitting Dragapult. Along with the strategy needed by Pult to win into some of the single prize decks (using Jet Headbutt to buy a turn before using Boss's Orders to take a multi-turn KO, for example)."
+            },
+            {
+              "id": 3508489,
+              "postDate": "2026-08-04T16:38:31.560Z",
+              "content": "<p>If you compare the matchup stats from limitlesstcg vs those here, they are quite different, and dragapult in particular is markedly worse. If there is someday a superhuman AI like in other games, it might play 100% dragapult, but in this competition I'm not sure.</p>",
+              "rawMarkdown": "If you compare the matchup stats from limitlesstcg vs those here, they are quite different, and dragapult in particular is markedly worse. If there is someday a superhuman AI like in other games, it might play 100% dragapult, but in this competition I'm not sure."
+            },
+            {
+              "id": 3508626,
+              "postDate": "2026-08-05T00:06:29.950Z",
+              "content": "<p>I think we agree. From what I see, however, Grimmsnarl decks are worse into Dragapult Crushing Hammer when I look at this link: <a href=\"https://labs.limitlesstcg.com/decks/grimmsnarl-froslass?tournaments=68%2C67%2C66%2C65%2C64%2C63%2C62\" target=\"_blank\">https://labs.limitlesstcg.com/decks/grimmsnarl-froslass?tournaments=68%2C67%2C66%2C65%2C64%2C63%2C62</a> . This is Grimmsnarl performance, at major IRL events, into all decks during the format that this Kaggle tournament is under, including Dragapult. For what it is worth, this site cannot filter \"Dragapult\" into \"Dragapult with Crushing Hammer\" - the win rate says under 40% for Grimm vs. straight Pult.</p>",
+              "rawMarkdown": "I think we agree. From what I see, however, Grimmsnarl decks are worse into Dragapult Crushing Hammer when I look at this link: https://labs.limitlesstcg.com/decks/grimmsnarl-froslass?tournaments=68%2C67%2C66%2C65%2C64%2C63%2C62 . This is Grimmsnarl performance, at major IRL events, into all decks during the format that this Kaggle tournament is under, including Dragapult. For what it is worth, this site cannot filter \"Dragapult\" into \"Dragapult with Crushing Hammer\" - the win rate says under 40% for Grimm vs. straight Pult."
+            },
+            {
+              "id": 3508875,
+              "postDate": "2026-08-05T15:37:51.797Z",
+              "content": "<p>If I compute e.g. Nash equilibrium deck choices with human stats, some Dragapult variant is usually the top pick, but if I use Kaggle AI agents stats, the picture is quite different. So optimising for human play might lead to different choices than optimising for agent play. However, your post made me re-run the numbers and Dragapult agents have become a lot better (now slightly favored vs Grimmsnarl, while they were losers before), so it is definitely learnable and the meta is shifting when new, stronger agents come into play.</p>",
+              "rawMarkdown": "If I compute e.g. Nash equilibrium deck choices with human stats, some Dragapult variant is usually the top pick, but if I use Kaggle AI agents stats, the picture is quite different. So optimising for human play might lead to different choices than optimising for agent play. However, your post made me re-run the numbers and Dragapult agents have become a lot better (now slightly favored vs Grimmsnarl, while they were losers before), so it is definitely learnable and the meta is shifting when new, stronger agents come into play."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3508312,
+      "postDate": "2026-08-04T08:21:20.137Z",
+      "content": "<p>people starts from imitation learning which uses existing massive battle log and that deck shows up in most of battles, so if you try to use trained model for playing some decks, that model can handle grimmsnarl very well from the beginning, you don't need to fine-tune or collect new data for your specific deck, that's why people usse this deck at first</p>",
+      "rawMarkdown": "people starts from imitation learning which uses existing massive battle log and that deck shows up in most of battles, so if you try to use trained model for playing some decks, that model can handle grimmsnarl very well from the beginning, you don't need to fine-tune or collect new data for your specific deck, that's why people usse this deck at first",
+      "votes": 1
+    },
+    {
+      "id": 3506838,
+      "postDate": "2026-08-01T01:04:41.790Z",
+      "content": "<p>Can anyone tell me why 80% of my matches are against grimmsnarl? I don't see a public notebook or anything. I guess it's an easy and good deck for bots to play?</p>",
+      "rawMarkdown": "Can anyone tell me why 80% of my matches are against grimmsnarl? I don't see a public notebook or anything. I guess it's an easy and good deck for bots to play?",
+      "votes": 3
+    },
+    {
+      "id": 3506852,
+      "postDate": "2026-08-01T01:45:44.643Z",
+      "content": "<p>Because Grimm is well-suited to the current Kaggle environment, it can effectively handle 600-900 points and is more stable than other decks.</p>",
+      "rawMarkdown": "Because Grimm is well-suited to the current Kaggle environment, it can effectively handle 600-900 points and is more stable than other decks.",
+      "votes": 1
+    }
+  ]
+}

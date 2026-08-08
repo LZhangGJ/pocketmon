@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 709490,
+    "title": "What can we learn from previous AI card games simulators?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/709490",
+    "votes": 4,
+    "postDate": "2026-06-18T21:58:45.872906900Z",
+    "lastCommentPostDate": "2026-06-18T21:58:45.873333300Z"
+  },
+  "messages": [
+    {
+      "id": 3474852,
+      "postDate": "2026-06-18T21:58:45.873Z",
+      "content": "<p>From the paper: \"Summarizing Strategy Card Game AI Competition\" (<a href=\"https://oss.quanweidu.com/Qwd_AI/Datas/pdfs/2544f7fbafaa5bb02350c31a9d1e5d5e.pdf\" target=\"_blank\">https://oss.quanweidu.com/Qwd_AI/Datas/pdfs/2544f7fbafaa5bb02350c31a9d1e5d5e.pdf</a>)</p>\n<p>My reading notes:</p>\n<ul>\n<li>the typical approach competitors take is \"evolution\" - treat cards as genes and decks as genotypes, with evaluation based on playouts between AI agents</li>\n<li>\"Handcrafted rule-based agents dominated the battle phase. However, the best players employed variants of well-known search methods like Minimax (few plys deep; alpha-beta and heuristic pruning) and MCTS (depth-limited with a heuristic cut-off). The most significant improvements reported by all players were move ordering and pruning, and lethal (winning) move detection\"</li>\n<li>Search-based agents were the most common and won all competitions running version 1.2. All of them employed move pruning either explicitly (certain actions were disallowed) or implicitly (moves were generated out of ordered actions). Similarly, most of them implemented lethal move detection. Only some of the agents searched through the opponent’s turn, and it is clear that while it is beneficial to do so, it requires further pruning and heuristic evaluation to make it feasible with the exploding branching factor.</li>\n</ul>\n<p>Neural networks? Maybe. It seems that as competitors got smarter to the competition, they were able to dominate the later competitions compared to rule-based (ruh-roh).</p>\n<ul>\n<li>If you can train the RL correctly, it can handily beat rule-based approaches (\"ByteRL\" from ByteDance)</li>\n<li>You're gonna wanna train using PPO.</li>\n</ul>",
+      "rawMarkdown": "From the paper: \"Summarizing Strategy Card Game AI Competition\" (https://oss.quanweidu.com/Qwd_AI/Datas/pdfs/2544f7fbafaa5bb02350c31a9d1e5d5e.pdf)\n\nMy reading notes:\n- the typical approach competitors take is \"evolution\" - treat cards as genes and decks as genotypes, with evaluation based on playouts between AI agents\n- \"Handcrafted rule-based agents dominated the battle phase. However, the best players employed variants of well-known search methods like Minimax (few plys deep; alpha-beta and heuristic pruning) and MCTS (depth-limited with a heuristic cut-off). The most significant improvements reported by all players were move ordering and pruning, and lethal (winning) move detection\"\n- Search-based agents were the most common and won all competitions running version 1.2. All of them employed move pruning either explicitly (certain actions were disallowed) or implicitly (moves were generated out of ordered actions). Similarly, most of them implemented lethal move detection. Only some of the agents searched through the opponent’s turn, and it is clear that while it is beneficial to do so, it requires further pruning and heuristic evaluation to make it feasible with the exploding branching factor.\n\nNeural networks? Maybe. It seems that as competitors got smarter to the competition, they were able to dominate the later competitions compared to rule-based (ruh-roh).\n- If you can train the RL correctly, it can handily beat rule-based approaches (\"ByteRL\" from ByteDance)\n- You're gonna wanna train using PPO.",
+      "votes": 4
+    }
+  ]
+}

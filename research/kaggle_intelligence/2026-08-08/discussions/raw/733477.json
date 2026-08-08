@@ -1,0 +1,19 @@
+{
+  "topic": {
+    "id": 733477,
+    "title": "Game engine bug",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/733477",
+    "votes": 1,
+    "postDate": "2026-08-07T03:02:49.036075800Z",
+    "lastCommentPostDate": "2026-08-07T03:02:49.036666700Z"
+  },
+  "messages": [
+    {
+      "id": 3509775,
+      "postDate": "2026-08-07T03:02:49.037Z",
+      "content": "<p>Opponent played multiple n's pp up with no valid targets</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F25752159%2F0599dcf6e1ba7aec552bccc08cb77550%2FScreenshot%202026.png?generation=1786071683443319&amp;alt=media\" alt=\"\"></p>",
+      "rawMarkdown": "Opponent played multiple n's pp up with no valid targets\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F25752159%2F0599dcf6e1ba7aec552bccc08cb77550%2FScreenshot%202026.png?generation=1786071683443319&alt=media)",
+      "votes": 1
+    }
+  ]
+}

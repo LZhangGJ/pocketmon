@@ -1,0 +1,109 @@
+{
+  "topic": {
+    "id": 731352,
+    "title": "Does a Pure Heuristic Top-100 Agent Exist?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/731352",
+    "commentCount": 12,
+    "votes": 3,
+    "postDate": "2026-07-31T06:12:32.579039500Z",
+    "lastCommentPostDate": "2026-08-04T13:34:19.586666700Z"
+  },
+  "messages": [
+    {
+      "id": 3508403,
+      "postDate": "2026-08-04T13:34:19.587Z",
+      "content": "<p>The top-ranked ones are probably… heuristic bots, I think.</p>",
+      "rawMarkdown": "The top-ranked ones are probably… heuristic bots, I think.",
+      "votes": -1
+    },
+    {
+      "id": 3507259,
+      "postDate": "2026-08-01T17:14:33.693Z",
+      "content": "<p>Google for presentation slides of “DeNA engineer Kosuke Sakimi detailed the implementation of reinforcement learning AI for Pokémon Trading Card Game Pocket at CEDEC 2026.”. He compares rule based, decision tree based and rl agent</p>",
+      "rawMarkdown": "Google for presentation slides of “DeNA engineer Kosuke Sakimi detailed the implementation of reinforcement learning AI for Pokémon Trading Card Game Pocket at CEDEC 2026.”. He compares rule based, decision tree based and rl agent",
+      "votes": 4
+    },
+    {
+      "id": 3506647,
+      "postDate": "2026-07-31T17:35:23.993Z",
+      "content": "<p>why don't you do an experiment in codex:</p>\n<p>\"folder xxx shows some rule based agent code. we have a neural-trained agent and its replay jsons. write a rule-based agent that imitate or outsmart the neural agent the producted the same replay jsons as close as possible.\"</p>",
+      "rawMarkdown": "why don't you do an experiment in codex:\n\n\"folder xxx shows some rule based agent code. we have a neural-trained agent and its replay jsons. write a rule-based agent that imitate or outsmart the neural agent the producted the same replay jsons as close as possible.\"",
+      "votes": 3,
+      "replies": [
+        {
+          "id": 3506943,
+          "postDate": "2026-08-01T06:07:39.523Z",
+          "content": "<p>It's not that easy bruv, reverse can be done easily tho</p>",
+          "rawMarkdown": "It's not that easy bruv, reverse can be done easily tho",
+          "votes": -1,
+          "replies": [
+            {
+              "id": 3506947,
+              "postDate": "2026-08-01T06:14:31.367Z",
+              "content": "<p>If it is not easy, then it means chances are slim that decision can be better than rl. </p>",
+              "rawMarkdown": "If it is not easy, then it means chances are slim that decision can be better than rl. "
+            },
+            {
+              "id": 3506950,
+              "postDate": "2026-08-01T06:18:06.123Z",
+              "content": "<p>I actually tried.eg, ask chatgpt to convert my rl agent to rule agent. Doesn’t work, but i discovered something else. Becuase codex keep explain why it doesn’t work and remedy plan, verify rule correct,  … etc … it gives lots of insights how to design deck, train the rl etc</p>\n<p>Also rule can be based on eg decision tree of the sparse vector …</p>",
+              "rawMarkdown": "I actually tried.eg, ask chatgpt to convert my rl agent to rule agent. Doesn’t work, but i discovered something else. Becuase codex keep explain why it doesn’t work and remedy plan, verify rule correct,  … etc … it gives lots of insights how to design deck, train the rl etc\n\n\nAlso rule can be based on eg decision tree of the sparse vector …",
+              "votes": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3507246,
+      "postDate": "2026-08-01T17:05:08.687Z",
+      "content": "<p>I would imagine that the entries from the James Cox &amp; Henry Chao duo (currently top 10) are rules-based agents.\nThey are both accomplished players in real-life play and I don't know that either of them have any history of RL or even ML. At a glance it looks like <a href=\"https://x.com/ptcgjamesc/status/2072321980024357031/\" target=\"_blank\">their list is a tool box</a> - 'big basics' for attackers, but with retreat lock &amp; wall options. I think it would be very feasible to write a strong rules-based agent for this strategy using GenAI, especially for a top-player.</p>\n<p>In my opinion, rules-based agents can only outperform competent RL if they adopt an unconventional/underrepresented strategy. I think given the sheer volume of games available to train on now, that for conventional strategies e.g. Alakazam an RL model would have better handling of the various edge cases that can arise in the game than an evaluation rule codebase.</p>\n<p>I don't know if the models people are training are as flexible as being able to play any given list of 60 cards at this stage, but that capability along with anticipating the underrepresented deck lists seems to me like it would be enough to crush rules-based agents across the board.</p>\n<p>I am rooting for the Cox &amp; Chao duo, but I think that they risk losing their edge as their agent volunteers increasingly more logs about how it plays into the public dataset. I wouldn't be surprised if their final submission is entirely different to their current one. In general I think any rules-based agents that end up performing well in the final standings will appear out of nowhere very close to the submission deadline. </p>",
+      "rawMarkdown": "I would imagine that the entries from the James Cox & Henry Chao duo (currently top 10) are rules-based agents.\nThey are both accomplished players in real-life play and I don't know that either of them have any history of RL or even ML. At a glance it looks like [their list is a tool box](https://x.com/ptcgjamesc/status/2072321980024357031/) - 'big basics' for attackers, but with retreat lock & wall options. I think it would be very feasible to write a strong rules-based agent for this strategy using GenAI, especially for a top-player.\n\nIn my opinion, rules-based agents can only outperform competent RL if they adopt an unconventional/underrepresented strategy. I think given the sheer volume of games available to train on now, that for conventional strategies e.g. Alakazam an RL model would have better handling of the various edge cases that can arise in the game than an evaluation rule codebase.\n\nI don't know if the models people are training are as flexible as being able to play any given list of 60 cards at this stage, but that capability along with anticipating the underrepresented deck lists seems to me like it would be enough to crush rules-based agents across the board.\n\nI am rooting for the Cox & Chao duo, but I think that they risk losing their edge as their agent volunteers increasingly more logs about how it plays into the public dataset. I wouldn't be surprised if their final submission is entirely different to their current one. In general I think any rules-based agents that end up performing well in the final standings will appear out of nowhere very close to the submission deadline. ",
+      "votes": 2
+    },
+    {
+      "id": 3506290,
+      "postDate": "2026-07-31T06:12:32.580Z",
+      "content": "<p>Most of the discussion seems to revolve around behavioural cloning, reinforcement learning, and other learned policies, so we're curious has anyone reached the top 100 using only handcrafted logic?</p>\n<p>If you're a top-100 player using a pure heuristic approach and would be interested in joining our team, we'd love to hear from you. A rough rank range and high level overview are sufficient.</p>",
+      "rawMarkdown": "Most of the discussion seems to revolve around behavioural cloning, reinforcement learning, and other learned policies, so we're curious has anyone reached the top 100 using only handcrafted logic?\n\nIf you're a top-100 player using a pure heuristic approach and would be interested in joining our team, we'd love to hear from you. A rough rank range and high level overview are sufficient.",
+      "votes": 3
+    },
+    {
+      "id": 3506470,
+      "postDate": "2026-07-31T12:21:46.957Z",
+      "content": "<p>Probably.  Some folks in another thread analysed game log start up and decision times to try to answer that question.  Some of what I assume are rule based agents have been pretty sticky near the top of the leaderboard, perhaps because they tend to overfit  to the leaderboard  less.  I would love to know what approach Yushin Ito is taking, that guy is a hero.  He hasn't submitted in 14 Days and is still in the 30s on the leaderboard with an Alakazam deck.</p>",
+      "rawMarkdown": "Probably.  Some folks in another thread analysed game log start up and decision times to try to answer that question.  Some of what I assume are rule based agents have been pretty sticky near the top of the leaderboard, perhaps because they tend to overfit  to the leaderboard  less.  I would love to know what approach Yushin Ito is taking, that guy is a hero.  He hasn't submitted in 14 Days and is still in the 30s on the leaderboard with an Alakazam deck.",
+      "votes": 2,
+      "replies": [
+        {
+          "id": 3506565,
+          "postDate": "2026-07-31T15:32:54.280Z",
+          "content": "<p>I wouldn't be surprised if a few of those sticky leaderboard spots are pure heuristics. Not asking for details, but is your current approach heuristic-based too? 👀</p>",
+          "rawMarkdown": "I wouldn't be surprised if a few of those sticky leaderboard spots are pure heuristics. Not asking for details, but is your current approach heuristic-based too? 👀",
+          "replies": [
+            {
+              "id": 3506633,
+              "postDate": "2026-07-31T17:14:39.250Z",
+              "content": "<p>Mine is not heuristic based.</p>",
+              "rawMarkdown": "Mine is not heuristic based."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3506454,
+      "postDate": "2026-07-31T11:47:15.360Z",
+      "content": "<p>Hey, one of my heuristics agents peaked at rank 151 breefly, but i pulled it from the ladder for other tests so it wasnt really settled there. Not quite top 100 but it might give a indication</p>",
+      "rawMarkdown": "Hey, one of my heuristics agents peaked at rank 151 breefly, but i pulled it from the ladder for other tests so it wasnt really settled there. Not quite top 100 but it might give a indication",
+      "replies": [
+        {
+          "id": 3506540,
+          "postDate": "2026-07-31T14:43:52.523Z",
+          "content": "<p>Yeah, one of our heuristic-only submissions actually peaked around rank 150 too, but didn't stay there 🥀</p>",
+          "rawMarkdown": "Yeah, one of our heuristic-only submissions actually peaked around rank 150 too, but didn't stay there 🥀"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "topic": {
+    "id": 712893,
+    "title": "Temporary Game Rate Decrease",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/712893",
+    "commentCount": 5,
+    "votes": 26,
+    "postDate": "2026-06-23T16:17:43.569231800Z",
+    "lastCommentPostDate": "2026-06-25T14:05:29.303333300Z"
+  },
+  "messages": [
+    {
+      "id": 3479299,
+      "postDate": "2026-06-23T16:17:43.570Z",
+      "content": "<p>Until <a href=\"https://www.kaggle.com/competitions/orbit-wars\" target=\"_blank\">https://www.kaggle.com/competitions/orbit-wars</a> submission window closes (about 6 hours from now) we've decreased the game play rate in the competition to avoid so instability issues around the submission pipeline. Apologies for the inconveince and game rates should be back soon!</p>",
+      "rawMarkdown": "Until https://www.kaggle.com/competitions/orbit-wars submission window closes (about 6 hours from now) we've decreased the game play rate in the competition to avoid so instability issues around the submission pipeline. Apologies for the inconveince and game rates should be back soon!",
+      "votes": 26
+    },
+    {
+      "id": 3479651,
+      "postDate": "2026-06-24T01:50:07.797Z",
+      "content": "<p>Orbit wars has now closed and we have increased the game rate. </p>\n<p>We are currently working through some scaling issues and might have further updates to the game play rate once that is completed.</p>",
+      "rawMarkdown": "Orbit wars has now closed and we have increased the game rate. \n\nWe are currently working through some scaling issues and might have further updates to the game play rate once that is completed.",
+      "votes": 7
+    },
+    {
+      "id": 3481012,
+      "postDate": "2026-06-25T14:05:29.303Z",
+      "content": "<p>Is it possible to bring an agent that's capable of learning from the initial plays and readjust in the next game, or Kaggle referee deletes that memory and keep playing the agent you submitted with trained memory alone?</p>",
+      "rawMarkdown": "Is it possible to bring an agent that's capable of learning from the initial plays and readjust in the next game, or Kaggle referee deletes that memory and keep playing the agent you submitted with trained memory alone?"
+    },
+    {
+      "id": 3479362,
+      "postDate": "2026-06-23T17:39:25.413Z",
+      "content": "<p>Thank you for the update, and good luck to those participating in Orbit Wars!</p>",
+      "rawMarkdown": "Thank you for the update, and good luck to those participating in Orbit Wars!"
+    },
+    {
+      "id": 3479723,
+      "postDate": "2026-06-24T04:04:46.093Z",
+      "content": "<p>Thank you so much.\nI'm Japanese, so please excuse my poor English.\nThis might be a different issue, but I'm having trouble.</p>\n<p>When I go to view my individual replays, the area where the card battle was previously displayed graphically now shows \"Unable to load episode replay: XXXXXXXX\".\nI can't see the battle, and the replay JSON download also fails (it just shows \"Too many requests.\").</p>",
+      "rawMarkdown": "Thank you so much.\nI'm Japanese, so please excuse my poor English.\nThis might be a different issue, but I'm having trouble.\n\nWhen I go to view my individual replays, the area where the card battle was previously displayed graphically now shows \"Unable to load episode replay: XXXXXXXX\".\nI can't see the battle, and the replay JSON download also fails (it just shows \"Too many requests.\").",
+      "isDeleted": true,
+      "replies": [
+        {
+          "id": 3480582,
+          "postDate": "2026-06-25T02:44:30.433Z",
+          "content": "<p>You have a daily limit to the number of episodes per day you can download across web/api/cli. You would see this message if you are downloading a lot in a given 24 hours. I recommend downloading the episodes from our daily datasets as they don't count toward your daily limit: <a href=\"https://www.kaggle.com/datasets/kaggle/pokemon-tcg-ai-battle-episodes-index\" target=\"_blank\">https://www.kaggle.com/datasets/kaggle/pokemon-tcg-ai-battle-episodes-index</a></p>",
+          "rawMarkdown": "You have a daily limit to the number of episodes per day you can download across web/api/cli. You would see this message if you are downloading a lot in a given 24 hours. I recommend downloading the episodes from our daily datasets as they don't count toward your daily limit: https://www.kaggle.com/datasets/kaggle/pokemon-tcg-ai-battle-episodes-index"
+        }
+      ]
+    }
+  ]
+}

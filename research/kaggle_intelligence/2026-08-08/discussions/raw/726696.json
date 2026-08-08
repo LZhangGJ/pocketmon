@@ -1,0 +1,17 @@
+{
+  "topic": {
+    "id": 726696,
+    "title": "Differences in the performance of Heuristic and RL",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/726696",
+    "postDate": "2026-07-16T04:08:53.151056600Z",
+    "lastCommentPostDate": "2026-07-16T04:08:53.150Z"
+  },
+  "messages": [
+    {
+      "id": 3498875,
+      "postDate": "2026-07-16T04:08:53.150Z",
+      "content": "<p>This is my first time learning about reinforcement learning, so I might not know much about the details of this competition.</p>\n<p>I’d like to ask for your opinions on how rule-based heuristics compare to RL methods like PPO and MCTS. When comparing these two approaches, which one is more effective for building an agent? Or could we combine the two approaches into a hybrid model? Thanks</p>",
+      "rawMarkdown": "This is my first time learning about reinforcement learning, so I might not know much about the details of this competition.\n\nI’d like to ask for your opinions on how rule-based heuristics compare to RL methods like PPO and MCTS. When comparing these two approaches, which one is more effective for building an agent? Or could we combine the two approaches into a hybrid model? Thanks"
+    }
+  ]
+}

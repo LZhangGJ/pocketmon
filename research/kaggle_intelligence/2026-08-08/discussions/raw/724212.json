@@ -1,0 +1,25 @@
+{
+  "topic": {
+    "id": 724212,
+    "title": "Can i train on my own hardware / cloud ? :)",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/724212",
+    "commentCount": 1,
+    "postDate": "2026-07-10T04:24:01.074345300Z",
+    "lastCommentPostDate": "2026-07-10T08:27:39.356666700Z"
+  },
+  "messages": [
+    {
+      "id": 3494560,
+      "postDate": "2026-07-10T08:27:39.357Z",
+      "content": "<p>yes                  </p>",
+      "rawMarkdown": "yes                  ",
+      "votes": 1
+    },
+    {
+      "id": 3494480,
+      "postDate": "2026-07-10T04:24:01.073Z",
+      "content": "<p>Is it ok to run training in cloud? </p>",
+      "rawMarkdown": "Is it ok to run training in cloud? "
+    }
+  ]
+}

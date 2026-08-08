@@ -1,0 +1,124 @@
+{
+  "topic": {
+    "id": 731298,
+    "title": "my plan on how to do RL training ... is it my hallucinations?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/731298",
+    "commentCount": 14,
+    "votes": 11,
+    "postDate": "2026-07-31T04:12:45.510846700Z",
+    "lastCommentPostDate": "2026-08-07T09:09:50.546666700Z"
+  },
+  "messages": [
+    {
+      "id": 3508641,
+      "postDate": "2026-08-05T01:06:41.303Z",
+      "content": "<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2F6add8b123810691044b19961da3342be%2FSelection_4500.png?generation=1785892046125189&amp;alt=media\" alt=\"\"></p>\n<p>analysing top player</p>",
+      "rawMarkdown": "![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2F6add8b123810691044b19961da3342be%2FSelection_4500.png?generation=1785892046125189&alt=media)\n\nanalysing top player",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3509882,
+          "postDate": "2026-08-07T09:09:50.547Z",
+          "content": "<p>Nice graph! How can I read this? </p>",
+          "rawMarkdown": "Nice graph! How can I read this? "
+        }
+      ]
+    },
+    {
+      "id": 3508096,
+      "postDate": "2026-08-03T17:09:43.320Z",
+      "content": "<p>Good Job hengck23！</p>",
+      "rawMarkdown": "Good Job hengck23！",
+      "votes": 1
+    },
+    {
+      "id": 3506223,
+      "postDate": "2026-07-31T04:12:45.510Z",
+      "content": "<p>my background:</p>\n<ul>\n<li>experience in CV, LLM, etc. Some experience in RL.</li>\n<li>But has not modeled a decision system before. Don't know anything about PTCG before.</li>\n</ul>\n<p>Below are my \"imaginations\". Still implementing and not sure if is helpful in RL training. I only confirmed chatgpt can implement rule-based agent with a specific strategy \"quite well\". Interpret with care and open to discussion.</p>\n<p>One thing bothering me now is +ve teacher. eg my agent is beaten by an opponent agent. <strong>If I can get a human card player, he can come up with, say 100 solutions which i can coded into rule based agent. how to learn from these and avoid confusion in RL?</strong></p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2F0a83938d73f7d9e9901caba3edc8712f%2FSelection_4445.png?generation=1785471161320660&amp;alt=media\" alt=\"\"></p>\n<p>reference: RL learning from rule-based agent: \n<a href=\"https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/717697\" target=\"_blank\">https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/717697</a> </p>",
+      "rawMarkdown": "my background:\n - experience in CV, LLM, etc. Some experience in RL.\n - But has not modeled a decision system before. Don't know anything about PTCG before.\n\nBelow are my \"imaginations\". Still implementing and not sure if is helpful in RL training. I only confirmed chatgpt can implement rule-based agent with a specific strategy \"quite well\". Interpret with care and open to discussion.\n\nOne thing bothering me now is +ve teacher. eg my agent is beaten by an opponent agent. **If I can get a human card player, he can come up with, say 100 solutions which i can coded into rule based agent. how to learn from these and avoid confusion in RL?**\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2F0a83938d73f7d9e9901caba3edc8712f%2FSelection_4445.png?generation=1785471161320660&alt=media)\n\n\nreference: RL learning from rule-based agent: \nhttps://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/717697 ",
+      "votes": 11
+    },
+    {
+      "id": 3507145,
+      "postDate": "2026-08-01T14:02:03.350Z",
+      "content": "<p>Is it possible to participate with single 4090（3-years-old）?</p>",
+      "rawMarkdown": "Is it possible to participate with single 4090（3-years-old）?",
+      "votes": 1,
+      "replies": [
+        {
+          "id": 3507185,
+          "postDate": "2026-08-01T15:26:32.500Z",
+          "content": "<p>Im using a 16gb GPU </p>",
+          "rawMarkdown": "Im using a 16gb GPU ",
+          "votes": 1
+        },
+        {
+          "id": 3507530,
+          "postDate": "2026-08-02T07:28:59.797Z",
+          "content": "<p>yes it is </p>",
+          "rawMarkdown": "yes it is ",
+          "votes": 1,
+          "replies": [
+            {
+              "id": 3507723,
+              "postDate": "2026-08-02T14:08:40.360Z",
+              "content": "<p>you've made it 👍</p>",
+              "rawMarkdown": "you've made it 👍",
+              "votes": 1
+            },
+            {
+              "id": 3508040,
+              "postDate": "2026-08-03T15:09:29.433Z",
+              "rawMarkdown": "",
+              "isDeleted": true
+            }
+          ]
+        },
+        {
+          "id": 3509624,
+          "postDate": "2026-08-06T18:22:53.890Z",
+          "content": "<p>Single 3070 (3 yrs old) here 🙋‍♂️</p>",
+          "rawMarkdown": "Single 3070 (3 yrs old) here 🙋‍♂️",
+          "votes": 1
+        }
+      ]
+    },
+    {
+      "id": 3507005,
+      "postDate": "2026-08-01T07:58:54.823Z",
+      "content": "<p>This is much more interesting than bored Markov decisions😅</p>",
+      "rawMarkdown": "This is much more interesting than bored Markov decisions😅",
+      "votes": 1
+    },
+    {
+      "id": 3506225,
+      "postDate": "2026-07-31T04:13:54.793Z",
+      "content": "<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2Ffe77e102f7580603f1d2a307c9673423%2FSelection_4446.png?generation=1785471186304876&amp;alt=media\" alt=\"\"></p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2Ff95c63d7fa125746e230bd25867d2d90%2FSelection_4447.png?generation=1785471212249175&amp;alt=media\" alt=\"\"></p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2Ff58a723f2f1f2162a79745e144e9825f%2FSelection_4448.png?generation=1785471232322356&amp;alt=media\" alt=\"\"></p>",
+      "rawMarkdown": "![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2Ffe77e102f7580603f1d2a307c9673423%2FSelection_4446.png?generation=1785471186304876&alt=media)\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2Ff95c63d7fa125746e230bd25867d2d90%2FSelection_4447.png?generation=1785471212249175&alt=media)\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2Ff58a723f2f1f2162a79745e144e9825f%2FSelection_4448.png?generation=1785471232322356&alt=media)",
+      "votes": 3,
+      "replies": [
+        {
+          "id": 3507049,
+          "postDate": "2026-08-01T10:24:40.907Z",
+          "content": "<p>The Frog is back :) Thanks for sharing… Wonder how much of above made into your progress recently..</p>",
+          "rawMarkdown": "The Frog is back :) Thanks for sharing... Wonder how much of above made into your progress recently..",
+          "replies": [
+            {
+              "id": 3507051,
+              "postDate": "2026-08-01T10:30:28.593Z",
+              "content": "<p>none. These are new ideas under exploration. Not contributing to score yet</p>",
+              "rawMarkdown": "none. These are new ideas under exploration. Not contributing to score yet",
+              "votes": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3509635,
+      "postDate": "2026-08-06T18:46:17.383Z",
+      "content": "<p>This is cool 😎 </p>",
+      "rawMarkdown": "This is cool 😎 \n"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "topic": {
+    "id": 728724,
+    "title": "Teammate deleted their Kaggle account. Am I still eligible to participate?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/728724",
+    "commentCount": 3,
+    "postDate": "2026-07-24T09:38:19.147632Z",
+    "lastCommentPostDate": "2026-07-24T19:12:00.870Z"
+  },
+  "messages": [
+    {
+      "id": 3502750,
+      "postDate": "2026-07-24T19:12:00.870Z",
+      "content": "<p>Yes, you're still eligible to participate. However if it's found that the teammate violated competition rules prior to deleting their account, your team may still be subject to disqualification.</p>",
+      "rawMarkdown": "Yes, you're still eligible to participate. However if it's found that the teammate violated competition rules prior to deleting their account, your team may still be subject to disqualification."
+    },
+    {
+      "id": 3502646,
+      "postDate": "2026-07-24T15:44:23.060Z",
+      "content": "<p>ask <a href=\"mailto:compliance@kaggle.com\">compliance@kaggle.com</a></p>",
+      "rawMarkdown": "ask compliance@kaggle.com"
+    },
+    {
+      "id": 3502484,
+      "postDate": "2026-07-24T11:03:23.360Z",
+      "content": "<p>May be contact kaggle support, send em a mail.</p>",
+      "rawMarkdown": "May be contact kaggle support, send em a mail."
+    },
+    {
+      "id": 3502440,
+      "postDate": "2026-07-24T09:38:19.147Z",
+      "content": "<p>Hi everyone,</p>\n<p>I formed a team with one of my uni friends for this competition. However, my teammate changed their mind about participating and deleted their Kaggle account.</p>\n<p>I am still listed as a member of the team, and I would like to continue participating in the competition. Does anyone know whether I am still eligible to participate?</p>\n<p>Any advice would be greatly appreciated. Thank you!</p>",
+      "rawMarkdown": "Hi everyone,\n\nI formed a team with one of my uni friends for this competition. However, my teammate changed their mind about participating and deleted their Kaggle account.\n\nI am still listed as a member of the team, and I would like to continue participating in the competition. Does anyone know whether I am still eligible to participate?\n\nAny advice would be greatly appreciated. Thank you!"
+    }
+  ]
+}

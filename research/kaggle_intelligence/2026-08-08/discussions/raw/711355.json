@@ -1,0 +1,27 @@
+{
+  "topic": {
+    "id": 711355,
+    "title": "Is the Training Required ?",
+    "topicUrl": "/competitions/pokemon-tcg-ai-battle/discussion/711355",
+    "commentCount": 1,
+    "votes": 2,
+    "postDate": "2026-06-21T11:12:25.655045100Z",
+    "lastCommentPostDate": "2026-06-21T17:34:47.266666700Z"
+  },
+  "messages": [
+    {
+      "id": 3477545,
+      "postDate": "2026-06-21T17:34:47.267Z",
+      "content": "<p>I tried RL and PPO and do not get good results, my bests results where with heuristic agents 😭</p>",
+      "rawMarkdown": "I tried RL and PPO and do not get good results, my bests results where with heuristic agents 😭",
+      "votes": 2
+    },
+    {
+      "id": 3477214,
+      "postDate": "2026-06-21T11:12:25.657Z",
+      "content": "<p>Thanks to the host, staff, and participants. I’m glad to be involved in this event. However, I have a few questions.</p>\n<p>The subtitle says it is an AI \"Training\" Agent. Does that mean all submissions should use reinforcement learning? In the past, we also called MSTC and minimax as AI, especially in game related areas. So, do the top-ranking agents mostly use machine learning methods?</p>\n<p>Additionally, I used PPO to train an agent that learns from the battle history of four official sample agents, as well as from random and self-play. However, I’m not sure how to fine-tune it for better performance. Could I ask for any advice or examples on how to improve it?</p>",
+      "rawMarkdown": "Thanks to the host, staff, and participants. I’m glad to be involved in this event. However, I have a few questions.\n\nThe subtitle says it is an AI \"Training\" Agent. Does that mean all submissions should use reinforcement learning? In the past, we also called MSTC and minimax as AI, especially in game related areas. So, do the top-ranking agents mostly use machine learning methods?\n\nAdditionally, I used PPO to train an agent that learns from the battle history of four official sample agents, as well as from random and self-play. However, I’m not sure how to fine-tune it for better performance. Could I ask for any advice or examples on how to improve it?",
+      "votes": 2
+    }
+  ]
+}
