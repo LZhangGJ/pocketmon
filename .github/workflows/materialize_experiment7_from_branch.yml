@@ -1,0 +1,32 @@
+name: Materialize Experiment 7 source from verified branch
+
+on:
+  push:
+    branches:
+      - agent/experiment7-multideck-ready-20260809
+    paths:
+      - experiment7/reference_archive/READY_FROM_BRANCH
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/experiment7-multideck-ready-20260809
+          fetch-depth: 0
+      - name: Fetch verified chunk branch
+        run: git fetch origin agent/experiment7-team-code-20260808
+      - name: Materialize and verify ordinary source files
+        run: python experiment7/integration/materialize_reference_from_branch.py .
+      - name: Commit ordinary source files
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A experiment7/reference experiment7/reference_archive
+          git diff --cached --check
+          git commit -m "Materialize teammate Experiment 7 source"
+          git push origin HEAD:agent/experiment7-multideck-ready-20260809
