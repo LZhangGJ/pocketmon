@@ -318,4 +318,4 @@ python -m compileall -q scripts/extract_kaggle_discussion_delta.py
 
 ## 12. 自动化启用条件
 
-`.github/workflows/kaggle-discussions-daily.yml` 合并到 GitHub 默认分支后，定时任务才会按日自动触发。在此之前可以通过该 workflow 的 `workflow_dispatch` 进行人工运行，但分支上的 workflow 文件本身不代表日程已经生效。
+`.github/workflows/kaggle-discussions-daily.yml` 必须先进入 GitHub 默认分支，`schedule` 和 `workflow_dispatch` 才可触发。文件进入默认分支后，可在 Actions 页面使用 `workflow_dispatch` 选择目标分支进行试跑；定时运行始终使用默认分支的最新版本。当前 PR 中存在 workflow 文件并不代表日程已经生效。
