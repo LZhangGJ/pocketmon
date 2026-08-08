@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "repository": "LZhangGJ/pocketmon",
+  "sourceBranch": "agent/experiment7-multideck-ready-20260809",
+  "workBranch": "codex/experiment7-multideck-run-20260809",
+  "linux": {
+    "repository": "/homes/lzhang/pocketmon",
+    "python": "/homes/lzhang/mypath/new/envs/trans/bin/python",
+    "replays": "/homes/lzhang/pocketmon/data/raw/replays/2026-08-06",
+    "ladderAnalysis": "/homes/lzhang/pocketmon/analysis/outputs/top_ladder_2026_08_07_20260808",
+    "runRoot": "/homes/lzhang/pocketmon/runs/experiment7-multideck-20260809",
+    "servers": [
+      "doraemon02",
+      "doraemon03",
+      "doraemon15",
+      "doraemon16",
+      "doraemon19",
+      "doraemon20"
+    ]
+  },
+  "target": {
+    "agent": "agents/lucario_rule",
+    "deck": "agents/lucario_rule/deck.csv"
+  },
+  "deckSelection": {
+    "desired": 6,
+    "minimum": 4,
+    "minimumPolicyActorEpisodes": 10,
+    "minimumPolicyDecisions": 500,
+    "nearDuplicatePokemonCoreJaccard": 0.8,
+    "excludeLabelSubstring": "Mega Lucario"
+  },
+  "model": {
+    "stateDim": 320,
+    "optionDim": 176,
+    "entityNumericDim": 12,
+    "historyLength": 8,
+    "dModel": 128,
+    "attentionHeads": 4,
+    "transformerBlocks": 3,
+    "ffDim": 384,
+    "dropout": 0.05
+  },
+  "training": {
+    "pretrainEpochs": 12,
+    "pretrainBatch": 128,
+    "pretrainLearningRate": 0.0003,
+    "finetuneEpochs": 6,
+    "finetuneBatchPerDeck": 48,
+    "finetuneLearningRate": 0.0001,
+    "opponentAuxiliaryLossWeight": 0.05,
+    "seeds": [20260808, 20260809, 20260810]
+  },
+  "arena": {
+    "smokeGamesPerChallenger": 20,
+    "screeningGamesPerChallenger": 100,
+    "confirmationGamesPerTopChallenger": 200,
+    "confirmationTopN": 3,
+    "successScoreRate": 0.55,
+    "successWilsonLower": 0.5,
+    "minimumSeatScoreRate": 0.45,
+    "automatic400GameConfirmation": false,
+    "automaticKaggleSubmission": false
+  }
+}
