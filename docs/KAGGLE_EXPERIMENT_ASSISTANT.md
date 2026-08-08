@@ -108,7 +108,7 @@
 - `research/kaggle_intelligence/2026-08-08/discussions/markdown/708586.md`
 - `research/kaggle_intelligence/2026-08-08/discussions/markdown/732331.md`
 
-## 6. 当前技术判断
+## 6. 当前技术判断与项目证据
 
 截至 2026-08-08，公开证据不支持“纯 RL 已普遍压倒规则 Agent”的结论。更合理的工作假设是：
 
@@ -118,7 +118,12 @@
 - Leaderboard 的早期匹配和评分不确定性会使相同 Agent 的不同 submission 出现显著差异，因此单次线上排名不能作为因果证据。
 - 隐藏信息搜索应使用可行的对手牌组/手牌 belief，而不是把不可见状态当成已知状态；第一轮只有 2 vCPU，搜索收益必须在严格的 CPU 时间预算下验证。
 
-这些判断主要是 B/C/D 级混合证据，必须通过本项目自己的对局和运行时证据验证。
+项目内已有两项重要证据：
+
+- 对 2026-07-19 的 500 个 public replays 进行 DATA-001 审计后，`steps[t].action` 配对 `steps[t-1].observation` 得到 78,776/78,776 个合法决策，valid rate 为 1.0；错误地采用 same-step 对齐时 valid rate 只有约 0.785。DATA-002 正式转换器使用 `previous` 对齐并得到 0 invalid decisions。后续每个新 replay 批次仍必须重跑该 gate。
+- 并行实验分支 `codex/rl-bc-003-structured` 的 Gold V3.1 已完成基础 packaged-agent 双座位 smoke，并在 Doraemon 集群运行异步 producer/evaluator；但截至状态文件更新时间，尚无候选通过完整本地晋级协议，G0 仍是 provisional champion。因此“系统运行中”不能解释为“模型已经变强”。
+
+这些判断混合了 A/B/C/D 级证据；任何策略晋级仍以本项目自己的不可变候选、对局和运行时证据为准。
 
 ## 7. 标准实验生命周期
 
@@ -161,12 +166,12 @@
 - 0 未解释 fallback；
 - 在 2 vCPU、12.2 GiB RAM 的第一轮等价资源约束下记录 p50/p95/max 决策时间和峰值 RSS；不得假设线上存在 GPU。训练侧 VRAM 另行记录。
 
-当前项目最优先事项是完成这一闭环。离线 BC 分数不能替代该门禁。
+Gold V3.1 已通过基础 packaged-agent smoke；当前 Stage 2 任务是让首个**不可变候选包**在正式资源约束和审计记录下通过 20 局 gate。离线 BC 分数仍不能替代该门禁。
 
 ### Stage 3：200 局筛选
 
 - 与固定 opponent snapshot 比较；
-- 双方换边，尽量使用成对 seed；
+- 双方换边；若引擎不能可靠复现同一初始随机状态，则不得伪称 paired-seed A/B，而应使用足够样本量、固定 opponent/版本和独立重复；
 - 与当前 champion、rule fallback 和最近强候选同时比较；
 - 报告 W/D/L、分 matchup 胜率、Wilson 置信下界、失败率和耗时。
 
@@ -176,12 +181,12 @@
 
 - 冻结代码、牌组、对手池、配置和 checkpoint；
 - 不允许边跑边调参；
-- 运行完整配对比较；
+- 运行完整双座位比较；
 - 必须保留逐局结果、日志、资源记录和失败样本。
 
 ### Stage 5：独立 400 局 holdout
 
-使用未参与调参的对手版本、replay 日期或 seed 范围。候选必须在 holdout 上维持优势，并且没有特定 matchup 灾难性回退。
+使用未参与调参的对手版本、replay 日期或随机样本表。候选必须在 holdout 上维持优势，并且没有特定 matchup 灾难性回退。
 
 ### Stage 6：晋级与 Kaggle 决策
 
@@ -226,9 +231,10 @@ Kaggle 两个 active slots 的默认策略：
 
 BC exact match、top-k accuracy、value loss、policy entropy 等仅作为诊断指标，不作为线上晋级的替代品。
 
-### 8.3 泄漏控制
+### 8.3 泄漏与标签控制
 
 - 训练、调参和独立 holdout 使用不重叠的 episode/date/team 分区；
+- public replay 的 action 必须按已验证的 `steps[t].action -> steps[t-1].observation` 语义转换；每个新批次先运行 DATA-001，未通过 alignment gate 时禁止进入训练；
 - 日志必须按决策时刻对齐：只使用当时 observation 中已经可见的日志前缀；若 public replay 的日志对象包含最终完整日志或未来事件，则该字段必须排除；
 - 只使用当前玩家视角在该决策时刻可观察的信息；
 - 隐藏状态只能通过采样 belief 生成，不能从 replay 真值回填到线上特征；
@@ -236,25 +242,25 @@ BC exact match、top-k accuracy、value loss、policy entropy 等仅作为诊断
 
 ## 9. 当前实验优先队列
 
-### P0：完成模型在线闭环
+### P0：让首个 Gold V3.1 不可变候选通过正式 20 局 gate
 
-修复 Stage B checkpoint/runtime 兼容性，并在第一轮等价的 2 vCPU、12.2 GiB RAM、无 GPU 假设下运行。目标是至少完成一组模型真实决策局，满足 `model_action_count > 0`、正常终局、0 非法、0 timeout、0 未解释 fallback。
+producer/evaluator 已运行，基础 packaged-agent smoke 已通过。现在的最高优先级不是继续堆叠新模块，而是确认首个候选在第一轮等价的 2 vCPU、12.2 GiB RAM、无 GPU 假设下满足：`model_action_count > 0`、正常终局、0 非法、0 timeout、0 loader/inference error、0 未解释 fallback，并输出完整 hash、逐局日志和资源统计。
 
-### P1：建立稳定规则基线与专项牌组矩阵
+### P1：完成 200→400→独立400 的首轮晋级闭环
 
-把当前 champion、rule fallback、公开高分方法家族和主要 archetype 纳入固定对手矩阵。先确认现有牌组/策略真正的 matchup 结构，再训练更复杂模型。
+首个通过 smoke 的候选必须对 frozen champion、规则基线和多 archetype 对手池完成双座位分阶段评测。G0 在独立 400 局通过前保持不变；不得以 producer 持续产出、checkpoint 写盘成功或离线精度提升替代 promotion evidence。
 
-### P2：RL-BC-003 对照实验
+### P2：单变量拆解 checkpoint、deck 与 Action-Q/search 的贡献
 
-在同一 opponent snapshot 下，对 rule fallback、RL-BC-002、RL-BC-003 做换边配对。只有在线证据优于基线，才允许作为 PPO、Action-Q 或 search policy/value 的初始化。
+Gold V3.1 的候选身份同时包含 checkpoint、deck 和 Q hash。正式因果实验必须分别固定其余两项，只改变一种变量；特别比较“仅换 deck”“仅换 policy”“仅启用经校准 Q-reranker”，避免无法判断收益来源。
 
 ### P3：有限 belief search
 
-在强规则/BC prior 上增加受预算约束的 rollout/search；对不可见牌组、手牌和奖品牌进行多次可行采样，比较平均价值及不确定性。先验证搜索收益是否超过耗时和模型误差。
+仅在 P0/P1 形成稳定在线基线后，在强规则/BC prior 上增加受预算约束的 rollout/search；对不可见牌组、手牌和奖品牌进行多次可行采样，比较平均价值及不确定性。先验证搜索收益是否超过 2 vCPU 下的耗时和模型误差。
 
 ### P4：rolling meta 与反制实验
 
-每日情报只更新 `rolling_meta` 候选，不直接改 champion。对出现的新牌组、引擎行为或反制策略，先生成专项对手，再经过 20→200→400→holdout 门禁。
+每日情报只更新 `rolling_meta` 候选，不直接改 champion。对出现的新牌组、引擎行为或反制策略，先生成专项对手或回归测试，再经过 20→200→400→holdout 门禁。
 
 ### P5：第二轮 BO3 适应
 
