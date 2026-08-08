@@ -1,0 +1,214 @@
+archetype_rank,archetype_id,archetype_label,representative_exact_deck_id,card_id,card_name_en,card_name_jp,card_group,card_subtype,count
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,66,Dudunsparce,ノココッチ,Pokémon,Stage 1 Pokémon,3
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,174,Fan Rotom,スピンロトム,Pokémon,Basic Pokémon,1
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,305,Dunsparce,ノコッチ,Pokémon,Basic Pokémon,4
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,848,Buneary,ミミロル,Pokémon,Basic Pokémon,2
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,849,Mega Lopunny ex,メガミミロップex,Pokémon,Stage 1 Pokémon,2
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,860,Snorunt,ユキワラシ,Pokémon,Basic Pokémon,2
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,861,Mega Froslass ex,メガユキメノコex,Pokémon,Stage 1 Pokémon,2
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,1086,Buddy-Buddy Poffin,なかよしポフィン,Trainer,Item,4
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,1087,Hand Trimmer,ハンドトリマー,Trainer,Item,3
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,1121,Ultra Ball,ハイパーボール,Trainer,Item,4
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,1122,Pokégear 3.0,ポケギア3.0,Trainer,Item,2
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,1152,Poké Pad,ポケパッド,Trainer,Item,4
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,1174,Air Balloon,ふうせん,Trainer,Pokémon Tool,3
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,1182,Boss’s Orders,ボスの指令,Trainer,Supporter,2
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,1225,Hilda,トウコ,Trainer,Supporter,3
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,1227,Lillie's Determination,リーリエの決心,Trainer,Supporter,4
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,1229,Wally's Compassion,ミツルの思いやり,Trainer,Supporter,4
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,1264,Battle Cage,バトルコロシアム,Trainer,Stadium,3
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,3,Basic {W} Energy,基本【水】エネルギー,Energy,Basic Energy,3
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,11,Mist Energy,ミストエネルギー,Energy,Special Energy,4
+1,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,deck_2110947ff883,13,Enriching Energy,リッチエネルギー,Energy,Special Energy,1
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,104,Froslass,ユキメノコ,Pokémon,Stage 1 Pokémon,2
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,112,Munkidori,マシマシラ,Pokémon,Basic Pokémon,4
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,646,Marnie's Impidimp,マリィのベロバー,Pokémon,Basic Pokémon,4
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,647,Marnie's Morgrem,マリィのギモー,Pokémon,Stage 1 Pokémon,3
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,648,Marnie's Grimmsnarl ex,マリィのオーロンゲex,Pokémon,Stage 2 Pokémon,3
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,860,Snorunt,ユキワラシ,Pokémon,Basic Pokémon,2
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,1079,Rare Candy,ふしぎなアメ,Trainer,Item,3
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,1080,Unfair Stamp,アンフェアスタンプ,Trainer,Item,1
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,1086,Buddy-Buddy Poffin,なかよしポフィン,Trainer,Item,4
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,1097,Night Stretcher,夜のタンカ,Trainer,Item,3
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,1122,Pokégear 3.0,ポケギア3.0,Trainer,Item,1
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,1137,Tool Scrapper,ツールスクラッパー,Trainer,Item,1
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,1152,Poké Pad,ポケパッド,Trainer,Item,4
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,1182,Boss’s Orders,ボスの指令,Trainer,Supporter,2
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,1219,Team Rocket's Petrel,ロケット団のラムダ,Trainer,Supporter,4
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,1227,Lillie's Determination,リーリエの決心,Trainer,Supporter,4
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,1231,Dawn,ヒカリ,Trainer,Supporter,1
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,1259,Spikemuth Gym,スパイクタウンジム,Trainer,Stadium,4
+2,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,deck_54f9a303b46e,7,Basic {D} Energy,基本【悪】エネルギー,Energy,Basic Energy,10
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,66,Dudunsparce,ノココッチ,Pokémon,Stage 1 Pokémon,2
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,140,Fezandipiti ex,キチキギスex,Pokémon,Basic Pokémon,1
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,305,Dunsparce,ノコッチ,Pokémon,Basic Pokémon,3
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,343,Shaymin,シェイミ,Pokémon,Basic Pokémon,1
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,741,Abra,ケーシィ,Pokémon,Basic Pokémon,4
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,742,Kadabra,ユンゲラー,Pokémon,Stage 1 Pokémon,4
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,743,Alakazam,フーディン,Pokémon,Stage 2 Pokémon,4
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,1079,Rare Candy,ふしぎなアメ,Trainer,Item,3
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,1081,Enhanced Hammer,改造ハンマー,Trainer,Item,4
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,1086,Buddy-Buddy Poffin,なかよしポフィン,Trainer,Item,4
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,1097,Night Stretcher,夜のタンカ,Trainer,Item,1
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,1129,Sacred Ash,せいなるはい,Trainer,Item,1
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,1152,Poké Pad,ポケパッド,Trainer,Item,4
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,1182,Boss’s Orders,ボスの指令,Trainer,Supporter,3
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,1184,Lana’s Aid,スイレンのお世話,Trainer,Supporter,1
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,1197,Xerosic’s Machinations,クセロシキのたくらみ,Trainer,Supporter,3
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,1225,Hilda,トウコ,Trainer,Supporter,4
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,1231,Dawn,ヒカリ,Trainer,Supporter,4
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,1266,Nighttime Mine,夜の鉱山,Trainer,Stadium,2
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,5,Basic {P} Energy,基本【超】エネルギー,Energy,Basic Energy,2
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,13,Enriching Energy,リッチエネルギー,Energy,Special Energy,1
+3,A03,Fezandipiti ex / Alakazam / Kadabra,deck_070ac8ff8e8a,19,Telepath Psychic Energy,テレパス【超】エネルギー,Energy,Special Energy,4
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,673,Makuhita,マクノシタ,Pokémon,Basic Pokémon,2
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,674,Hariyama,ハリテヤマ,Pokémon,Stage 1 Pokémon,2
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,675,Lunatone,ルナトーン,Pokémon,Basic Pokémon,2
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,676,Solrock,ソルロック,Pokémon,Basic Pokémon,3
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,677,Riolu,リオル,Pokémon,Basic Pokémon,3
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,678,Mega Lucario ex,メガルカリオex,Pokémon,Stage 1 Pokémon,4
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,1121,Ultra Ball,ハイパーボール,Trainer,Item,4
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,1123,Switch,ポケモンいれかえ,Trainer,Item,2
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,1141,Premium Power Pro,パワープロテイン,Trainer,Item,4
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,1142,Fighting Gong,ファイトゴング,Trainer,Item,4
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,1152,Poké Pad,ポケパッド,Trainer,Item,4
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,1159,Hero’s Cape,ヒーローマント,Trainer,Pokémon Tool,1
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,1182,Boss’s Orders,ボスの指令,Trainer,Supporter,2
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,1213,Judge,ジャッジマン,Trainer,Supporter,4
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,1227,Lillie's Determination,リーリエの決心,Trainer,Supporter,4
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,1229,Wally's Compassion,ミツルの思いやり,Trainer,Supporter,2
+4,A04,Mega Lucario ex / Hariyama / Solrock,deck_79bca51bc8cf,6,Basic {F} Energy,基本【闘】エネルギー,Energy,Basic Energy,13
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,63,Raging Bolt ex,タケルライコex,Pokémon,Basic Pokémon,2
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,96,Teal Mask Ogerpon ex,オーガポン みどりのめんex,Pokémon,Basic Pokémon,3
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,108,Wellspring Mask Ogerpon ex,オーガポン いどのめんex,Pokémon,Basic Pokémon,1
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,140,Fezandipiti ex,キチキギスex,Pokémon,Basic Pokémon,1
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,184,Latias ex,ラティアスex,Pokémon,Basic Pokémon,2
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,272,Lillie’s Clefairy ex,リーリエのピッピex,Pokémon,Basic Pokémon,1
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,756,Mega Kangaskhan ex,メガガルーラex,Pokémon,Basic Pokémon,3
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,978,Passimian,ナゲツケサル,Pokémon,Basic Pokémon,1
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,1071,Meowth ex,ニャースex,Pokémon,Basic Pokémon,3
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,1088,Prime Catcher,プライムキャッチャー,Trainer,Item,1
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,1097,Night Stretcher,夜のタンカ,Trainer,Item,2
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,1098,Glass Trumpet,ガラスのラッパ,Trainer,Item,2
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,1116,Energy Switch,エネルギーつけかえ,Trainer,Item,4
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,1121,Ultra Ball,ハイパーボール,Trainer,Item,4
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,1182,Boss’s Orders,ボスの指令,Trainer,Supporter,2
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,1197,Xerosic’s Machinations,クセロシキのたくらみ,Trainer,Supporter,2
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,1198,Crispin,アカマツ,Trainer,Supporter,4
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,1205,Cyrano,シアノ,Trainer,Supporter,2
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,1250,Area Zero Underdepths,ゼロの大空洞,Trainer,Stadium,4
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,1,Basic {G} Energy,基本【草】エネルギー,Energy,Basic Energy,9
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,3,Basic {W} Energy,基本【水】エネルギー,Energy,Basic Energy,1
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,4,Basic {L} Energy,基本【雷】エネルギー,Energy,Basic Energy,2
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,5,Basic {P} Energy,基本【超】エネルギー,Energy,Basic Energy,2
+5,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,deck_2dd496b61a9a,6,Basic {F} Energy,基本【闘】エネルギー,Energy,Basic Energy,2
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,112,Munkidori,マシマシラ,Pokémon,Basic Pokémon,2
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,119,Dreepy,ドラメシヤ,Pokémon,Basic Pokémon,4
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,120,Drakloak,ドロンチ,Pokémon,Stage 1 Pokémon,4
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,121,Dragapult ex,ドラパルトex,Pokémon,Stage 2 Pokémon,3
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,140,Fezandipiti ex,キチキギスex,Pokémon,Basic Pokémon,1
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,235,Budew,スボミー,Pokémon,Basic Pokémon,2
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,1071,Meowth ex,ニャースex,Pokémon,Basic Pokémon,1
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,1080,Unfair Stamp,アンフェアスタンプ,Trainer,Item,1
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,1086,Buddy-Buddy Poffin,なかよしポフィン,Trainer,Item,4
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,1097,Night Stretcher,夜のタンカ,Trainer,Item,2
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,1120,Crushing Hammer,クラッシュハンマー,Trainer,Item,4
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,1121,Ultra Ball,ハイパーボール,Trainer,Item,4
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,1152,Poké Pad,ポケパッド,Trainer,Item,4
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,1182,Boss’s Orders,ボスの指令,Trainer,Supporter,3
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,1198,Crispin,アカマツ,Trainer,Supporter,3
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,1213,Judge,ジャッジマン,Trainer,Supporter,1
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,1227,Lillie's Determination,リーリエの決心,Trainer,Supporter,4
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,1231,Dawn,ヒカリ,Trainer,Supporter,1
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,1246,Jamming Tower,ジャミングタワー,Trainer,Stadium,2
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,2,Basic {R} Energy,基本【炎】エネルギー,Energy,Basic Energy,4
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,5,Basic {P} Energy,基本【超】エネルギー,Energy,Basic Energy,4
+6,A06,Dragapult ex / Meowth ex / Fezandipiti ex,deck_dbbeeb08a403,7,Basic {D} Energy,基本【悪】エネルギー,Energy,Basic Energy,2
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,112,Munkidori,マシマシラ,Pokémon,Basic Pokémon,2
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,235,Budew,スボミー,Pokémon,Basic Pokémon,1
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,292,N’s Zorua,Nのゾロア,Pokémon,Basic Pokémon,4
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,293,N’s Zoroark ex,Nのゾロアークex,Pokémon,Stage 1 Pokémon,4
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,303,N’s Reshiram,Nのレシラム,Pokémon,Basic Pokémon,2
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,906,N's Zekrom,Nのゼクロム,Pokémon,Basic Pokémon,2
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,1080,Unfair Stamp,アンフェアスタンプ,Trainer,Item,1
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,1086,Buddy-Buddy Poffin,なかよしポフィン,Trainer,Item,4
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,1097,Night Stretcher,夜のタンカ,Trainer,Item,2
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,1113,N’s PP Up,Nのポイントアップ,Trainer,Item,4
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,1121,Ultra Ball,ハイパーボール,Trainer,Item,3
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,1152,Poké Pad,ポケパッド,Trainer,Item,3
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,1176,Punk Helmet,パンクメット,Trainer,Pokémon Tool,2
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,1182,Boss’s Orders,ボスの指令,Trainer,Supporter,4
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,1188,Ciphermaniac’s Codebreaking,暗号マニアの解読,Trainer,Supporter,1
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,1195,Janine’s Secret Art,アンズの秘技,Trainer,Supporter,1
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,1197,Xerosic’s Machinations,クセロシキのたくらみ,Trainer,Supporter,1
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,1205,Cyrano,シアノ,Trainer,Supporter,3
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,1227,Lillie's Determination,リーリエの決心,Trainer,Supporter,4
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,1253,N’s Castle,Nの城,Trainer,Stadium,3
+7,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,deck_292a7f41c943,7,Basic {D} Energy,基本【悪】エネルギー,Energy,Basic Energy,9
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,89,Grookey,サルノリ,Pokémon,Basic Pokémon,4
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,90,Thwackey,バチンキー,Pokémon,Stage 1 Pokémon,4
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,93,Dipplin,カミッチュ,Pokémon,Stage 1 Pokémon,4
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,100,Goldeen,トサキント,Pokémon,Basic Pokémon,2
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,149,Applin,カジッチュ,Pokémon,Basic Pokémon,4
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,240,Seaking,アズマオウ,Pokémon,Stage 1 Pokémon,2
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1080,Unfair Stamp,アンフェアスタンプ,Trainer,Item,1
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1086,Buddy-Buddy Poffin,なかよしポフィン,Trainer,Item,4
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1094,Bug Catching Set,むしとりセット,Trainer,Item,4
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1097,Night Stretcher,夜のタンカ,Trainer,Item,2
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1152,Poké Pad,ポケパッド,Trainer,Item,4
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1174,Air Balloon,ふうせん,Trainer,Pokémon Tool,2
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1175,Brave Bangle,ブレイブバングル,Trainer,Pokémon Tool,2
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1182,Boss’s Orders,ボスの指令,Trainer,Supporter,2
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1184,Lana’s Aid,スイレンのお世話,Trainer,Supporter,1
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1191,Kieran,スグリ,Trainer,Supporter,1
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1210,Brock’s Scouting,タケシのスカウト,Trainer,Supporter,2
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1211,Black Belt’s Training,からておうの稽古,Trainer,Supporter,1
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1227,Lillie's Determination,リーリエの決心,Trainer,Supporter,4
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1245,Festival Grounds,お祭り会場,Trainer,Stadium,4
+8,A08,Thwackey / Dipplin / Seaking,deck_1e8358b792a8,1,Basic {G} Energy,基本【草】エネルギー,Energy,Basic Energy,6
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,115,Conkeldurr,ローブシン,Pokémon,Stage 2 Pokémon,1
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,140,Fezandipiti ex,キチキギスex,Pokémon,Basic Pokémon,1
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,144,Kyurem,キュレム,Pokémon,Basic Pokémon,2
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,162,Slowpoke,ヤドン,Pokémon,Basic Pokémon,4
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,163,Slowking,ヤドキング,Pokémon,Stage 1 Pokémon,4
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,183,Smoochum,ムチュール,Pokémon,Basic Pokémon,2
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,184,Latias ex,ラティアスex,Pokémon,Basic Pokémon,2
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,224,Annihilape,コノヨザル,Pokémon,Stage 2 Pokémon,1
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,756,Mega Kangaskhan ex,メガガルーラex,Pokémon,Basic Pokémon,3
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,1071,Meowth ex,ニャースex,Pokémon,Basic Pokémon,1
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,1088,Prime Catcher,プライムキャッチャー,Trainer,Item,1
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,1097,Night Stretcher,夜のタンカ,Trainer,Item,4
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,1121,Ultra Ball,ハイパーボール,Trainer,Item,4
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,1123,Switch,ポケモンいれかえ,Trainer,Item,1
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,1146,Wondrous Patch,ワンダーパッチ,Trainer,Item,3
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,1152,Poké Pad,ポケパッド,Trainer,Item,4
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,1188,Ciphermaniac’s Codebreaking,暗号マニアの解読,Trainer,Supporter,4
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,1194,Colress’s Tenacity,アクロマの執念,Trainer,Supporter,1
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,1225,Hilda,トウコ,Trainer,Supporter,1
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,1227,Lillie's Determination,リーリエの決心,Trainer,Supporter,4
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,1248,Academy at Night,夜のアカデミー,Trainer,Stadium,4
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,5,Basic {P} Energy,基本【超】エネルギー,Energy,Basic Energy,4
+9,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,deck_14c31dd130a3,19,Telepath Psychic Energy,テレパス【超】エネルギー,Energy,Special Energy,4
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,93,Dipplin,カミッチュ,Pokémon,Stage 1 Pokémon,2
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,96,Teal Mask Ogerpon ex,オーガポン みどりのめんex,Pokémon,Basic Pokémon,4
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,140,Fezandipiti ex,キチキギスex,Pokémon,Basic Pokémon,1
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,149,Applin,カジッチュ,Pokémon,Basic Pokémon,1
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,150,Hydrapple ex,カミツオロチex,Pokémon,Stage 2 Pokémon,2
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,346,Applin,カジッチュ,Pokémon,Basic Pokémon,1
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,709,Bayleef,ベイリーフ,Pokémon,Stage 1 Pokémon,1
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,710,Meganium,メガニウム,Pokémon,Stage 2 Pokémon,2
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,917,Chikorita,チコリータ,Pokémon,Basic Pokémon,2
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,918,Bayleef,ベイリーフ,Pokémon,Stage 1 Pokémon,1
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,1071,Meowth ex,ニャースex,Pokémon,Basic Pokémon,2
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,1080,Unfair Stamp,アンフェアスタンプ,Trainer,Item,1
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,1094,Bug Catching Set,むしとりセット,Trainer,Item,4
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,1097,Night Stretcher,夜のタンカ,Trainer,Item,1
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,1121,Ultra Ball,ハイパーボール,Trainer,Item,4
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,1152,Poké Pad,ポケパッド,Trainer,Item,1
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,1182,Boss’s Orders,ボスの指令,Trainer,Supporter,2
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,1184,Lana’s Aid,スイレンのお世話,Trainer,Supporter,1
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,1188,Ciphermaniac’s Codebreaking,暗号マニアの解読,Trainer,Supporter,1
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,1227,Lillie's Determination,リーリエの決心,Trainer,Supporter,4
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,1231,Dawn,ヒカリ,Trainer,Supporter,1
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,1261,Forest of Vitality,活力の森,Trainer,Stadium,4
+10,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,deck_b464a974612c,1,Basic {G} Energy,基本【草】エネルギー,Energy,Basic Energy,17

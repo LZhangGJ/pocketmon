@@ -1,0 +1,24 @@
+# Validation Report
+
+## Overall Assessment: Share with caveats
+
+## Calculation Spot-Checks
+
+- **one_deck_row_per_episode_player: Verified.** `{"rows": 1854, "duplicate_rows": 0}`
+- **elite_appearance_count_matches_games: Verified.** `{"appearances": 928, "valid_games_x2": 928}`
+- **archetype_appearances_sum: Verified.** `{"archetype_sum": 928, "appearance_rows": 928}`
+- **current_usage_shares_sum_to_one: Verified.** `0.9999999999999996`
+- **comparison_shares_sum_to_one: Verified.** `{"current": 0.9999999999999996, "previous": 0.9999999999999994, "previous_rows": 926}`
+- **two_player_rewards_conserve_wins: Verified.** `0.5`
+- **representative_decks_have_60_cards: Verified.** `{"min": 60, "max": 60, "decks": 10}`
+- **card_usage_has_official_mapping: Verified.** `{"unknown_group_rows": 0, "missing_names": 0}`
+- **card_inclusion_rates_are_valid: Verified.** `{"elite_min": 0.0010775862068965, "elite_max": 0.9719827586206896, "field_min": 0.0037748058671268, "field_max": 0.9820966350301984}`
+- **matchups_are_reciprocal: Verified.** `{"sample_size_mismatches": 0, "max_win_rate_sum_error": 2.220446049250313e-16}`
+
+## Required Caveats for Stakeholders
+
+- Current manifest has 6 replay files unavailable from the official daily dataset.
+- A further 3 loaded replays lack a valid two-player outcome and are excluded.
+- Player-level scores cannot be mapped to agent identities; min_score is used to guarantee both players clear the cohort cutoff.
+- Wilson intervals treat appearances as independent even though teams play repeatedly; small single-team archetypes are directional only.
+- Manifest timestamps do not declare a timezone offset.
