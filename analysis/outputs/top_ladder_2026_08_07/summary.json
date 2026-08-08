@@ -1,0 +1,45 @@
+{
+  "as_of_date": "2026-08-07",
+  "previous_date": "2026-08-06",
+  "source_latest_create_time": "2026-08-07T23:59:34.649512900",
+  "timezone_note": "Kaggle manifest create_time has no timezone offset; timestamps are reported as source time.",
+  "elite_definition": "Top 10% of daily matches ranked by min_score, so both players clear the cutoff.",
+  "elite_min_score_cutoff": 1079.122914,
+  "previous_elite_min_score_cutoff": 1072.177282,
+  "elite_target_games": 465,
+  "elite_valid_games": 464,
+  "elite_deck_appearances": 928,
+  "elite_unique_teams": 53,
+  "current_manifest_games": 4645,
+  "current_valid_game_coverage": 0.9980624327233585,
+  "first_player_win_rate": 0.5366379310344828,
+  "top_archetype": "Mega Froslass ex / Mega Lopunny ex / Dudunsparce",
+  "top_archetype_usage_share": 0.2941810344827586,
+  "top_archetype_nonmirror_win_rate": 0.43317972350230416,
+  "top_archetype_nonmirror_appearances": 217,
+  "top_archetype_previous_usage_share": 0.2041036717062635,
+  "top_archetype_usage_delta_pp": 9.007736277649512,
+  "top_three_archetypes": [
+    {
+      "archetype_label": "Mega Froslass ex / Mega Lopunny ex / Dudunsparce",
+      "appearances": 273,
+      "usage_share": 0.2941810344827586,
+      "nonmirror_win_rate": 0.43317972350230416,
+      "nonmirror_appearances": 217
+    },
+    {
+      "archetype_label": "Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass",
+      "appearances": 189,
+      "usage_share": 0.2036637931034483,
+      "nonmirror_win_rate": 0.4195804195804196,
+      "nonmirror_appearances": 143
+    },
+    {
+      "archetype_label": "Fezandipiti ex / Alakazam / Kadabra",
+      "appearances": 133,
+      "usage_share": 0.14331896551724138,
+      "nonmirror_win_rate": 0.5327102803738317,
+      "nonmirror_appearances": 107
+    }
+  ]
+}

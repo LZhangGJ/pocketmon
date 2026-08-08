@@ -1,0 +1,109 @@
+archetype_id,archetype_label,opponent_archetype_id,opponent_archetype_label,matchup_appearances,wins,matchup_win_rate
+A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,56,28.0,0.5
+A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,63,37.0,0.5873015873015873
+A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,A03,Fezandipiti ex / Alakazam / Kadabra,39,18.0,0.46153846153846156
+A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,A04,Mega Lucario ex / Hariyama / Solrock,35,10.0,0.2857142857142857
+A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,14,7.0,0.5
+A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,A06,Dragapult ex / Meowth ex / Fezandipiti ex,21,10.0,0.47619047619047616
+A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,13,1.0,0.07692307692307693
+A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,A08,Thwackey / Dipplin / Seaking,11,3.0,0.2727272727272727
+A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,4,1.0,0.25
+A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,6,1.0,0.16666666666666666
+A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,8,4.0,0.5
+A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,A12,Teal Mask Ogerpon ex,2,2.0,1.0
+A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,A13,Blaziken ex / Dragapult ex / Lillie’s Clefairy ex,1,0.0,0.0
+A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,63,26.0,0.4126984126984127
+A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,46,23.0,0.5
+A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,A03,Fezandipiti ex / Alakazam / Kadabra,18,10.0,0.5555555555555556
+A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,A04,Mega Lucario ex / Hariyama / Solrock,19,9.0,0.47368421052631576
+A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,10,3.0,0.3
+A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,A06,Dragapult ex / Meowth ex / Fezandipiti ex,9,5.0,0.5555555555555556
+A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,6,1.0,0.16666666666666666
+A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,A08,Thwackey / Dipplin / Seaking,7,3.0,0.42857142857142855
+A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,4,1.0,0.25
+A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,4,1.0,0.25
+A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,2,1.0,0.5
+A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,A13,Blaziken ex / Dragapult ex / Lillie’s Clefairy ex,1,0.0,0.0
+A03,Fezandipiti ex / Alakazam / Kadabra,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,39,21.0,0.5384615384615384
+A03,Fezandipiti ex / Alakazam / Kadabra,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,18,8.0,0.4444444444444444
+A03,Fezandipiti ex / Alakazam / Kadabra,A03,Fezandipiti ex / Alakazam / Kadabra,26,13.0,0.5
+A03,Fezandipiti ex / Alakazam / Kadabra,A04,Mega Lucario ex / Hariyama / Solrock,9,5.0,0.5555555555555556
+A03,Fezandipiti ex / Alakazam / Kadabra,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,12,7.0,0.5833333333333334
+A03,Fezandipiti ex / Alakazam / Kadabra,A06,Dragapult ex / Meowth ex / Fezandipiti ex,7,4.0,0.5714285714285714
+A03,Fezandipiti ex / Alakazam / Kadabra,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,6,5.0,0.8333333333333334
+A03,Fezandipiti ex / Alakazam / Kadabra,A08,Thwackey / Dipplin / Seaking,8,3.0,0.375
+A03,Fezandipiti ex / Alakazam / Kadabra,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,2,0.0,0.0
+A03,Fezandipiti ex / Alakazam / Kadabra,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,4,3.0,0.75
+A03,Fezandipiti ex / Alakazam / Kadabra,A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,2,1.0,0.5
+A04,Mega Lucario ex / Hariyama / Solrock,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,35,25.0,0.7142857142857143
+A04,Mega Lucario ex / Hariyama / Solrock,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,19,10.0,0.5263157894736842
+A04,Mega Lucario ex / Hariyama / Solrock,A03,Fezandipiti ex / Alakazam / Kadabra,9,4.0,0.4444444444444444
+A04,Mega Lucario ex / Hariyama / Solrock,A04,Mega Lucario ex / Hariyama / Solrock,4,2.0,0.5
+A04,Mega Lucario ex / Hariyama / Solrock,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,4,3.0,0.75
+A04,Mega Lucario ex / Hariyama / Solrock,A06,Dragapult ex / Meowth ex / Fezandipiti ex,3,2.0,0.6666666666666666
+A04,Mega Lucario ex / Hariyama / Solrock,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,3,2.0,0.6666666666666666
+A04,Mega Lucario ex / Hariyama / Solrock,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,12,1.0,0.08333333333333333
+A04,Mega Lucario ex / Hariyama / Solrock,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,1,0.0,0.0
+A04,Mega Lucario ex / Hariyama / Solrock,A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,1,0.0,0.0
+A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,14,7.0,0.5
+A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,10,7.0,0.7
+A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,A03,Fezandipiti ex / Alakazam / Kadabra,12,5.0,0.4166666666666667
+A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,A04,Mega Lucario ex / Hariyama / Solrock,4,1.0,0.25
+A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,A06,Dragapult ex / Meowth ex / Fezandipiti ex,2,1.0,0.5
+A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,4,1.0,0.25
+A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,A08,Thwackey / Dipplin / Seaking,2,1.0,0.5
+A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,2,0.0,0.0
+A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,1,0.0,0.0
+A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,A12,Teal Mask Ogerpon ex,1,0.0,0.0
+A06,Dragapult ex / Meowth ex / Fezandipiti ex,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,21,11.0,0.5238095238095238
+A06,Dragapult ex / Meowth ex / Fezandipiti ex,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,9,4.0,0.4444444444444444
+A06,Dragapult ex / Meowth ex / Fezandipiti ex,A03,Fezandipiti ex / Alakazam / Kadabra,7,3.0,0.42857142857142855
+A06,Dragapult ex / Meowth ex / Fezandipiti ex,A04,Mega Lucario ex / Hariyama / Solrock,3,1.0,0.3333333333333333
+A06,Dragapult ex / Meowth ex / Fezandipiti ex,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,2,1.0,0.5
+A06,Dragapult ex / Meowth ex / Fezandipiti ex,A08,Thwackey / Dipplin / Seaking,1,1.0,1.0
+A06,Dragapult ex / Meowth ex / Fezandipiti ex,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,2,1.0,0.5
+A06,Dragapult ex / Meowth ex / Fezandipiti ex,A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,2,1.0,0.5
+A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,13,12.0,0.9230769230769231
+A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,6,5.0,0.8333333333333334
+A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,A03,Fezandipiti ex / Alakazam / Kadabra,6,1.0,0.16666666666666666
+A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,A04,Mega Lucario ex / Hariyama / Solrock,3,1.0,0.3333333333333333
+A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,4,3.0,0.75
+A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,2,2.0,1.0
+A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,1,1.0,1.0
+A08,Thwackey / Dipplin / Seaking,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,11,8.0,0.7272727272727273
+A08,Thwackey / Dipplin / Seaking,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,7,4.0,0.5714285714285714
+A08,Thwackey / Dipplin / Seaking,A03,Fezandipiti ex / Alakazam / Kadabra,8,5.0,0.625
+A08,Thwackey / Dipplin / Seaking,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,2,1.0,0.5
+A08,Thwackey / Dipplin / Seaking,A06,Dragapult ex / Meowth ex / Fezandipiti ex,1,0.0,0.0
+A08,Thwackey / Dipplin / Seaking,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,1,1.0,1.0
+A09,Mega Kangaskhan ex / Latias ex / Meowth ex,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,4,3.0,0.75
+A09,Mega Kangaskhan ex / Latias ex / Meowth ex,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,4,3.0,0.75
+A09,Mega Kangaskhan ex / Latias ex / Meowth ex,A03,Fezandipiti ex / Alakazam / Kadabra,2,2.0,1.0
+A09,Mega Kangaskhan ex / Latias ex / Meowth ex,A04,Mega Lucario ex / Hariyama / Solrock,12,11.0,0.9166666666666666
+A09,Mega Kangaskhan ex / Latias ex / Meowth ex,A06,Dragapult ex / Meowth ex / Fezandipiti ex,2,1.0,0.5
+A09,Mega Kangaskhan ex / Latias ex / Meowth ex,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,1,0.0,0.0
+A09,Mega Kangaskhan ex / Latias ex / Meowth ex,A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,1,1.0,1.0
+A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,6,5.0,0.8333333333333334
+A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,4,3.0,0.75
+A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,A03,Fezandipiti ex / Alakazam / Kadabra,4,1.0,0.25
+A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,A04,Mega Lucario ex / Hariyama / Solrock,1,1.0,1.0
+A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,2,2.0,1.0
+A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,2,0.0,0.0
+A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,A08,Thwackey / Dipplin / Seaking,1,0.0,0.0
+A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,1,1.0,1.0
+A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,3,1.0,0.3333333333333333
+A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,A12,Teal Mask Ogerpon ex,1,0.0,0.0
+A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,8,4.0,0.5
+A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,2,1.0,0.5
+A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,A03,Fezandipiti ex / Alakazam / Kadabra,2,1.0,0.5
+A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,A04,Mega Lucario ex / Hariyama / Solrock,1,1.0,1.0
+A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,1,1.0,1.0
+A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,A06,Dragapult ex / Meowth ex / Fezandipiti ex,2,1.0,0.5
+A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,A07,N’s Zoroark ex / N’s Zorua / N’s Reshiram,1,0.0,0.0
+A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,A09,Mega Kangaskhan ex / Latias ex / Meowth ex,1,0.0,0.0
+A11,Cornerstone Mask Ogerpon ex / Mega Kangaskhan ex / Crustle,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,3,2.0,0.6666666666666666
+A12,Teal Mask Ogerpon ex,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,2,0.0,0.0
+A12,Teal Mask Ogerpon ex,A05,Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex,1,1.0,1.0
+A12,Teal Mask Ogerpon ex,A10,Hydrapple ex / Teal Mask Ogerpon ex / Meowth ex,1,1.0,1.0
+A13,Blaziken ex / Dragapult ex / Lillie’s Clefairy ex,A01,Mega Froslass ex / Mega Lopunny ex / Dudunsparce,1,1.0,1.0
+A13,Blaziken ex / Dragapult ex / Lillie’s Clefairy ex,A02,Marnie's Grimmsnarl ex / Marnie's Morgrem / Froslass,1,1.0,1.0
