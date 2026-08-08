@@ -103,6 +103,7 @@ echo "[5/8] freeze planned config"
     --seed "${SEED}" \
     --epochs 12 \
     --history-length 8 \
+    --patience 12 \
     --output "${RUN_ROOT}/config/planned.json"
 
 COMMON_ARGS=(
@@ -115,6 +116,7 @@ COMMON_ARGS=(
     --seed "${SEED}"
     --epochs 12
     --history-length 8
+    --patience 12
     --card-database "${CARD_DATABASE}"
     --attack-database "${ATTACK_DATABASE}"
     --device "cuda:0"
