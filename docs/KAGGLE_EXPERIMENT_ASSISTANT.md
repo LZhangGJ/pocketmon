@@ -91,13 +91,15 @@
 
 ## 5. 截至 2026-08-08 的已确认约束
 
-以下内容来自已归档的官方 Discussion，属于 A 级证据：
+以下内容来自 Kaggle Overview 和已归档的官方 Discussion，属于 A 级证据：
 
-- 第一阶段截止日为 **2026-08-16**，此后约两周继续运行对局以收敛最终 Simulation Leaderboard。
+- Entry/Team Merger Deadline 为 **2026-08-09 23:59 UTC**；Final Submission Deadline 为 **2026-08-16 23:59 UTC**，此后约两周继续运行对局以收敛最终 Simulation Leaderboard。
 - 同时只有两个 active submissions，且是最近提交的两个版本；每天最多提交五次。重复提交相同代码也会作为新 submission 重新建立评分不确定性。
+- submission 先进行自我对战 validation；通过后以 `μ=600` 初始化，评分由 `N(μ, σ²)` 表示。胜负或平局影响评分，赢多少分不影响更新幅度。
 - simulator 的行为是比赛中的权威规则；Agent 应只从 observation 暴露的合法 options 中选择动作。
 - Strategy Category 决定进入第二轮的八支队伍，但不改变最终 Simulation Leaderboard。
 - 第二轮为东京线下 BO3；同一场 BO3 内必须使用相同牌组和代码，但后续局可以读取前序局日志。
+- 第一轮 submission 必须是顶层包含 `main.py` 和 `deck.csv` 的 `.tar.gz`；上限 197.7 MiB，运行目录为 `/kaggle_simulations/agent/`，资源为 11.8 GiB 磁盘、12.2 GiB RAM、2 vCPU，官方未列出第一轮 GPU。
 - 第二轮资源公告为 H100 80 GB、256 GiB RAM、16 vCPU，每局总思考时间 30 分钟；卡池会扩大。
 
 对应归档：
@@ -114,7 +116,7 @@
 - 强方案常见形态是**规则护栏 + 牌组专项策略 + 有限搜索或 BC**，而不是完全无约束的端到端策略。
 - 72%–80% 的 imitation policy accuracy 可能对应很弱或不稳定的线上表现；该指标只能用于模型诊断。
 - Leaderboard 的早期匹配和评分不确定性会使相同 Agent 的不同 submission 出现显著差异，因此单次线上排名不能作为因果证据。
-- 隐藏信息搜索应使用可行的对手牌组/手牌 belief，而不是把不可见状态当成已知状态。
+- 隐藏信息搜索应使用可行的对手牌组/手牌 belief，而不是把不可见状态当成已知状态；第一轮只有 2 vCPU，搜索收益必须在严格的 CPU 时间预算下验证。
 
 这些判断主要是 B/C/D 级混合证据，必须通过本项目自己的对局和运行时证据验证。
 
@@ -137,7 +139,7 @@
 
 最低要求：
 
-- 单元测试、编译检查和 submission 打包通过；
+- 单元测试、编译检查和 submission 打包通过；`main.py`、`deck.csv` 位于压缩包顶层，包大小不超过 197.7 MiB；
 - 牌组合法、动作 mask 正确、空选择和多选动作覆盖；
 - 无网络访问；
 - checkpoint 可加载；
@@ -157,7 +159,7 @@
 - 0 timeout；
 - 0 网络尝试；
 - 0 未解释 fallback；
-- 记录 p50/p95/max 决策时间、峰值 RSS/VRAM。
+- 在 2 vCPU、12.2 GiB RAM 的第一轮等价资源约束下记录 p50/p95/max 决策时间和峰值 RSS；不得假设线上存在 GPU。训练侧 VRAM 另行记录。
 
 当前项目最优先事项是完成这一闭环。离线 BC 分数不能替代该门禁。
 
@@ -214,7 +216,7 @@ Kaggle 两个 active slots 的默认策略：
 ### 8.2 必报指标
 
 - 总体与分 matchup 的 W/D/L；
-- win rate 及 Wilson 区间/下界；
+- win rate 及 Wilson 区间/下界；比赛评分只看胜负/平局，因此不把胜利分差作为主优化目标；
 - 双座位结果和座位差；
 - 决策次数、合法率、fallback 数、timeout 数；
 - p50/p95/max 决策时延；
@@ -227,8 +229,8 @@ BC exact match、top-k accuracy、value loss、policy entropy 等仅作为诊断
 ### 8.3 泄漏控制
 
 - 训练、调参和独立 holdout 使用不重叠的 episode/date/team 分区；
-- 去除 `observation.logs` 等不应在当前决策时可见的信息；
-- 只使用当前玩家视角可观察信息；
+- 日志必须按决策时刻对齐：只使用当时 observation 中已经可见的日志前缀；若 public replay 的日志对象包含最终完整日志或未来事件，则该字段必须排除；
+- 只使用当前玩家视角在该决策时刻可观察的信息；
 - 隐藏状态只能通过采样 belief 生成，不能从 replay 真值回填到线上特征；
 - public notebook/replay 代码先静态检查，不执行不可信嵌入 payload。
 
@@ -236,7 +238,7 @@ BC exact match、top-k accuracy、value loss、policy entropy 等仅作为诊断
 
 ### P0：完成模型在线闭环
 
-修复 Stage B checkpoint/runtime 兼容性。目标是至少完成一组模型真实决策局，满足 `model_action_count > 0`、正常终局、0 非法、0 timeout、0 未解释 fallback。
+修复 Stage B checkpoint/runtime 兼容性，并在第一轮等价的 2 vCPU、12.2 GiB RAM、无 GPU 假设下运行。目标是至少完成一组模型真实决策局，满足 `model_action_count > 0`、正常终局、0 非法、0 timeout、0 未解释 fallback。
 
 ### P1：建立稳定规则基线与专项牌组矩阵
 
