@@ -30,6 +30,13 @@ foreach ($Program in @('git','ssh','scp')) {
     }
 }
 
+if (-not $ArchivePath) {
+    $DownloadCandidate = Join-Path $HOME 'Downloads\experiment7_code_for_gpt_2026-08-08.zip'
+    if (Test-Path $DownloadCandidate) {
+        $ArchivePath = $DownloadCandidate
+    }
+}
+
 if (-not (Test-Path (Join-Path $LocalRepo '.git'))) {
     New-Item -ItemType Directory -Force -Path (Split-Path $LocalRepo) | Out-Null
     Invoke-Checked git @('clone', $RepoUrl, $LocalRepo)
@@ -67,11 +74,12 @@ if ($ArchivePath) {
     }
     Invoke-Checked ssh @($Coordinator, "mkdir -p $RemoteRepo/data/imports")
     Invoke-Checked scp @($ResolvedArchive, "${Coordinator}:$RemoteArchive")
-    Invoke-Checked ssh @($Coordinator, "test `$(stat -c '%s' '$RemoteArchive') -eq $ExpectedArchiveBytes; test `$(sha256sum '$RemoteArchive' | awk '{print `$1}') = '$ExpectedArchiveSha256'")
+    $VerifyArchive = "set -e; test `$(stat -c '%s' '$RemoteArchive') -eq $ExpectedArchiveBytes; test `$(sha256sum '$RemoteArchive' | awk '{print `$1}') = '$ExpectedArchiveSha256'"
+    Invoke-Checked ssh @($Coordinator, $VerifyArchive)
     Write-Host "Verified archive copied to ${Coordinator}:$RemoteArchive"
 }
 else {
-    Write-Warning 'ArchivePath was not supplied. Remote bootstrap will require an existing verified archive at the remote import path.'
+    Write-Warning 'No ArchivePath was supplied or found in Downloads. A verified archive must already exist at the remote import path.'
 }
 
 $Dirty = (git status --porcelain)
@@ -104,6 +112,17 @@ bash experiment7/unpack_source.sh
 printf '{"host":"%s","commit":"%s","worktree":"%s","archive":"%s"}\n' "\$(hostname)" '$Commit' '$RemoteWorktree' '$RemoteArchive'
 "@
 
-Invoke-Checked ssh @($Coordinator, "bash -lc " + [Management.Automation.Language.CodeGeneration]::QuoteArgument($RemoteCommand))
+$TempScript = [System.IO.Path]::GetTempFileName()
+try {
+    Set-Content -Path $TempScript -Value $RemoteCommand -Encoding utf8NoBOM -NoNewline
+    Get-Content -Raw $TempScript | & ssh $Coordinator 'bash -s'
+    if ($LASTEXITCODE -ne 0) {
+        throw "Remote coordinator bootstrap exited with code $LASTEXITCODE"
+    }
+}
+finally {
+    Remove-Item -Force $TempScript -ErrorAction SilentlyContinue
+}
+
 Write-Host "Remote coordinator bootstrap completed at $Coordinator using commit $Commit"
 Write-Host 'Next: follow experiment7/CODEX_TRAINING_PROMPT.md from the Windows Codex session.'
