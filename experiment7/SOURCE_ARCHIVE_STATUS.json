@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "repository_copy": {
+    "path": "experiment7/source/experiment7_code_for_gpt_2026-08-08.zip",
+    "github_blob_sha": "a4b78cc99920e2645d6ee3143f939ecaab15c48b",
+    "observed_bytes": 13019,
+    "status": "transport_truncated_do_not_use"
+  },
+  "verified_source_artifact": {
+    "expected_filename": "experiment7_code_for_gpt_2026-08-08.zip",
+    "expected_bytes": 94038,
+    "expected_sha256": "9c0d24067eacee8abc38223dba28d893e5d1e4e9b75204a9ce92a03093558229"
+  },
+  "required_action": {
+    "control_host": "windows",
+    "copy_method": "scp",
+    "recommended_remote_path": "/homes/lzhang/pocketmon/data/imports/experiment7_code_for_gpt_2026-08-08.zip",
+    "linux_environment_variable": "EXPERIMENT7_ARCHIVE",
+    "bootstrap_script": "experiment7/WINDOWS_REMOTE_BOOTSTRAP.ps1"
+  },
+  "safety": "unpack_source.sh refuses any archive whose byte size or SHA-256 does not match the verified source artifact"
+}
