@@ -1,0 +1,34 @@
+name: Materialize Experiment 7 multi-deck code
+
+on:
+  push:
+    branches:
+      - agent/experiment7-multideck-ready-20260808
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Materialize integrated source tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .exp7-bootstrap/payload-* | base64 -d > /tmp/experiment7-ready-overlay.tar.xz
+          echo "8b34a625df1524c1fcfac6d196986b6cf4c5e97b6ac983674cd3ceb989a9c872  /tmp/experiment7-ready-overlay.tar.xz" | sha256sum -c -
+          tar -xJf /tmp/experiment7-ready-overlay.tar.xz -C .
+          rm -rf .exp7-bootstrap .github/workflows/materialize-experiment7.yml
+          python -m compileall -q experiment7 tests
+          PYTHONPATH=. python -m unittest discover -s tests -p 'test_experiment7_integration.py'
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Materialize Experiment 7 multi-deck training code"
+          git push origin HEAD:agent/experiment7-multideck-ready-20260808
