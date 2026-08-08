@@ -421,7 +421,7 @@ def smoke(args: argparse.Namespace) -> dict[str, Any]:
         )
         for bundle, decisions, _ in tiny_sources
     }
-    initial_macro = float(np.mean([value["exactSemantic"] for value in initial.values()])
+    initial_macro = float(np.mean([value["exactSemantic"] for value in initial.values()]))
     final_macro = float(np.mean([value["exactSemantic"] for value in final.values()]))
     illegal = sum(int(value["illegalPredictionCount"]) for value in final.values())
     checkpoint = args.output_dir / "smoke_model.pt"

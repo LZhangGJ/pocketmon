@@ -125,4 +125,141 @@ def select_best(root: Path, output: Path) -> dict[str, Any]:
         )
     if not candidates:
         raise Experiment7Error(f"no usable finetune reports under {root}")
-    candidates.sort(key=lambda row: (-row["macro"], -row["worst‰t°É½Ýl‰ÍÑ‰t°ÍÑÈ¡É½Ýl‰Í••‰t¤¤¤(€€€Á…å±½…€ôì(€€€€€€€€‰Í¡•µ…Y•ÉÍ¥½¸ˆè€Ä°(€€€€€€€€‰É•…Ñ•‘ÐˆèÕÑ}¹½Ü ¤°(€€€€€€€€‰Í•±•Ñ¥½¹5•ÑÉ¥Œˆè€‰…±¥‰É…Ñ¥½¸µ…É¼•á…ÑM•µ…¹Ñ¥Œ°Ñ¡•¸Ý½ÉÍÐ‘•¬°Ñ¡•¸±½Ý•È‘•¬ÍÑˆ°(€€€€€€€€‰Í•±•Ñ•ˆè…¹‘¥‘…Ñ•ÍlÁt°(€€€€€€€€‰…¹‘¥‘…Ñ•Ìˆè…¹‘¥‘…Ñ•Ì°(€€€€€€€€‰¡½±‘½ÕÑUÍ•ˆè…±Í”°(€€€ô(€€€ÝÉ¥Ñ•}©Í½¸¡½ÕÑÁÕÐ°Á…å±½…¤(€€€ÁÉ¥¹Ð¡©Í½¸¹‘ÕµÁÌ¡Á…å±½…°•¹ÍÕÉ•}…Í¥¤õ…±Í”¤°™±ÕÍ õQÉÕ”¤(€€€É•ÑÕÉ¸Á…å±½…(()‘•˜Á…­…•}…•¹ÑÌ¡É•™•É•¹•}É½½ÐèA…Ñ °Í½ÕÉ•Í}Á…Ñ èA…Ñ °Á½ÉÑ…‰±”èA…Ñ °½ÕÑÁÕÑ}É½½ÐèA…Ñ ¤€´ø‘¥ÑmÍÑÈ°¹åtè(€€€µ…¹¥™•ÍÐ€ôÉ•…‘}©Í½¸¡Í½ÕÉ•Í}Á…Ñ ¤(€€€•¹¥¹•}…Ñ…±½œ€ôA…Ñ ¡µ…¹¥™•ÍÑl‰•¹¥¹•…Ñ…±½œ‰ul‰Á…Ñ ‰t¤(€€€ÉÕ¹Ñ¥µ”€ôÉ•™•É•¹•}É½½Ð€¼€‰ÉÕ¹Ñ¥µ•}…•¹Ðˆ(€€€É•ÅÕ¥É•€ôl(€€€€€€€ÉÕ¹Ñ¥µ”€¼€‰µ…¥¸¹Áäˆ°(€€€€€€€ÉÕ¹Ñ¥µ”€¼€‰Á½ÉÑ…‰±”¹Áäˆ°(€€€€€€€ÉÕ¹Ñ¥µ”€¼€‰‘•­}¥‘•¹Ñ¥Ñå}Á½ÉÑ…‰±”¹Áäˆ°(€€€€€€€ÉÕ¹Ñ¥µ”€¼€‰Ñ½­•¹¥é•È¹Áäˆ°(€€€€€€€É•™•É•¹•}É½½Ð€¼€‰‘…Ñ…}Á¥Á•±¥¹”ˆ€¼€‰™•…ÑÕÉ•Ì¹Áäˆ°(€€€€€€€Á½ÉÑ…‰±”°(€€€€€€€•¹¥¹•}…Ñ…±½œ°(€€€t(€€€™½ÈÁ…Ñ ¥¸É•ÅÕ¥É•è(€€€€€€€¥˜¹½ÐÁ…Ñ ¹¥Í}™¥±” ¤è(€€€€€€€€€€€É…¥Í”¥±•9½Ñ½Õ¹‘ÉÉ½È¡Á…Ñ ¤(€€€Í…™•}™•…ÑÕÉ•Ì€ôA…Ñ ¡}}™¥±•}|¤¹É•Í½±Ù” ¤¹Á…É•¹Ð€¼€‰Í…™•}™•…ÑÕÉ•Ì¹Áäˆ(€€€Á…­…•Ì€ômt(€€€™½ÈÉ½Ü¥¸µ…¹¥™•ÍÑl‰ÕÉÉ•¹ÑM½ÕÉ•Ì‰tè(€€€€€€€‘•­}Á…Ñ €ôA…Ñ ¡É½Ýl‰‘•­A…Ñ ‰t¤(€€€€€€€Á…­…”€ô½ÕÑÁÕÑ}É½½Ð€¼É½Ýl‰¹…µ”‰t(€€€€€€€¥˜Á…­…”¹•á¥ÍÑÌ ¤è(€€€€€€€€€€€Í¡ÕÑ¥°¹ÉµÑÉ•”¡Á…­…”¤(€€€€€€€Á…­…”¹µ­‘¥È¡Á…É•¹ÑÌõQÉÕ”¤(€€€€€€€Í¡ÕÑ¥°¹½ÁäÈ¡ÉÕ¹Ñ¥µ”€¼€‰µ…¥¸¹Áäˆ°Á…­…”€¼€‰µ…¥¸¹Áäˆ¤(€€€€€€€µ…¥¹}Á…Ñ €ôÁ…­…”€¼€‰µ…¥¸¹Áäˆ(€€€€€€€Ý¥Ñ µ…¥¹}Á…Ñ ¹½Á•¸ ‰„ˆ°•¹½‘¥¹œô‰ÕÑ˜´àˆ¤…Ì¡…¹‘±”è(€€€€€€€€€€€¡…¹‘±”¹ÝÉ¥Ñ” ‰q¹q¹‘•˜‘¥…¹½ÍÑ¥Ì ¤éq¸€€€É•ÑÕÉ¸íp‰‰pˆè‰}…‘Ù¥Í½È¹•Ñ}ÍÑ…ÑÌ ¥õq¸ˆ¤(€€€€€€€Í¡ÕÑ¥°¹½ÁäÈ¡ÉÕ¹Ñ¥µ”€¼€‰Á½ÉÑ…‰±”¹Áäˆ°Á…­…”€¼€‰Á½ÉÑ…‰±”¹Áäˆ¤(€€€€€€€Í¡ÕÑ¥°¹½ÁäÈ¡ÉÕ¹Ñ¥µ”€¼€‰‘•­}¥‘•¹Ñ¥Ñå}Á½ÉÑ…‰±”¹Áäˆ°Á…­…”€¼€‰‘•­}¥‘•¹Ñ¥Ñå}Á½ÉÑ…‰±”¹Áäˆ¤(€€€€€€€Í¡ÕÑ¥°¹½ÁäÈ¡ÉÕ¹Ñ¥µ”€¼€‰Ñ½­•¹¥é•È¹Áäˆ°Á…­…”€¼€‰Ñ½­•¹¥é•È¹Áäˆ¤(€€€€€€€Í¡ÕÑ¥°¹½ÁäÈ¡É•™•É•¹•}É½½Ð€¼€‰‘…Ñ…}Á¥Á•±¥¹”ˆ€¼€‰™•…ÑÕÉ•Ì¹Áäˆ°Á…­…”€¼€‰™•…ÑÕÉ•Í}Ù•¹‘½È¹Áäˆ¤(€€€€€€€Í¡ÕÑ¥°¹½ÁäÈ¡Í…™•}™•…ÑÕÉ•Ì°Á…­…”€¼€‰™•…ÑÕÉ•Ì¹Áäˆ¤(€€€€€€€Í¡ÕÑ¥°¹½ÁäÈ¡Á½ÉÑ…‰±”°Á…­…”€¼€‰‘•­}¥‘•¹Ñ¥Ñå}‰Œ¹¹Áèˆ¤(€€€€€€€Í¡ÕÑ¥°¹½ÁäÈ¡•¹¥¹•}…Ñ…±½œ°Á…­…”€¼€‰•¹¥¹•}…Ñ…±½œ¹©Í½¸ˆ¤(€€€€€€€Í¡ÕÑ¥°¹½ÁäÈ¡‘•­}Á…Ñ °Á…­…”€¼€‰‘•¬¹ÍØˆ¤(€€€€€€€¥˜¹½Ð½µÁ¥±•…±°¹½µÁ¥±•}‘¥È¡ÍÑÈ¡Á…­…”¤°ÅÕ¥•ÐôÄ°™½É”õQÉÕ”¤è(€€€€€€€€€€€É…¥Í”áÁ•É¥µ•¹ÐÝÉÉ½È¡˜‰Á…­…”½µÁ¥±•…±°™…¥±•èíÁ…­…•ôˆ¤(€€€€€€€™½È…¡•}‘¥È¥¸Á…­…”¹É±½ˆ ‰}}Áå…¡•}|ˆ¤è(€€€€€€€€€€€Í¡ÕÑ¥°¹ÉµÑÉ•”¡…¡•}‘¥È¤(€€€€€€€™¥±•Ì€ôíô(€€€€€€€™½ÈÁ…Ñ ¥¸Í½ÉÑ•¡Á…­…”¹¥Ñ•É‘¥È ¤¤è(€€€€€€€€€€€¥˜Á…Ñ ¹¥Í}™¥±” ¤è(€€€€€€€€€€€€€€€™¥±•ÍmÁ…Ñ ¹¹…µ•t€ôì(€€€€€€€€€€€€€€€€€€€€‰‰åÑ•ÌˆèÁ…Ñ ¹ÍÑ…Ð ¤¹ÍÑ}Í¥é”°(€€€€€€€€€€€€€€€€€€€€‰Í¡„ÈÔØˆèÍ¡„ÈÔÙ}™¥±”¡Á…Ñ ¤°(€€€€€€€€€€€€€€€ô(€€€€€€€É••¥ÁÐ€ôì(€€€€€€€€€€€€‰Í¡•µ…Y•ÉÍ¥½¸ˆè€Ä°(€€€€€€€€€€€€‰É•…Ñ•‘ÐˆèÕÑ}¹½Ü ¤°(€€€€€€€€€€€€‰¹…µ”ˆèÉ½Ýl‰¹…µ”‰t°(€€€€€€€€€€€€‰‘•­M¡„ÈÔØˆèÉ½Ýl‰‘•­M¡„ÈÔØ‰t°(€€€€€€€€€€€€‰Í½ÕÉ••¬ˆèÍÑÈ¡‘•­}Á…Ñ ¹É•Í½±Ù” ¤¤°(€€€€€€€€€€€€‰Á½ÉÑ…‰±•M½ÕÉ”ˆèì‰Á…Ñ ˆèÍÑÈ¡Á½ÉÑ…‰±”¹É•Í½±Ù” ¤¤°€‰Í¡„ÈÔØˆèÍ¡„ÈÔÙ}™¥±”¡Á½ÉÑ…‰±”¥ô°(€€€€€€€€€€€€‰•¹¥¹•…Ñ…±½M½ÕÉ”ˆèì‰Á…Ñ ˆèÍÑÈ¡•¹¥¹•}…Ñ…±½œ¹É•Í½±Ù” ¤¤°€‰Í¡„ÈÔØˆèÍ¡„ÈÔÙ}™¥±”¡•¹¥¹•}…Ñ…±½œ¥ô°(€€€€€€€€€€€€‰™¥±•Ìˆè™¥±•Ì°(€€€€€€€ô(€€€€€€€ÝÉ¥Ñ•}©Í½¸¡Á…­…”€¼€‰É••¥ÁÐ¹©Í½¸ˆ°É••¥ÁÐ¤(€€€€€€€Á…­…•Ì¹…ÁÁ•¹¡ì‰¹…µ”ˆèÉ½Ýl‰¹…µ”‰t°€‰…•¹Ñ¥ÈˆèÍÑÈ¡Á…­…”¹É•Í½±Ù” ¤¤°€‰‘•­M¡„ÈÔØˆèÉ½Ýl‰‘•­M¡„ÈÔØ‰uô¤(€€€Á…å±½…€ôì(€€€€€€€€‰Í¡•µ…Y•ÉÍ¥½¸ˆè€Ä°(€€€€€€€€‰É•…Ñ•‘ÐˆèÕÑ}¹½Ü ¤°(€€€€€€€€‰Í½ÕÉ•Ìˆèì‰Á…Ñ ˆèÍÑÈ¡Í½ÕÉ•Í}Á…Ñ ¹É•Í½±Ù” ¤¤°€‰Í¡„ÈÔØˆèÍ¡„ÈÔÙ}™¥±”¡Í½ÕÉ•Í}Á…Ñ ¥ô°(€€€€€€€€‰Á½ÉÑ…‰±”ˆèì‰Á…Ñ ˆèÍÑÈ¡Á½ÉÑ…‰±”¹É•Í½±Ù” ¤¤°€‰Í¡„ÈÔØˆèÍ¡„ÈÔÙ}™¥±”¡Á½ÉÑ…‰±”¥ô°(€€€€€€€€‰Á…­…•ÌˆèÁ…­…•Ì°(€€€ô(€€€ÝÉ¥Ñ•}©Í½¸¡½ÕÑÁÕÑ}É½½Ð€¼€‰Á…­…•Ì¹©Í½¸ˆ°Á…å±½…¤(€€€ÁÉ¥¹Ð¡©Í½¸¹‘ÕµÁÌ¡Á…å±½…°•¹ÍÕÉ•}…Í¥¤õ…±Í”¤°™±ÕÍ õQÉÕ”¤(€€€É•ÑÕÉ¸Á…å±½…(()‘•˜µ…¥¸ ¤€´ø9½¹”è(€€€Á…ÉÍ•È€ô…ÉÁ…ÉÍ”¹ÉÕµ•¹ÑA…ÉÍ•È¡‘•ÍÉ¥ÁÑ¥½¸ô‰áÁ½ÉÐ…¹Á…­…”áÁ•É¥µ•¹Ð€ÜµÕ±Ñ¤µ‘•¬•¹ÑÌˆ¤(€€€ÍÕˆ€ôÁ…ÉÍ•È¹…‘‘}ÍÕ‰Á…ÉÍ•ÉÌ¡‘•ÍÐô‰½µµ…¹ˆ°É•ÅÕ¥É•õQÉÕ”¤((€€€•áÁ½ÉÑ}Á…ÉÍ•È€ôÍÕˆ¹…‘‘}Á…ÉÍ•È ‰•áÁ½ÉÐˆ¤(€€€•áÁ½ÉÑ}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µ¡•­Á½¥¹Ðˆ°ÑåÁ”õA…Ñ °É•ÅÕ¥É•õQÉÕ”¤(€€€•áÁ½ÉÑ}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µ½ÕÑÁÕÐˆ°ÑåÁ”õA…Ñ °É•ÅÕ¥É•õQÉÕ”¤((€€€Ù•É¥™å}Á…ÉÍ•È€ôÍÕˆ¹…‘‘}Á…ÉÍ•È ‰Ù•É¥™äˆ¤(€€€Ù•É¥™å}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µÉ•™•É•¹”µÉ½½Ðˆ°ÑåÁ”õA…Ñ °É•ÅÕ¥É•õQÉÕ”¤(€€€Ù•É¥™å}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µÍ½ÕÉ•Ìˆ°ÑåÁ”õA…Ñ °É•ÅÕ¥É•õQÉÕ”¤(€€€Ù•É¥™å}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µ¡•­Á½¥¹Ðˆ°ÑåÁ”õA…Ñ °É•ÅÕ¥É•õQÉÕ”¤(€€€Ù•É¥™å}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µÁ½ÉÑ…‰±”ˆ°ÑåÁ”õA…Ñ °É•ÅÕ¥É•õQÉÕ”¤(€€€Ù•É¥™å}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µ½ÕÑÁÕÐˆ°ÑåÁ”õA…Ñ °É•ÅÕ¥É•õQÉÕ”¤(€€€Ù•É¥™å}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µÁåÑ¡½¸ˆ°‘•™…Õ±ÐõÍåÌ¹•á•ÕÑ…‰±”¤(€€€Ù•É¥™å}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µ‘•¥Í¥½¹ÌµÁ•ÈµÍ½ÕÉ”ˆ°ÑåÁ”õ¥¹Ð°‘•™…Õ±ÐôÄÀÀ¤((€€€Í•±•Ñ}Á…ÉÍ•È€ôÍÕˆ¹…‘‘}Á…ÉÍ•È ‰Í•±•Ðµ‰•ÍÐˆ¤(€€€Í•±•Ñ}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µÉ½½Ðˆ°ÑåÁ”õA…Ñ °É•ÅÕ¥É•õQÉÕ”¤(€€€Í•±•Ñ}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µ½ÕÑÁÕÐˆ°ÑåÁ”õA…Ñ °É•ÅÕ¥É•õQÉÕ”¤((€€€Á…­…•}Á…ÉÍ•È€ôÍÕˆ¹…‘‘}Á…ÉÍ•È ‰Á…­…”ˆ¤(€€€Á…­…•}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µÉ•™•É•¹”µÉ½½Ðˆ°ÑåÁ”õA…Ñ °É•ÅÕ¥É•õQÉÕ”¤(€€€Á…­…•}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µÍ½ÕÉ•Ìˆ°ÑåÁ”õA…Ñ °É•ÅÕ¥É•õQÉÕ”¤(€€€Á…­…•}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µÁ½ÉÑ…‰±”ˆ°ÑåÁ”õA…Ñ °É•ÅÕ¥É•õQÉÕ”¤(€€€Á…­…•}Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ð ˆ´µ½ÕÑÁÕÐµÉ½½Ðˆ°ÑåÁ”õA…Ñ °É•ÅÕ¥É•õQÉÕ”¤((€€€…ÉÌ€ôÁ…ÉÍ•È¹Á…ÉÍ•}…ÉÌ ¤(€€€¥˜…ÉÌ¹½µµ…¹€ôô€‰•áÁ½ÉÐˆè(€€€€€€€•áÁ½ÉÑ}¡•­Á½¥¹Ð¡…ÉÌ¹¡•­Á½¥¹Ð¹É•Í½±Ù” ¤°…ÉÌ¹½ÕÑÁÕÐ¹É•Í½±Ù” ¤¤(€€€•±¥˜…ÉÌ¹½µµ…¹€ôô€‰Ù•É¥™äˆè(€€€€€€€Ù•É¥™å}Á½ÉÑ…‰±” (€€€€€€€€€€€…ÉÌ¹É•™•É•¹•}É½½Ð¹É•Í½±Ù” ¤°(€€€€€€€€€€€…ÉÌ¹Í½ÕÉ•Ì¹É•Í½±Ù” ¤°(€€€€€€€€€€€…ÉÌ¹¡•­Á½¥¹Ð¹É•Í½±Ù” ¤°(€€€€€€€€€€€…ÉÌ¹Á½ÉÑ…‰±”¹É•Í½±Ù” ¤°(€€€€€€€€€€€…ÉÌ¹½ÕÑÁÕÐ¹É•Í½±Ù” ¤°(€€€€€€€€€€€…ÉÌ¹ÁåÑ¡½¸°(€€€€€€€€€€€…ÉÌ¹‘•¥Í¥½¹Í}Á•É}Í½ÕÉ”°(€€€€€€€€¤(€€€•±¥˜…ÉÌ¹½µµ…¹€ôô€‰Í•±•Ðµ‰•ÍÐˆè(€€€€€€€Í•±•Ñ}‰•ÍÐ¡…ÉÌ¹É½½Ð¹É•Í½±Ù” ¤°…ÉÌ¹½ÕÑÁÕÐ¹É•Í½±Ù” ¤¤(€€€•±¥˜…ÉÌ¹½µµ…¹€ôô€‰Á…­…”ˆè(€€€€€€€Á…­…•}…•¹ÑÌ (€€€€€€€€€€€…ÉÌ¹É•™•É•¹•}É½½Ð¹É•Í½±Ù” ¤°(€€€€€€€€€€€…ÉÌ¹Í½ÕÉ•Ì¹É•Í½±Ù” ¤°(€€€€€€€€€€€…ÉÌ¹Á½ÉÑ…‰±”¹É•Í½±Ù” ¤°(€€€€€€€€€€€…ÉÌ¹½ÕÑÁÕÑ}É½½Ð¹É•Í½±Ù” ¤°(€€€€€€€€¤(()¥˜}}¹…µ•}|€ôô€‰}}µ…¥¹}|ˆè(€€€µ…¥¸ ¤
+    candidates.sort(key=lambda row: (-row["macro"], -row["worst"], row["std"], str(row["seed"])))
+    payload = {
+        "schemaVersion": 1,
+        "createdAt": utc_now(),
+        "selectionMetric": "calibration macro exactSemantic, then worst deck, then lower deck std",
+        "selected": candidates[0],
+        "candidates": candidates,
+        "holdoutUsed": False,
+    }
+    write_json(output, payload)
+    print(json.dumps(payload, ensure_ascii=False), flush=True)
+    return payload
+
+
+def package_agents(reference_root: Path, sources_path: Path, portable: Path, output_root: Path) -> dict[str, Any]:
+    manifest = read_json(sources_path)
+    engine_catalog = Path(manifest["engineCatalog"]["path"])
+    runtime = reference_root / "runtime_agent"
+    required = [
+        runtime / "main.py",
+        runtime / "portable.py",
+        runtime / "deck_identity_portable.py",
+        runtime / "tokenizer.py",
+        reference_root / "data_pipeline" / "features.py",
+        portable,
+        engine_catalog,
+    ]
+    for path in required:
+        if not path.is_file():
+            raise FileNotFoundError(path)
+    safe_features = Path(__file__).resolve().parent / "safe_features.py"
+    packages = []
+    for row in manifest["currentSources"]:
+        deck_path = Path(row["deckPath"])
+        package = output_root / row["name"]
+        if package.exists():
+            shutil.rmtree(package)
+        package.mkdir(parents=True)
+        shutil.copy2(runtime / "main.py", package / "main.py")
+        main_path = package / "main.py"
+        with main_path.open("a", encoding="utf-8") as handle:
+            handle.write("\n\ndef diagnostics():\n    return {\"bc\": bc_advisor.get_stats()}\n")
+        shutil.copy2(runtime / "portable.py", package / "portable.py")
+        shutil.copy2(runtime / "deck_identity_portable.py", package / "deck_identity_portable.py")
+        shutil.copy2(runtime / "tokenizer.py", package / "tokenizer.py")
+        shutil.copy2(reference_root / "data_pipeline" / "features.py", package / "features_vendor.py")
+        shutil.copy2(safe_features, package / "features.py")
+        shutil.copy2(portable, package / "deck_identity_bc.npz")
+        shutil.copy2(engine_catalog, package / "engine_catalog.json")
+        shutil.copy2(deck_path, package / "deck.csv")
+        if not compileall.compile_dir(str(package), quiet=1, force=True):
+            raise Experiment7Error(f"package compileall failed: {package}")
+        for cache_dir in package.rglob("__pycache__"):
+            shutil.rmtree(cache_dir)
+        files = {}
+        for path in sorted(package.iterdir()):
+            if path.is_file():
+                files[path.name] = {
+                    "bytes": path.stat().st_size,
+                    "sha256": sha256_file(path),
+                }
+        receipt = {
+            "schemaVersion": 1,
+            "createdAt": utc_now(),
+            "name": row["name"],
+            "deckSha256": row["deckSha256"],
+            "sourceDeck": str(deck_path.resolve()),
+            "portableSource": {"path": str(portable.resolve()), "sha256": sha256_file(portable)},
+            "engineCatalogSource": {"path": str(engine_catalog.resolve()), "sha256": sha256_file(engine_catalog)},
+            "files": files,
+        }
+        write_json(package / "receipt.json", receipt)
+        packages.append({"name": row["name"], "agentDir": str(package.resolve()), "deckSha256": row["deckSha256"]})
+    payload = {
+        "schemaVersion": 1,
+        "createdAt": utc_now(),
+        "sources": {"path": str(sources_path.resolve()), "sha256": sha256_file(sources_path)},
+        "portable": {"path": str(portable.resolve()), "sha256": sha256_file(portable)},
+        "packages": packages,
+    }
+    write_json(output_root / "packages.json", payload)
+    print(json.dumps(payload, ensure_ascii=False), flush=True)
+    return payload
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Export and package Experiment 7 multi-deck Agents")
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    export_parser = sub.add_parser("export")
+    export_parser.add_argument("--checkpoint", type=Path, required=True)
+    export_parser.add_argument("--output", type=Path, required=True)
+
+    verify_parser = sub.add_parser("verify")
+    verify_parser.add_argument("--reference-root", type=Path, required=True)
+    verify_parser.add_argument("--sources", type=Path, required=True)
+    verify_parser.add_argument("--checkpoint", type=Path, required=True)
+    verify_parser.add_argument("--portable", type=Path, required=True)
+    verify_parser.add_argument("--output", type=Path, required=True)
+    verify_parser.add_argument("--python", default=sys.executable)
+    verify_parser.add_argument("--decisions-per-source", type=int, default=100)
+
+    select_parser = sub.add_parser("select-best")
+    select_parser.add_argument("--root", type=Path, required=True)
+    select_parser.add_argument("--output", type=Path, required=True)
+
+    package_parser = sub.add_parser("package")
+    package_parser.add_argument("--reference-root", type=Path, required=True)
+    package_parser.add_argument("--sources", type=Path, required=True)
+    package_parser.add_argument("--portable", type=Path, required=True)
+    package_parser.add_argument("--output-root", type=Path, required=True)
+
+    args = parser.parse_args()
+    if args.command == "export":
+        export_checkpoint(args.checkpoint.resolve(), args.output.resolve())
+    elif args.command == "verify":
+        verify_portable(
+            args.reference_root.resolve(),
+            args.sources.resolve(),
+            args.checkpoint.resolve(),
+            args.portable.resolve(),
+            args.output.resolve(),
+            args.python,
+            args.decisions_per_source,
+        )
+    elif args.command == "select-best":
+        select_best(args.root.resolve(), args.output.resolve())
+    elif args.command == "package":
+        package_agents(
+            args.reference_root.resolve(),
+            args.sources.resolve(),
+            args.portable.resolve(),
+            args.output_root.resolve(),
+        )
+
+
+if __name__ == "__main__":
+    main()
