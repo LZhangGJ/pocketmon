@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "repository": "LZhangGJ/pocketmon",
+  "baseBranch": "exp/league-v1",
+  "baseCommit": "a524e73b6d6e51e89c87a1af65ae515054f9400c",
+  "sourceFilename": "experiment7_code_for_gpt_2026-08-08.zip",
+  "sourceSha256": "9c0d24067eacee8abc38223dba28d893e5d1e4e9b75204a9ce92a03093558229",
+  "sourceBytes": 94038,
+  "archiveEntries": 39,
+  "manifestEntries": 38,
+  "manifestVerification": {
+    "matched": 38,
+    "missing": 0,
+    "sizeMismatches": 0,
+    "sha256Mismatches": 0
+  },
+  "pythonFiles": 29,
+  "pyCompileFailures": 0,
+  "placement": "experiment7/source/experiment7_code_for_gpt_2026-08-08.zip",
+  "notes": [
+    "Source archive preserved byte-for-byte.",
+    "Excluded weights, replay data, caches, engine catalog, opponent packages and Arena logs are not reconstructed or fabricated.",
+    "Local training must generate new evidence and must not treat the included historical summary as a reproduction result."
+  ]
+}
