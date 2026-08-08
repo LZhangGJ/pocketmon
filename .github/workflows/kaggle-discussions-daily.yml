@@ -1,0 +1,173 @@
+name: Daily Kaggle discussion intelligence
+
+on:
+  schedule:
+    # 00:17 UTC = 09:17 JST. Avoid the start of the hour, where scheduled
+    # GitHub Actions runs are more likely to be delayed.
+    - cron: "17 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kaggle-discussions-daily
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      TZ: Asia/Tokyo
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Check out automation code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install downloader dependency
+        run: python -m pip install --disable-pip-version-check "requests>=2.32.3"
+
+      - name: Prepare run paths and persistent data branch
+        id: prepare
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          data_branch="data/kaggle-intelligence"
+          data_worktree="$RUNNER_TEMP/pocketmon-kaggle-data"
+          snapshot_dir="$RUNNER_TEMP/kaggle-intelligence-snapshot"
+          previous_state="$RUNNER_TEMP/kaggle-intelligence-state-before.json"
+          jst_date="$(date +%F)"
+          run_key="$(date -u +%H%M%SZ)-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+
+          git fetch origin "$data_branch" || true
+          if git show-ref --verify --quiet "refs/remotes/origin/$data_branch"; then
+            git worktree add -B "$data_branch" "$data_worktree" "origin/$data_branch"
+          else
+            git worktree add -b "$data_branch" "$data_worktree" "$GITHUB_SHA"
+          fi
+
+          data_root="$data_worktree/research/kaggle_intelligence"
+          state_path="$data_root/state.json"
+          delta_dir="$data_root/daily/$jst_date/$run_key"
+          mkdir -p "$data_root" "$snapshot_dir"
+
+          if [[ -f "$state_path" ]]; then
+            cp "$state_path" "$previous_state"
+          else
+            printf '{}\n' > "$previous_state"
+          fi
+
+          {
+            echo "data_branch=$data_branch"
+            echo "data_worktree=$data_worktree"
+            echo "data_root=$data_root"
+            echo "snapshot_dir=$snapshot_dir"
+            echo "previous_state=$previous_state"
+            echo "state_path=$state_path"
+            echo "delta_dir=$delta_dir"
+            echo "jst_date=$jst_date"
+            echo "run_key=$run_key"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Download the complete public discussion snapshot
+        run: |
+          python scripts/download_kaggle_intelligence.py \
+            --skip-notebooks \
+            --output "${{ steps.prepare.outputs.snapshot_dir }}" \
+            --state "${{ steps.prepare.outputs.state_path }}"
+
+      - name: Extract durable message-level deltas
+        run: |
+          python scripts/extract_kaggle_discussion_delta.py \
+            --snapshot "${{ steps.prepare.outputs.snapshot_dir }}" \
+            --previous-state "${{ steps.prepare.outputs.previous_state }}" \
+            --output "${{ steps.prepare.outputs.delta_dir }}"
+
+      - name: Validate the delta extractor and generated output
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_extract_kaggle_discussion_delta.py' -v
+          python -m compileall -q scripts/extract_kaggle_discussion_delta.py
+          python - \
+            "${{ steps.prepare.outputs.snapshot_dir }}/download_manifest.json" \
+            "${{ steps.prepare.outputs.delta_dir }}/summary.json" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          manifest = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+          summary = json.loads(Path(sys.argv[2]).read_text(encoding="utf-8"))
+          expected_topics = int(manifest["discussions"]["topics"])
+          expected_messages = int(manifest["discussions"]["messages"])
+          assert expected_topics > 0, manifest
+          assert expected_messages > 0, manifest
+          assert summary["snapshot"]["topics"] == expected_topics, summary
+          assert summary["snapshot"]["messages"] == expected_messages, summary
+          assert summary["delta"]["invalid_message_ids"] == 0, summary
+          PY
+
+      - name: Update rolling summaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp "${{ steps.prepare.outputs.delta_dir }}/README.md" \
+            "${{ steps.prepare.outputs.data_root }}/LATEST.md"
+          cp "${{ steps.prepare.outputs.delta_dir }}/summary.json" \
+            "${{ steps.prepare.outputs.data_root }}/latest_summary.json"
+          python - \
+            "${{ steps.prepare.outputs.delta_dir }}/summary.json" \
+            "${{ steps.prepare.outputs.data_root }}/runs.jsonl" <<'PY'
+          import json
+          import os
+          import sys
+          from pathlib import Path
+
+          summary = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+          summary["workflow_run_url"] = (
+              f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/"
+              f"{os.environ['GITHUB_RUN_ID']}"
+          )
+          with Path(sys.argv[2]).open("a", encoding="utf-8") as handle:
+              handle.write(json.dumps(summary, ensure_ascii=False, sort_keys=True) + "\n")
+          PY
+
+      - name: Upload the complete snapshot artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: kaggle-discussions-${{ steps.prepare.outputs.jst_date }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ steps.prepare.outputs.snapshot_dir }}
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 9
+
+      - name: Commit durable deltas and cursor
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "${{ steps.prepare.outputs.data_worktree }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/kaggle_intelligence
+
+          if git diff --cached --quiet; then
+            echo "No cursor or delta change to commit."
+            exit 0
+          fi
+
+          git commit -m "Update Kaggle discussions ${{ steps.prepare.outputs.jst_date }} (${{ steps.prepare.outputs.run_key }})"
+          if ! git push origin "HEAD:${{ steps.prepare.outputs.data_branch }}"; then
+            git pull --rebase origin "${{ steps.prepare.outputs.data_branch }}"
+            git push origin "HEAD:${{ steps.prepare.outputs.data_branch }}"
+          fi
