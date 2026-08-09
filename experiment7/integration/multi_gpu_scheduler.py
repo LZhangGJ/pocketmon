@@ -178,7 +178,7 @@ def make_specialist_plan(
     integration = worktree / "experiment7" / "integration"
     jobs = []
     for index, source_name in enumerate(source_names):
-        if not source_name.replace("-", "_").isalnum():
+        if not all(character.isalnum() or character in {"_", "-"} for character in source_name):
             raise Experiment7Error(f"unsafe specialist source name: {source_name!r}")
         gpu = gpus[index]
         name = f"specialist-{source_name}"
