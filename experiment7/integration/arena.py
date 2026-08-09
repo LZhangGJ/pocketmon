@@ -44,22 +44,19 @@ def make_schedule(
     write_json(opponents_path, opponents)
     rows = []
     per_seat = games_per_challenger // 2
-    game_id = 0
     for learner_index, row in enumerate(packages):
         for seat in (0, 1):
             for local_index in range(per_seat):
                 rows.append(
                     {
-                        "game_id": f"{stage}-{row['name']}-{seat}-{local_index:04d}",
                         "learner": row["name"],
                         "opponent": "frozen_lucario_rule",
                         "seed": seed_base + learner_index * 1_000_000 + seat * 100_000 + local_index,
                         "learner_seat": seat,
                     }
                 )
-                game_id += 1
     schedule = output_dir / "schedule.csv"
-    write_csv(schedule, rows, ["game_id", "learner", "opponent", "seed", "learner_seat"])
+    write_csv(schedule, rows, ["learner", "opponent", "seed", "learner_seat"])
     payload = {
         "schemaVersion": 1,
         "createdAt": utc_now(),

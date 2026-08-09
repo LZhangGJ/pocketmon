@@ -18,6 +18,7 @@ for path in (INTEGRATION, REFERENCE / "training"):
         sys.path.insert(0, str(path))
 
 from common import canonical_deck_sha256, directory_sha256, write_csv
+from arena import make_schedule
 
 
 class Experiment7IntegrationTests(unittest.TestCase):
@@ -83,6 +84,33 @@ class Experiment7IntegrationTests(unittest.TestCase):
             self.assertFalse(output.read_bytes().startswith(b"\xef\xbb\xbf"))
             with output.open(encoding="utf-8", newline="") as handle:
                 self.assertEqual(next(csv.DictReader(handle))["game_id"], "smoke-1")
+
+    def test_arena_schedule_columns_match_existing_league_runner(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "target"
+            target.mkdir()
+            (target / "main.py").write_text("VALUE = 1\n", encoding="utf-8")
+            packages = root / "packages.json"
+            packages.write_text(
+                json.dumps(
+                    {
+                        "packages": [
+                            {"name": "challenger", "agentDir": str(root / "agent")}
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            output = root / "smoke"
+            make_schedule(packages, target, output, 4, 100, "smoke", None)
+            with (output / "schedule.csv").open(encoding="utf-8", newline="") as handle:
+                reader = csv.DictReader(handle)
+                self.assertEqual(
+                    reader.fieldnames,
+                    ["learner", "opponent", "seed", "learner_seat"],
+                )
+                self.assertEqual(len(list(reader)), 4)
 
     def test_reference_model_deck_multiset_invariance(self) -> None:
         from deck_identity_model import (
