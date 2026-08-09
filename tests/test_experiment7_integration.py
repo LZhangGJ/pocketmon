@@ -20,6 +20,11 @@ for path in (INTEGRATION, REFERENCE / "training"):
 from common import canonical_deck_sha256, directory_sha256, write_csv
 from arena import make_schedule
 from multi_gpu_scheduler import make_specialist_plan
+from universal_deck_model import (
+    UniversalDeckModelConfig,
+    UniversalDeckTransformerPolicy,
+    universal_bc_loss,
+)
 
 
 class Experiment7IntegrationTests(unittest.TestCase):
@@ -214,6 +219,108 @@ class Experiment7IntegrationTests(unittest.TestCase):
             different = model(*changed)[0]
         self.assertTrue(torch.allclose(original, reordered, atol=1e-6, rtol=0.0))
         self.assertFalse(torch.allclose(original, different, atol=1e-6, rtol=0.0))
+
+    def _universal_batch(self):
+        config = UniversalDeckModelConfig(
+            state_dim=12,
+            option_dim=8,
+            entity_num_dim=4,
+            card_vocab=128,
+            d_model=32,
+            n_heads=4,
+            n_layers=1,
+            ff_dim=64,
+            max_actions=6,
+            history_length=2,
+            deck_size=6,
+            deck_latents=8,
+            dropout=0.0,
+        )
+        model = UniversalDeckTransformerPolicy(config).eval()
+        batch_size, entities, options = 2, 3, 4
+        inputs = (
+            torch.randn(batch_size, config.state_dim),
+            torch.randn(batch_size, config.history_length, config.state_dim),
+            torch.randn(batch_size, config.history_length, config.option_dim),
+            torch.ones(batch_size, config.history_length, dtype=torch.bool),
+            torch.tensor([[1, 2, 2, 3, 4, 5], [7, 7, 8, 9, 10, 11]]),
+            torch.zeros(batch_size, entities, 10, dtype=torch.long),
+            torch.randn(batch_size, entities, config.entity_num_dim),
+            torch.ones(batch_size, entities, dtype=torch.bool),
+            torch.randn(batch_size, options, config.option_dim),
+            torch.tensor([[1, 1, 1, 1], [1, 1, 0, 0]], dtype=torch.bool),
+        )
+        batch = {
+            "original_labels": torch.tensor(
+                [[0, 1, 0, 0], [0, 0, 0, 0]], dtype=torch.float32
+            ),
+            "min_count": torch.tensor([1, 0]),
+            "max_count": torch.tensor([2, 1]),
+            "winner": torch.tensor([1.0, 0.0]),
+        }
+        return model, inputs, batch
+
+    def test_universal_deck8_is_multiset_invariant_and_count_sensitive(self) -> None:
+        torch.manual_seed(20260810)
+        model, inputs, _ = self._universal_batch()
+        with torch.inference_mode():
+            original = model(*inputs)
+            permuted_inputs = list(inputs)
+            permuted_inputs[4] = inputs[4][:, torch.tensor([5, 2, 0, 4, 1, 3])]
+            permuted = model(*permuted_inputs)
+            changed_inputs = list(inputs)
+            changed_deck = inputs[4].clone()
+            changed_deck[0, -1] = changed_deck[0, -2]
+            changed_inputs[4] = changed_deck
+            changed = model(*changed_inputs)
+        self.assertEqual(tuple(original.deck_hidden.shape), (2, 8, 32))
+        self.assertTrue(
+            torch.allclose(original.option_hidden, permuted.option_hidden, atol=1e-6, rtol=0.0)
+        )
+        self.assertFalse(
+            torch.allclose(original.option_hidden, changed.option_hidden, atol=1e-6, rtol=0.0)
+        )
+
+    def test_universal_joint_decoder_enforces_stop_and_selection_legality(self) -> None:
+        torch.manual_seed(20260810)
+        model, inputs, batch = self._universal_batch()
+        encoding = model(*inputs)
+        selected = torch.zeros_like(inputs[-1], dtype=torch.bool)
+        logits = model.decoder_logits(
+            encoding, selected, batch["min_count"], batch["max_count"]
+        )
+        self.assertLess(float(logits[0, -1]), -9999.0)  # STOP before minCount
+        self.assertGreater(float(logits[1, -1]), -9999.0)
+        selected[0, 0] = True
+        selected[0, 1] = True
+        at_max = model.decoder_logits(
+            encoding, selected, batch["min_count"], batch["max_count"]
+        )
+        self.assertTrue(bool(torch.all(at_max[0, :-1] <= -9999.0)))
+        actions = model.greedy_actions(
+            encoding, batch["min_count"], batch["max_count"]
+        )
+        self.assertTrue(all(1 <= len(actions[0]) <= 2 for _ in [0]))
+        self.assertTrue(all(0 <= len(actions[1]) <= 1 for _ in [0]))
+        self.assertEqual(len(actions[0]), len(set(actions[0])))
+
+    def test_universal_value_loss_uses_loser_when_policy_weight_is_zero(self) -> None:
+        torch.manual_seed(20260810)
+        model, inputs, batch = self._universal_batch()
+        encoding = model(*inputs)
+        loss, parts = universal_bc_loss(
+            model,
+            encoding,
+            batch,
+            torch.tensor([1.0, 0.0]),
+            torch.tensor([1.0, 1.0]),
+        )
+        self.assertTrue(bool(torch.isfinite(loss)))
+        self.assertEqual(int(parts["policyExamples"]), 1)
+        loser_only = torch.nn.functional.binary_cross_entropy_with_logits(
+            encoding.value_logits[1], batch["winner"][1]
+        )
+        self.assertGreater(float(loser_only), 0.0)
 
 
 if __name__ == "__main__":
