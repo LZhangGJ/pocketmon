@@ -133,7 +133,9 @@ def write_csv(path: str | Path, rows: Sequence[Mapping[str, Any]], fieldnames: S
     target.parent.mkdir(parents=True, exist_ok=True)
     if fieldnames is None:
         fieldnames = list(rows[0]) if rows else []
-    with target.open("w", encoding="utf-8-sig", newline="") as handle:
+    # League runners consume schedules with plain ``utf-8`` and otherwise
+    # interpret a BOM as part of the first field name (``\ufeffgame_id``).
+    with target.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(fieldnames), extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)

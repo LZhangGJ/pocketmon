@@ -17,7 +17,7 @@ for path in (INTEGRATION, REFERENCE / "training"):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))
 
-from common import canonical_deck_sha256, directory_sha256
+from common import canonical_deck_sha256, directory_sha256, write_csv
 
 
 class Experiment7IntegrationTests(unittest.TestCase):
@@ -75,6 +75,14 @@ class Experiment7IntegrationTests(unittest.TestCase):
             self.assertEqual(directory_sha256(root), original)
             source.write_text("VALUE = 2\n", encoding="utf-8")
             self.assertNotEqual(directory_sha256(root), original)
+
+    def test_integration_csv_has_no_byte_order_mark(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "schedule.csv"
+            write_csv(output, [{"game_id": "smoke-1"}], ["game_id"])
+            self.assertFalse(output.read_bytes().startswith(b"\xef\xbb\xbf"))
+            with output.open(encoding="utf-8", newline="") as handle:
+                self.assertEqual(next(csv.DictReader(handle))["game_id"], "smoke-1")
 
     def test_reference_model_deck_multiset_invariance(self) -> None:
         from deck_identity_model import (
