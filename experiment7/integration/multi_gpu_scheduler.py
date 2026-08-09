@@ -32,7 +32,7 @@ class GPU:
         return (self.utilization, -self.free_mib, self.index)
 
 
-def ssh(host: str, command: str, timeout: int = 30) -> subprocess.CompletedProcess[str]:
+def ssh(host: str, command: str, timeout: int = 120) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         ["ssh", host, command],
         text=True,
@@ -53,7 +53,7 @@ def inventory(hosts: list[str], output: Path, minimum_free_mib: int, maximum_uti
     )
     for host in hosts:
         try:
-            result = ssh(host, query)
+            result = ssh(host, query, timeout=30)
         except subprocess.TimeoutExpired:
             errors.append({"host": host, "error": "ssh_timeout"})
             continue
