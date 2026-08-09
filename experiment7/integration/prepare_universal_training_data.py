@@ -11,6 +11,28 @@ from common import resolve_python, sha256_file, utc_now, write_json
 from prepare_training_data import build_engine_catalog, build_standard_caches, vendor_command
 
 
+def reuse_engine_catalog(source: Path, output: Path) -> dict[str, Any]:
+    payload = json.loads(source.read_text(encoding="utf-8"))
+    cards = payload.get("cards")
+    attacks = payload.get("attacks")
+    if not isinstance(cards, list) or not cards or not isinstance(attacks, list) or not attacks:
+        raise ValueError(f"invalid combined engine catalog: {source}")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(
+        json.dumps({"cards": cards, "attacks": attacks}, separators=(",", ":")) + "\n",
+        encoding="utf-8",
+    )
+    return {
+        "path": str(output.resolve()),
+        "sha256": sha256_file(output),
+        "sourcePath": str(source.resolve()),
+        "sourceSha256": sha256_file(source),
+        "cards": len(cards),
+        "attacks": len(attacks),
+        "cardVocab": max(int(row["cardId"]) for row in cards) + 1,
+    }
+
+
 def prepare(args: argparse.Namespace) -> dict[str, Any]:
     """Build one chronological, all-deck, both-player Experiment 7 dataset."""
     python = resolve_python(args.python)
@@ -21,9 +43,14 @@ def prepare(args: argparse.Namespace) -> dict[str, Any]:
     reference_root = args.reference_root.resolve()
 
     engine_catalog = output_root / "engine_catalog.json"
-    engine_receipt = build_engine_catalog(
-        args.cards.resolve(), args.attacks.resolve(), engine_catalog
-    )
+    if args.engine_catalog:
+        engine_receipt = reuse_engine_catalog(args.engine_catalog.resolve(), engine_catalog)
+    else:
+        if args.cards is None or args.attacks is None:
+            raise ValueError("provide --engine-catalog or both --cards and --attacks")
+        engine_receipt = build_engine_catalog(
+            args.cards.resolve(), args.attacks.resolve(), engine_catalog
+        )
     catalog_root = output_root / "catalog"
     build_catalog(
         args.raw_root.resolve(),
@@ -147,8 +174,13 @@ def main() -> None:
     )
     parser.add_argument("--reference-root", type=Path, required=True)
     parser.add_argument("--raw-root", type=Path, required=True)
-    parser.add_argument("--cards", type=Path, required=True)
-    parser.add_argument("--attacks", type=Path, required=True)
+    parser.add_argument(
+        "--engine-catalog",
+        type=Path,
+        help="Reuse a verified combined engine catalog from an earlier Experiment 7 run",
+    )
+    parser.add_argument("--cards", type=Path)
+    parser.add_argument("--attacks", type=Path)
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--python")
     parser.add_argument(

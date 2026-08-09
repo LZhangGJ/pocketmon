@@ -20,6 +20,7 @@ for path in (INTEGRATION, REFERENCE / "training"):
 from common import canonical_deck_sha256, directory_sha256, write_csv
 from arena import make_schedule
 from multi_gpu_scheduler import make_specialist_plan
+from prepare_universal_training_data import reuse_engine_catalog
 from universal_deck_model import (
     UniversalDeckModelConfig,
     UniversalDeckTransformerPolicy,
@@ -28,6 +29,27 @@ from universal_deck_model import (
 
 
 class Experiment7IntegrationTests(unittest.TestCase):
+    def test_universal_prepare_reuses_verified_engine_catalog(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "source.json"
+            output = root / "output.json"
+            source.write_text(
+                json.dumps(
+                    {
+                        "cards": [{"cardId": 1}, {"cardId": 7}],
+                        "attacks": [{"attackId": 3}],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            receipt = reuse_engine_catalog(source, output)
+            self.assertEqual(receipt["cardVocab"], 8)
+            self.assertEqual(receipt["cards"], 2)
+            self.assertEqual(receipt["attacks"], 1)
+            self.assertEqual(receipt["sourceSha256"], hashlib.sha256(source.read_bytes()).hexdigest())
+            self.assertTrue(output.is_file())
+
     def test_specialist_plan_assigns_one_exact_source_per_gpu(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
