@@ -4,6 +4,7 @@ import csv
 import hashlib
 import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -16,7 +17,7 @@ for path in (INTEGRATION, REFERENCE / "training"):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))
 
-from common import canonical_deck_sha256
+from common import canonical_deck_sha256, directory_sha256
 
 
 class Experiment7IntegrationTests(unittest.TestCase):
@@ -60,6 +61,20 @@ class Experiment7IntegrationTests(unittest.TestCase):
         self.assertGreaterEqual(len(payload["linux"]["servers"]), 6)
         self.assertEqual(payload["model"]["historyLength"], 8)
         self.assertEqual(payload["deckSelection"]["desired"], 6)
+
+    def test_runtime_directory_hash_ignores_python_caches(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "main.py"
+            source.write_text("VALUE = 1\n", encoding="utf-8")
+            original = directory_sha256(root)
+            cache = root / "__pycache__"
+            cache.mkdir()
+            (cache / "main.cpython-311.pyc").write_bytes(b"generated-cache")
+            (root / "orphan.pyc").write_bytes(b"generated-cache")
+            self.assertEqual(directory_sha256(root), original)
+            source.write_text("VALUE = 2\n", encoding="utf-8")
+            self.assertNotEqual(directory_sha256(root), original)
 
     def test_reference_model_deck_multiset_invariance(self) -> None:
         from deck_identity_model import (

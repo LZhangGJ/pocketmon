@@ -37,6 +37,31 @@ def sha256_file(path: str | Path, chunk_size: int = 8 << 20) -> str:
     return digest.hexdigest()
 
 
+def stable_runtime_files(root: str | Path) -> list[Path]:
+    """Return source/runtime files while ignoring interpreter-generated caches."""
+    base = Path(root)
+    return [
+        path
+        for path in sorted(base.rglob("*"))
+        if path.is_file()
+        and "__pycache__" not in path.relative_to(base).parts
+        and path.suffix not in {".pyc", ".pyo"}
+    ]
+
+
+def directory_sha256(root: str | Path) -> str:
+    base = Path(root)
+    digest = hashlib.sha256()
+    for path in stable_runtime_files(base):
+        relative = path.relative_to(base).as_posix().encode("utf-8")
+        digest.update(len(relative).to_bytes(4, "big"))
+        digest.update(relative)
+        content = path.read_bytes()
+        digest.update(len(content).to_bytes(8, "big"))
+        digest.update(content)
+    return digest.hexdigest()
+
+
 def canonical_deck(cards: Sequence[int]) -> tuple[int, ...]:
     values = tuple(sorted(int(card) for card in cards))
     if len(values) != 60:

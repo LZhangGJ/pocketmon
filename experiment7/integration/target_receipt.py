@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import platform
 import subprocess
@@ -9,21 +8,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from common import sha256_file, utc_now, write_json
-
-
-def directory_sha256(root: Path) -> str:
-    digest = hashlib.sha256()
-    for path in sorted(root.rglob("*")):
-        if not path.is_file():
-            continue
-        relative = path.relative_to(root).as_posix().encode("utf-8")
-        digest.update(len(relative).to_bytes(4, "big"))
-        digest.update(relative)
-        content = path.read_bytes()
-        digest.update(len(content).to_bytes(8, "big"))
-        digest.update(content)
-    return digest.hexdigest()
+from common import directory_sha256, sha256_file, stable_runtime_files, utc_now, write_json
 
 
 def git_value(repo: Path, *arguments: str) -> str:
@@ -48,15 +33,14 @@ def main() -> None:
     agent = args.agent_dir.resolve()
     cg = args.cg_dir.resolve()
     files = {}
-    for path in sorted(agent.rglob("*")):
-        if path.is_file():
-            files[path.relative_to(agent).as_posix()] = {
-                "bytes": path.stat().st_size,
-                "sha256": sha256_file(path),
-            }
+    for path in stable_runtime_files(agent):
+        files[path.relative_to(agent).as_posix()] = {
+            "bytes": path.stat().st_size,
+            "sha256": sha256_file(path),
+        }
     engine_files = {}
-    for path in sorted(cg.rglob("*")):
-        if path.is_file() and (path.suffix in {".so", ".py", ".json"} or path.name.startswith("lib")):
+    for path in stable_runtime_files(cg):
+        if path.suffix in {".so", ".py", ".json"} or path.name.startswith("lib"):
             engine_files[path.relative_to(cg).as_posix()] = {
                 "bytes": path.stat().st_size,
                 "sha256": sha256_file(path),

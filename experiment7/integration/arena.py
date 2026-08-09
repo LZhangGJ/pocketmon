@@ -7,7 +7,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable
 
-from common import Experiment7Error, read_json, sha256_file, utc_now, wilson_interval, write_csv, write_json
+from common import Experiment7Error, directory_sha256, read_json, sha256_file, utc_now, wilson_interval, write_csv, write_json
 
 
 def make_schedule(
@@ -75,22 +75,6 @@ def make_schedule(
     write_json(output_dir / "schedule_receipt.json", payload)
     print(json.dumps(payload, ensure_ascii=False), flush=True)
     return payload
-
-
-def directory_sha256(path: Path) -> str:
-    import hashlib
-
-    digest = hashlib.sha256()
-    for child in sorted(path.rglob("*")):
-        if not child.is_file():
-            continue
-        relative = child.relative_to(path).as_posix().encode("utf-8")
-        digest.update(len(relative).to_bytes(4, "big"))
-        digest.update(relative)
-        content = child.read_bytes()
-        digest.update(len(content).to_bytes(8, "big"))
-        digest.update(content)
-    return digest.hexdigest()
 
 
 def _candidate_stats(row: dict[str, str]) -> dict[str, Any]:
