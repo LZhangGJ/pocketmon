@@ -60,12 +60,18 @@ def selected_rows(
     modules: set[str] | None,
     positive_policy_only: bool,
     max_episodes: int,
+    min_game_score_exclusive: float | None = None,
 ) -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
     for row in read_csv(catalog):
         if row.get("is_clean") != "1":
             continue
         if modules is not None and row.get("module_version") not in modules:
+            continue
+        if (
+            min_game_score_exclusive is not None
+            and float(row.get("min_score", 0.0) or 0.0) <= min_game_score_exclusive
+        ):
             continue
         if mode == "exact" and deck_sha256 not in (
             row.get("deck0_sha256", "").lower(),
@@ -104,6 +110,7 @@ def build_dataset(
     positive_policy_only: bool,
     skip_forced: bool,
     max_episodes: int,
+    min_game_score_exclusive: float | None = None,
 ) -> dict[str, Any]:
     if mode == "exact" and not deck_sha256:
         raise ValueError("exact mode requires deck_sha256")
@@ -117,6 +124,7 @@ def build_dataset(
         modules,
         positive_policy_only,
         max_episodes,
+        min_game_score_exclusive,
     )
     validation_count = (
         0 if validation_fraction == 0.0 else max(1, math.ceil(len(rows) * validation_fraction))
@@ -335,6 +343,7 @@ def build_dataset(
         "createdAt": utc_now(),
         "mode": mode,
         "deckSha256": deck_sha256,
+        "minGameScoreExclusive": min_game_score_exclusive,
         "moduleVersions": sorted(modules) if modules is not None else ["*"],
         "sourceEpisodes": len(rows),
         "trainEpisodes": len(rows) - validation_count,
@@ -376,6 +385,11 @@ def main() -> None:
     parser.add_argument("--all-players", action="store_true")
     parser.add_argument("--include-forced", action="store_true")
     parser.add_argument("--max-episodes", type=int, default=0)
+    parser.add_argument(
+        "--min-game-score-exclusive",
+        type=float,
+        help="Keep only games whose manifest min_score is strictly above this value",
+    )
     args = parser.parse_args()
     build_dataset(
         reference_root=args.reference_root.resolve(),
@@ -389,6 +403,7 @@ def main() -> None:
         positive_policy_only=not args.all_players,
         skip_forced=not args.include_forced,
         max_episodes=args.max_episodes,
+        min_game_score_exclusive=args.min_game_score_exclusive,
     )
 
 

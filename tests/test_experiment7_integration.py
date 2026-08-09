@@ -19,6 +19,7 @@ for path in (INTEGRATION, REFERENCE / "training"):
 
 from common import canonical_deck_sha256, directory_sha256, write_csv
 from arena import make_schedule
+from build_from_pocketmon_replays import selected_rows
 from multi_gpu_scheduler import make_specialist_plan
 from prepare_universal_training_data import reuse_engine_catalog
 from universal_deck_model import (
@@ -29,6 +30,38 @@ from universal_deck_model import (
 
 
 class Experiment7IntegrationTests(unittest.TestCase):
+    def test_replay_score_filter_is_strictly_greater_than_threshold(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            catalog = Path(directory) / "catalog.csv"
+            write_csv(
+                catalog,
+                [
+                    {
+                        "episode_id": episode,
+                        "create_time": f"2026-08-08T00:00:0{index}Z",
+                        "raw_path": f"/{episode}.json",
+                        "is_clean": "1",
+                        "module_version": "1.32.6",
+                        "min_score": score,
+                        "policy_weight0": "1",
+                        "policy_weight1": "0",
+                    }
+                    for index, (episode, score) in enumerate(
+                        ((1, "899.9"), (2, "900"), (3, "900.1"), (4, "1200"))
+                    )
+                ],
+            )
+            rows = selected_rows(
+                catalog,
+                "broad",
+                None,
+                None,
+                False,
+                0,
+                min_game_score_exclusive=900.0,
+            )
+            self.assertEqual([int(row["episode_id"]) for row in rows], [3, 4])
+
     def test_universal_prepare_reuses_verified_engine_catalog(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

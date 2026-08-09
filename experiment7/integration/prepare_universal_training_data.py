@@ -75,6 +75,7 @@ def prepare(args: argparse.Namespace) -> dict[str, Any]:
         positive_policy_only=False,
         skip_forced=True,
         max_episodes=args.max_episodes,
+        min_game_score_exclusive=args.min_game_score_exclusive,
     )
     token_cache, sequence_cache = build_standard_caches(
         python=python,
@@ -132,6 +133,7 @@ def prepare(args: argparse.Namespace) -> dict[str, Any]:
         "classMap": {"path": str(class_map), "sha256": sha256_file(class_map)},
         "moduleVersions": args.module_versions,
         "policySource": args.policy_source,
+        "minGameScoreExclusive": args.min_game_score_exclusive,
         "dataset": {
             "name": "universal",
             "root": str(dataset_root),
@@ -147,6 +149,11 @@ def prepare(args: argparse.Namespace) -> dict[str, Any]:
             "value": "both player perspectives, independent unit weights",
             "opponentDeckAuxiliary": "disabled",
             "validation": "chronological newest replay episodes",
+            "scoreFilter": (
+                f"manifest min_score > {args.min_game_score_exclusive}"
+                if args.min_game_score_exclusive is not None
+                else "none"
+            ),
         },
         "privacyBoundary": "all raw observations sanitized before cache construction",
     }
@@ -195,6 +202,11 @@ def main() -> None:
     parser.add_argument("--strict-catalog", action="store_true")
     parser.add_argument("--max-replay-files", type=int, default=0)
     parser.add_argument("--max-episodes", type=int, default=0)
+    parser.add_argument(
+        "--min-game-score-exclusive",
+        type=float,
+        help="Keep only games where both players' score floor is strictly above this value",
+    )
     args = parser.parse_args()
     prepare(args)
 
