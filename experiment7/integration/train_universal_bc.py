@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import random
 import sys
 import time
@@ -247,13 +248,16 @@ def evaluate(
 
 def train(args: argparse.Namespace) -> dict[str, Any]:
     sources = read_json(args.sources.resolve())
-    if sources.get("kind") != "experiment7_universal_bc":
-        raise Experiment7Error("not a Universal BC source manifest")
+    universal_sources = sources.get("kind") == "experiment7_universal_bc"
+    if not universal_sources and not args.allow_multideck_pretrain:
+        raise Experiment7Error(
+            "not a Universal BC source manifest; use --allow-multideck-pretrain only for bootstrap"
+        )
     reference_root = Path(sources["referenceRoot"])
     vendor = setup_vendor(reference_root)
     seed_everything(args.seed)
     device = device_from_arg(args.device)
-    row = sources["dataset"]
+    row = sources["dataset"] if universal_sources else sources["pretrain"]
     bundle = vendor["IdentityBundle"].load(
         "universal",
         Path(row["features"]),
@@ -263,8 +267,15 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     )
     base = bundle.sequence.base
     meaningful = base.nontrivial_mask()
-    train_decisions = np.flatnonzero((base.data["validation"] == 0) & meaningful)
-    validation_decisions = np.flatnonzero((base.data["validation"] == 1) & meaningful)
+    validation_mask = base.data["validation"] == 1
+    if not bool(validation_mask.any()):
+        episode_ids = np.asarray(base.data["episode_ids"], dtype=np.int64)
+        ordered_episodes = list(dict.fromkeys(int(value) for value in episode_ids))
+        validation_count = max(1, int(math.ceil(len(ordered_episodes) * args.validation_fraction)))
+        validation_episodes = set(ordered_episodes[-validation_count:])
+        validation_mask = np.isin(episode_ids, list(validation_episodes))
+    train_decisions = np.flatnonzero(~validation_mask & meaningful)
+    validation_decisions = np.flatnonzero(validation_mask & meaningful)
     if args.max_train_decisions > 0:
         train_decisions = train_decisions[: args.max_train_decisions]
     if args.max_validation_decisions > 0:
@@ -304,6 +315,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     report: dict[str, Any] = {
         "schemaVersion": 2,
         "stage": "universal_bc",
+        "bootstrapFromMultideckPretrain": not universal_sources,
         "createdAt": utc_now(),
         "sources": {"path": str(args.sources.resolve()), "sha256": sha256_file(args.sources)},
         "seed": args.seed,
@@ -371,6 +383,17 @@ def main() -> None:
     parser.add_argument("--sources", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--initialize-from", type=Path)
+    parser.add_argument(
+        "--allow-multideck-pretrain",
+        action="store_true",
+        help="Bootstrap Deck-8/STOP weights from the prior broad winner-only cache",
+    )
+    parser.add_argument(
+        "--validation-fraction",
+        type=float,
+        default=0.05,
+        help="Chronological split used only when the source cache has no validation rows",
+    )
     parser.add_argument("--device", default="auto")
     parser.add_argument("--seed", type=int, default=20260810)
     parser.add_argument("--epochs", type=int, default=4)
