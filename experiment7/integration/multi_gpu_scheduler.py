@@ -43,7 +43,13 @@ def ssh(host: str, command: str, timeout: int = 120) -> subprocess.CompletedProc
     )
 
 
-def inventory(hosts: list[str], output: Path, minimum_free_mib: int, maximum_utilization: int) -> dict[str, Any]:
+def inventory(
+    hosts: list[str],
+    output: Path,
+    minimum_free_mib: int,
+    maximum_utilization: int,
+    ssh_timeout_seconds: int = 60,
+) -> dict[str, Any]:
     rows = []
     errors = []
     query = (
@@ -53,7 +59,7 @@ def inventory(hosts: list[str], output: Path, minimum_free_mib: int, maximum_uti
     )
     for host in hosts:
         try:
-            result = ssh(host, query, timeout=30)
+            result = ssh(host, query, timeout=ssh_timeout_seconds)
         except subprocess.TimeoutExpired:
             errors.append({"host": host, "error": "ssh_timeout"})
             continue
@@ -85,6 +91,7 @@ def inventory(hosts: list[str], output: Path, minimum_free_mib: int, maximum_uti
         "createdAt": utc_now(),
         "minimumFreeMiB": minimum_free_mib,
         "maximumUtilizationPercent": maximum_utilization,
+        "sshTimeoutSeconds": ssh_timeout_seconds,
         "gpus": rows,
         "errors": errors,
     }
@@ -208,6 +215,7 @@ def main() -> None:
     inv.add_argument("--output", type=Path, required=True)
     inv.add_argument("--minimum-free-mib", type=int, default=12_000)
     inv.add_argument("--maximum-utilization", type=int, default=20)
+    inv.add_argument("--ssh-timeout-seconds", type=int, default=60)
 
     plan = sub.add_parser("make-training-plan")
     plan.add_argument("--inventory", type=Path, required=True)
@@ -233,7 +241,13 @@ def main() -> None:
 
     args = parser.parse_args()
     if args.command == "inventory":
-        inventory(args.hosts, args.output.resolve(), args.minimum_free_mib, args.maximum_utilization)
+        inventory(
+            args.hosts,
+            args.output.resolve(),
+            args.minimum_free_mib,
+            args.maximum_utilization,
+            args.ssh_timeout_seconds,
+        )
     elif args.command == "make-training-plan":
         make_training_plan(
             args.inventory.resolve(),
