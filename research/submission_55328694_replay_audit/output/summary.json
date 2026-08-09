@@ -1,0 +1,146 @@
+{
+  "submission_id": 55328694,
+  "manifest_episode_count": 108,
+  "replay_files": 108,
+  "analyzed_player_episodes": 109,
+  "public_player_episodes": 107,
+  "public_outcomes": {
+    "win": 64,
+    "loss": 43
+  },
+  "public_win_rate": 0.5981308411214953,
+  "validation_player_episodes": 2,
+  "invalid_decisions": 0,
+  "all_candidate_flag_counts": {
+    "attacked_with_evolve_available": 92,
+    "attacked_with_ability_available": 79,
+    "attacked_with_play_available": 208,
+    "ended_with_attach_available": 19,
+    "declined_optional_selection": 25,
+    "attacked_before_energy_attachment": 71,
+    "ended_with_evolve_available": 24
+  },
+  "loss_candidate_flag_counts": {
+    "ended_with_attach_available": 11,
+    "attacked_with_play_available": 62,
+    "declined_optional_selection": 17,
+    "attacked_before_energy_attachment": 30,
+    "attacked_with_ability_available": 13,
+    "attacked_with_evolve_available": 34,
+    "ended_with_evolve_available": 12
+  },
+  "option_names": {
+    "0": "UNKNOWN",
+    "1": "YES",
+    "2": "NO",
+    "3": "CARD",
+    "4": "TOOL",
+    "5": "ENERGY",
+    "6": "POKEMON_ENERGY",
+    "7": "PLAY",
+    "8": "ATTACH",
+    "9": "EVOLVE",
+    "10": "ABILITY",
+    "11": "DISCARD",
+    "12": "RETREAT",
+    "13": "ATTACK",
+    "14": "END",
+    "15": "CARD_ID",
+    "16": "SPECIAL_CONDITION"
+  },
+  "select_context_names": {},
+  "matchups": {
+    "Alakazam / Kadabra / Dudunsparce": {
+      "win": 2,
+      "loss": 1
+    },
+    "Alakazam / Kadabra / Dunsparce": {
+      "win": 2,
+      "loss": 1
+    },
+    "Comfey / Bramblin / Brambleghast": {
+      "win": 1
+    },
+    "Cynthia's Garchomp ex / Cynthia's Roselia / Cynthia's Gible": {
+      "win": 1
+    },
+    "Dragapult ex / Meowth ex / Fezandipiti ex": {
+      "win": 2,
+      "loss": 2
+    },
+    "Fezandipiti ex / Alakazam / Kadabra": {
+      "win": 9,
+      "loss": 7
+    },
+    "Fezandipiti ex / Rillaboom / Thwackey": {
+      "loss": 1
+    },
+    "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp": {
+      "win": 27,
+      "loss": 18
+    },
+    "Marnie's Grimmsnarl ex / Munkidori / Marnie's Morgrem": {
+      "win": 1
+    },
+    "Mega Kangaskhan ex / Cornerstone Mask Ogerpon ex / Dwebble": {
+      "win": 1
+    },
+    "Mega Kangaskhan ex / Dwebble / Crustle": {
+      "win": 4,
+      "loss": 1
+    },
+    "Mega Kangaskhan ex / Mega Lopunny ex / Fezandipiti ex": {
+      "win": 1
+    },
+    "Mega Kangaskhan ex / Teal Mask Ogerpon ex / Lillie’s Clefairy ex": {
+      "loss": 1
+    },
+    "Mega Kangaskhan ex / Teal Mask Ogerpon ex / Meowth ex": {
+      "win": 1
+    },
+    "Mega Lopunny ex / Dunsparce / Dudunsparce": {
+      "win": 1,
+      "loss": 1
+    },
+    "Mega Lopunny ex / Mega Froslass ex / Dunsparce": {
+      "loss": 4
+    },
+    "Mega Lucario ex / Cornerstone Mask Ogerpon ex / Riolu": {
+      "win": 1
+    },
+    "Mega Lucario ex / Riolu / Solrock": {
+      "win": 1
+    },
+    "Mega Lucario ex / Solrock / Riolu": {
+      "win": 5,
+      "loss": 2
+    },
+    "Mega Starmie ex / Cinderace / Staryu": {
+      "win": 1
+    },
+    "Mega Starmie ex / Mega Froslass ex / Meowth ex": {
+      "loss": 1
+    },
+    "N’s Zoroark ex / N’s Zorua / N’s Reshiram": {
+      "loss": 1
+    },
+    "Rillaboom / Grookey / Dipplin": {
+      "loss": 1
+    },
+    "Teal Mask Ogerpon ex": {
+      "loss": 2
+    },
+    "Teal Mask Ogerpon ex / Tapu Bulu": {
+      "win": 1
+    },
+    "Team Rocket's Mewtwo ex / Team Rocket's Tarountula / Team Rocket's Spidops": {
+      "win": 1
+    },
+    "Team Rocket's Murkrow / Team Rocket's Honchkrow / Team Rocket's Porygon2": {
+      "win": 1
+    },
+    "Thwackey / Grookey / Dipplin": {
+      "win": 1
+    }
+  }
+}

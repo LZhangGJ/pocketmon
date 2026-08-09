@@ -1,0 +1,1085 @@
+{
+  "snapshot_date": "2026-08-09",
+  "submission_id": 55328694,
+  "public_games": 107,
+  "wins": 64,
+  "losses": 43,
+  "win_rate": 0.5981308411214953,
+  "high_confidence_affected_loss_episodes": 22,
+  "high_confidence_affected_loss_rate": 0.5116279069767442,
+  "comparison_affected_win_episodes": 20,
+  "comparison_affected_win_rate": 0.3125,
+  "high_confidence_event_counts": {
+    "ended_with_evolve_available": 12,
+    "declined_optional_selection": 15,
+    "ended_with_attach_available": 10
+  },
+  "high_confidence_episode_counts": {
+    "ended_with_evolve_available": 7,
+    "declined_optional_selection": 11,
+    "ended_with_attach_available": 7
+  },
+  "matchups": [
+    {
+      "archetype": "Grimmsnarl 镜像",
+      "games": 44,
+      "wins": 27,
+      "losses": 17,
+      "win_rate": 0.6136363636363636,
+      "loss_share": 0.3953488372093023
+    },
+    {
+      "archetype": "Alakazam",
+      "games": 22,
+      "wins": 13,
+      "losses": 9,
+      "win_rate": 0.5909090909090909,
+      "loss_share": 0.20930232558139536
+    },
+    {
+      "archetype": "Mega Lucario",
+      "games": 9,
+      "wins": 7,
+      "losses": 2,
+      "win_rate": 0.7777777777777778,
+      "loss_share": 0.046511627906976744
+    },
+    {
+      "archetype": "Mega Kangaskhan",
+      "games": 8,
+      "wins": 6,
+      "losses": 2,
+      "win_rate": 0.75,
+      "loss_share": 0.046511627906976744
+    },
+    {
+      "archetype": "Grass / Ogerpon",
+      "games": 7,
+      "wins": 3,
+      "losses": 4,
+      "win_rate": 0.42857142857142855,
+      "loss_share": 0.09302325581395349
+    },
+    {
+      "archetype": "Mega Lopunny",
+      "games": 7,
+      "wins": 2,
+      "losses": 5,
+      "win_rate": 0.2857142857142857,
+      "loss_share": 0.11627906976744186
+    },
+    {
+      "archetype": "Dragapult",
+      "games": 4,
+      "wins": 2,
+      "losses": 2,
+      "win_rate": 0.5,
+      "loss_share": 0.046511627906976744
+    },
+    {
+      "archetype": "其他",
+      "games": 4,
+      "wins": 3,
+      "losses": 1,
+      "win_rate": 0.75,
+      "loss_share": 0.023255813953488372
+    },
+    {
+      "archetype": "Mega Starmie",
+      "games": 2,
+      "wins": 1,
+      "losses": 1,
+      "win_rate": 0.5,
+      "loss_share": 0.023255813953488372
+    }
+  ],
+  "flags": [
+    {
+      "flag": "declined_optional_selection",
+      "label": "可选检索选空",
+      "loss_episodes": 11,
+      "loss_episode_rate": 0.2558139534883721,
+      "win_episodes": 7,
+      "win_episode_rate": 0.109375,
+      "loss_minus_win_pp": 14.64389534883721,
+      "high_confidence": true
+    },
+    {
+      "flag": "ended_with_attach_available",
+      "label": "可贴能量却结束回合",
+      "loss_episodes": 7,
+      "loss_episode_rate": 0.16279069767441862,
+      "win_episodes": 6,
+      "win_episode_rate": 0.09375,
+      "loss_minus_win_pp": 6.904069767441862,
+      "high_confidence": true
+    },
+    {
+      "flag": "ended_with_evolve_available",
+      "label": "可进化却结束回合",
+      "loss_episodes": 7,
+      "loss_episode_rate": 0.16279069767441862,
+      "win_episodes": 8,
+      "win_episode_rate": 0.125,
+      "loss_minus_win_pp": 3.779069767441862,
+      "high_confidence": true
+    },
+    {
+      "flag": "attacked_with_evolve_available",
+      "label": "攻击时仍可进化",
+      "loss_episodes": 15,
+      "loss_episode_rate": 0.3488372093023256,
+      "win_episodes": 30,
+      "win_episode_rate": 0.46875,
+      "loss_minus_win_pp": -11.99127906976744,
+      "high_confidence": false
+    },
+    {
+      "flag": "attacked_before_energy_attachment",
+      "label": "攻击前仍可贴能量",
+      "loss_episodes": 14,
+      "loss_episode_rate": 0.32558139534883723,
+      "win_episodes": 30,
+      "win_episode_rate": 0.46875,
+      "loss_minus_win_pp": -14.316860465116276,
+      "high_confidence": false
+    },
+    {
+      "flag": "attacked_with_play_available",
+      "label": "攻击时仍有手牌可打",
+      "loss_episodes": 25,
+      "loss_episode_rate": 0.5813953488372093,
+      "win_episodes": 60,
+      "win_episode_rate": 0.9375,
+      "loss_minus_win_pp": -35.610465116279066,
+      "high_confidence": false
+    },
+    {
+      "flag": "attacked_with_ability_available",
+      "label": "攻击时仍有能力可用",
+      "loss_episodes": 7,
+      "loss_episode_rate": 0.16279069767441862,
+      "win_episodes": 39,
+      "win_episode_rate": 0.609375,
+      "loss_minus_win_pp": -44.65843023255814,
+      "high_confidence": false
+    }
+  ],
+  "reviewed_losses": [
+    {
+      "episode_id": 91325674,
+      "opponent": "カントー地方マスター(KantoRegionMaster)",
+      "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+      "archetype": "Grimmsnarl 镜像",
+      "max_turn": 22,
+      "severity": "高",
+      "event_count": 5,
+      "flags": {
+        "declined_optional_selection": 1,
+        "ended_with_evolve_available": 4
+      },
+      "turns": {
+        "declined_optional_selection": [
+          2
+        ],
+        "ended_with_evolve_available": [
+          6,
+          8,
+          10,
+          12
+        ]
+      },
+      "events": [
+        {
+          "flag": "declined_optional_selection",
+          "turn": 2,
+          "action_step": 18,
+          "available": [
+            "CARD | Snorunt",
+            "CARD | Marnie's Impidimp",
+            "CARD | Snorunt"
+          ],
+          "self_active": "Marnie's Impidimp",
+          "opponent_active": "Snorunt"
+        },
+        {
+          "flag": "ended_with_evolve_available",
+          "turn": 6,
+          "action_step": 51,
+          "available": [
+            "PLAY | Boss’s Orders",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "END"
+          ],
+          "self_active": "Marnie's Impidimp",
+          "opponent_active": "Snorunt"
+        },
+        {
+          "flag": "ended_with_evolve_available",
+          "turn": 8,
+          "action_step": 67,
+          "available": [
+            "PLAY | Boss’s Orders",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "PLAY | Marnie's Impidimp",
+            "END"
+          ],
+          "self_active": "Marnie's Impidimp",
+          "opponent_active": "Snorunt"
+        },
+        {
+          "flag": "ended_with_evolve_available",
+          "turn": 10,
+          "action_step": 73,
+          "available": [
+            "PLAY | Boss’s Orders",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "PLAY | Marnie's Impidimp",
+            "PLAY | Rare Candy",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "END"
+          ],
+          "self_active": "Marnie's Impidimp",
+          "opponent_active": "Snorunt"
+        },
+        {
+          "flag": "ended_with_evolve_available",
+          "turn": 12,
+          "action_step": 80,
+          "available": [
+            "PLAY | Poké Pad",
+            "PLAY | Buddy-Buddy Poffin",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "END"
+          ],
+          "self_active": "Marnie's Impidimp",
+          "opponent_active": "Snorunt"
+        }
+      ]
+    },
+    {
+      "episode_id": 90761788,
+      "opponent": "kirito83",
+      "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+      "archetype": "Grimmsnarl 镜像",
+      "max_turn": 9,
+      "severity": "高",
+      "event_count": 3,
+      "flags": {
+        "ended_with_attach_available": 3
+      },
+      "turns": {
+        "ended_with_attach_available": [
+          1,
+          7,
+          9
+        ]
+      },
+      "events": [
+        {
+          "flag": "ended_with_attach_available",
+          "turn": 1,
+          "action_step": 7,
+          "available": [
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "END"
+          ],
+          "self_active": "Marnie's Impidimp",
+          "opponent_active": "Marnie's Impidimp"
+        },
+        {
+          "flag": "ended_with_attach_available",
+          "turn": 7,
+          "action_step": 104,
+          "available": [
+            "ATTACH | Basic {D} Energy | to Munkidori",
+            "ATTACH | Basic {D} Energy | to Munkidori",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "PLAY | Snorunt",
+            "RETREAT",
+            "END"
+          ],
+          "self_active": "Munkidori",
+          "opponent_active": "Marnie's Grimmsnarl ex"
+        },
+        {
+          "flag": "ended_with_attach_available",
+          "turn": 9,
+          "action_step": 145,
+          "available": [
+            "ATTACH | Basic {D} Energy | to Munkidori",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "PLAY | Snorunt",
+            "RETREAT",
+            "END"
+          ],
+          "self_active": "Munkidori",
+          "opponent_active": "Marnie's Grimmsnarl ex"
+        }
+      ]
+    },
+    {
+      "episode_id": 90907191,
+      "opponent": "hatry",
+      "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+      "archetype": "Grimmsnarl 镜像",
+      "max_turn": 14,
+      "severity": "高",
+      "event_count": 3,
+      "flags": {
+        "declined_optional_selection": 3
+      },
+      "turns": {
+        "declined_optional_selection": [
+          2,
+          6,
+          8
+        ]
+      },
+      "events": [
+        {
+          "flag": "declined_optional_selection",
+          "turn": 2,
+          "action_step": 10,
+          "available": [
+            "CARD | Snorunt",
+            "CARD | Snorunt"
+          ],
+          "self_active": "Marnie's Impidimp",
+          "opponent_active": "Marnie's Impidimp"
+        },
+        {
+          "flag": "declined_optional_selection",
+          "turn": 6,
+          "action_step": 79,
+          "available": [
+            "CARD | Snorunt"
+          ],
+          "self_active": "Marnie's Grimmsnarl ex",
+          "opponent_active": "Marnie's Grimmsnarl ex"
+        },
+        {
+          "flag": "declined_optional_selection",
+          "turn": 8,
+          "action_step": 99,
+          "available": [
+            "CARD | Snorunt"
+          ],
+          "self_active": "Marnie's Grimmsnarl ex",
+          "opponent_active": "Snorunt"
+        }
+      ]
+    },
+    {
+      "episode_id": 90756224,
+      "opponent": "takusemba",
+      "opponent_deck": "Mega Starmie ex / Mega Froslass ex / Meowth ex",
+      "archetype": "Mega Starmie",
+      "max_turn": 9,
+      "severity": "高",
+      "event_count": 2,
+      "flags": {
+        "declined_optional_selection": 2
+      },
+      "turns": {
+        "declined_optional_selection": [
+          5,
+          5
+        ]
+      },
+      "events": [
+        {
+          "flag": "declined_optional_selection",
+          "turn": 5,
+          "action_step": 77,
+          "available": [
+            "CARD | Marnie's Impidimp",
+            "CARD | Snorunt",
+            "CARD | Snorunt"
+          ],
+          "self_active": "Marnie's Grimmsnarl ex",
+          "opponent_active": "Mega Starmie ex"
+        },
+        {
+          "flag": "declined_optional_selection",
+          "turn": 5,
+          "action_step": 79,
+          "available": [
+            "CARD | Marnie's Impidimp",
+            "CARD | Snorunt",
+            "CARD | Snorunt"
+          ],
+          "self_active": "Marnie's Grimmsnarl ex",
+          "opponent_active": "Mega Starmie ex"
+        }
+      ]
+    },
+    {
+      "episode_id": 90764263,
+      "opponent": "tokimashita",
+      "opponent_deck": "Mega Lucario ex / Solrock / Riolu",
+      "archetype": "Mega Lucario",
+      "max_turn": 19,
+      "severity": "高",
+      "event_count": 2,
+      "flags": {
+        "ended_with_evolve_available": 2
+      },
+      "turns": {
+        "ended_with_evolve_available": [
+          6,
+          8
+        ]
+      },
+      "events": [
+        {
+          "flag": "ended_with_evolve_available",
+          "turn": 6,
+          "action_step": 27,
+          "available": [
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "RETREAT",
+            "END"
+          ],
+          "self_active": "Munkidori",
+          "opponent_active": "Solrock"
+        },
+        {
+          "flag": "ended_with_evolve_available",
+          "turn": 8,
+          "action_step": 37,
+          "available": [
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "RETREAT",
+            "END"
+          ],
+          "self_active": "Munkidori",
+          "opponent_active": "Solrock"
+        }
+      ]
+    },
+    {
+      "episode_id": 90768268,
+      "opponent": "BhavitB",
+      "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+      "archetype": "Grimmsnarl 镜像",
+      "max_turn": 11,
+      "severity": "高",
+      "event_count": 2,
+      "flags": {
+        "declined_optional_selection": 2
+      },
+      "turns": {
+        "declined_optional_selection": [
+          6,
+          10
+        ]
+      },
+      "events": [
+        {
+          "flag": "declined_optional_selection",
+          "turn": 6,
+          "action_step": 92,
+          "available": [
+            "CARD | Snorunt",
+            "CARD | Snorunt"
+          ],
+          "self_active": "Marnie's Grimmsnarl ex",
+          "opponent_active": "Marnie's Grimmsnarl ex"
+        },
+        {
+          "flag": "declined_optional_selection",
+          "turn": 10,
+          "action_step": 155,
+          "available": [
+            "CARD | Snorunt"
+          ],
+          "self_active": "Marnie's Grimmsnarl ex",
+          "opponent_active": "Marnie's Grimmsnarl ex"
+        }
+      ]
+    },
+    {
+      "episode_id": 90780965,
+      "opponent": "Shangshang Zhang",
+      "opponent_deck": "Alakazam / Kadabra / Dudunsparce",
+      "archetype": "Alakazam",
+      "max_turn": 13,
+      "severity": "高",
+      "event_count": 2,
+      "flags": {
+        "ended_with_attach_available": 2
+      },
+      "turns": {
+        "ended_with_attach_available": [
+          3,
+          5
+        ]
+      },
+      "events": [
+        {
+          "flag": "ended_with_attach_available",
+          "turn": 3,
+          "action_step": 20,
+          "available": [
+            "ATTACH | Basic {D} Energy | to Munkidori",
+            "ATTACH | Basic {D} Energy | to Snorunt",
+            "ATTACH | Basic {D} Energy | to Snorunt",
+            "RETREAT",
+            "END"
+          ],
+          "self_active": "Munkidori",
+          "opponent_active": "Abra"
+        },
+        {
+          "flag": "ended_with_attach_available",
+          "turn": 5,
+          "action_step": 41,
+          "available": [
+            "ATTACH | Basic {D} Energy | to Munkidori",
+            "ATTACH | Basic {D} Energy | to Froslass",
+            "ATTACH | Basic {D} Energy | to Snorunt",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "RETREAT",
+            "END"
+          ],
+          "self_active": "Munkidori",
+          "opponent_active": "Kadabra"
+        }
+      ]
+    },
+    {
+      "episode_id": 91160774,
+      "opponent": "EliKal",
+      "opponent_deck": "N’s Zoroark ex / N’s Zorua / N’s Reshiram",
+      "archetype": "其他",
+      "max_turn": 16,
+      "severity": "高",
+      "event_count": 2,
+      "flags": {
+        "ended_with_evolve_available": 2
+      },
+      "turns": {
+        "ended_with_evolve_available": [
+          6,
+          8
+        ]
+      },
+      "events": [
+        {
+          "flag": "ended_with_evolve_available",
+          "turn": 6,
+          "action_step": 51,
+          "available": [
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "RETREAT",
+            "END"
+          ],
+          "self_active": "Munkidori",
+          "opponent_active": "Budew"
+        },
+        {
+          "flag": "ended_with_evolve_available",
+          "turn": 8,
+          "action_step": 74,
+          "available": [
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "RETREAT",
+            "END"
+          ],
+          "self_active": "Munkidori",
+          "opponent_active": "Budew"
+        }
+      ]
+    },
+    {
+      "episode_id": 91168560,
+      "opponent": "jiatu.l",
+      "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+      "archetype": "Grimmsnarl 镜像",
+      "max_turn": 9,
+      "severity": "高",
+      "event_count": 2,
+      "flags": {
+        "ended_with_evolve_available": 1,
+        "declined_optional_selection": 1
+      },
+      "turns": {
+        "ended_with_evolve_available": [
+          3
+        ],
+        "declined_optional_selection": [
+          7
+        ]
+      },
+      "events": [
+        {
+          "flag": "ended_with_evolve_available",
+          "turn": 3,
+          "action_step": 30,
+          "available": [
+            "PLAY | Buddy-Buddy Poffin",
+            "PLAY | Buddy-Buddy Poffin",
+            "EVOLVE | Froslass | to Snorunt",
+            "END"
+          ],
+          "self_active": "Snorunt",
+          "opponent_active": "Marnie's Impidimp"
+        },
+        {
+          "flag": "declined_optional_selection",
+          "turn": 7,
+          "action_step": 97,
+          "available": [
+            "CARD | Snorunt"
+          ],
+          "self_active": "Marnie's Grimmsnarl ex",
+          "opponent_active": "Marnie's Grimmsnarl ex"
+        }
+      ]
+    },
+    {
+      "episode_id": 91221601,
+      "opponent": "kanno",
+      "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+      "archetype": "Grimmsnarl 镜像",
+      "max_turn": 15,
+      "severity": "高",
+      "event_count": 2,
+      "flags": {
+        "ended_with_attach_available": 1,
+        "declined_optional_selection": 1
+      },
+      "turns": {
+        "ended_with_attach_available": [
+          1
+        ],
+        "declined_optional_selection": [
+          13
+        ]
+      },
+      "events": [
+        {
+          "flag": "ended_with_attach_available",
+          "turn": 1,
+          "action_step": 9,
+          "available": [
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "END"
+          ],
+          "self_active": "Marnie's Impidimp",
+          "opponent_active": "Munkidori"
+        },
+        {
+          "flag": "declined_optional_selection",
+          "turn": 13,
+          "action_step": 178,
+          "available": [
+            "CARD | Snorunt",
+            "CARD | Froslass",
+            "CARD | Snorunt"
+          ],
+          "self_active": "Marnie's Grimmsnarl ex",
+          "opponent_active": "Marnie's Grimmsnarl ex"
+        }
+      ]
+    },
+    {
+      "episode_id": 90752841,
+      "opponent": "Saulo Quiñones Góngora",
+      "opponent_deck": "Fezandipiti ex / Alakazam / Kadabra",
+      "archetype": "Alakazam",
+      "max_turn": 23,
+      "severity": "中",
+      "event_count": 1,
+      "flags": {
+        "ended_with_evolve_available": 1
+      },
+      "turns": {
+        "ended_with_evolve_available": [
+          15
+        ]
+      },
+      "events": [
+        {
+          "flag": "ended_with_evolve_available",
+          "turn": 15,
+          "action_step": 184,
+          "available": [
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "END"
+          ],
+          "self_active": "Froslass",
+          "opponent_active": "Fezandipiti ex"
+        }
+      ]
+    },
+    {
+      "episode_id": 90758524,
+      "opponent": "zhan renyi",
+      "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+      "archetype": "Grimmsnarl 镜像",
+      "max_turn": 12,
+      "severity": "中",
+      "event_count": 1,
+      "flags": {
+        "declined_optional_selection": 1
+      },
+      "turns": {
+        "declined_optional_selection": [
+          8
+        ]
+      },
+      "events": [
+        {
+          "flag": "declined_optional_selection",
+          "turn": 8,
+          "action_step": 130,
+          "available": [
+            "CARD | Snorunt",
+            "CARD | Snorunt"
+          ],
+          "self_active": "Marnie's Grimmsnarl ex",
+          "opponent_active": "Munkidori"
+        }
+      ]
+    },
+    {
+      "episode_id": 90771647,
+      "opponent": "Attacker",
+      "opponent_deck": "Dragapult ex / Meowth ex / Fezandipiti ex",
+      "archetype": "Dragapult",
+      "max_turn": 13,
+      "severity": "高",
+      "event_count": 1,
+      "flags": {
+        "ended_with_attach_available": 1
+      },
+      "turns": {
+        "ended_with_attach_available": [
+          1
+        ]
+      },
+      "events": [
+        {
+          "flag": "ended_with_attach_available",
+          "turn": 1,
+          "action_step": 5,
+          "available": [
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "END"
+          ],
+          "self_active": "Marnie's Impidimp",
+          "opponent_active": "Meowth ex"
+        }
+      ]
+    },
+    {
+      "episode_id": 90817453,
+      "opponent": "sadwat",
+      "opponent_deck": "Mega Lopunny ex / Mega Froslass ex / Dunsparce",
+      "archetype": "Mega Lopunny",
+      "max_turn": 14,
+      "severity": "中",
+      "event_count": 1,
+      "flags": {
+        "declined_optional_selection": 1
+      },
+      "turns": {
+        "declined_optional_selection": [
+          12
+        ]
+      },
+      "events": [
+        {
+          "flag": "declined_optional_selection",
+          "turn": 12,
+          "action_step": 156,
+          "available": [
+            "CARD | Snorunt",
+            "CARD | Snorunt"
+          ],
+          "self_active": "Marnie's Grimmsnarl ex",
+          "opponent_active": "Mega Froslass ex"
+        }
+      ]
+    },
+    {
+      "episode_id": 90826802,
+      "opponent": "miya",
+      "opponent_deck": "Fezandipiti ex / Alakazam / Kadabra",
+      "archetype": "Alakazam",
+      "max_turn": 14,
+      "severity": "中",
+      "event_count": 1,
+      "flags": {
+        "ended_with_evolve_available": 1
+      },
+      "turns": {
+        "ended_with_evolve_available": [
+          6
+        ]
+      },
+      "events": [
+        {
+          "flag": "ended_with_evolve_available",
+          "turn": 6,
+          "action_step": 88,
+          "available": [
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "EVOLVE | Marnie's Grimmsnarl ex | to Marnie's Morgrem",
+            "PLAY | Rare Candy",
+            "RETREAT",
+            "END"
+          ],
+          "self_active": "Froslass",
+          "opponent_active": "Shaymin"
+        }
+      ]
+    },
+    {
+      "episode_id": 91050216,
+      "opponent": "☕ Psyduck Needs Coffee",
+      "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+      "archetype": "Grimmsnarl 镜像",
+      "max_turn": 11,
+      "severity": "中",
+      "event_count": 1,
+      "flags": {
+        "declined_optional_selection": 1
+      },
+      "turns": {
+        "declined_optional_selection": [
+          5
+        ]
+      },
+      "events": [
+        {
+          "flag": "declined_optional_selection",
+          "turn": 5,
+          "action_step": 76,
+          "available": [
+            "CARD | Snorunt",
+            "CARD | Snorunt"
+          ],
+          "self_active": "Marnie's Grimmsnarl ex",
+          "opponent_active": "Marnie's Grimmsnarl ex"
+        }
+      ]
+    },
+    {
+      "episode_id": 91061018,
+      "opponent": "yoshitaka agent",
+      "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+      "archetype": "Grimmsnarl 镜像",
+      "max_turn": 7,
+      "severity": "中",
+      "event_count": 1,
+      "flags": {
+        "declined_optional_selection": 1
+      },
+      "turns": {
+        "declined_optional_selection": [
+          7
+        ]
+      },
+      "events": [
+        {
+          "flag": "declined_optional_selection",
+          "turn": 7,
+          "action_step": 114,
+          "available": [
+            "CARD | Marnie's Morgrem"
+          ],
+          "self_active": "Marnie's Grimmsnarl ex",
+          "opponent_active": "Marnie's Grimmsnarl ex"
+        }
+      ]
+    },
+    {
+      "episode_id": 91092609,
+      "opponent": "YumeNeko",
+      "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+      "archetype": "Grimmsnarl 镜像",
+      "max_turn": 11,
+      "severity": "中",
+      "event_count": 1,
+      "flags": {
+        "ended_with_attach_available": 1
+      },
+      "turns": {
+        "ended_with_attach_available": [
+          3
+        ]
+      },
+      "events": [
+        {
+          "flag": "ended_with_attach_available",
+          "turn": 3,
+          "action_step": 35,
+          "available": [
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Froslass",
+            "ATTACH | Basic {D} Energy | to Marnie's Morgrem",
+            "ATTACH | Basic {D} Energy | to Marnie's Morgrem",
+            "ATTACH | Basic {D} Energy | to Munkidori",
+            "END"
+          ],
+          "self_active": "Marnie's Impidimp",
+          "opponent_active": "Marnie's Impidimp"
+        }
+      ]
+    },
+    {
+      "episode_id": 91103678,
+      "opponent": "matsurih",
+      "opponent_deck": "Mega Lopunny ex / Mega Froslass ex / Dunsparce",
+      "archetype": "Mega Lopunny",
+      "max_turn": 11,
+      "severity": "高",
+      "event_count": 1,
+      "flags": {
+        "ended_with_attach_available": 1
+      },
+      "turns": {
+        "ended_with_attach_available": [
+          1
+        ]
+      },
+      "events": [
+        {
+          "flag": "ended_with_attach_available",
+          "turn": 1,
+          "action_step": 7,
+          "available": [
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "END"
+          ],
+          "self_active": "Marnie's Impidimp",
+          "opponent_active": "Snorunt"
+        }
+      ]
+    },
+    {
+      "episode_id": 91135935,
+      "opponent": "Konstantin Zhar",
+      "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+      "archetype": "Grimmsnarl 镜像",
+      "max_turn": 10,
+      "severity": "中",
+      "event_count": 1,
+      "flags": {
+        "ended_with_evolve_available": 1
+      },
+      "turns": {
+        "ended_with_evolve_available": [
+          4
+        ]
+      },
+      "events": [
+        {
+          "flag": "ended_with_evolve_available",
+          "turn": 4,
+          "action_step": 52,
+          "available": [
+            "EVOLVE | Froslass | to Snorunt",
+            "END"
+          ],
+          "self_active": "Marnie's Impidimp",
+          "opponent_active": "Marnie's Grimmsnarl ex"
+        }
+      ]
+    },
+    {
+      "episode_id": 91178158,
+      "opponent": "Iliamna",
+      "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+      "archetype": "Grimmsnarl 镜像",
+      "max_turn": 15,
+      "severity": "中",
+      "event_count": 1,
+      "flags": {
+        "declined_optional_selection": 1
+      },
+      "turns": {
+        "declined_optional_selection": [
+          15
+        ]
+      },
+      "events": [
+        {
+          "flag": "declined_optional_selection",
+          "turn": 15,
+          "action_step": 220,
+          "available": [
+            "CARD | Snorunt"
+          ],
+          "self_active": "Marnie's Impidimp",
+          "opponent_active": "Marnie's Grimmsnarl ex"
+        }
+      ]
+    },
+    {
+      "episode_id": 91307030,
+      "opponent": "대답해드리는게인지상정",
+      "opponent_deck": "Mega Lucario ex / Solrock / Riolu",
+      "archetype": "Mega Lucario",
+      "max_turn": 9,
+      "severity": "高",
+      "event_count": 1,
+      "flags": {
+        "ended_with_attach_available": 1
+      },
+      "turns": {
+        "ended_with_attach_available": [
+          1
+        ]
+      },
+      "events": [
+        {
+          "flag": "ended_with_attach_available",
+          "turn": 1,
+          "action_step": 12,
+          "available": [
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "ATTACH | Basic {D} Energy | to Marnie's Impidimp",
+            "END"
+          ],
+          "self_active": "Marnie's Impidimp",
+          "opponent_active": "Solrock"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1058 @@
+{
+  "surface": "report",
+  "manifest": {
+    "version": 1,
+    "surface": "report",
+    "title": "Agent 55328694 全量 Replay 败局审计",
+    "description": "对 Kaggle submission 55328694 的 108 场 episode 做逐动作败局审计。",
+    "generatedAt": "2026-08-09T00:00:00+09:00",
+    "sources": [
+      {
+        "path": "research/submission_55328694_replay_audit/output/report_source.sqlite",
+        "href": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=55328694",
+        "id": "headline_sql",
+        "label": "全量 replay 头部指标与提交包复现结果",
+        "query": {
+          "engine": "sqlite",
+          "language": "sql",
+          "sql": "SELECT public_games, public_win_rate, affected_losses, affected_loss_rate, fallback_calls, mismatch_count, comparison_count FROM headline_metrics",
+          "description": "读取 107 场公开对局的头部结果和原提交包的精确动作复现计数。",
+          "executed_at": "2026-08-09T00:00:00+09:00",
+          "tables_used": [
+            "headline_metrics"
+          ],
+          "filters": [
+            "公开胜率排除 90751124 validation 自对局"
+          ],
+          "metric_definitions": [
+            "公开胜率 = 64 / 107",
+            "受影响败局 = 43 场败局中至少出现一项高置信度战术失误信号的 episode 数",
+            "fallback = 原提交 main.py 捕获异常或产生非法动作后启用最小合法动作的次数"
+          ]
+        }
+      },
+      {
+        "path": "research/submission_55328694_replay_audit/output/report_source.sqlite",
+        "href": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=55328694",
+        "id": "flag_sql",
+        "label": "胜负对局中的动作信号出现率",
+        "query": {
+          "engine": "sqlite",
+          "language": "sql",
+          "sql": "SELECT pattern, result, episode_rate, episodes, denominator, loss_minus_win_pp FROM flag_comparison ORDER BY pattern, result",
+          "description": "按结果比较三类高置信度动作信号的 episode 覆盖率。",
+          "executed_at": "2026-08-09T00:00:00+09:00",
+          "tables_used": [
+            "flag_comparison"
+          ],
+          "filters": [
+            "仅含 107 场 EPISODE_TYPE_PUBLIC"
+          ],
+          "metric_definitions": [
+            "对局出现率 = 出现该信号的 episode 数 / 对应结果 episode 数"
+          ]
+        }
+      },
+      {
+        "path": "research/submission_55328694_replay_audit/output/report_source.sqlite",
+        "href": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=55328694",
+        "id": "matchup_sql",
+        "label": "按对手牌组聚合的公开赛结果",
+        "query": {
+          "engine": "sqlite",
+          "language": "sql",
+          "sql": "SELECT archetype, games, wins, losses, win_rate, loss_share, rank_by_win_rate FROM matchup ORDER BY win_rate ASC, games DESC",
+          "description": "按对手主轴牌组聚合 107 场公开对局的胜负。",
+          "executed_at": "2026-08-09T00:00:00+09:00",
+          "tables_used": [
+            "matchup"
+          ],
+          "filters": [
+            "仅含 107 场 EPISODE_TYPE_PUBLIC"
+          ],
+          "metric_definitions": [
+            "牌组胜率 = 胜局数 / 对局数；小样本只作方向性参考"
+          ]
+        }
+      },
+      {
+        "path": "research/submission_55328694_replay_audit/output/report_source.sqlite",
+        "href": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=55328694",
+        "id": "loss_sql",
+        "label": "43 场公开败局逐局审计",
+        "query": {
+          "engine": "sqlite",
+          "language": "sql",
+          "sql": "SELECT episode_id, severity, opponent, archetype, opponent_deck, max_turn, event_count, assessment FROM loss_detail ORDER BY event_count DESC, episode_id ASC",
+          "description": "列出全部公开败局及规则审计识别到的高置信度战术失误。",
+          "executed_at": "2026-08-09T00:00:00+09:00",
+          "tables_used": [
+            "loss_detail"
+          ],
+          "filters": [
+            "result = loss",
+            "episode_type = EPISODE_TYPE_PUBLIC"
+          ],
+          "metric_definitions": [
+            "事件数 = 该 episode 中三类高置信度战术失误的出现次数之和"
+          ]
+        }
+      }
+    ],
+    "cards": [
+      {
+        "id": "public_games_card",
+        "description": "公开赛 episode 数；validation 自对局不计入。",
+        "dataset": "headline",
+        "sourceId": "headline_sql",
+        "metrics": [
+          {
+            "label": "公开对局",
+            "field": "public_games",
+            "format": "number"
+          }
+        ]
+      },
+      {
+        "id": "win_rate_card",
+        "description": "64 胜、43 负。",
+        "dataset": "headline",
+        "sourceId": "headline_sql",
+        "metrics": [
+          {
+            "label": "公开胜率",
+            "field": "public_win_rate",
+            "format": "percent"
+          }
+        ]
+      },
+      {
+        "id": "affected_losses_card",
+        "description": "至少出现一项高置信度战术失误信号的败局。",
+        "dataset": "headline",
+        "sourceId": "headline_sql",
+        "metrics": [
+          {
+            "label": "受影响败局",
+            "field": "affected_losses",
+            "format": "number"
+          },
+          {
+            "label": "占全部败局",
+            "field": "affected_loss_rate",
+            "format": "percent"
+          }
+        ]
+      },
+      {
+        "id": "fallback_card",
+        "description": "原提交代码精确复现全部动作后的运行计数。",
+        "dataset": "headline",
+        "sourceId": "headline_sql",
+        "metrics": [
+          {
+            "label": "Fallback",
+            "field": "fallback_calls",
+            "format": "number"
+          },
+          {
+            "label": "动作不匹配",
+            "field": "mismatch_count",
+            "format": "number"
+          },
+          {
+            "label": "对照动作",
+            "field": "comparison_count",
+            "format": "compact"
+          }
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "id": "flag_comparison_chart",
+        "title": "三类动作信号在胜局与败局中的对局出现率",
+        "subtitle": "任一高置信度信号在败局中覆盖 51.2%，胜局中为 31.2%；单项差异以检索选空最大。",
+        "type": "bar",
+        "dataset": "flag_comparison",
+        "sourceId": "flag_sql",
+        "valueFormat": "percent",
+        "encodings": {
+          "x": {
+            "field": "pattern",
+            "type": "nominal",
+            "label": "动作信号"
+          },
+          "y": {
+            "field": "episode_rate",
+            "type": "quantitative",
+            "label": "对局出现率",
+            "format": "percent"
+          },
+          "color": {
+            "field": "result",
+            "type": "nominal",
+            "label": "结果"
+          },
+          "tooltip": [
+            {
+              "field": "episodes",
+              "type": "quantitative",
+              "label": "出现对局数"
+            },
+            {
+              "field": "denominator",
+              "type": "quantitative",
+              "label": "结果对局数"
+            },
+            {
+              "field": "loss_minus_win_pp",
+              "type": "quantitative",
+              "label": "败局-胜局",
+              "unit": "pp"
+            }
+          ]
+        }
+      },
+      {
+        "id": "matchup_chart",
+        "title": "公开对局按对手牌组聚合的胜率",
+        "subtitle": "Mega Lopunny 为 2-5，Grass / Ogerpon 为 3-4；这两组样本较小，只宜用作定向回归测试。",
+        "type": "bar",
+        "dataset": "matchup",
+        "sourceId": "matchup_sql",
+        "valueFormat": "percent",
+        "encodings": {
+          "x": {
+            "field": "archetype",
+            "type": "nominal",
+            "label": "对手牌组"
+          },
+          "y": {
+            "field": "win_rate",
+            "type": "quantitative",
+            "label": "胜率",
+            "format": "percent"
+          },
+          "tooltip": [
+            {
+              "field": "games",
+              "type": "quantitative",
+              "label": "对局数"
+            },
+            {
+              "field": "wins",
+              "type": "quantitative",
+              "label": "胜局"
+            },
+            {
+              "field": "losses",
+              "type": "quantitative",
+              "label": "败局"
+            },
+            {
+              "field": "loss_share",
+              "type": "quantitative",
+              "label": "败局占比",
+              "format": "percent"
+            }
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "loss_audit_table",
+        "title": "43 场公开败局逐局审计",
+        "subtitle": "先列出事件较多的对局；“未发现”表示本规则集没有识别到明确的单步资源浪费，不代表整局最优。",
+        "dataset": "loss_detail",
+        "sourceId": "loss_sql",
+        "density": "compact",
+        "defaultSort": {
+          "field": "event_count",
+          "direction": "desc"
+        },
+        "columns": [
+          {
+            "field": "episode_id",
+            "label": "Episode",
+            "type": "number"
+          },
+          {
+            "field": "severity",
+            "label": "严重度",
+            "type": "text"
+          },
+          {
+            "field": "archetype",
+            "label": "对手类型",
+            "type": "text"
+          },
+          {
+            "field": "max_turn",
+            "label": "末回合",
+            "type": "number"
+          },
+          {
+            "field": "event_count",
+            "label": "事件数",
+            "type": "number"
+          },
+          {
+            "field": "assessment",
+            "label": "审计结论",
+            "type": "text"
+          }
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "id": "title",
+        "type": "markdown",
+        "body": "# Agent 55328694 全量 Replay 败局审计"
+      },
+      {
+        "id": "executive_summary",
+        "type": "markdown",
+        "body": "## Executive Summary\n\n- **完整范围是 108 场 episode。** 其中 107 场公开对局为 64 胜 43 负（59.8%）；90751124 是 validation 自对局，双方都是同一 submission。\n- **最确定的失误不是非法动作，而是主动放弃价值。** 43 场败局中，22 场至少出现一次“检索选空 / 能贴不贴 / 能进化不进化”；合计 37 个事件。\n- **这些信号与败局相关，但不是每次都致败。** 任一信号在败局覆盖 51.2%，胜局覆盖 31.2%；仍有 21 场败局没有识别到明确的单步失误。\n- **代码异常不是主因。** 用原提交包重放 10,546 个动作，动作完全一致，fallback 与不匹配均为 0。"
+      },
+      {
+        "id": "headline_metrics",
+        "type": "metric-strip",
+        "cardIds": [
+          "public_games_card",
+          "win_rate_card",
+          "affected_losses_card",
+          "fallback_card"
+        ]
+      },
+      {
+        "id": "mistake_patterns",
+        "type": "markdown",
+        "body": "## 我们确实犯了三类重复失误\n\n**第一是可选检索直接选空：15 次，分布在 11 场败局。** 典型情形是已打出 Buddy-Buddy Poffin，系统给出 Snorunt 或 Impidimp，却返回空选择。这个信号的败局覆盖率为 25.6%，比胜局高 14.6 个百分点，是三类中最稳定的异常。\n\n**第二是仍可贴能量却结束回合：10 次，分布在 7 场败局。** 其中 90761788、90771647、91103678、91221601、91307030 在第 1 回合就空过贴能；90761788 还在第 7、9 回合重复。\n\n**第三是仍可进化却结束回合：12 次，分布在 7 场败局。** 这会推迟 Grimmsnarl ex 的成型、血量与攻击窗口。与“攻击时仍有能力/手牌可用”不同，这三类信号在败局里更常见，因此优先级更高。"
+      },
+      {
+        "id": "flag_comparison",
+        "type": "chart",
+        "chartId": "flag_comparison_chart"
+      },
+      {
+        "id": "episode_91325674",
+        "type": "markdown",
+        "body": "## 91325674 是最典型的崩盘样本\n\n**第 2 回合，agent 打出第二张 Buddy-Buddy Poffin 后，在 Snorunt、Impidimp、Snorunt 三个可选目标前返回空选择。** 随后它在第 6、8、10、12 回合连续四次持有并可合法进化 Grimmsnarl ex，却直接结束回合；直到第 14 回合才通过 Rare Candy 建成第一只 Grimmsnarl ex。\n\n这不是一次偶然排序错误，而是同一局连续四个决策点重复选择 END，说明主阶段价值排序缺少最低限度的资源推进约束。"
+      },
+      {
+        "id": "matchup_findings",
+        "type": "markdown",
+        "body": "## 败局还集中在两个弱对局\n\n**Mega Lopunny 对局只有 2 胜 5 负（28.6%），Grass / Ogerpon 为 3 胜 4 负（42.9%）。** 这两组样本不大，但明显弱于总体 59.8%，适合作为下一轮定向回归集。\n\nGrimmsnarl 镜像贡献 17 场败局、Alakazam 贡献 9 场，合计占全部败局 60.5%；不过它们也占了绝大多数对局，胜率分别为 61.4% 和 59.1%，更像高暴露量而非结构性劣势。"
+      },
+      {
+        "id": "matchup_visual",
+        "type": "chart",
+        "chartId": "matchup_chart"
+      },
+      {
+        "id": "all_losses_intro",
+        "type": "markdown",
+        "body": "## 43 场败局逐局审计\n\n下表覆盖全部公开败局。22 场带有高置信度单步失误；其余 21 场没有发现“合法但明显放弃当回合资源”的动作，更多需要靠反事实模拟判断累计路线、换位和攻击目标是否次优。"
+      },
+      {
+        "id": "all_losses",
+        "type": "table",
+        "tableId": "loss_audit_table"
+      },
+      {
+        "id": "recommendations",
+        "type": "markdown",
+        "body": "## 推荐修改顺序\n\n1. **先加主阶段 guardrail。** 若模型选择 END，但本回合尚未贴能且存在合法 ATTACH，优先贴给可成型的 Grimmsnarl 线；若存在合法 Grimmsnarl ex 进化，除明确的反制规则外禁止直接 END。\n2. **修 optional-count head。** 对 Buddy-Buddy Poffin 这类已支付卡牌成本且有空板凳的检索，把可选数量下限由模型自由选 0 改为规则约束至少 1，并按 Snorunt / Impidimp 的盘面需求排序。当前实现先独立预测数量，再取 option logits 的 top-k，正是“好目标存在但数量头选 0”的结构性入口。\n3. **用 22 场败局做 hard-negative 微调。** 给 END 对比合法 ATTACH / EVOLVE、给空选择对比非空检索，增加同盘面成对样本；验收指标直接用这三类事件率，而不只看整体 action accuracy。\n4. **单独扩充 Mega Lopunny 与 Grass / Ogerpon 回归集。** 先把每类至少补到 30 场，再决定是否需要对手牌组条件化策略或换牌。"
+      },
+      {
+        "id": "further_questions",
+        "type": "markdown",
+        "body": "## 还需要回答的问题\n\n- 把 37 个动作逐一替换为 guardrail 动作后，实际可挽回多少场？这需要可复现的环境状态或分支模拟，replay 本身不能证明因果。\n- 第二张 Poffin 选空时，是否应优先补 Snorunt 还是 Impidimp？应按当前板凳、进化件、奖赏区与对局类型制定目标排序。\n- 对手牌组辅助头在 9,559 次模型调用中只有 101 次置信度超过 60%，而预测只用于统计；是否值得将其校准后真正接入策略路由？"
+      },
+      {
+        "id": "caveats",
+        "type": "markdown",
+        "body": "## 边界与假设\n\n本审计使用 2026 年 8 月 9 日取得的完整 episode 快照。公开统计只含 107 场 public episode；90751124 validation 自对局单独检查，败方在第 4 回合跳过贴能，并在第 10 回合两次放弃 Snorunt 可选检索。\n\n“高置信度失误”表示 replay 中存在合法且通常增值的动作，但 agent 选择了空检索或 END；它不等于该动作一定改变胜负。相反，“攻击时仍有手牌/能力/进化可用”在胜局更常见，已从失误清单剔除，避免把合理资源保留误判为错误。"
+      }
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "generatedAt": "2026-08-09T00:00:00+09:00",
+    "status": "ready",
+    "datasets": {
+      "headline": [
+        {
+          "public_games": 107,
+          "public_win_rate": 0.5981308411214953,
+          "affected_losses": 22,
+          "affected_loss_rate": 0.5116279069767442,
+          "fallback_calls": 0,
+          "mismatch_count": 0,
+          "comparison_count": 10546
+        }
+      ],
+      "flag_comparison": [
+        {
+          "pattern": "可贴能量却结束回合",
+          "result": "胜局",
+          "episode_rate": 0.09375,
+          "episodes": 6,
+          "denominator": 64,
+          "loss_minus_win_pp": 6.904069767441862
+        },
+        {
+          "pattern": "可贴能量却结束回合",
+          "result": "败局",
+          "episode_rate": 0.16279069767441862,
+          "episodes": 7,
+          "denominator": 43,
+          "loss_minus_win_pp": 6.904069767441862
+        },
+        {
+          "pattern": "可进化却结束回合",
+          "result": "胜局",
+          "episode_rate": 0.125,
+          "episodes": 8,
+          "denominator": 64,
+          "loss_minus_win_pp": 3.779069767441862
+        },
+        {
+          "pattern": "可进化却结束回合",
+          "result": "败局",
+          "episode_rate": 0.16279069767441862,
+          "episodes": 7,
+          "denominator": 43,
+          "loss_minus_win_pp": 3.779069767441862
+        },
+        {
+          "pattern": "可选检索选空",
+          "result": "胜局",
+          "episode_rate": 0.109375,
+          "episodes": 7,
+          "denominator": 64,
+          "loss_minus_win_pp": 14.64389534883721
+        },
+        {
+          "pattern": "可选检索选空",
+          "result": "败局",
+          "episode_rate": 0.2558139534883721,
+          "episodes": 11,
+          "denominator": 43,
+          "loss_minus_win_pp": 14.64389534883721
+        }
+      ],
+      "matchup": [
+        {
+          "archetype": "Mega Lopunny",
+          "games": 7,
+          "wins": 2,
+          "losses": 5,
+          "win_rate": 0.2857142857142857,
+          "loss_share": 0.11627906976744186,
+          "rank_by_win_rate": 1
+        },
+        {
+          "archetype": "Grass / Ogerpon",
+          "games": 7,
+          "wins": 3,
+          "losses": 4,
+          "win_rate": 0.42857142857142855,
+          "loss_share": 0.09302325581395349,
+          "rank_by_win_rate": 2
+        },
+        {
+          "archetype": "Dragapult",
+          "games": 4,
+          "wins": 2,
+          "losses": 2,
+          "win_rate": 0.5,
+          "loss_share": 0.046511627906976744,
+          "rank_by_win_rate": 3
+        },
+        {
+          "archetype": "Mega Starmie",
+          "games": 2,
+          "wins": 1,
+          "losses": 1,
+          "win_rate": 0.5,
+          "loss_share": 0.023255813953488372,
+          "rank_by_win_rate": 4
+        },
+        {
+          "archetype": "Alakazam",
+          "games": 22,
+          "wins": 13,
+          "losses": 9,
+          "win_rate": 0.5909090909090909,
+          "loss_share": 0.20930232558139536,
+          "rank_by_win_rate": 5
+        },
+        {
+          "archetype": "Grimmsnarl 镜像",
+          "games": 44,
+          "wins": 27,
+          "losses": 17,
+          "win_rate": 0.6136363636363636,
+          "loss_share": 0.3953488372093023,
+          "rank_by_win_rate": 6
+        },
+        {
+          "archetype": "Mega Kangaskhan",
+          "games": 8,
+          "wins": 6,
+          "losses": 2,
+          "win_rate": 0.75,
+          "loss_share": 0.046511627906976744,
+          "rank_by_win_rate": 7
+        },
+        {
+          "archetype": "其他",
+          "games": 4,
+          "wins": 3,
+          "losses": 1,
+          "win_rate": 0.75,
+          "loss_share": 0.023255813953488372,
+          "rank_by_win_rate": 8
+        },
+        {
+          "archetype": "Mega Lucario",
+          "games": 9,
+          "wins": 7,
+          "losses": 2,
+          "win_rate": 0.7777777777777778,
+          "loss_share": 0.046511627906976744,
+          "rank_by_win_rate": 9
+        }
+      ],
+      "loss_detail": [
+        {
+          "episode_id": 91325674,
+          "severity": "高",
+          "opponent": "カントー地方マスター(KantoRegionMaster)",
+          "archetype": "Grimmsnarl 镜像",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 22,
+          "event_count": 5,
+          "assessment": "可选检索选空 ×1（T2）；可进化却结束回合 ×4（T6, T8, T10, T12）"
+        },
+        {
+          "episode_id": 90761788,
+          "severity": "高",
+          "opponent": "kirito83",
+          "archetype": "Grimmsnarl 镜像",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 9,
+          "event_count": 3,
+          "assessment": "可贴能量却结束回合 ×3（T1, T7, T9）"
+        },
+        {
+          "episode_id": 90907191,
+          "severity": "高",
+          "opponent": "hatry",
+          "archetype": "Grimmsnarl 镜像",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 14,
+          "event_count": 3,
+          "assessment": "可选检索选空 ×3（T2, T6, T8）"
+        },
+        {
+          "episode_id": 90756224,
+          "severity": "高",
+          "opponent": "takusemba",
+          "archetype": "Mega Starmie",
+          "opponent_deck": "Mega Starmie ex / Mega Froslass ex / Meowth ex",
+          "max_turn": 9,
+          "event_count": 2,
+          "assessment": "可选检索选空 ×2（T5, T5）"
+        },
+        {
+          "episode_id": 90764263,
+          "severity": "高",
+          "opponent": "tokimashita",
+          "archetype": "Mega Lucario",
+          "opponent_deck": "Mega Lucario ex / Solrock / Riolu",
+          "max_turn": 19,
+          "event_count": 2,
+          "assessment": "可进化却结束回合 ×2（T6, T8）"
+        },
+        {
+          "episode_id": 90768268,
+          "severity": "高",
+          "opponent": "BhavitB",
+          "archetype": "Grimmsnarl 镜像",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 11,
+          "event_count": 2,
+          "assessment": "可选检索选空 ×2（T6, T10）"
+        },
+        {
+          "episode_id": 90780965,
+          "severity": "高",
+          "opponent": "Shangshang Zhang",
+          "archetype": "Alakazam",
+          "opponent_deck": "Alakazam / Kadabra / Dudunsparce",
+          "max_turn": 13,
+          "event_count": 2,
+          "assessment": "可贴能量却结束回合 ×2（T3, T5）"
+        },
+        {
+          "episode_id": 91160774,
+          "severity": "高",
+          "opponent": "EliKal",
+          "archetype": "其他",
+          "opponent_deck": "N’s Zoroark ex / N’s Zorua / N’s Reshiram",
+          "max_turn": 16,
+          "event_count": 2,
+          "assessment": "可进化却结束回合 ×2（T6, T8）"
+        },
+        {
+          "episode_id": 91168560,
+          "severity": "高",
+          "opponent": "jiatu.l",
+          "archetype": "Grimmsnarl 镜像",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 9,
+          "event_count": 2,
+          "assessment": "可选检索选空 ×1（T7）；可进化却结束回合 ×1（T3）"
+        },
+        {
+          "episode_id": 91221601,
+          "severity": "高",
+          "opponent": "kanno",
+          "archetype": "Grimmsnarl 镜像",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 15,
+          "event_count": 2,
+          "assessment": "可选检索选空 ×1（T13）；可贴能量却结束回合 ×1（T1）"
+        },
+        {
+          "episode_id": 90752841,
+          "severity": "中",
+          "opponent": "Saulo Quiñones Góngora",
+          "archetype": "Alakazam",
+          "opponent_deck": "Fezandipiti ex / Alakazam / Kadabra",
+          "max_turn": 23,
+          "event_count": 1,
+          "assessment": "可进化却结束回合 ×1（T15）"
+        },
+        {
+          "episode_id": 90758524,
+          "severity": "中",
+          "opponent": "zhan renyi",
+          "archetype": "Grimmsnarl 镜像",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 12,
+          "event_count": 1,
+          "assessment": "可选检索选空 ×1（T8）"
+        },
+        {
+          "episode_id": 90771647,
+          "severity": "高",
+          "opponent": "Attacker",
+          "archetype": "Dragapult",
+          "opponent_deck": "Dragapult ex / Meowth ex / Fezandipiti ex",
+          "max_turn": 13,
+          "event_count": 1,
+          "assessment": "可贴能量却结束回合 ×1（T1）"
+        },
+        {
+          "episode_id": 90817453,
+          "severity": "中",
+          "opponent": "sadwat",
+          "archetype": "Mega Lopunny",
+          "opponent_deck": "Mega Lopunny ex / Mega Froslass ex / Dunsparce",
+          "max_turn": 14,
+          "event_count": 1,
+          "assessment": "可选检索选空 ×1（T12）"
+        },
+        {
+          "episode_id": 90826802,
+          "severity": "中",
+          "opponent": "miya",
+          "archetype": "Alakazam",
+          "opponent_deck": "Fezandipiti ex / Alakazam / Kadabra",
+          "max_turn": 14,
+          "event_count": 1,
+          "assessment": "可进化却结束回合 ×1（T6）"
+        },
+        {
+          "episode_id": 91050216,
+          "severity": "中",
+          "opponent": "☕ Psyduck Needs Coffee",
+          "archetype": "Grimmsnarl 镜像",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 11,
+          "event_count": 1,
+          "assessment": "可选检索选空 ×1（T5）"
+        },
+        {
+          "episode_id": 91061018,
+          "severity": "中",
+          "opponent": "yoshitaka agent",
+          "archetype": "Grimmsnarl 镜像",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 7,
+          "event_count": 1,
+          "assessment": "可选检索选空 ×1（T7）"
+        },
+        {
+          "episode_id": 91092609,
+          "severity": "中",
+          "opponent": "YumeNeko",
+          "archetype": "Grimmsnarl 镜像",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 11,
+          "event_count": 1,
+          "assessment": "可贴能量却结束回合 ×1（T3）"
+        },
+        {
+          "episode_id": 91103678,
+          "severity": "高",
+          "opponent": "matsurih",
+          "archetype": "Mega Lopunny",
+          "opponent_deck": "Mega Lopunny ex / Mega Froslass ex / Dunsparce",
+          "max_turn": 11,
+          "event_count": 1,
+          "assessment": "可贴能量却结束回合 ×1（T1）"
+        },
+        {
+          "episode_id": 91135935,
+          "severity": "中",
+          "opponent": "Konstantin Zhar",
+          "archetype": "Grimmsnarl 镜像",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 10,
+          "event_count": 1,
+          "assessment": "可进化却结束回合 ×1（T4）"
+        },
+        {
+          "episode_id": 91178158,
+          "severity": "中",
+          "opponent": "Iliamna",
+          "archetype": "Grimmsnarl 镜像",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 15,
+          "event_count": 1,
+          "assessment": "可选检索选空 ×1（T15）"
+        },
+        {
+          "episode_id": 91307030,
+          "severity": "高",
+          "opponent": "대답해드리는게인지상정",
+          "archetype": "Mega Lucario",
+          "opponent_deck": "Mega Lucario ex / Solrock / Riolu",
+          "max_turn": 9,
+          "event_count": 1,
+          "assessment": "可贴能量却结束回合 ×1（T1）"
+        },
+        {
+          "episode_id": 90759338,
+          "severity": "—",
+          "opponent": "Fitalabs",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Fezandipiti ex / Alakazam / Kadabra",
+          "max_turn": 13,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 90762625,
+          "severity": "—",
+          "opponent": "Budew",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Dragapult ex / Meowth ex / Fezandipiti ex",
+          "max_turn": 13,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 90765079,
+          "severity": "—",
+          "opponent": "zhangshuosc",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 16,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 90770010,
+          "severity": "—",
+          "opponent": "213tubo",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Mega Lopunny ex / Mega Froslass ex / Dunsparce",
+          "max_turn": 18,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 90778432,
+          "severity": "—",
+          "opponent": "zhangshuosc",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Mega Kangaskhan ex / Dwebble / Crustle",
+          "max_turn": 20,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 90780116,
+          "severity": "—",
+          "opponent": "Botamochi",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Alakazam / Kadabra / Dunsparce",
+          "max_turn": 15,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 90795912,
+          "severity": "—",
+          "opponent": "cm391",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 28,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 90803395,
+          "severity": "—",
+          "opponent": "pokemon master",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Fezandipiti ex / Rillaboom / Thwackey",
+          "max_turn": 7,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 90813464,
+          "severity": "—",
+          "opponent": "Alan_Nasibullin",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 9,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 90916332,
+          "severity": "—",
+          "opponent": "kazuki0123",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Mega Kangaskhan ex / Teal Mask Ogerpon ex / Lillie’s Clefairy ex",
+          "max_turn": 9,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 90974014,
+          "severity": "—",
+          "opponent": "Petit Canard",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Fezandipiti ex / Alakazam / Kadabra",
+          "max_turn": 10,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 91018852,
+          "severity": "—",
+          "opponent": "perrodawn",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Rillaboom / Grookey / Dipplin",
+          "max_turn": 7,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 91110853,
+          "severity": "—",
+          "opponent": "stnick",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Mega Lopunny ex / Mega Froslass ex / Dunsparce",
+          "max_turn": 15,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 91114280,
+          "severity": "—",
+          "opponent": "Saber",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Teal Mask Ogerpon ex",
+          "max_turn": 10,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 91123824,
+          "severity": "—",
+          "opponent": "Boseiju",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 10,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 91151806,
+          "severity": "—",
+          "opponent": "koumiyata",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Mega Lopunny ex / Dunsparce / Dudunsparce",
+          "max_turn": 12,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 91156508,
+          "severity": "—",
+          "opponent": "takayosi",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Teal Mask Ogerpon ex",
+          "max_turn": 13,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 91160689,
+          "severity": "—",
+          "opponent": "Suyash Verma",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Marnie's Grimmsnarl ex / Munkidori / Marnie's Impidimp",
+          "max_turn": 14,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 91261487,
+          "severity": "—",
+          "opponent": "OiOi-Poke",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Fezandipiti ex / Alakazam / Kadabra",
+          "max_turn": 13,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 91264836,
+          "severity": "—",
+          "opponent": "ONE PIECE",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Fezandipiti ex / Alakazam / Kadabra",
+          "max_turn": 12,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        },
+        {
+          "episode_id": 91322326,
+          "severity": "—",
+          "opponent": "Pokémon Day Care",
+          "archetype": "其他/未标记",
+          "opponent_deck": "Fezandipiti ex / Alakazam / Kadabra",
+          "max_turn": 13,
+          "event_count": 0,
+          "assessment": "未发现高置信度单步失误"
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "path": "research/submission_55328694_replay_audit/output/report_source.sqlite",
+      "href": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=55328694",
+      "id": "headline_sql",
+      "label": "全量 replay 头部指标与提交包复现结果",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "SELECT public_games, public_win_rate, affected_losses, affected_loss_rate, fallback_calls, mismatch_count, comparison_count FROM headline_metrics",
+        "description": "读取 107 场公开对局的头部结果和原提交包的精确动作复现计数。",
+        "executed_at": "2026-08-09T00:00:00+09:00",
+        "tables_used": [
+          "headline_metrics"
+        ],
+        "filters": [
+          "公开胜率排除 90751124 validation 自对局"
+        ],
+        "metric_definitions": [
+          "公开胜率 = 64 / 107",
+          "受影响败局 = 43 场败局中至少出现一项高置信度战术失误信号的 episode 数",
+          "fallback = 原提交 main.py 捕获异常或产生非法动作后启用最小合法动作的次数"
+        ]
+      }
+    },
+    {
+      "path": "research/submission_55328694_replay_audit/output/report_source.sqlite",
+      "href": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=55328694",
+      "id": "flag_sql",
+      "label": "胜负对局中的动作信号出现率",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "SELECT pattern, result, episode_rate, episodes, denominator, loss_minus_win_pp FROM flag_comparison ORDER BY pattern, result",
+        "description": "按结果比较三类高置信度动作信号的 episode 覆盖率。",
+        "executed_at": "2026-08-09T00:00:00+09:00",
+        "tables_used": [
+          "flag_comparison"
+        ],
+        "filters": [
+          "仅含 107 场 EPISODE_TYPE_PUBLIC"
+        ],
+        "metric_definitions": [
+          "对局出现率 = 出现该信号的 episode 数 / 对应结果 episode 数"
+        ]
+      }
+    },
+    {
+      "path": "research/submission_55328694_replay_audit/output/report_source.sqlite",
+      "href": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=55328694",
+      "id": "matchup_sql",
+      "label": "按对手牌组聚合的公开赛结果",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "SELECT archetype, games, wins, losses, win_rate, loss_share, rank_by_win_rate FROM matchup ORDER BY win_rate ASC, games DESC",
+        "description": "按对手主轴牌组聚合 107 场公开对局的胜负。",
+        "executed_at": "2026-08-09T00:00:00+09:00",
+        "tables_used": [
+          "matchup"
+        ],
+        "filters": [
+          "仅含 107 场 EPISODE_TYPE_PUBLIC"
+        ],
+        "metric_definitions": [
+          "牌组胜率 = 胜局数 / 对局数；小样本只作方向性参考"
+        ]
+      }
+    },
+    {
+      "path": "research/submission_55328694_replay_audit/output/report_source.sqlite",
+      "href": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/submissions?submissionId=55328694",
+      "id": "loss_sql",
+      "label": "43 场公开败局逐局审计",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "SELECT episode_id, severity, opponent, archetype, opponent_deck, max_turn, event_count, assessment FROM loss_detail ORDER BY event_count DESC, episode_id ASC",
+        "description": "列出全部公开败局及规则审计识别到的高置信度战术失误。",
+        "executed_at": "2026-08-09T00:00:00+09:00",
+        "tables_used": [
+          "loss_detail"
+        ],
+        "filters": [
+          "result = loss",
+          "episode_type = EPISODE_TYPE_PUBLIC"
+        ],
+        "metric_definitions": [
+          "事件数 = 该 episode 中三类高置信度战术失误的出现次数之和"
+        ]
+      }
+    }
+  ]
+}
