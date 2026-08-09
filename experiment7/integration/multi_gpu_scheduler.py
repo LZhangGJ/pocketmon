@@ -49,7 +49,7 @@ def inventory(hosts: list[str], output: Path, minimum_free_mib: int, maximum_uti
     query = (
         "set -e; hostname; "
         "nvidia-smi --query-gpu=index,name,memory.total,memory.used,memory.free,utilization.gpu "
-        "--format=csv, noheader,nounits"
+        "--format=csv,noheader,nounits"
     )
     for host in hosts:
         try:
