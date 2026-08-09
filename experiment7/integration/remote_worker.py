@@ -46,7 +46,14 @@ def supervise(job_path: Path) -> int:
     log_path.parent.mkdir(parents=True, exist_ok=True)
     receipt_path.parent.mkdir(parents=True, exist_ok=True)
     gpu = job.get("gpuIndex")
-    lock_name = f"/tmp/pocketmon-experiment7-gpu-{gpu}.lock" if gpu is not None else "/tmp/pocketmon-experiment7-cpu.lock"
+    lock_root = Path(job.get("lockRoot") or os.environ.get("EXPERIMENT7_LOCK_ROOT", "/dev/shm"))
+    if not lock_root.is_dir():
+        lock_root = Path("/tmp")
+    lock_name = lock_root / (
+        f"pocketmon-experiment7-gpu-{gpu}.lock"
+        if gpu is not None
+        else "pocketmon-experiment7-cpu.lock"
+    )
     environment = os.environ.copy()
     environment.update({str(key): str(value) for key, value in job.get("env", {}).items()})
     environment.update(
@@ -61,7 +68,7 @@ def supervise(job_path: Path) -> int:
     if gpu is not None:
         environment["CUDA_VISIBLE_DEVICES"] = str(int(gpu))
     started_at = utc_now()
-    with Path(lock_name).open("a+") as lock_handle:
+    with lock_name.open("a+") as lock_handle:
         try:
             fcntl.flock(lock_handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError:
@@ -71,7 +78,7 @@ def supervise(job_path: Path) -> int:
                 "status": "blocked_gpu_lock",
                 "host": os.uname().nodename,
                 "gpuIndex": gpu,
-                "lock": lock_name,
+                "lock": str(lock_name),
                 "startedAt": started_at,
                 "finishedAt": utc_now(),
                 "exitCode": 73,
