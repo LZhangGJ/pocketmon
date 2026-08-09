@@ -339,6 +339,8 @@ class Experiment7IntegrationTests(unittest.TestCase):
         )
         self.assertTrue(bool(torch.isfinite(loss)))
         self.assertEqual(int(parts["policyExamples"]), 1)
+        loss.backward()
+        self.assertTrue(any(parameter.grad is not None for parameter in model.parameters()))
         loser_only = torch.nn.functional.binary_cross_entropy_with_logits(
             encoding.value_logits[1], batch["winner"][1]
         )

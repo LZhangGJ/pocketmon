@@ -290,9 +290,11 @@ def joint_policy_loss(
         per_decision = per_decision + loss * active
         steps = steps + active
         choose_option = active & (target < options)
+        next_selected = selected.clone()
         if bool(choose_option.any()):
             rows = torch.arange(batch, device=labels.device)[choose_option]
-            selected[rows, target[choose_option]] = True
+            next_selected[rows, target[choose_option]] = True
+        selected = next_selected
     per_decision = per_decision / steps.clamp_min(1.0)
     denominator = policy_weights.sum().clamp_min(1e-6)
     loss = (per_decision * policy_weights).sum() / denominator
