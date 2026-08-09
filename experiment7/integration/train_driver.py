@@ -339,6 +339,146 @@ def finetune(args: argparse.Namespace) -> dict[str, Any]:
     return report
 
 
+def specialize(args: argparse.Namespace) -> dict[str, Any]:
+    manifest = source_manifest(args.sources.resolve())
+    reference_root = Path(manifest["referenceRoot"])
+    vendor = setup_vendor(reference_root)
+    seed_everything(args.seed)
+    device = device_from_arg(args.device)
+    bundles, fit_sources, split_data = current_splits(vendor, manifest)
+    bundle_by_name = {bundle.name: (bundle, row) for bundle, row in bundles}
+    fit_by_name = {
+        bundle.name: (bundle, decisions, weights)
+        for bundle, decisions, weights in fit_sources
+    }
+    if args.source_name not in bundle_by_name:
+        raise Experiment7Error(
+            f"unknown specialist source {args.source_name!r}; expected one of {sorted(bundle_by_name)}"
+        )
+    bundle, _ = bundle_by_name[args.source_name]
+    specialist_fit = [fit_by_name[args.source_name]]
+    class_weights, class_counts = class_weights_for_fit(manifest, specialist_fit, device)
+    base_checkpoint = load_checkpoint(args.base_checkpoint.resolve(), device)
+    config = vendor["DeckIdentityModelConfig"](**base_checkpoint["config"])
+    model = vendor["PTCGDeckIdentityTransformerPolicy"](config).to(device)
+    model.load_state_dict(base_checkpoint["state_dict"], strict=True)
+    optimizer = torch.optim.AdamW(
+        model.parameters(), lr=args.learning_rate, weight_decay=args.weight_decay
+    )
+    scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda")
+    rng = np.random.default_rng(args.seed)
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    calibration_indices = split_data[args.source_name]["calibration"]
+    initial_calibration = vendor["evaluate_identity"](
+        model, bundle, calibration_indices, device, args.eval_batch_size
+    )
+    best_score = float(initial_calibration["exactSemantic"])
+    best_epoch = 0
+    best_path = args.output_dir / "best_model.pt"
+    vendor["save_checkpoint"](
+        best_path,
+        model,
+        {
+            "stage": "specialist",
+            "sourceName": args.source_name,
+            "selectedSpecialistEpoch": 0,
+            "calibration": initial_calibration,
+            "baseCheckpointSha256": sha256_file(args.base_checkpoint),
+            "seed": args.seed,
+        },
+    )
+    report = {
+        "schemaVersion": 1,
+        "stage": "single_deck_specialist_finetune",
+        "createdAt": utc_now(),
+        "sourceName": args.source_name,
+        "sourcesSha256": sha256_file(args.sources),
+        "baseCheckpoint": {
+            "path": str(args.base_checkpoint.resolve()),
+            "sha256": sha256_file(args.base_checkpoint),
+        },
+        "seed": args.seed,
+        "device": str(device),
+        "modelConfig": config.to_dict(),
+        "parameterCount": model.parameter_count,
+        "classFitCounts": class_counts.tolist(),
+        "split": {
+            "fitDecisions": int(len(specialist_fit[0][1])),
+            "calibrationDecisions": int(len(calibration_indices)),
+            "holdoutDecisions": int(len(split_data[args.source_name]["holdout"])),
+            "fitEpisodes": split_data[args.source_name]["fitEpisodes"],
+            "calibrationEpisodes": split_data[args.source_name]["calibrationEpisodes"],
+            "holdoutEpisodes": split_data[args.source_name]["holdoutEpisodes"],
+        },
+        "selectionMetric": (
+            "target-deck calibration exactSemantic; epoch zero is the frozen shared baseline"
+        ),
+        "initialCalibration": initial_calibration,
+        "epochs": [],
+    }
+    for epoch in range(1, args.epochs + 1):
+        train_metrics = vendor["train_balanced_multideck_epoch"](
+            model,
+            specialist_fit,
+            optimizer,
+            scaler,
+            device,
+            args.batch_per_deck,
+            rng,
+            class_weights,
+            args.opponent_loss_weight,
+        )
+        calibration = vendor["evaluate_identity"](
+            model, bundle, calibration_indices, device, args.eval_batch_size
+        )
+        score = float(calibration["exactSemantic"])
+        row = {
+            "epoch": epoch,
+            "train": train_metrics,
+            "calibration": calibration,
+            "calibrationExactSemantic": score,
+            "deltaFromSharedBaseline": score
+            - float(initial_calibration["exactSemantic"]),
+        }
+        report["epochs"].append(row)
+        print(
+            json.dumps(
+                {"stage": "specialize", "sourceName": args.source_name, **row}
+            ),
+            flush=True,
+        )
+        if score > best_score:
+            best_score = score
+            best_epoch = epoch
+            vendor["save_checkpoint"](
+                best_path,
+                model,
+                {
+                    "stage": "specialist",
+                    "sourceName": args.source_name,
+                    "selectedSpecialistEpoch": epoch,
+                    "calibration": calibration,
+                    "baseCheckpointSha256": sha256_file(args.base_checkpoint),
+                    "seed": args.seed,
+                },
+            )
+    selected_checkpoint = load_checkpoint(best_path, device)
+    model.load_state_dict(selected_checkpoint["state_dict"], strict=True)
+    selected_calibration = vendor["evaluate_identity"](
+        model, bundle, calibration_indices, device, args.eval_batch_size
+    )
+    report["selectedEpoch"] = best_epoch
+    report["selectedCalibrationExactSemantic"] = best_score
+    report["selectedCalibration"] = selected_calibration
+    report["improvesOnSharedBaseline"] = best_epoch > 0
+    report["checkpoint"] = {
+        "path": str(best_path.resolve()),
+        "sha256": sha256_file(best_path),
+    }
+    write_json(args.output_dir / "specialist_report.json", report)
+    return report
+
+
 def holdout(args: argparse.Namespace) -> dict[str, Any]:
     if args.output.exists():
         raise FileExistsError(f"holdout receipt already exists and is sealed: {args.output}")
@@ -372,6 +512,102 @@ def holdout(args: argparse.Namespace) -> dict[str, Any]:
         "macroExactSemantic": float(np.mean(scores)),
         "worstDeckExactSemantic": float(min(scores)),
         "deckStd": float(np.std(scores)),
+    }
+    write_json(args.output, payload)
+    print(json.dumps(payload, ensure_ascii=False), flush=True)
+    return payload
+
+
+def specialist_holdout(args: argparse.Namespace) -> dict[str, Any]:
+    if args.output.exists():
+        raise FileExistsError(
+            f"specialist holdout receipt already exists and is sealed: {args.output}"
+        )
+    manifest = source_manifest(args.sources.resolve())
+    vendor = setup_vendor(Path(manifest["referenceRoot"]))
+    device = device_from_arg(args.device)
+    bundles, _, split_data = current_splits(vendor, manifest)
+    bundle_by_name = {bundle.name: bundle for bundle, _ in bundles}
+    specialist_paths: dict[str, Path] = {}
+    for value in args.specialist:
+        if "=" not in value:
+            raise Experiment7Error(
+                f"invalid --specialist value {value!r}; expected NAME=CHECKPOINT"
+            )
+        name, path = value.split("=", 1)
+        if name in specialist_paths:
+            raise Experiment7Error(f"duplicate specialist source: {name}")
+        specialist_paths[name] = Path(path).resolve()
+    expected = set(bundle_by_name)
+    if set(specialist_paths) != expected:
+        raise Experiment7Error(
+            "specialist sources must exactly match manifest: "
+            f"missing={sorted(expected - set(specialist_paths))} "
+            f"extra={sorted(set(specialist_paths) - expected)}"
+        )
+
+    def load_model(path: Path):
+        checkpoint = load_checkpoint(path, device)
+        config = vendor["DeckIdentityModelConfig"](**checkpoint["config"])
+        model = vendor["PTCGDeckIdentityTransformerPolicy"](config).to(device)
+        model.load_state_dict(checkpoint["state_dict"], strict=True)
+        return model
+
+    shared_path = args.shared_checkpoint.resolve()
+    shared_model = load_model(shared_path)
+    comparison = {}
+    for name in sorted(bundle_by_name):
+        bundle = bundle_by_name[name]
+        indices = split_data[name]["holdout"]
+        shared_metrics = vendor["evaluate_identity"](
+            shared_model, bundle, indices, device, args.batch_size
+        )
+        specialist_model = load_model(specialist_paths[name])
+        specialist_metrics = vendor["evaluate_identity"](
+            specialist_model, bundle, indices, device, args.batch_size
+        )
+        comparison[name] = {
+            "shared": shared_metrics,
+            "specialist": specialist_metrics,
+            "deltaExactSemantic": float(specialist_metrics["exactSemantic"])
+            - float(shared_metrics["exactSemantic"]),
+        }
+        del specialist_model
+    del shared_model
+    payload = {
+        "schemaVersion": 1,
+        "createdAt": utc_now(),
+        "holdoutOpened": True,
+        "selectionFrozenBeforeHoldout": True,
+        "selectionRule": (
+            "each specialist checkpoint was selected only on its target calibration split, "
+            "including shared epoch zero"
+        ),
+        "sources": {
+            "path": str(args.sources.resolve()),
+            "sha256": sha256_file(args.sources),
+        },
+        "sharedCheckpoint": {
+            "path": str(shared_path),
+            "sha256": sha256_file(shared_path),
+        },
+        "specialistCheckpoints": {
+            name: {"path": str(path), "sha256": sha256_file(path)}
+            for name, path in sorted(specialist_paths.items())
+        },
+        "comparison": comparison,
+        "meanDeltaExactSemantic": float(
+            np.mean([value["deltaExactSemantic"] for value in comparison.values()])
+        ),
+        "improvedDecks": sum(
+            value["deltaExactSemantic"] > 0 for value in comparison.values()
+        ),
+        "tiedDecks": sum(
+            value["deltaExactSemantic"] == 0 for value in comparison.values()
+        ),
+        "degradedDecks": sum(
+            value["deltaExactSemantic"] < 0 for value in comparison.values()
+        ),
     }
     write_json(args.output, payload)
     print(json.dumps(payload, ensure_ascii=False), flush=True)
@@ -487,12 +723,34 @@ def main() -> None:
     fine.add_argument("--weight-decay", type=float, default=1e-4)
     fine.add_argument("--opponent-loss-weight", type=float, default=0.05)
 
+    specialist = subparsers.add_parser("specialize")
+    specialist.add_argument("--sources", type=Path, required=True)
+    specialist.add_argument("--base-checkpoint", type=Path, required=True)
+    specialist.add_argument("--source-name", required=True)
+    specialist.add_argument("--output-dir", type=Path, required=True)
+    specialist.add_argument("--seed", type=int, default=20260809)
+    specialist.add_argument("--device", default="auto")
+    specialist.add_argument("--epochs", type=int, default=6)
+    specialist.add_argument("--batch-per-deck", type=int, default=48)
+    specialist.add_argument("--eval-batch-size", type=int, default=128)
+    specialist.add_argument("--learning-rate", type=float, default=1e-4)
+    specialist.add_argument("--weight-decay", type=float, default=1e-4)
+    specialist.add_argument("--opponent-loss-weight", type=float, default=0.05)
+
     hold = subparsers.add_parser("holdout")
     hold.add_argument("--sources", type=Path, required=True)
     hold.add_argument("--checkpoint", type=Path, required=True)
     hold.add_argument("--output", type=Path, required=True)
     hold.add_argument("--device", default="auto")
     hold.add_argument("--batch-size", type=int, default=128)
+
+    specialist_hold = subparsers.add_parser("specialist-holdout")
+    specialist_hold.add_argument("--sources", type=Path, required=True)
+    specialist_hold.add_argument("--shared-checkpoint", type=Path, required=True)
+    specialist_hold.add_argument("--specialist", action="append", required=True)
+    specialist_hold.add_argument("--output", type=Path, required=True)
+    specialist_hold.add_argument("--device", default="auto")
+    specialist_hold.add_argument("--batch-size", type=int, default=128)
 
     smoke_parser = subparsers.add_parser("smoke")
     smoke_parser.add_argument("--sources", type=Path, required=True)
@@ -512,8 +770,12 @@ def main() -> None:
         pretrain(args)
     elif args.command == "finetune":
         finetune(args)
+    elif args.command == "specialize":
+        specialize(args)
     elif args.command == "holdout":
         holdout(args)
+    elif args.command == "specialist-holdout":
+        specialist_holdout(args)
     elif args.command == "smoke":
         smoke(args)
     else:  # pragma: no cover

@@ -6,7 +6,7 @@ import json
 import sys
 import tempfile
 import unittest
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 import torch
 
@@ -19,9 +19,54 @@ for path in (INTEGRATION, REFERENCE / "training"):
 
 from common import canonical_deck_sha256, directory_sha256, write_csv
 from arena import make_schedule
+from multi_gpu_scheduler import make_specialist_plan
 
 
 class Experiment7IntegrationTests(unittest.TestCase):
+    def test_specialist_plan_assigns_one_exact_source_per_gpu(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            inventory = root / "inventory.json"
+            inventory.write_text(
+                json.dumps(
+                    {
+                        "gpus": [
+                            {
+                                "host": "doraemon15",
+                                "gpuIndex": index,
+                                "name": "RTX 8000",
+                                "totalMiB": 48601,
+                                "usedMiB": 1,
+                                "freeMiB": 48600,
+                                "utilizationPercent": 0,
+                                "eligible": True,
+                            }
+                            for index in range(2)
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            plan = make_specialist_plan(
+                inventory,
+                root / "plan.json",
+                PurePosixPath("/homes/lzhang/worktrees/fixed"),
+                "a" * 40,
+                "/env/bin/python",
+                PurePosixPath("/runs/prepared/training_sources.json"),
+                PurePosixPath("/runs/specialists"),
+                PurePosixPath("/runs/training/best_model.pt"),
+                ["01_a01_hash", "02_a02_hash"],
+                20260809,
+            )
+            self.assertEqual([job["gpuIndex"] for job in plan["jobs"]], [0, 1])
+            self.assertEqual(
+                [job["command"][2] for job in plan["jobs"]],
+                ["specialize", "specialize"],
+            )
+            self.assertIn("01_a01_hash", plan["jobs"][0]["command"])
+            self.assertIn("02_a02_hash", plan["jobs"][1]["command"])
+
     def test_reference_manifest_is_complete(self) -> None:
         manifest = REFERENCE / "PACKAGE_MANIFEST.csv"
         self.assertTrue(manifest.is_file())

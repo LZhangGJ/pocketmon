@@ -156,6 +156,96 @@ def make_training_plan(
     return payload
 
 
+def make_specialist_plan(
+    inventory_path: Path,
+    output: Path,
+    worktree: PurePosixPath,
+    commit: str,
+    python: str,
+    sources: PurePosixPath,
+    run_root: PurePosixPath,
+    base_checkpoint: PurePosixPath,
+    source_names: list[str],
+    seed: int,
+) -> dict[str, Any]:
+    if not source_names or len(set(source_names)) != len(source_names):
+        raise Experiment7Error("specialist source names must be non-empty and unique")
+    gpus = eligible_gpus(read_json(inventory_path))
+    if len(gpus) < len(source_names):
+        raise Experiment7Error(
+            f"specialist wave needs {len(source_names)} idle GPUs, found {len(gpus)}"
+        )
+    integration = worktree / "experiment7" / "integration"
+    jobs = []
+    for index, source_name in enumerate(source_names):
+        if not source_name.replace("-", "_").isalnum():
+            raise Experiment7Error(f"unsafe specialist source name: {source_name!r}")
+        gpu = gpus[index]
+        name = f"specialist-{source_name}"
+        run_dir = run_root / source_name
+        command = [
+            python,
+            str(integration / "train_driver.py"),
+            "specialize",
+            "--sources",
+            str(sources),
+            "--base-checkpoint",
+            str(base_checkpoint),
+            "--source-name",
+            source_name,
+            "--output-dir",
+            str(run_dir),
+            "--seed",
+            str(seed),
+        ]
+        job_path = run_root / "jobs" / f"{name}.json"
+        jobs.append(
+            {
+                "jobId": name,
+                "stage": "specialize",
+                "host": gpu.host,
+                "gpuIndex": gpu.index,
+                "commit": commit,
+                "cwd": str(worktree),
+                "command": command,
+                "runDir": str(run_dir),
+                "logPath": str(run_dir / "train.log"),
+                "receiptPath": str(run_dir / "job_receipt.json"),
+                "jobPath": str(job_path),
+                "env": {"PYTHON": python},
+            }
+        )
+    payload = {
+        "schemaVersion": 1,
+        "createdAt": utc_now(),
+        "stage": "specialize",
+        "commit": commit,
+        "worktree": str(worktree),
+        "sources": str(sources),
+        "baseCheckpoint": str(base_checkpoint),
+        "seed": seed,
+        "jobs": jobs,
+    }
+    write_json(output, payload)
+    write_csv(
+        output.with_suffix(".csv"),
+        [
+            {
+                "job_id": row["jobId"],
+                "stage": row["stage"],
+                "host": row["host"],
+                "gpu_index": row["gpuIndex"],
+                "run_dir": row["runDir"],
+                "receipt": row["receiptPath"],
+                "command": json.dumps(row["command"], ensure_ascii=False),
+            }
+            for row in jobs
+        ],
+    )
+    print(json.dumps(payload, ensure_ascii=False), flush=True)
+    return payload
+
+
 def _upload_json(host: str, remote_path: str, payload: dict[str, Any]) -> None:
     encoded = base64.b64encode(json.dumps(payload, ensure_ascii=False).encode("utf-8")).decode("ascii")
     command = f"mkdir -p {shell_quote(str(PurePosixPath(remote_path).parent))}; printf %s {shell_quote(encoded)} | base64 -d > {shell_quote(remote_path)}"
@@ -229,6 +319,18 @@ def main() -> None:
     plan.add_argument("--pretrain-checkpoint")
     plan.add_argument("--seeds", type=int, nargs="*", default=[20260808, 20260809, 20260810])
 
+    specialist = sub.add_parser("make-specialist-plan")
+    specialist.add_argument("--inventory", type=Path, required=True)
+    specialist.add_argument("--output", type=Path, required=True)
+    specialist.add_argument("--worktree", required=True)
+    specialist.add_argument("--commit", required=True)
+    specialist.add_argument("--python", required=True)
+    specialist.add_argument("--sources", required=True)
+    specialist.add_argument("--run-root", required=True)
+    specialist.add_argument("--base-checkpoint", required=True)
+    specialist.add_argument("--source-names", nargs="+", required=True)
+    specialist.add_argument("--seed", type=int, default=20260809)
+
     launch = sub.add_parser("launch")
     launch.add_argument("--plan", type=Path, required=True)
     launch.add_argument("--remote-python", required=True)
@@ -260,6 +362,19 @@ def main() -> None:
             args.stage,
             PurePosixPath(args.pretrain_checkpoint) if args.pretrain_checkpoint else None,
             args.seeds,
+        )
+    elif args.command == "make-specialist-plan":
+        make_specialist_plan(
+            args.inventory.resolve(),
+            args.output.resolve(),
+            PurePosixPath(args.worktree),
+            args.commit,
+            args.python,
+            PurePosixPath(args.sources),
+            PurePosixPath(args.run_root),
+            PurePosixPath(args.base_checkpoint),
+            args.source_names,
+            args.seed,
         )
     elif args.command == "launch":
         launch_plan(args.plan.resolve(), args.remote_python, PurePosixPath(args.worker))
