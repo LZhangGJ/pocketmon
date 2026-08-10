@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import py_compile
 import subprocess
 import sys
 import time
@@ -60,7 +59,11 @@ def validate_agent(path: Path, name: str) -> None:
     missing = [filename for filename in ("main.py", "deck.csv") if not (path / filename).is_file()]
     if missing:
         raise FileNotFoundError(f"{name} missing {', '.join(missing)} at {path}")
-    py_compile.compile(str(path / "main.py"), doraise=True)
+    main = path / "main.py"
+    # Syntax validation must not mutate a frozen agent directory.  Compiling
+    # the source bytes in memory preserves encoding-cookie handling without
+    # py_compile's __pycache__ write.
+    compile(main.read_bytes(), str(main), "exec")
 
 
 def classify_result(payload: dict[str, Any], learner_seat: int) -> str:
