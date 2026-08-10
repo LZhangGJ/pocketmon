@@ -284,9 +284,11 @@ def evaluate_actions(
         weights = active.to(entropy.dtype)
         entropy_sum = entropy_sum + entropy * weights
         token_count = token_count + weights
+        next_selected = selected.clone()
         for index, row in enumerate(rows):
             if step < len(row["action"]):
-                selected[index, int(row["action"][step])] = True
+                next_selected[index, int(row["action"][step])] = True
+        selected = next_selected
     values = torch.tanh(encoding.value_logits / 2.0)
     return log_probability, entropy_sum / token_count.clamp_min(1.0), values
 
