@@ -22,9 +22,10 @@ from common import (  # noqa: E402
     directory_sha256,
     read_deck,
     sha256_file,
+    write_csv,
     write_json,
 )
-from arena import make_schedule  # noqa: E402
+from arena import make_schedule, summarize_results  # noqa: E402
 from stage_opponent_pool import (  # noqa: E402
     TEAM_ALLOWED_FILES,
     _archive_path,
@@ -356,6 +357,66 @@ class StageOpponentPoolTest(unittest.TestCase):
             self.assertEqual(
                 payload["agents"][0]["directory_sha256"], directory_sha256(target)
             )
+
+    def test_arena_external_runtime_gate_accepts_agents_without_bc_diagnostics(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            results = root / "results.csv"
+            rows = [
+                {
+                    "game_id": f"game-{seat}",
+                    "learner": "external_rule_agent",
+                    "opponent": "frozen_target",
+                    "seed": 10 + seat,
+                    "learner_seat": seat,
+                    "result": "win",
+                    "diagnostics_json": "[]",
+                }
+                for seat in (0, 1)
+            ]
+            write_csv(results, rows)
+
+            external = summarize_results(
+                [results], root / "external.json", "smoke", 0.0, 0.0, 0.0, 1, "external"
+            )
+            challenger = external["challengers"][0]
+            self.assertTrue(challenger["passesRuntimeGate"])
+            self.assertEqual(challenger["runtimeGateMode"], "external")
+            self.assertEqual(challenger["diagnosticsRows"], 0)
+            self.assertEqual(external["thresholds"]["runtimeGateMode"], "external")
+            self.assertFalse(external["thresholds"]["modelCallsPositive"])
+            self.assertFalse(external["thresholds"]["fallbackCallsZero"])
+
+            default_bc = summarize_results(
+                [results], root / "bc.json", "smoke", 0.0, 0.0, 0.0, 1
+            )
+            self.assertFalse(default_bc["challengers"][0]["passesRuntimeGate"])
+            self.assertEqual(default_bc["challengers"][0]["runtimeGateMode"], "bc")
+
+    def test_arena_external_runtime_gate_still_rejects_failures(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            results = root / "results.csv"
+            write_csv(
+                results,
+                [
+                    {
+                        "game_id": "failed-game",
+                        "learner": "external_rule_agent",
+                        "opponent": "frozen_target",
+                        "seed": 10,
+                        "learner_seat": 0,
+                        "result": "crash",
+                        "diagnostics_json": "[]",
+                    }
+                ],
+            )
+            external = summarize_results(
+                [results], root / "external.json", "smoke", 0.0, 0.0, 0.0, 1, "external"
+            )
+            challenger = external["challengers"][0]
+            self.assertEqual(challenger["failures"], 1)
+            self.assertFalse(challenger["passesRuntimeGate"])
 
 
 if __name__ == "__main__":

@@ -114,7 +114,10 @@ def summarize_results(
     minimum_wilson: float,
     minimum_seat_score: float,
     top_n: int,
+    runtime_gate_mode: str = "bc",
 ) -> dict[str, Any]:
+    if runtime_gate_mode not in {"bc", "external"}:
+        raise ValueError(f"unsupported runtime gate mode: {runtime_gate_mode}")
     rows = []
     seen_keys = set()
     for path in result_paths:
@@ -160,15 +163,21 @@ def summarize_results(
             }
         diagnostic_sums: Counter[str] = Counter()
         diagnostic_max: Counter[str] = Counter()
+        diagnostics_rows = 0
         for row in learner_rows:
             stats = _candidate_stats(row)
+            if stats:
+                diagnostics_rows += 1
             for key, value in stats.items():
                 if isinstance(value, (int, float)) and not isinstance(value, bool):
                     diagnostic_sums[key] += float(value)
                     diagnostic_max[key] = max(diagnostic_max[key], float(value))
         model_calls = diagnostic_max.get("modelCalls", 0.0)
         fallback_calls = diagnostic_max.get("fallbackCalls", 0.0)
-        passes_runtime = failures == 0 and model_calls > 0 and fallback_calls == 0
+        if runtime_gate_mode == "bc":
+            passes_runtime = failures == 0 and model_calls > 0 and fallback_calls == 0
+        else:
+            passes_runtime = failures == 0
         if stage.lower() == "smoke":
             passes_score = True
         else:
@@ -188,6 +197,8 @@ def summarize_results(
                 "scoreRate": score,
                 "wilson95": [low, high],
                 "seats": seat_metrics,
+                "runtimeGateMode": runtime_gate_mode,
+                "diagnosticsRows": diagnostics_rows,
                 "diagnosticMax": dict(diagnostic_max),
                 "passesRuntimeGate": passes_runtime,
                 "passesScoreGate": passes_score,
@@ -210,9 +221,10 @@ def summarize_results(
             "minimumScoreRate": minimum_score,
             "minimumWilsonLower": minimum_wilson,
             "minimumSeatScoreRate": minimum_seat_score,
+            "runtimeGateMode": runtime_gate_mode,
             "zeroFailures": True,
-            "modelCallsPositive": True,
-            "fallbackCallsZero": True,
+            "modelCallsPositive": runtime_gate_mode == "bc",
+            "fallbackCallsZero": runtime_gate_mode == "bc",
         },
         "sources": [{"path": str(path.resolve()), "sha256": sha256_file(path)} for path in result_paths],
         "challengers": summaries,
@@ -235,6 +247,8 @@ def summarize_results(
                 "wilson_high": row["wilson95"][1],
                 "seat0_score": row["seats"]["0"]["scoreRate"],
                 "seat1_score": row["seats"]["1"]["scoreRate"],
+                "runtime_gate_mode": row["runtimeGateMode"],
+                "diagnostics_rows": row["diagnosticsRows"],
                 "model_calls": row["diagnosticMax"].get("modelCalls", 0),
                 "fallback_calls": row["diagnosticMax"].get("fallbackCalls", 0),
                 "passes": row["passes"],
@@ -267,6 +281,7 @@ def main() -> None:
     summary.add_argument("--minimum-wilson", type=float, default=0.0)
     summary.add_argument("--minimum-seat-score", type=float, default=0.0)
     summary.add_argument("--top-n", type=int, default=3)
+    summary.add_argument("--runtime-gate-mode", choices=("bc", "external"), default="bc")
 
     args = parser.parse_args()
     if args.command == "make-schedule":
@@ -288,6 +303,7 @@ def main() -> None:
             args.minimum_wilson,
             args.minimum_seat_score,
             args.top_n,
+            args.runtime_gate_mode,
         )
 
 
