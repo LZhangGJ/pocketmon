@@ -11,7 +11,25 @@ import numpy as np
 import torch
 
 from common import Experiment7Error, read_json, sha256_file, write_json
-from universal_deck_portable import PortableUniversalDeckTransformerPolicy
+from universal_deck_portable import (
+    GREEDY_TIE_TOLERANCE,
+    PortableUniversalDeckTransformerPolicy,
+)
+
+
+def stable_order(logits: np.ndarray, valid: np.ndarray) -> np.ndarray:
+    """Order logits with a deterministic low-index tie break for numerical near-ties."""
+
+    remaining = np.flatnonzero(valid)
+    ordered: list[int] = []
+    while len(remaining):
+        maximum = logits[remaining].max()
+        tied = remaining[
+            logits[remaining] >= maximum - float(GREEDY_TIE_TOLERANCE)
+        ]
+        ordered.extend(sorted(int(index) for index in tied))
+        remaining = remaining[~np.isin(remaining, tied)]
+    return np.asarray(ordered, dtype=np.int64)
 
 
 def load_checkpoint(path: Path) -> dict[str, Any]:
@@ -52,6 +70,7 @@ def verify(args: argparse.Namespace) -> dict[str, Any]:
     rng = np.random.default_rng(args.seed)
     source_reports: list[dict[str, Any]] = []
     total = action_mismatches = ranking_mismatches = illegal = 0
+    mismatch_details: list[dict[str, Any]] = []
     max_global_delta = max_option_delta = max_deck_delta = 0.0
     max_value_delta = max_opponent_delta = max_decoder_delta = 0.0
     timings: list[float] = []
@@ -153,7 +172,8 @@ def verify(args: argparse.Namespace) -> dict[str, Any]:
 
             selected = np.zeros(option_count, dtype=bool)
             trace_mismatch = False
-            for _ in range(option_count + 1):
+            trace_details: list[dict[str, Any]] = []
+            for decoder_step in range(option_count + 1):
                 with torch.inference_mode():
                     torch_logits = model.decoder_logits(
                         torch_encoding,
@@ -170,19 +190,44 @@ def verify(args: argparse.Namespace) -> dict[str, Any]:
                         max_decoder_delta,
                         float(np.max(np.abs(torch_logits[valid] - portable_logits[valid]))),
                     )
-                    torch_order = np.flatnonzero(valid)[
-                        np.argsort(-torch_logits[valid], kind="stable")
-                    ]
-                    portable_order = np.flatnonzero(valid)[
-                        np.argsort(-portable_logits[valid], kind="stable")
-                    ]
-                    trace_mismatch |= not np.array_equal(torch_order, portable_order)
+                    torch_order = stable_order(torch_logits, valid)
+                    portable_order = stable_order(portable_logits, valid)
+                    order_mismatch = not np.array_equal(torch_order, portable_order)
+                    trace_mismatch |= order_mismatch
+                    if order_mismatch:
+                        torch_top = torch_order[:8]
+                        portable_top = portable_order[:8]
+                        trace_details.append(
+                            {
+                                "decoderStep": decoder_step,
+                                "selectedBeforeStep": np.flatnonzero(selected).astype(int).tolist(),
+                                "torchTopIndices": torch_top.astype(int).tolist(),
+                                "torchTopLogits": torch_logits[torch_top].astype(float).tolist(),
+                                "portableTopIndices": portable_top.astype(int).tolist(),
+                                "portableTopLogits": portable_logits[portable_top].astype(float).tolist(),
+                            }
+                        )
                 choice = int(np.argmax(torch_logits))
                 if choice == option_count:
                     break
                 selected[choice] = True
             source_ranking_mismatches += int(trace_mismatch)
             ranking_mismatches += int(trace_mismatch)
+            if action_mismatch or trace_mismatch:
+                mismatch_details.append(
+                    {
+                        "source": row["name"],
+                        "decision": decision,
+                        "optionCount": option_count,
+                        "minimum": minimum,
+                        "maximum": maximum,
+                        "torchAction": [int(index) for index in torch_action],
+                        "portableAction": [int(index) for index in portable_action],
+                        "actionMismatch": action_mismatch,
+                        "rankingMismatch": trace_mismatch,
+                        "trace": trace_details,
+                    }
+                )
             total += 1
         source_reports.append(
             {
@@ -202,6 +247,7 @@ def verify(args: argparse.Namespace) -> dict[str, Any]:
         "actionMismatches": action_mismatches,
         "stableRankingMismatches": ranking_mismatches,
         "illegalPredictionCount": illegal,
+        "mismatchDetails": mismatch_details,
         "maxGlobalHiddenDelta": max_global_delta,
         "maxOptionHiddenDelta": max_option_delta,
         "maxDeckHiddenDelta": max_deck_delta,
@@ -239,4 +285,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

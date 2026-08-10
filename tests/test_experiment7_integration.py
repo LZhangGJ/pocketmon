@@ -28,7 +28,7 @@ from universal_deck_model import (
     UniversalDeckTransformerPolicy,
     universal_bc_loss,
 )
-from universal_deck_portable import PortableUniversalDeckTransformerPolicy
+from universal_deck_portable import PortableUniversalDeckTransformerPolicy, _stable_argmax
 
 
 class Experiment7IntegrationTests(unittest.TestCase):
@@ -409,6 +409,12 @@ class Experiment7IntegrationTests(unittest.TestCase):
                     rtol=0.0,
                 )
             )
+
+    def test_universal_portable_near_tie_prefers_lower_index(self) -> None:
+        import numpy as np
+
+        logits = np.asarray([-2.0, -1.00010, -3.0, -1.0], dtype=np.float32)
+        self.assertEqual(_stable_argmax(logits), 1)
 
     def test_select_universal_shortlists_best_validation_seeds(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

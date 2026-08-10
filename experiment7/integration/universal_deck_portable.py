@@ -17,6 +17,18 @@ except ImportError:  # package import used by local tests
     )
 
 
+GREEDY_TIE_TOLERANCE = np.float32(5e-4)
+
+
+def _stable_argmax(logits: np.ndarray) -> int:
+    """Choose the lowest index inside a tiny numerical near-tie at the maximum."""
+
+    values = np.asarray(logits, dtype=np.float32).reshape(-1)
+    maximum = values.max()
+    near_maximum = np.flatnonzero(values >= maximum - GREEDY_TIE_TOLERANCE)
+    return int(near_maximum[0])
+
+
 class PortableUniversalDeckTransformerPolicy:
     """NumPy inference for the Deck-8 autoregressive option/STOP policy."""
 
@@ -342,8 +354,8 @@ class PortableUniversalDeckTransformerPolicy:
         selected = np.zeros(options, dtype=bool)
         result: list[int] = []
         for _ in range(options + 1):
-            choice = int(
-                np.argmax(self.decoder_logits(encoding, selected, min_count, max_count))
+            choice = _stable_argmax(
+                self.decoder_logits(encoding, selected, min_count, max_count)
             )
             if choice == options:
                 break
@@ -385,4 +397,3 @@ class PortableUniversalDeckTransformerPolicy:
 # The verified runtime main imports this historical symbol. Packaging replaces
 # only the implementation module, keeping the public Agent interface unchanged.
 PortableDeckIdentityTransformerPolicy = PortableUniversalDeckTransformerPolicy
-
