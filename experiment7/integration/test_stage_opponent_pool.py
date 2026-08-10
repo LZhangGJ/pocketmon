@@ -30,6 +30,7 @@ from stage_opponent_pool import (  # noqa: E402
     TEAM_ALLOWED_FILES,
     _archive_path,
     copy_public_candidate,
+    copy_external_submission,
     copy_team_submission,
     prepare_arena_runtime,
     rebase_packages,
@@ -136,6 +137,53 @@ class StageOpponentPoolTest(unittest.TestCase):
             with self.assertRaises(Experiment7Error):
                 copy_team_submission(archive, target, sha256_file(archive))
             self.assertFalse((target / "cg").exists())
+
+    def test_external_copy_materializes_safe_top_level_agent_without_execution(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            archive = root / "external.tar.gz"
+            model = io.BytesIO()
+            np.savez(model, weight=np.zeros((2,), dtype=np.float32))
+            files = {
+                "main.py": b"raise RuntimeError('must not run during staging')\n",
+                "deck.csv": "".join(f"{value}\n" for value in range(1, 61)).encode(),
+                "helper.py": b"VALUE = 1\n",
+                "model.npz": model.getvalue(),
+            }
+            with tarfile.open(archive, "w:gz") as handle:
+                for name, content in files.items():
+                    info = tarfile.TarInfo(name)
+                    info.size = len(content)
+                    handle.addfile(info, io.BytesIO(content))
+            target = root / "staged"
+            receipt = copy_external_submission(archive, target)
+            self.assertEqual(receipt["fileCount"], len(files))
+            self.assertTrue((target / "model.npz").is_file())
+            scan = static_scan_agent(target)
+            self.assertFalse(scan["executedAgentCode"])
+
+    def test_external_copy_rejects_nested_links_and_native_assets(self) -> None:
+        fixtures = {
+            "nested": ("nested/main.py", tarfile.REGTYPE),
+            "link": ("main.py", tarfile.SYMTYPE),
+            "native": ("model.so", tarfile.REGTYPE),
+        }
+        for label, (name, member_type) in fixtures.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                archive = root / "external.tar.gz"
+                with tarfile.open(archive, "w:gz") as handle:
+                    info = tarfile.TarInfo(name)
+                    info.type = member_type
+                    if member_type == tarfile.SYMTYPE:
+                        info.linkname = "deck.csv"
+                        handle.addfile(info)
+                    else:
+                        content = b"unsafe"
+                        info.size = len(content)
+                        handle.addfile(info, io.BytesIO(content))
+                with self.assertRaises(Experiment7Error):
+                    copy_external_submission(archive, root / "staged")
 
     def test_rebase_packages_verifies_relocated_agent_hashes(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

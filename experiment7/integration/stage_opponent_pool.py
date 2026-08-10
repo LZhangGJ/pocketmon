@@ -221,6 +221,10 @@ FORBIDDEN_RUNTIME_SUFFIXES = {
     ".so",
 }
 
+MAX_EXTERNAL_MEMBER_BYTES = 64 * 1024 * 1024
+MAX_EXTERNAL_ARCHIVE_BYTES = 256 * 1024 * 1024
+EXTERNAL_ALLOWED_SUFFIXES = {".csv", ".json", ".npz", ".py"}
+
 
 def _archive_path(name: str) -> PurePosixPath:
     normalized = name.replace("\\", "/")
@@ -278,6 +282,107 @@ def copy_team_submission(archive_path: Path, target: Path, expected_model_sha256
     _require_hash(target / "deck.csv", TEAM_DECK_FILE_SHA256, "team deck.csv")
     _require_hash(target / "deck_identity_bc.npz", expected_model_sha256, "team model")
     validate_safe_npz(target / "deck_identity_bc.npz")
+
+
+def copy_external_submission(archive_path: Path, target: Path) -> dict[str, Any]:
+    """Materialize one untrusted top-level agent archive without executing it."""
+    _ensure_new_staging_root(target)
+    copied: list[str] = []
+    total_bytes = 0
+    seen: set[str] = set()
+    with tarfile.open(archive_path, mode="r:*") as archive:
+        for member in archive.getmembers():
+            path = _archive_path(member.name)
+            if len(path.parts) != 1:
+                raise Experiment7Error(
+                    f"external submission must contain only top-level files: {member.name}"
+                )
+            name = path.name
+            if name in seen:
+                raise Experiment7Error(f"duplicate external submission member: {name}")
+            seen.add(name)
+            if not member.isfile():
+                raise Experiment7Error(f"non-regular external submission member rejected: {name}")
+            suffix = Path(name).suffix.lower()
+            if suffix in FORBIDDEN_RUNTIME_SUFFIXES:
+                raise Experiment7Error(f"forbidden external runtime asset: {name}")
+            if suffix not in EXTERNAL_ALLOWED_SUFFIXES:
+                raise Experiment7Error(f"unsupported external runtime asset: {name}")
+            if member.size < 0 or member.size > MAX_EXTERNAL_MEMBER_BYTES:
+                raise Experiment7Error(f"external submission member is too large: {name}")
+            total_bytes += member.size
+            if total_bytes > MAX_EXTERNAL_ARCHIVE_BYTES:
+                raise Experiment7Error("external submission exceeds the materialization size limit")
+            handle = archive.extractfile(member)
+            if handle is None:
+                raise Experiment7Error(f"cannot read external submission member: {name}")
+            content = handle.read(MAX_EXTERNAL_MEMBER_BYTES + 1)
+            if len(content) != member.size:
+                raise Experiment7Error(f"external submission member size mismatch: {name}")
+            _write_member(target / name, content)
+            copied.append(name)
+    missing = {"main.py", "deck.csv"} - set(copied)
+    if missing:
+        raise Experiment7Error(f"external submission missing files: {sorted(missing)}")
+    for path in sorted(target.glob("*.npz")):
+        validate_safe_npz(path)
+    return {
+        "files": sorted(copied),
+        "fileCount": len(copied),
+        "uncompressedBytes": total_bytes,
+    }
+
+
+def stage_external_submission(args: argparse.Namespace) -> dict[str, Any]:
+    archive = args.archive.resolve()
+    expected_sha256 = str(args.expected_sha256).lower()
+    _require_hash(archive, expected_sha256, "external submission")
+    name = _require_safe_agent_name(args.name)
+    staging_root = args.staging_root.resolve()
+    _ensure_new_staging_root(staging_root)
+    target = staging_root / "agents" / name
+    copy_receipt = copy_external_submission(archive, target)
+    scan = static_scan_agent(target)
+    row = {
+        **_staged_row(
+            {"name": name, "archetype": str(args.archetype)},
+            target,
+            scan,
+            "external_submission_static_materializer",
+        ),
+        "sourceArchiveSha256": expected_sha256,
+        "materialization": copy_receipt,
+    }
+    packages_path = staging_root / "packages.json"
+    write_json(
+        packages_path,
+        {
+            "schemaVersion": 1,
+            "packages": [
+                {
+                    "name": name,
+                    "agentDir": str(target.resolve()),
+                    "status": "staging",
+                    "archetype": str(args.archetype),
+                    "deckCanonicalSha256": row["deckCanonicalSha256"],
+                    "directorySha256": row["directorySha256"],
+                }
+            ],
+        },
+    )
+    payload = {
+        "schemaVersion": 1,
+        "createdAt": utc_now(),
+        "status": "static_staging_only_not_arena_admitted",
+        "source": {"path": str(archive), "sha256": expected_sha256},
+        "stagingRoot": str(staging_root),
+        "agents": [row],
+        "packages": {"path": str(packages_path), "sha256": sha256_file(packages_path)},
+        "externalAgentCodeExecuted": False,
+    }
+    write_json(args.output.resolve(), payload)
+    print(json.dumps(payload, ensure_ascii=False), flush=True)
+    return payload
 
 
 def validate_safe_npz(path: Path) -> None:
@@ -886,6 +991,14 @@ def main() -> None:
     prepare.add_argument("--arena-stage", type=Path, required=True)
     prepare.add_argument("--shard-count", type=int, required=True)
 
+    stage_external = subparsers.add_parser("stage-external")
+    stage_external.add_argument("--archive", type=Path, required=True)
+    stage_external.add_argument("--expected-sha256", required=True)
+    stage_external.add_argument("--name", required=True)
+    stage_external.add_argument("--archetype", required=True)
+    stage_external.add_argument("--staging-root", type=Path, required=True)
+    stage_external.add_argument("--output", type=Path, required=True)
+
     args = parser.parse_args()
     if args.command == "plan":
         make_plan(args)
@@ -893,8 +1006,10 @@ def main() -> None:
         materialize_plan(args.plan.resolve())
     elif args.command == "rebase-packages":
         rebase_packages(args.staging_root, args.output)
-    else:
+    elif args.command == "prepare-arena-runtime":
         prepare_arena_runtime(args.packages, args.opponents, args.arena_stage, args.shard_count)
+    else:
+        stage_external_submission(args)
 
 
 if __name__ == "__main__":
