@@ -29,6 +29,7 @@ from universal_deck_model import (
     universal_bc_loss,
 )
 from universal_deck_portable import PortableUniversalDeckTransformerPolicy, _stable_argmax
+from verify_universal_portable import stable_order
 
 
 class Experiment7IntegrationTests(unittest.TestCase):
@@ -415,6 +416,13 @@ class Experiment7IntegrationTests(unittest.TestCase):
 
         logits = np.asarray([-2.0, -1.00010, -3.0, -1.0], dtype=np.float32)
         self.assertEqual(_stable_argmax(logits), 1)
+
+    def test_universal_stable_order_groups_numerical_near_ties(self) -> None:
+        import numpy as np
+
+        logits = np.asarray([2.0, -1.0003, -3.0, -1.0], dtype=np.float32)
+        valid = np.ones(4, dtype=bool)
+        self.assertEqual(stable_order(logits, valid).tolist(), [0, 1, 3, 2])
 
     def test_select_universal_shortlists_best_validation_seeds(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

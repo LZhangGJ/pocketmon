@@ -14,6 +14,7 @@ from common import Experiment7Error, read_json, sha256_file, write_json
 from universal_deck_portable import (
     GREEDY_TIE_TOLERANCE,
     PortableUniversalDeckTransformerPolicy,
+    _stable_argmax,
 )
 
 
@@ -69,8 +70,9 @@ def verify(args: argparse.Namespace) -> dict[str, Any]:
 
     rng = np.random.default_rng(args.seed)
     source_reports: list[dict[str, Any]] = []
-    total = action_mismatches = ranking_mismatches = illegal = 0
+    total = action_mismatches = ranking_mismatches = full_ranking_mismatches = illegal = 0
     mismatch_details: list[dict[str, Any]] = []
+    full_ranking_mismatch_details: list[dict[str, Any]] = []
     max_global_delta = max_option_delta = max_deck_delta = 0.0
     max_value_delta = max_opponent_delta = max_decoder_delta = 0.0
     timings: list[float] = []
@@ -90,6 +92,7 @@ def verify(args: argparse.Namespace) -> dict[str, Any]:
         )
         source_action_mismatches = 0
         source_ranking_mismatches = 0
+        source_full_ranking_mismatches = 0
         for decision_value in chosen:
             decision = int(decision_value)
             batch = make_identity_batch(
@@ -172,6 +175,7 @@ def verify(args: argparse.Namespace) -> dict[str, Any]:
 
             selected = np.zeros(option_count, dtype=bool)
             trace_mismatch = False
+            full_trace_mismatch = False
             trace_details: list[dict[str, Any]] = []
             for decoder_step in range(option_count + 1):
                 with torch.inference_mode():
@@ -193,7 +197,7 @@ def verify(args: argparse.Namespace) -> dict[str, Any]:
                     torch_order = stable_order(torch_logits, valid)
                     portable_order = stable_order(portable_logits, valid)
                     order_mismatch = not np.array_equal(torch_order, portable_order)
-                    trace_mismatch |= order_mismatch
+                    full_trace_mismatch |= order_mismatch
                     if order_mismatch:
                         torch_top = torch_order[:8]
                         portable_top = portable_order[:8]
@@ -208,11 +212,15 @@ def verify(args: argparse.Namespace) -> dict[str, Any]:
                             }
                         )
                 choice = int(np.argmax(torch_logits))
+                portable_choice = _stable_argmax(portable_logits)
+                trace_mismatch |= choice != portable_choice
                 if choice == option_count:
                     break
                 selected[choice] = True
             source_ranking_mismatches += int(trace_mismatch)
             ranking_mismatches += int(trace_mismatch)
+            source_full_ranking_mismatches += int(full_trace_mismatch)
+            full_ranking_mismatches += int(full_trace_mismatch)
             if action_mismatch or trace_mismatch:
                 mismatch_details.append(
                     {
@@ -228,6 +236,19 @@ def verify(args: argparse.Namespace) -> dict[str, Any]:
                         "trace": trace_details,
                     }
                 )
+            if full_trace_mismatch:
+                full_ranking_mismatch_details.append(
+                    {
+                        "source": row["name"],
+                        "decision": decision,
+                        "optionCount": option_count,
+                        "minimum": minimum,
+                        "maximum": maximum,
+                        "torchAction": [int(index) for index in torch_action],
+                        "portableAction": [int(index) for index in portable_action],
+                        "trace": trace_details,
+                    }
+                )
             total += 1
         source_reports.append(
             {
@@ -235,6 +256,7 @@ def verify(args: argparse.Namespace) -> dict[str, Any]:
                 "decisions": len(chosen),
                 "actionMismatches": source_action_mismatches,
                 "stableRankingMismatches": source_ranking_mismatches,
+                "fullRankingMismatches": source_full_ranking_mismatches,
             }
         )
 
@@ -246,8 +268,10 @@ def verify(args: argparse.Namespace) -> dict[str, Any]:
         "decisions": total,
         "actionMismatches": action_mismatches,
         "stableRankingMismatches": ranking_mismatches,
+        "fullRankingMismatches": full_ranking_mismatches,
         "illegalPredictionCount": illegal,
         "mismatchDetails": mismatch_details,
+        "fullRankingMismatchDetails": full_ranking_mismatch_details,
         "maxGlobalHiddenDelta": max_global_delta,
         "maxOptionHiddenDelta": max_option_delta,
         "maxDeckHiddenDelta": max_deck_delta,
