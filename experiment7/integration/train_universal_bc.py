@@ -246,6 +246,153 @@ def evaluate(
     }
 
 
+def prepare_shards(
+    sources: dict[str, Any],
+    vendor: dict[str, Any],
+    validation_fraction: float,
+    max_train_decisions: int,
+    max_validation_decisions: int,
+) -> list[dict[str, Any]]:
+    rows = sources.get("datasets")
+    if rows is None:
+        rows = [sources["dataset"]]
+    if not isinstance(rows, list) or not rows:
+        raise Experiment7Error("Universal BC sources must contain a non-empty dataset(s) list")
+
+    names: set[str] = set()
+    shards: list[dict[str, Any]] = []
+    train_limits = _distributed_limits(max_train_decisions, len(rows))
+    validation_limits = _distributed_limits(max_validation_decisions, len(rows))
+    for index, row in enumerate(rows):
+        name = str(row.get("name") or f"universal-{index:02d}")
+        if name in names:
+            raise Experiment7Error(f"duplicate Universal BC dataset name: {name}")
+        names.add(name)
+        bundle = vendor["IdentityBundle"].load(
+            name,
+            Path(row["features"]),
+            Path(row["tokenCache"]),
+            Path(row["sequenceCache"]),
+            Path(row["identityCache"]),
+        )
+        base = bundle.sequence.base
+        meaningful = base.nontrivial_mask()
+        validation_mask = base.data["validation"] == 1
+        if not bool(validation_mask.any()):
+            episode_ids = np.asarray(base.data["episode_ids"], dtype=np.int64)
+            ordered_episodes = list(dict.fromkeys(int(value) for value in episode_ids))
+            validation_count = max(
+                1, int(math.ceil(len(ordered_episodes) * validation_fraction))
+            )
+            validation_episodes = set(ordered_episodes[-validation_count:])
+            validation_mask = np.isin(episode_ids, list(validation_episodes))
+        train_decisions = np.flatnonzero(~validation_mask & meaningful)
+        validation_decisions = np.flatnonzero(validation_mask & meaningful)
+        if train_limits[index] is not None:
+            train_decisions = train_decisions[: train_limits[index]]
+        if validation_limits[index] is not None:
+            validation_decisions = validation_decisions[: validation_limits[index]]
+        if not len(train_decisions) or not len(validation_decisions):
+            raise Experiment7Error(
+                f"{name}: empty Universal BC split "
+                f"train={len(train_decisions)} validation={len(validation_decisions)}"
+            )
+        policy_weights = np.asarray(
+            base.data["policy_weights"], dtype=np.float32
+        ).copy()
+        shards.append(
+            {
+                "name": name,
+                "bundle": bundle,
+                "train": train_decisions,
+                "validation": validation_decisions,
+                "policyWeights": policy_weights,
+            }
+        )
+    return shards
+
+
+def _distributed_limits(total: int, count: int) -> list[int | None]:
+    if total <= 0:
+        return [None] * count
+    if total < count:
+        raise Experiment7Error(
+            f"decision limit {total} is smaller than Universal BC shard count {count}"
+        )
+    quotient, remainder = divmod(total, count)
+    return [quotient + int(index < remainder) for index in range(count)]
+
+
+def combine_training_metrics(rows: list[tuple[str, dict[str, float]]]) -> dict[str, Any]:
+    decisions = sum(int(row["decisions"]) for _, row in rows)
+    seconds = sum(float(row["seconds"]) for _, row in rows)
+    ignored = {"decisions", "seconds", "decisionsPerSecond"}
+    keys = sorted({key for _, row in rows for key in row if key not in ignored})
+    return {
+        **{
+            key: float(
+                sum(float(row[key]) * int(row["decisions"]) for _, row in rows)
+                / max(decisions, 1)
+            )
+            for key in keys
+        },
+        "decisions": decisions,
+        "seconds": seconds,
+        "decisionsPerSecond": decisions / max(seconds, 1e-9),
+        "shards": {name: row for name, row in rows},
+    }
+
+
+def combine_validation_metrics(rows: list[tuple[str, dict[str, Any]]]) -> dict[str, Any]:
+    decisions = sum(int(row["decisions"]) for _, row in rows)
+    policy_decisions = sum(int(row["policyDecisions"]) for _, row in rows)
+
+    def weighted(key: str, weight_key: str) -> float | None:
+        eligible = [
+            (float(row[key]), int(row[weight_key]))
+            for _, row in rows
+            if row.get(key) is not None and int(row[weight_key]) > 0
+        ]
+        denominator = sum(weight for _, weight in eligible)
+        return (
+            sum(value * weight for value, weight in eligible) / denominator
+            if denominator
+            else None
+        )
+
+    def uncertainty_weighted(key: str) -> float | None:
+        eligible = [
+            (float(row["uncertainty"][key]), int(row["decisions"]))
+            for _, row in rows
+            if row["uncertainty"].get(key) is not None and int(row["decisions"]) > 0
+        ]
+        denominator = sum(weight for _, weight in eligible)
+        return (
+            sum(value * weight for value, weight in eligible) / denominator
+            if denominator
+            else None
+        )
+
+    return {
+        "decisions": decisions,
+        "policyDecisions": policy_decisions,
+        "exactIndex": weighted("exactIndex", "policyDecisions"),
+        "exactSemantic": weighted("exactSemantic", "policyDecisions"),
+        "countAccuracy": weighted("countAccuracy", "policyDecisions"),
+        "illegalPredictionCount": sum(
+            int(row["illegalPredictionCount"]) for _, row in rows
+        ),
+        "valueBrier": weighted("valueBrier", "decisions"),
+        "uncertainty": {
+            "meanFirstStepConfidence": uncertainty_weighted(
+                "meanFirstStepConfidence"
+            ),
+            "confidence60Coverage": uncertainty_weighted("confidence60Coverage"),
+        },
+        "shards": {name: row for name, row in rows},
+    }
+
+
 def train(args: argparse.Namespace) -> dict[str, Any]:
     sources = read_json(args.sources.resolve())
     universal_sources = sources.get("kind") == "experiment7_universal_bc"
@@ -257,32 +404,22 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     vendor = setup_vendor(reference_root)
     seed_everything(args.seed)
     device = device_from_arg(args.device)
-    row = sources["dataset"] if universal_sources else sources["pretrain"]
-    bundle = vendor["IdentityBundle"].load(
-        "universal",
-        Path(row["features"]),
-        Path(row["tokenCache"]),
-        Path(row["sequenceCache"]),
-        Path(row["identityCache"]),
-    )
-    base = bundle.sequence.base
-    meaningful = base.nontrivial_mask()
-    validation_mask = base.data["validation"] == 1
-    if not bool(validation_mask.any()):
-        episode_ids = np.asarray(base.data["episode_ids"], dtype=np.int64)
-        ordered_episodes = list(dict.fromkeys(int(value) for value in episode_ids))
-        validation_count = max(1, int(math.ceil(len(ordered_episodes) * args.validation_fraction)))
-        validation_episodes = set(ordered_episodes[-validation_count:])
-        validation_mask = np.isin(episode_ids, list(validation_episodes))
-    train_decisions = np.flatnonzero(~validation_mask & meaningful)
-    validation_decisions = np.flatnonzero(validation_mask & meaningful)
-    if args.max_train_decisions > 0:
-        train_decisions = train_decisions[: args.max_train_decisions]
-    if args.max_validation_decisions > 0:
-        validation_decisions = validation_decisions[: args.max_validation_decisions]
-    if not len(train_decisions) or not len(validation_decisions):
-        raise Experiment7Error(
-            f"empty Universal BC split train={len(train_decisions)} validation={len(validation_decisions)}"
+    if universal_sources:
+        shards = prepare_shards(
+            sources,
+            vendor,
+            args.validation_fraction,
+            args.max_train_decisions,
+            args.max_validation_decisions,
+        )
+    else:
+        bootstrap_sources = {**sources, "dataset": sources["pretrain"]}
+        shards = prepare_shards(
+            bootstrap_sources,
+            vendor,
+            args.validation_fraction,
+            args.max_train_decisions,
+            args.max_validation_decisions,
         )
 
     config = vendor["UniversalDeckModelConfig"](
@@ -307,13 +444,10 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     )
     scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda")
     rng = np.random.default_rng(args.seed)
-    policy_weight_by_decision = np.asarray(
-        base.data["policy_weights"], dtype=np.float32
-    ).copy()
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     report: dict[str, Any] = {
-        "schemaVersion": 2,
+        "schemaVersion": 3,
         "stage": "universal_bc",
         "bootstrapFromMultideckPretrain": not universal_sources,
         "createdAt": utc_now(),
@@ -324,37 +458,107 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
         "parameterCount": model.parameter_count,
         "initialization": initialization,
         "splits": {
-            "trainDecisions": int(len(train_decisions)),
-            "trainPolicyDecisions": int(np.sum(policy_weight_by_decision[train_decisions] > 0)),
-            "validationDecisions": int(len(validation_decisions)),
-            "validationPolicyDecisions": int(np.sum(policy_weight_by_decision[validation_decisions] > 0)),
+            "trainDecisions": int(sum(len(shard["train"]) for shard in shards)),
+            "trainPolicyDecisions": int(
+                sum(
+                    np.sum(shard["policyWeights"][shard["train"]] > 0)
+                    for shard in shards
+                )
+            ),
+            "validationDecisions": int(
+                sum(len(shard["validation"]) for shard in shards)
+            ),
+            "validationPolicyDecisions": int(
+                sum(
+                    np.sum(shard["policyWeights"][shard["validation"]] > 0)
+                    for shard in shards
+                )
+            ),
+            "shards": {
+                shard["name"]: {
+                    "trainDecisions": int(len(shard["train"])),
+                    "trainPolicyDecisions": int(
+                        np.sum(shard["policyWeights"][shard["train"]] > 0)
+                    ),
+                    "validationDecisions": int(len(shard["validation"])),
+                    "validationPolicyDecisions": int(
+                        np.sum(shard["policyWeights"][shard["validation"]] > 0)
+                    ),
+                }
+                for shard in shards
+            },
         },
         "epochs": [],
     }
+    print(
+        json.dumps(
+            {
+                "stage": "start",
+                "device": str(device),
+                "parameterCount": model.parameter_count,
+                "splits": report["splits"],
+            },
+            ensure_ascii=False,
+        ),
+        flush=True,
+    )
     best_score = -1.0
     best_path = args.output_dir / "best_model.pt"
     for epoch in range(1, args.epochs + 1):
-        metrics = train_epoch(
-            vendor,
-            model,
-            bundle,
-            train_decisions,
-            policy_weight_by_decision,
-            optimizer,
-            scaler,
-            device,
-            args.batch_size,
-            rng,
-            args.value_loss_weight,
-        )
-        validation = evaluate(
-            vendor,
-            model,
-            bundle,
-            validation_decisions,
-            device,
-            args.batch_size,
-        )
+        training_rows: list[tuple[str, dict[str, float]]] = []
+        for shard_index in rng.permutation(len(shards)):
+            shard = shards[int(shard_index)]
+            shard_metrics = train_epoch(
+                vendor,
+                model,
+                shard["bundle"],
+                shard["train"],
+                shard["policyWeights"],
+                optimizer,
+                scaler,
+                device,
+                args.batch_size,
+                rng,
+                args.value_loss_weight,
+            )
+            training_rows.append((shard["name"], shard_metrics))
+            print(
+                json.dumps(
+                    {
+                        "stage": "train_shard",
+                        "epoch": epoch,
+                        "shard": shard["name"],
+                        **shard_metrics,
+                    },
+                    ensure_ascii=False,
+                ),
+                flush=True,
+            )
+        metrics = combine_training_metrics(training_rows)
+        validation_rows: list[tuple[str, dict[str, Any]]] = []
+        for shard in shards:
+            shard_validation = evaluate(
+                vendor,
+                model,
+                shard["bundle"],
+                shard["validation"],
+                device,
+                args.batch_size,
+            )
+            validation_rows.append((shard["name"], shard_validation))
+            print(
+                json.dumps(
+                    {
+                        "stage": "validation_shard",
+                        "epoch": epoch,
+                        "shard": shard["name"],
+                        **shard_validation,
+                    },
+                    ensure_ascii=False,
+                ),
+                flush=True,
+            )
+        validation = combine_validation_metrics(validation_rows)
         epoch_row = {"epoch": epoch, "training": metrics, "validation": validation}
         report["epochs"].append(epoch_row)
         print(json.dumps(epoch_row, ensure_ascii=False), flush=True)
