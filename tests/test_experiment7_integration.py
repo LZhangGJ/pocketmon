@@ -22,11 +22,13 @@ from arena import make_schedule
 from build_from_pocketmon_replays import selected_rows
 from multi_gpu_scheduler import make_specialist_plan
 from prepare_universal_training_data import reuse_engine_catalog
+from export_and_package import select_universal
 from universal_deck_model import (
     UniversalDeckModelConfig,
     UniversalDeckTransformerPolicy,
     universal_bc_loss,
 )
+from universal_deck_portable import PortableUniversalDeckTransformerPolicy
 
 
 class Experiment7IntegrationTests(unittest.TestCase):
@@ -358,6 +360,90 @@ class Experiment7IntegrationTests(unittest.TestCase):
         self.assertTrue(all(1 <= len(actions[0]) <= 2 for _ in [0]))
         self.assertTrue(all(0 <= len(actions[1]) <= 1 for _ in [0]))
         self.assertEqual(len(actions[0]), len(set(actions[0])))
+
+    def test_universal_portable_matches_deck8_autoregressive_actions(self) -> None:
+        import numpy as np
+
+        torch.manual_seed(20260810)
+        model, inputs, batch = self._universal_batch()
+        model.eval()
+        with tempfile.TemporaryDirectory() as directory:
+            portable_path = Path(directory) / "universal.npz"
+            arrays = {
+                name: value.detach().numpy().astype(np.float32, copy=False)
+                for name, value in model.state_dict().items()
+            }
+            arrays["config_json"] = np.asarray(
+                [json.dumps(model.config.to_dict(), separators=(",", ":"), sort_keys=True)]
+            )
+            np.savez_compressed(portable_path, **arrays)
+            portable = PortableUniversalDeckTransformerPolicy(portable_path)
+            with torch.inference_mode():
+                torch_encoding = model(*inputs)
+                torch_action = model.greedy_actions(
+                    torch_encoding, batch["min_count"], batch["max_count"]
+                )[0]
+            portable_encoding = portable.encode(
+                inputs[0][0].numpy(),
+                inputs[1][0].numpy(),
+                inputs[2][0].numpy(),
+                inputs[3][0].numpy(),
+                inputs[4][0].numpy(),
+                inputs[5][0].numpy(),
+                inputs[6][0].numpy(),
+                inputs[7][0].numpy(),
+                inputs[8][0].numpy(),
+                inputs[9][0].numpy(),
+            )
+            portable_action = portable.greedy_actions(
+                portable_encoding,
+                int(batch["min_count"][0]),
+                int(batch["max_count"][0]),
+            )
+            self.assertEqual(portable_action, torch_action)
+            self.assertTrue(
+                np.allclose(
+                    portable_encoding["option_hidden"],
+                    torch_encoding.option_hidden[0].numpy(),
+                    atol=2e-3,
+                    rtol=0.0,
+                )
+            )
+
+    def test_select_universal_shortlists_best_validation_seeds(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for seed, semantic, index in ((11, 0.75, 0.72), (12, 0.76, 0.71)):
+                run = root / f"seed-{seed}"
+                run.mkdir()
+                checkpoint = run / "best_model.pt"
+                checkpoint.write_bytes(f"checkpoint-{seed}".encode())
+                (run / "training_report.json").write_text(
+                    json.dumps(
+                        {
+                            "stage": "universal_bc",
+                            "seed": seed,
+                            "best": {"epoch": 4, "path": str(checkpoint)},
+                            "epochs": [
+                                {
+                                    "epoch": 4,
+                                    "validation": {
+                                        "exactSemantic": semantic,
+                                        "exactIndex": index,
+                                        "countAccuracy": 0.99,
+                                        "illegalPredictionCount": 0,
+                                    },
+                                }
+                            ],
+                        }
+                    ),
+                    encoding="utf-8",
+                )
+            output = root / "selection.json"
+            payload = select_universal(root, output, 2)
+            self.assertEqual(payload["selected"]["seed"], 12)
+            self.assertEqual([row["seed"] for row in payload["shortlist"]], [12, 11])
+            self.assertFalse(payload["holdoutUsed"])
 
     def test_universal_value_loss_uses_loser_when_policy_weight_is_zero(self) -> None:
         torch.manual_seed(20260810)
