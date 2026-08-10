@@ -374,7 +374,14 @@ def ppo_loss(
     entropy_coefficient: float = 0.01,
     teacher_anchor_coefficient: float = 0.02,
 ) -> tuple[torch.Tensor, dict[str, float]]:
+    # PPO ratios must compare the exact behavior distribution.  Keep dropout
+    # disabled while retaining autograd; otherwise identical weights can start
+    # an update with ratio != 1 solely because of a new dropout mask.
+    was_training = model.training
+    model.eval()
     new_log_probability, entropy, values = evaluate_actions(model, batch)
+    if was_training:
+        model.train()
     rows = batch["rows"]
     tensor = lambda key: torch.tensor(
         [float(row[key]) for row in rows], dtype=values.dtype, device=values.device
