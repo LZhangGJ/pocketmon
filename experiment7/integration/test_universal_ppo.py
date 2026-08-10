@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import os
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -23,6 +25,7 @@ from universal_ppo import (  # noqa: E402
     ppo_loss,
     sample_action,
 )
+from train_universal_ppo import require_clean_repository  # noqa: E402
 
 
 def row(action: list[int] | None = None) -> dict:
@@ -89,6 +92,17 @@ class UniversalPpoTest(unittest.TestCase):
         loss.backward()
         self.assertTrue(any(parameter.grad is not None for parameter in self.model.parameters()))
         self.assertAlmostEqual(metrics["ratioMean"], 1.0, places=5)
+
+    def test_repository_validation_does_not_depend_on_process_cwd(self) -> None:
+        previous = Path.cwd()
+        try:
+            with tempfile.TemporaryDirectory() as temporary:
+                os.chdir(temporary)
+                repository, commit = require_clean_repository(INTEGRATION / "train_universal_ppo.py")
+        finally:
+            os.chdir(previous)
+        self.assertTrue((repository / ".git").exists() or (repository / ".git").is_file())
+        self.assertEqual(len(commit), 40)
 
 
 if __name__ == "__main__":

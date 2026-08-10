@@ -26,6 +26,33 @@ from universal_ppo import (
 )
 
 
+def require_clean_repository(script_path: Path = Path(__file__)) -> tuple[Path, str]:
+    """Resolve and validate the repository independently of the process cwd."""
+    integration = script_path.resolve().parent
+    try:
+        repository = Path(
+            subprocess.check_output(
+                ["git", "-C", str(integration), "rev-parse", "--show-toplevel"],
+                text=True,
+            ).strip()
+        ).resolve()
+        commit = subprocess.check_output(
+            ["git", "-C", str(repository), "rev-parse", "HEAD"], text=True
+        ).strip()
+        dirty = subprocess.check_output(
+            ["git", "-C", str(repository), "status", "--porcelain"], text=True
+        ).strip()
+    except (OSError, subprocess.CalledProcessError) as error:
+        raise Experiment7Error(
+            f"unable to validate Universal PPO repository for {integration}"
+        ) from error
+    if dirty:
+        raise Experiment7Error(
+            f"formal Universal PPO training requires a clean worktree: {repository}"
+        )
+    return repository, commit
+
+
 def load_rollouts(
     paths: list[Path], behavior_sha256: str, teacher_sha256: str
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -121,8 +148,7 @@ def main() -> None:
     args = parser.parse_args()
     if args.output.exists() or args.metrics_output.exists():
         raise FileExistsError("refusing to overwrite Universal PPO outputs")
-    if subprocess.check_output(["git", "status", "--porcelain"], text=True).strip():
-        raise Experiment7Error("formal Universal PPO training requires a clean worktree")
+    repository, repository_commit = require_clean_repository()
     random.seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
@@ -178,6 +204,7 @@ def main() -> None:
         "role": args.role,
         "generation": args.generation,
         "seed": args.seed,
+        "repository": {"path": str(repository), "commit": repository_commit},
         "parent": {"path": str(args.initialize_from.resolve()), "sha256": behavior_sha},
         "teacher": {"path": str(args.teacher.resolve()), "sha256": teacher_sha},
         "parentMetadata": parent.get("metadata", {}),
