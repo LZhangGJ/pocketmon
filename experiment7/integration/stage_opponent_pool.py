@@ -5,6 +5,8 @@ import ast
 import importlib.util
 import json
 import os
+import shutil
+import stat
 import sys
 import tarfile
 import zipfile
@@ -504,6 +506,7 @@ def materialize_plan(plan_path: Path) -> dict[str, Any]:
                 "status": "staging",
                 "archetype": row["archetype"],
                 "deckCanonicalSha256": row["deckCanonicalSha256"],
+                "directorySha256": row["directorySha256"],
             }
             for row in staged
         ],
@@ -528,6 +531,19 @@ def materialize_plan(plan_path: Path) -> dict[str, Any]:
                 "<dataT0-copied-staging-root>",
                 "--output",
                 "<dataT0-copied-staging-root>/packages.json",
+            ],
+            "prepareWritableArenaRuntime": [
+                "<linux-python>",
+                "<linux-repository>/experiment7/integration/stage_opponent_pool.py",
+                "prepare-arena-runtime",
+                "--packages",
+                "<dataT0-copied-staging-root>/packages.json",
+                "--opponents",
+                "<frozen-opponents-manifest-with-directory-hashes>",
+                "--arena-stage",
+                "<writable-arena-stage>",
+                "--shard-count",
+                "<positive-shard-count>",
             ],
             "makeOfficialArenaSchedule": [
                 os.fspath(Path(sys.executable).resolve()),
@@ -576,6 +592,7 @@ def rebase_packages(staging_root: Path, output: Path) -> dict[str, Any]:
                 "status": "staging",
                 "archetype": row["archetype"],
                 "deckCanonicalSha256": row["deckCanonicalSha256"],
+                "directorySha256": expected,
             }
         )
     if not packages:
@@ -592,6 +609,217 @@ def rebase_packages(staging_root: Path, output: Path) -> dict[str, Any]:
         "externalAgentCodeExecuted": False,
     }
     write_json(output.with_name(output.stem + "_rebase_receipt.json"), receipt)
+    print(json.dumps(receipt, ensure_ascii=False), flush=True)
+    return receipt
+
+
+def _is_link(path: Path) -> bool:
+    if path.is_symlink():
+        return True
+    is_junction = getattr(path, "is_junction", None)
+    return bool(is_junction is not None and is_junction())
+
+
+def _require_safe_agent_name(value: Any) -> str:
+    name = str(value)
+    path = PurePosixPath(name.replace("\\", "/"))
+    if not name or path.is_absolute() or len(path.parts) != 1 or path.name in {".", ".."}:
+        raise Experiment7Error(f"unsafe arena agent name: {name!r}")
+    return name
+
+
+def _require_regular_source_tree(root: Path, label: str) -> None:
+    if not root.exists() or not root.is_dir():
+        raise Experiment7Error(f"{label} source directory is missing: {root}")
+    if _is_link(root):
+        raise Experiment7Error(f"{label} source directory link rejected: {root}")
+    for current, directory_names, file_names in os.walk(root, followlinks=False):
+        current_path = Path(current)
+        for child_name in [*directory_names, *file_names]:
+            child = current_path / child_name
+            if _is_link(child):
+                raise Experiment7Error(f"{label} source link rejected: {child}")
+        for child_name in file_names:
+            child = current_path / child_name
+            if not child.is_file():
+                raise Experiment7Error(f"{label} non-regular source file rejected: {child}")
+    missing = [name for name in ("main.py", "deck.csv") if not (root / name).is_file()]
+    if missing:
+        raise Experiment7Error(f"{label} source missing {', '.join(missing)}: {root}")
+
+
+def _manifest_rows(payload: Any, collection: str, manifest_path: Path) -> list[dict[str, Any]]:
+    if not isinstance(payload, dict) or not isinstance(payload.get(collection), list):
+        raise Experiment7Error(f"invalid {collection} manifest: {manifest_path}")
+    rows = payload[collection]
+    if not rows:
+        raise Experiment7Error(f"empty {collection} manifest: {manifest_path}")
+    return rows
+
+
+def _expected_directory_hash(row: dict[str, Any], label: str) -> str:
+    for key in ("directorySha256", "directory_sha256", "sourceDirectorySha256"):
+        value = row.get(key)
+        if isinstance(value, str) and len(value) == 64:
+            return value.lower()
+    raise Experiment7Error(f"{label} has no frozen directory SHA256")
+
+
+def _source_agent_dir(row: dict[str, Any], label: str) -> Path:
+    value = row.get("agentDir") or row.get("agent_dir") or row.get("path")
+    if not value:
+        raise Experiment7Error(f"{label} has no source directory")
+    # ``Path.resolve`` would follow a symlink and hide it from the link gate.
+    # Normalize dot segments while preserving the final filesystem object.
+    return Path(os.path.abspath(os.fspath(Path(str(value)).expanduser())))
+
+
+def _require_unlinked_output_path(path: Path) -> None:
+    current = path.parent
+    while True:
+        if current.exists() and _is_link(current):
+            raise Experiment7Error(f"arena stage parent link rejected: {current}")
+        parent = current.parent
+        if parent == current:
+            break
+        current = parent
+
+
+def _validated_runtime_sources(
+    manifest_path: Path,
+    collection: str,
+    role: str,
+) -> list[dict[str, Any]]:
+    payload = read_json(manifest_path)
+    rows = _manifest_rows(payload, collection, manifest_path)
+    validated = []
+    names: set[str] = set()
+    for row in rows:
+        if not isinstance(row, dict):
+            raise Experiment7Error(f"invalid {role} row in {manifest_path}: {row!r}")
+        if role == "opponents" and row.get("status", "accepted") != "accepted":
+            continue
+        name = _require_safe_agent_name(row.get("name", ""))
+        if name in names:
+            raise Experiment7Error(f"duplicate {role} name: {name}")
+        names.add(name)
+        label = f"{role} {name}"
+        source = _source_agent_dir(row, label)
+        expected = _expected_directory_hash(row, label)
+        _require_regular_source_tree(source, label)
+        actual = directory_sha256(source)
+        if actual.lower() != expected:
+            raise Experiment7Error(
+                f"{label} source hash mismatch: expected={expected} actual={actual}"
+            )
+        validated.append(
+            {
+                "name": name,
+                "sourceAgentDir": str(source),
+                "sourceDirectorySha256": expected,
+            }
+        )
+    if not validated:
+        raise Experiment7Error(f"no accepted {role} in {manifest_path}")
+    return validated
+
+
+def _copy_writable_runtime_tree(source: Path, target: Path) -> None:
+    if target.exists():
+        raise Experiment7Error(f"arena runtime destination already exists: {target}")
+    target.mkdir(parents=True)
+    for source_file in stable_runtime_files(source):
+        relative = source_file.relative_to(source)
+        destination = target / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source_file, destination)
+    for path in sorted(target.rglob("*"), key=lambda item: len(item.parts), reverse=True):
+        mode = path.stat().st_mode
+        path.chmod(mode | (stat.S_IRUSR | stat.S_IWUSR) | (stat.S_IXUSR if path.is_dir() else 0))
+    target.chmod(target.stat().st_mode | stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR)
+
+
+def prepare_arena_runtime(
+    packages_manifest: Path,
+    opponents_manifest: Path,
+    arena_stage: Path,
+    shard_count: int,
+) -> dict[str, Any]:
+    if shard_count <= 0:
+        raise ValueError("shard_count must be positive")
+    packages_path = packages_manifest.resolve()
+    opponents_path = opponents_manifest.resolve()
+    stage = Path(os.path.abspath(os.fspath(arena_stage.expanduser())))
+    if stage.exists():
+        raise Experiment7Error(f"arena stage already exists; refusing overwrite: {stage}")
+    _require_unlinked_output_path(stage)
+
+    # Validate every immutable source before creating any writable output.
+    learners = _validated_runtime_sources(packages_path, "packages", "learners")
+    opponents = _validated_runtime_sources(opponents_path, "agents", "opponents")
+    stage.mkdir(parents=True)
+    shard_receipts = []
+    for shard_index in range(shard_count):
+        shard_root = stage / f"runtime-shard-{shard_index}"
+        runtime_rows: dict[str, list[dict[str, Any]]] = {"learners": [], "opponents": []}
+        for role, sources in (("learners", learners), ("opponents", opponents)):
+            for source_row in sources:
+                name = source_row["name"]
+                destination = shard_root / role / name
+                _copy_writable_runtime_tree(Path(source_row["sourceAgentDir"]), destination)
+                runtime_hash = directory_sha256(destination)
+                expected = source_row["sourceDirectorySha256"]
+                if runtime_hash != expected:
+                    raise Experiment7Error(
+                        f"{role} {name} runtime copy hash mismatch: expected={expected} actual={runtime_hash}"
+                    )
+                runtime_rows[role].append(
+                    {
+                        "name": name,
+                        "agent_dir": str(destination.resolve()),
+                        "status": "accepted",
+                        "source_agent_dir": source_row["sourceAgentDir"],
+                        "source_directory_sha256": expected,
+                        "runtime_initial_directory_sha256": runtime_hash,
+                    }
+                )
+        learners_path = shard_root / "learners.json"
+        opponents_path_for_shard = shard_root / "opponents.json"
+        write_json(learners_path, {"schemaVersion": 1, "agents": runtime_rows["learners"]})
+        write_json(opponents_path_for_shard, {"schemaVersion": 1, "agents": runtime_rows["opponents"]})
+        shard_receipts.append(
+            {
+                "shardIndex": shard_index,
+                "runtimeRoot": str(shard_root.resolve()),
+                "learners": {
+                    "path": str(learners_path.resolve()),
+                    "sha256": sha256_file(learners_path),
+                    "agents": len(runtime_rows["learners"]),
+                },
+                "opponents": {
+                    "path": str(opponents_path_for_shard.resolve()),
+                    "sha256": sha256_file(opponents_path_for_shard),
+                    "agents": len(runtime_rows["opponents"]),
+                },
+            }
+        )
+    receipt = {
+        "schemaVersion": 1,
+        "createdAt": utc_now(),
+        "arenaStage": str(stage),
+        "shardCount": shard_count,
+        "sources": {
+            "packages": {"path": str(packages_path), "sha256": sha256_file(packages_path)},
+            "opponents": {"path": str(opponents_path), "sha256": sha256_file(opponents_path)},
+            "learners": learners,
+            "opponentAgents": opponents,
+        },
+        "shards": shard_receipts,
+        "frozenSourcesModified": False,
+        "externalAgentCodeExecuted": False,
+    }
+    receipt_path = stage / "prepare_arena_runtime_receipt.json"
+    write_json(receipt_path, receipt)
     print(json.dumps(receipt, ensure_ascii=False), flush=True)
     return receipt
 
@@ -652,13 +880,21 @@ def main() -> None:
     rebase.add_argument("--staging-root", type=Path, required=True)
     rebase.add_argument("--output", type=Path, required=True)
 
+    prepare = subparsers.add_parser("prepare-arena-runtime")
+    prepare.add_argument("--packages", type=Path, required=True)
+    prepare.add_argument("--opponents", type=Path, required=True)
+    prepare.add_argument("--arena-stage", type=Path, required=True)
+    prepare.add_argument("--shard-count", type=int, required=True)
+
     args = parser.parse_args()
     if args.command == "plan":
         make_plan(args)
     elif args.command == "materialize":
         materialize_plan(args.plan.resolve())
-    else:
+    elif args.command == "rebase-packages":
         rebase_packages(args.staging_root, args.output)
+    else:
+        prepare_arena_runtime(args.packages, args.opponents, args.arena_stage, args.shard_count)
 
 
 if __name__ == "__main__":

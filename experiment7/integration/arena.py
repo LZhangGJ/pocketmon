@@ -27,15 +27,30 @@ def make_schedule(
     if games_per_challenger <= 0 or games_per_challenger % 2:
         raise ValueError("games_per_challenger must be a positive even number")
     output_dir.mkdir(parents=True, exist_ok=True)
+    target_directory_sha256 = directory_sha256(target_agent)
     learners = {
         "agents": [
-            {"name": row["name"], "agent_dir": row["agentDir"], "status": "accepted"}
+            {
+                "name": row["name"],
+                "agent_dir": row["agentDir"],
+                "status": "accepted",
+                **(
+                    {"directory_sha256": row["directorySha256"]}
+                    if row.get("directorySha256")
+                    else {}
+                ),
+            }
             for row in packages
         ]
     }
     opponents = {
         "agents": [
-            {"name": "frozen_lucario_rule", "agent_dir": str(target_agent.resolve()), "status": "accepted"}
+            {
+                "name": "frozen_lucario_rule",
+                "agent_dir": str(target_agent.resolve()),
+                "status": "accepted",
+                "directory_sha256": target_directory_sha256,
+            }
         ]
     }
     learners_path = output_dir / "learners.json"
@@ -64,7 +79,7 @@ def make_schedule(
         "gamesPerChallenger": games_per_challenger,
         "seatBalanced": True,
         "challengers": [row["name"] for row in packages],
-        "targetAgent": {"path": str(target_agent.resolve()), "directorySha256": directory_sha256(target_agent)},
+        "targetAgent": {"path": str(target_agent.resolve()), "directorySha256": target_directory_sha256},
         "schedule": {"path": str(schedule.resolve()), "sha256": sha256_file(schedule), "games": len(rows)},
         "learners": str(learners_path.resolve()),
         "opponents": str(opponents_path.resolve()),

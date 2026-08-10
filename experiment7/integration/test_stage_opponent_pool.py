@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import io
+import json
+import py_compile
 import sys
 import tarfile
 import tempfile
 import unittest
 import zipfile
 from pathlib import Path
+from unittest import mock
 
 import numpy as np
 
@@ -21,11 +24,13 @@ from common import (  # noqa: E402
     sha256_file,
     write_json,
 )
+from arena import make_schedule  # noqa: E402
 from stage_opponent_pool import (  # noqa: E402
     TEAM_ALLOWED_FILES,
     _archive_path,
     copy_public_candidate,
     copy_team_submission,
+    prepare_arena_runtime,
     rebase_packages,
     static_scan_agent,
     validate_safe_npz,
@@ -155,6 +160,202 @@ class StageOpponentPoolTest(unittest.TestCase):
             receipt = rebase_packages(root, output)
             self.assertEqual(receipt["agents"], 1)
             self.assertTrue(output.is_file())
+            self.assertEqual(
+                json.loads(output.read_text())["packages"][0]["directorySha256"],
+                directory_sha256(agent),
+            )
+
+    def test_prepare_arena_runtime_rejects_source_hash_mismatch_before_output(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            learner = root / "frozen-learner"
+            opponent = root / "frozen-opponent"
+            for agent in (learner, opponent):
+                agent.mkdir()
+                (agent / "main.py").write_text("def agent(obs):\n    return []\n", encoding="utf-8")
+                write_deck(agent / "deck.csv")
+            packages = root / "packages.json"
+            opponents = root / "opponents.json"
+            write_json(
+                packages,
+                {
+                    "packages": [
+                        {
+                            "name": "learner",
+                            "agentDir": str(learner),
+                            "directorySha256": "0" * 64,
+                        }
+                    ]
+                },
+            )
+            write_json(
+                opponents,
+                {
+                    "agents": [
+                        {
+                            "name": "opponent",
+                            "agent_dir": str(opponent),
+                            "status": "accepted",
+                            "directorySha256": directory_sha256(opponent),
+                        }
+                    ]
+                },
+            )
+            arena_stage = root / "arena-stage"
+            with self.assertRaisesRegex(Experiment7Error, "source hash mismatch"):
+                prepare_arena_runtime(packages, opponents, arena_stage, 2)
+            self.assertFalse(arena_stage.exists())
+
+    def test_prepare_arena_runtime_outputs_independent_writable_shards(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            learner = root / "frozen-learner"
+            opponent = root / "frozen-opponent"
+            for agent in (learner, opponent):
+                agent.mkdir()
+                (agent / "main.py").write_text("def agent(obs):\n    return []\n", encoding="utf-8")
+                write_deck(agent / "deck.csv")
+            learner_hash = directory_sha256(learner)
+            opponent_hash = directory_sha256(opponent)
+            packages = root / "packages.json"
+            opponents = root / "opponents.json"
+            write_json(
+                packages,
+                {
+                    "packages": [
+                        {
+                            "name": "learner",
+                            "agentDir": str(learner),
+                            "directorySha256": learner_hash,
+                        }
+                    ]
+                },
+            )
+            write_json(
+                opponents,
+                {
+                    "agents": [
+                        {
+                            "name": "opponent",
+                            "agent_dir": str(opponent),
+                            "status": "accepted",
+                            "directory_sha256": opponent_hash,
+                        }
+                    ]
+                },
+            )
+            arena_stage = root / "arena-stage"
+            receipt = prepare_arena_runtime(packages, opponents, arena_stage, 2)
+            self.assertEqual(receipt["shardCount"], 2)
+            for shard_index, shard in enumerate(receipt["shards"]):
+                expected_root = (arena_stage / f"runtime-shard-{shard_index}").resolve()
+                self.assertEqual(Path(shard["runtimeRoot"]), expected_root)
+                learners_payload = json.loads(Path(shard["learners"]["path"]).read_text())
+                opponents_payload = json.loads(Path(shard["opponents"]["path"]).read_text())
+                learner_row = learners_payload["agents"][0]
+                opponent_row = opponents_payload["agents"][0]
+                self.assertEqual(
+                    Path(learner_row["agent_dir"]), expected_root / "learners" / "learner"
+                )
+                self.assertEqual(
+                    Path(opponent_row["agent_dir"]), expected_root / "opponents" / "opponent"
+                )
+                self.assertEqual(learner_row["source_directory_sha256"], learner_hash)
+                self.assertEqual(opponent_row["source_directory_sha256"], opponent_hash)
+                self.assertTrue((Path(learner_row["agent_dir"]) / "main.py").stat().st_mode & 0o200)
+                py_compile.compile(
+                    str(Path(learner_row["agent_dir"]) / "main.py"), doraise=True
+                )
+                self.assertTrue((Path(learner_row["agent_dir"]) / "__pycache__").is_dir())
+                self.assertFalse((learner / "__pycache__").exists())
+            self.assertNotEqual(
+                receipt["shards"][0]["runtimeRoot"], receipt["shards"][1]["runtimeRoot"]
+            )
+            with self.assertRaisesRegex(Experiment7Error, "refusing overwrite"):
+                prepare_arena_runtime(packages, opponents, arena_stage, 2)
+
+    def test_prepare_arena_runtime_rejects_name_escape_and_links(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            learner = root / "frozen-learner"
+            opponent = root / "frozen-opponent"
+            for agent in (learner, opponent):
+                agent.mkdir()
+                (agent / "main.py").write_text("def agent(obs):\n    return []\n", encoding="utf-8")
+                write_deck(agent / "deck.csv")
+            packages = root / "packages.json"
+            opponents = root / "opponents.json"
+            write_json(
+                packages,
+                {
+                    "packages": [
+                        {
+                            "name": "../escape",
+                            "agentDir": str(learner),
+                            "directorySha256": directory_sha256(learner),
+                        }
+                    ]
+                },
+            )
+            write_json(
+                opponents,
+                {
+                    "agents": [
+                        {
+                            "name": "opponent",
+                            "agent_dir": str(opponent),
+                            "directorySha256": directory_sha256(opponent),
+                        }
+                    ]
+                },
+            )
+            with self.assertRaisesRegex(Experiment7Error, "unsafe arena agent name"):
+                prepare_arena_runtime(packages, opponents, root / "arena-stage", 1)
+
+            write_json(
+                packages,
+                {
+                    "packages": [
+                        {
+                            "name": "learner",
+                            "agentDir": str(learner),
+                            "directorySha256": directory_sha256(learner),
+                        }
+                    ]
+                },
+            )
+            with mock.patch("stage_opponent_pool._is_link", side_effect=lambda path: path == learner):
+                with self.assertRaisesRegex(Experiment7Error, "link rejected"):
+                    prepare_arena_runtime(packages, opponents, root / "arena-stage", 1)
+
+    def test_arena_opponents_manifest_carries_frozen_directory_hash(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            learner = root / "learner"
+            target = root / "target"
+            for agent in (learner, target):
+                agent.mkdir()
+                (agent / "main.py").write_text("def agent(obs):\n    return []\n", encoding="utf-8")
+                write_deck(agent / "deck.csv")
+            packages = root / "packages.json"
+            write_json(
+                packages,
+                {
+                    "packages": [
+                        {
+                            "name": "learner",
+                            "agentDir": str(learner),
+                            "directorySha256": directory_sha256(learner),
+                        }
+                    ]
+                },
+            )
+            output = root / "schedule"
+            make_schedule(packages, target, output, 2, 10, "smoke", None)
+            payload = json.loads((output / "opponents.json").read_text())
+            self.assertEqual(
+                payload["agents"][0]["directory_sha256"], directory_sha256(target)
+            )
 
 
 if __name__ == "__main__":
