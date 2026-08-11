@@ -487,6 +487,10 @@ def main() -> int:
         "updatedAt": now().isoformat(),
         "roundId": round_id,
         "games": len(rows),
+        "engineSeedControlled": all(
+            row.get("engine_seed_controlled", "").lower() == "true" for row in rows
+        ),
+        "seedPolicy": "fixed paired-seat Python agent RNG seeds; native engine deal RNG is uncontrolled",
         "frozenAgentCount": len(frozen),
         "chains": report,
         "previousRoundId": previous.get("roundId") if previous_compatible else None,
