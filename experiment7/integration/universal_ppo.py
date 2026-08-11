@@ -373,7 +373,10 @@ def ppo_loss(
     value_coefficient: float = 0.5,
     entropy_coefficient: float = 0.01,
     teacher_anchor_coefficient: float = 0.02,
+    seat1_weight: float = 1.0,
 ) -> tuple[torch.Tensor, dict[str, float]]:
+    if not math.isfinite(seat1_weight) or seat1_weight <= 0.0:
+        raise ValueError("seat1_weight must be finite and positive")
     # PPO ratios must compare the exact behavior distribution.  Keep dropout
     # disabled while retaining autograd; otherwise identical weights can start
     # an update with ratio != 1 solely because of a new dropout mask.
@@ -390,23 +393,33 @@ def ppo_loss(
     old_values = tensor("behavior_value")
     advantages = tensor("advantage")
     returns = tensor("return")
+    sample_weights = torch.tensor(
+        [seat1_weight if int(row.get("player", 0)) == 1 else 1.0 for row in rows],
+        dtype=values.dtype,
+        device=values.device,
+    )
+    weight_total = sample_weights.sum().clamp_min(torch.finfo(values.dtype).eps)
+
+    def weighted_mean(items: torch.Tensor) -> torch.Tensor:
+        return (items * sample_weights).sum() / weight_total
+
     log_ratio = (new_log_probability - old_log_probability).clamp(-20.0, 20.0)
     ratio = log_ratio.exp()
-    policy = -torch.minimum(
+    policy = -weighted_mean(torch.minimum(
         ratio * advantages,
         ratio.clamp(1.0 - clip_ratio, 1.0 + clip_ratio) * advantages,
-    ).mean()
+    ))
     clipped_values = old_values + (values - old_values).clamp(-value_clip, value_clip)
-    value = 0.5 * torch.maximum(
+    value = 0.5 * weighted_mean(torch.maximum(
         (values - returns).square(), (clipped_values - returns).square()
-    ).mean()
+    ))
     teacher = torch.tensor(
         [float(row.get("teacher_log_probability", row["behavior_log_probability"])) for row in rows],
         dtype=values.dtype,
         device=values.device,
     )
-    teacher_anchor = (new_log_probability - teacher).square().mean()
-    entropy_mean = entropy.mean()
+    teacher_anchor = weighted_mean((new_log_probability - teacher).square())
+    entropy_mean = weighted_mean(entropy)
     loss = (
         policy
         + value_coefficient * value
@@ -414,8 +427,10 @@ def ppo_loss(
         - entropy_coefficient * entropy_mean
     )
     with torch.no_grad():
-        approximate_kl = ((ratio - 1.0) - log_ratio).mean()
-        clip_fraction = ((ratio - 1.0).abs() > clip_ratio).to(values.dtype).mean()
+        approximate_kl = weighted_mean((ratio - 1.0) - log_ratio)
+        clip_fraction = weighted_mean(
+            ((ratio - 1.0).abs() > clip_ratio).to(values.dtype)
+        )
     return loss, {
         "policyLoss": float(policy.detach()),
         "valueLoss": float(value.detach()),
@@ -423,7 +438,8 @@ def ppo_loss(
         "teacherAnchor": float(teacher_anchor.detach()),
         "approximateKl": float(approximate_kl.detach()),
         "clipFraction": float(clip_fraction.detach()),
-        "ratioMean": float(ratio.mean().detach()),
+        "ratioMean": float(weighted_mean(ratio).detach()),
+        "seat1Weight": float(seat1_weight),
     }
 
 

@@ -12,6 +12,7 @@ if str(INTEGRATION) not in sys.path:
     sys.path.insert(0, str(INTEGRATION))
 
 from async_ppo_control import add_chain, initialize, publish_snapshot, read_json  # noqa: E402
+from run_async_ppo_learner import select_minimum_batch  # noqa: E402
 
 
 def write_json(path: Path, payload: dict) -> None:
@@ -20,6 +21,16 @@ def write_json(path: Path, payload: dict) -> None:
 
 
 class AsyncPpoControlTest(unittest.TestCase):
+    def test_minimum_batch_waits_until_decision_threshold(self) -> None:
+        paths = [Path("one"), Path("two")]
+        summaries = [{"decisions": 100}, {"decisions": 200}]
+        selected, _, decisions = select_minimum_batch(paths, summaries, 400)
+        self.assertEqual(selected, [])
+        self.assertEqual(decisions, 300)
+        selected, _, decisions = select_minimum_batch(paths, summaries, 250)
+        self.assertEqual(selected, paths)
+        self.assertEqual(decisions, 300)
+
     def test_four_live_snapshots_are_added_to_canonical_pool(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

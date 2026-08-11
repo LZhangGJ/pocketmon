@@ -182,11 +182,14 @@ def main() -> None:
     parser.add_argument("--value-coefficient", type=float, default=0.5)
     parser.add_argument("--entropy-coefficient", type=float, default=0.01)
     parser.add_argument("--teacher-anchor-coefficient", type=float, default=0.02)
+    parser.add_argument("--seat1-weight", type=float, default=1.0)
     parser.add_argument("--gradient-clip-norm", type=float, default=0.5)
     parser.add_argument("--target-kl", type=float, default=0.03)
     parser.add_argument("--max-initial-clip-fraction", type=float, default=0.5)
     parser.add_argument("--device", default="cuda:0")
     args = parser.parse_args()
+    if not math.isfinite(args.seat1_weight) or args.seat1_weight <= 0.0:
+        raise ValueError("seat1 weight must be finite and positive")
     if args.output.exists() or args.metrics_output.exists():
         raise FileExistsError("refusing to overwrite Universal PPO outputs")
     repository, repository_commit = require_clean_repository()
@@ -232,6 +235,7 @@ def main() -> None:
                     value_coefficient=args.value_coefficient,
                     entropy_coefficient=args.entropy_coefficient,
                     teacher_anchor_coefficient=args.teacher_anchor_coefficient,
+                    seat1_weight=args.seat1_weight,
                 )
                 count = len(chosen)
                 examples += count
@@ -275,6 +279,7 @@ def main() -> None:
                 value_coefficient=args.value_coefficient,
                 entropy_coefficient=args.entropy_coefficient,
                 teacher_anchor_coefficient=args.teacher_anchor_coefficient,
+                seat1_weight=args.seat1_weight,
             )
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), args.gradient_clip_norm)
@@ -306,6 +311,10 @@ def main() -> None:
         "initialPolicyShift": initial_policy_shift,
         "epochs": epoch_rows,
         "stoppedForKl": stopped_for_kl,
+        "trainingConfig": {
+            "teacherAnchorCoefficient": args.teacher_anchor_coefficient,
+            "seat1Weight": args.seat1_weight,
+        },
         "seconds": time.perf_counter() - started,
     }
     save_checkpoint(args.output, model, metadata)

@@ -98,6 +98,35 @@ class UniversalPpoTest(unittest.TestCase):
         self.assertTrue(any(parameter.grad is not None for parameter in self.model.parameters()))
         self.assertAlmostEqual(metrics["ratioMean"], 1.0, places=5)
 
+    def test_ppo_loss_can_upweight_second_seat(self) -> None:
+        action, log_probability, value, entropy = sample_action(
+            self.model.eval(), row(), self.device
+        )
+        rows = []
+        for player, advantage in ((0, 1.0), (1, -1.0)):
+            item = row(action)
+            item.update(
+                {
+                    "episode_id": f"seat-{player}",
+                    "player": player,
+                    "action_step": 1,
+                    "behavior_log_probability": log_probability,
+                    "teacher_log_probability": log_probability,
+                    "behavior_value": value,
+                    "behavior_entropy": entropy,
+                    "advantage": advantage,
+                    "return": value,
+                }
+            )
+            rows.append(item)
+        _, balanced = ppo_loss(self.model, collate_rows(rows, self.device))
+        _, weighted = ppo_loss(
+            self.model, collate_rows(rows, self.device), seat1_weight=2.0
+        )
+        self.assertAlmostEqual(balanced["policyLoss"], 0.0, places=5)
+        self.assertAlmostEqual(weighted["policyLoss"], 1.0 / 3.0, places=5)
+        self.assertEqual(weighted["seat1Weight"], 2.0)
+
     def test_repository_validation_does_not_depend_on_process_cwd(self) -> None:
         previous = Path.cwd()
         try:

@@ -65,6 +65,21 @@ def eligible_shards(
     return [row[2] for row in candidates], [row[3] for row in candidates]
 
 
+def select_minimum_batch(
+    shards: list[Path], summaries: list[dict[str, Any]], min_decisions: int
+) -> tuple[list[Path], list[dict[str, Any]], int]:
+    selected_paths: list[Path] = []
+    selected_summaries: list[dict[str, Any]] = []
+    decision_total = 0
+    for path, summary in zip(shards, summaries, strict=True):
+        selected_paths.append(path)
+        selected_summaries.append(summary)
+        decision_total += int(summary["decisions"])
+        if decision_total >= min_decisions:
+            return selected_paths, selected_summaries, decision_total
+    return [], [], decision_total
+
+
 def deploy(
     *,
     args: argparse.Namespace,
@@ -139,6 +154,8 @@ def main() -> None:
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--max-behavior-lag", type=int, default=2)
     parser.add_argument("--min-decisions", type=int, default=1)
+    parser.add_argument("--teacher-anchor-coefficient", type=float, default=0.02)
+    parser.add_argument("--seat1-weight", type=float, default=1.0)
     parser.add_argument("--poll-seconds", type=float, default=10.0)
     parser.add_argument("--bootstrap-deployment", action="store_true")
     args = parser.parse_args()
@@ -177,15 +194,9 @@ def main() -> None:
             league, args.chain, args.buffer_root, ledger, args.max_behavior_lag
         )
         atomic_write_json(ledger_path, ledger)
-        decision_total = 0
-        selected_paths = []
-        selected_summaries = []
-        for path, summary in zip(shards, summaries):
-            selected_paths.append(path)
-            selected_summaries.append(summary)
-            decision_total += int(summary["decisions"])
-            if decision_total >= args.min_decisions:
-                break
+        selected_paths, selected_summaries, decision_total = select_minimum_batch(
+            shards, summaries, args.min_decisions
+        )
         if not selected_paths:
             time.sleep(args.poll_seconds)
             continue
@@ -249,6 +260,10 @@ def main() -> None:
             "1e-5",
             "--target-kl",
             "0.03",
+            "--teacher-anchor-coefficient",
+            str(args.teacher_anchor_coefficient),
+            "--seat1-weight",
+            str(args.seat1_weight),
             "--max-initial-clip-fraction",
             "0.5",
             "--device",
