@@ -4,6 +4,8 @@ import os
 import sys
 import tempfile
 import unittest
+import gzip
+import json
 from pathlib import Path
 
 import numpy as np
@@ -25,7 +27,10 @@ from universal_ppo import (  # noqa: E402
     ppo_loss,
     sample_action,
 )
-from train_universal_ppo import require_clean_repository  # noqa: E402
+from train_universal_ppo import load_rollouts, require_clean_repository  # noqa: E402
+from collect_universal_ppo_rollouts import canonical_archetype  # noqa: E402
+from common import Experiment7Error  # noqa: E402
+from universal_ppo import ROLLOUT_FORMAT  # noqa: E402
 
 
 def row(action: list[int] | None = None) -> dict:
@@ -103,6 +108,57 @@ class UniversalPpoTest(unittest.TestCase):
             os.chdir(previous)
         self.assertTrue((repository / ".git").exists() or (repository / ".git").is_file())
         self.assertEqual(len(commit), 40)
+
+    def test_canonical_archetype_collapses_b08_aliases(self) -> None:
+        self.assertEqual(canonical_archetype({"archetype": "alakazam"}), "A03")
+        self.assertEqual(canonical_archetype({"archetype": "dragapult"}), "A06")
+        self.assertEqual(canonical_archetype({"archetype": "A08"}), "A08")
+        self.assertEqual(
+            canonical_archetype({"archetype": "A03", "canonical_archetype": "A07"}),
+            "A07",
+        )
+
+    def test_async_rollouts_accept_bounded_staleness(self) -> None:
+        item = row([0])
+        item.update(
+            {
+                "rollout_format": ROLLOUT_FORMAT,
+                "episode_id": "async-episode",
+                "player": 0,
+                "action_step": 1,
+                "behavior_checkpoint_sha256": "old-sha",
+                "behavior_generation": 8,
+                "teacher_checkpoint_sha256": "teacher-sha",
+                "behavior_log_probability": 0.0,
+                "teacher_log_probability": 0.0,
+                "behavior_value": 0.0,
+                "behavior_entropy": 0.0,
+                "reward": 1.0,
+                "outcome": 1.0,
+            }
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "rollout.jsonl.gz"
+            with gzip.open(path, "wt", encoding="utf-8") as handle:
+                handle.write(json.dumps(item) + "\n")
+            rows, _ = load_rollouts(
+                [path],
+                "current-sha",
+                "teacher-sha",
+                allowed_behavior_generations={"old-sha": 8},
+                current_generation=10,
+                max_behavior_lag=2,
+            )
+            self.assertEqual(len(rows), 1)
+            with self.assertRaises(Experiment7Error):
+                load_rollouts(
+                    [path],
+                    "current-sha",
+                    "teacher-sha",
+                    allowed_behavior_generations={"old-sha": 8},
+                    current_generation=11,
+                    max_behavior_lag=2,
+                )
 
 
 if __name__ == "__main__":

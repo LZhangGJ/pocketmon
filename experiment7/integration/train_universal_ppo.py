@@ -54,7 +54,13 @@ def require_clean_repository(script_path: Path = Path(__file__)) -> tuple[Path, 
 
 
 def load_rollouts(
-    paths: list[Path], behavior_sha256: str, teacher_sha256: str
+    paths: list[Path],
+    behavior_sha256: str,
+    teacher_sha256: str,
+    *,
+    allowed_behavior_generations: dict[str, int] | None = None,
+    current_generation: int | None = None,
+    max_behavior_lag: int = 0,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     rows: list[dict[str, Any]] = []
     audits = []
@@ -62,6 +68,8 @@ def load_rollouts(
     for path in paths:
         count = 0
         episodes: set[str] = set()
+        behavior_counts: Counter[str] = Counter()
+        behavior_generations: Counter[int] = Counter()
         with gzip.open(path, "rt", encoding="utf-8") as handle:
             for line in handle:
                 if not line.strip():
@@ -69,8 +77,23 @@ def load_rollouts(
                 row = json.loads(line)
                 if row.get("rollout_format") != ROLLOUT_FORMAT:
                     raise Experiment7Error(f"unsupported rollout format in {path}")
-                if row.get("behavior_checkpoint_sha256") != behavior_sha256:
-                    raise Experiment7Error("rollout behavior checkpoint mismatch")
+                row_behavior_sha = str(row.get("behavior_checkpoint_sha256", ""))
+                if allowed_behavior_generations is None:
+                    if row_behavior_sha != behavior_sha256:
+                        raise Experiment7Error("rollout behavior checkpoint mismatch")
+                else:
+                    if current_generation is None:
+                        raise Experiment7Error("current generation is required for asynchronous rollouts")
+                    if row_behavior_sha not in allowed_behavior_generations:
+                        raise Experiment7Error("rollout behavior checkpoint is not in the snapshot manifest")
+                    behavior_generation = int(row.get("behavior_generation", -1))
+                    if behavior_generation != allowed_behavior_generations[row_behavior_sha]:
+                        raise Experiment7Error("rollout behavior generation mismatch")
+                    lag = current_generation - behavior_generation
+                    if lag < 0 or lag > max_behavior_lag:
+                        raise Experiment7Error(
+                            f"rollout behavior lag outside [0, {max_behavior_lag}]: {lag}"
+                        )
                 if row.get("teacher_checkpoint_sha256") != teacher_sha256:
                     raise Experiment7Error("rollout teacher checkpoint mismatch")
                 key = (str(row["episode_id"]), int(row["player"]), int(row["action_step"]))
@@ -98,7 +121,21 @@ def load_rollouts(
                 rows.append(row)
                 count += 1
                 episodes.add(str(row["episode_id"]))
-        audits.append({"path": str(path.resolve()), "sha256": sha256_file(path), "decisions": count, "episodes": len(episodes)})
+                behavior_counts[row_behavior_sha] += 1
+                if "behavior_generation" in row:
+                    behavior_generations[int(row["behavior_generation"])] += 1
+        audits.append(
+            {
+                "path": str(path.resolve()),
+                "sha256": sha256_file(path),
+                "decisions": count,
+                "episodes": len(episodes),
+                "behaviorCheckpoints": dict(behavior_counts),
+                "behaviorGenerations": {
+                    str(key): value for key, value in sorted(behavior_generations.items())
+                },
+            }
+        )
     if not rows:
         raise Experiment7Error("no Universal PPO rollout rows")
     return rows, audits
@@ -129,6 +166,9 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--metrics-output", type=Path, required=True)
     parser.add_argument("--generation", type=int, required=True)
+    parser.add_argument("--allowed-behavior-manifest", type=Path)
+    parser.add_argument("--current-generation", type=int)
+    parser.add_argument("--max-behavior-lag", type=int, default=0)
     parser.add_argument("--role", choices=("generalist", "hard_exploiter", "diversity", "conservative"), required=True)
     parser.add_argument("--seed", type=int, required=True)
     parser.add_argument("--ppo-epochs", type=int, default=2)
@@ -144,6 +184,7 @@ def main() -> None:
     parser.add_argument("--teacher-anchor-coefficient", type=float, default=0.02)
     parser.add_argument("--gradient-clip-norm", type=float, default=0.5)
     parser.add_argument("--target-kl", type=float, default=0.03)
+    parser.add_argument("--max-initial-clip-fraction", type=float, default=0.5)
     parser.add_argument("--device", default="cuda:0")
     args = parser.parse_args()
     if args.output.exists() or args.metrics_output.exists():
@@ -156,8 +197,61 @@ def main() -> None:
     model, parent = load_universal_checkpoint(args.initialize_from, args.reference_root, device)
     behavior_sha = sha256_file(args.initialize_from)
     teacher_sha = sha256_file(args.teacher)
-    rows, audits = load_rollouts(args.rollouts, behavior_sha, teacher_sha)
+    allowed_behavior_generations = None
+    if args.allowed_behavior_manifest is not None:
+        payload = json.loads(args.allowed_behavior_manifest.read_text(encoding="utf-8"))
+        snapshots = payload.get("snapshots", []) if isinstance(payload, dict) else []
+        allowed_behavior_generations = {
+            str(row["sha256"]): int(row["generation"]) for row in snapshots
+        }
+        if not allowed_behavior_generations:
+            raise Experiment7Error("allowed behavior manifest has no snapshots")
+        if args.current_generation is None or args.max_behavior_lag < 0:
+            raise Experiment7Error("invalid asynchronous rollout lag configuration")
+    rows, audits = load_rollouts(
+        args.rollouts,
+        behavior_sha,
+        teacher_sha,
+        allowed_behavior_generations=allowed_behavior_generations,
+        current_generation=args.current_generation,
+        max_behavior_lag=args.max_behavior_lag,
+    )
     rows = normalize_advantages(compute_gae(rows, args.gamma, args.gae_lambda))
+    initial_policy_shift = None
+    if allowed_behavior_generations is not None:
+        totals: Counter[str] = Counter()
+        examples = 0
+        with torch.inference_mode():
+            for begin in range(0, len(rows), args.batch_size):
+                chosen = rows[begin : begin + args.batch_size]
+                _, metrics = ppo_loss(
+                    model,
+                    collate_rows(chosen, device),
+                    clip_ratio=args.clip_ratio,
+                    value_clip=args.value_clip,
+                    value_coefficient=args.value_coefficient,
+                    entropy_coefficient=args.entropy_coefficient,
+                    teacher_anchor_coefficient=args.teacher_anchor_coefficient,
+                )
+                count = len(chosen)
+                examples += count
+                for key, value in metrics.items():
+                    totals[key] += float(value) * count
+        initial_policy_shift = {
+            key: value / max(examples, 1) for key, value in totals.items()
+        }
+        initial_policy_shift["decisions"] = examples
+        if initial_policy_shift["approximateKl"] > args.target_kl:
+            raise Experiment7Error(
+                "asynchronous rollout rejected by initial KL gate: "
+                f"{initial_policy_shift['approximateKl']:.6f} > {args.target_kl:.6f}"
+            )
+        if initial_policy_shift["clipFraction"] > args.max_initial_clip_fraction:
+            raise Experiment7Error(
+                "asynchronous rollout rejected by initial clip-fraction gate: "
+                f"{initial_policy_shift['clipFraction']:.6f} > "
+                f"{args.max_initial_clip_fraction:.6f}"
+            )
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=args.learning_rate, weight_decay=args.weight_decay
     )
@@ -209,6 +303,7 @@ def main() -> None:
         "teacher": {"path": str(args.teacher.resolve()), "sha256": teacher_sha},
         "parentMetadata": parent.get("metadata", {}),
         "rollouts": audits,
+        "initialPolicyShift": initial_policy_shift,
         "epochs": epoch_rows,
         "stoppedForKl": stopped_for_kl,
         "seconds": time.perf_counter() - started,

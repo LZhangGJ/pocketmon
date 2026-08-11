@@ -28,6 +28,24 @@ from universal_ppo import (
 )
 
 
+CANONICAL_ARCHETYPE_ALIASES = {
+    "alakazam": "A03",
+    "grimmsnarl_froslass_munkidori": "A02",
+    "dragapult": "A06",
+    "mega_lucario": "LUCARIO",
+    "mega_lucario_ex": "LUCARIO",
+}
+
+
+def canonical_archetype(row: dict[str, Any]) -> str:
+    """Return the B08 sampling bucket, collapsing known alias tags."""
+    explicit = row.get("canonical_archetype")
+    if explicit:
+        return str(explicit).upper()
+    archetype = str(row.get("archetype", "unknown"))
+    return CANONICAL_ARCHETYPE_ALIASES.get(archetype.lower(), archetype.upper())
+
+
 def read_deck(path: Path) -> list[int]:
     deck = [int(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
     if len(deck) != 60:
@@ -62,7 +80,7 @@ def choose_opponent(pool: list[dict[str, Any]], role: str, rng: random.Random) -
     if role == "diversity":
         by_archetype: dict[str, list[dict[str, Any]]] = defaultdict(list)
         for row in pool:
-            by_archetype[str(row.get("archetype", "unknown"))].append(row)
+            by_archetype[canonical_archetype(row)].append(row)
         return rng.choice(by_archetype[rng.choice(sorted(by_archetype))])
     if role == "hard_exploiter":
         weights = [3.0 if row.get("skill_tier") == "hard" else 1.0 for row in pool]
@@ -96,6 +114,8 @@ def play_episode(
     episode: int,
     episode_id: str,
     checkpoint_sha256: str,
+    behavior_generation: int,
+    behavior_snapshot_id: str,
     teacher_sha256: str,
     device: torch.device,
     temperature: float,
@@ -170,6 +190,8 @@ def play_episode(
                                 "behavior_value": value,
                                 "behavior_entropy": entropy,
                                 "behavior_checkpoint_sha256": checkpoint_sha256,
+                                "behavior_generation": behavior_generation,
+                                "behavior_snapshot_id": behavior_snapshot_id,
                                 "teacher_checkpoint_sha256": teacher_sha256,
                                 "temperature": temperature,
                                 "opponent": opponent_name,
@@ -213,6 +235,8 @@ def main() -> None:
     parser.add_argument("--max-decisions", type=int, default=5000)
     parser.add_argument("--seed", type=int, required=True)
     parser.add_argument("--run-id", required=True)
+    parser.add_argument("--behavior-generation", type=int, default=0)
+    parser.add_argument("--behavior-snapshot-id", default="legacy")
     parser.add_argument("--role", choices=("generalist", "hard_exploiter", "diversity", "conservative"), required=True)
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--output", type=Path, required=True)
@@ -223,6 +247,8 @@ def main() -> None:
         raise ValueError("invalid rollout episode configuration")
     if not math.isfinite(args.temperature) or args.temperature <= 0:
         raise ValueError("temperature must be positive and finite")
+    if args.behavior_generation < 0:
+        raise ValueError("behavior generation must be non-negative")
     random.seed(args.seed)
     torch.manual_seed(args.seed)
     device = torch.device(args.device)
@@ -255,6 +281,8 @@ def main() -> None:
                 episode=episode,
                 episode_id=f"{args.run_id}-{episode:06d}",
                 checkpoint_sha256=behavior_sha,
+                behavior_generation=args.behavior_generation,
+                behavior_snapshot_id=args.behavior_snapshot_id,
                 teacher_sha256=teacher_sha,
                 device=device,
                 temperature=args.temperature,
@@ -281,6 +309,8 @@ def main() -> None:
         **dict(counters),
         "opponents": dict(opponents),
         "behaviorCheckpoint": {"path": str(args.checkpoint.resolve()), "sha256": behavior_sha},
+        "behaviorGeneration": args.behavior_generation,
+        "behaviorSnapshotId": args.behavior_snapshot_id,
         "teacherCheckpoint": {"path": str(args.teacher.resolve()), "sha256": teacher_sha},
         "output": {"path": str(args.output.resolve()), "sha256": sha256_file(args.output)},
         "engineSeedControlled": False,

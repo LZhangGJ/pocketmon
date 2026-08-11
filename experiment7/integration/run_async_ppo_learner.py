@@ -1,0 +1,289 @@
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import subprocess
+import time
+from pathlib import Path
+from typing import Any
+
+from async_ppo_control import (
+    atomic_write_json,
+    publish_snapshot,
+    read_json,
+    sha256_file,
+    utc_now,
+)
+
+
+def read_ledger(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {"schemaVersion": 1, "consumed": {}, "rejected": {}}
+    return read_json(path)
+
+
+def eligible_shards(
+    league: dict[str, Any],
+    chain_name: str,
+    buffer_root: Path,
+    ledger: dict[str, Any],
+    max_lag: int,
+) -> tuple[list[Path], list[dict[str, Any]]]:
+    chain = league["chains"][chain_name]
+    current_generation = int(chain["current"]["generation"])
+    history = [*chain.get("history", []), chain["current"]]
+    allowed = {str(row["sha256"]): int(row["generation"]) for row in history}
+    ignored = set(ledger.get("consumed", {})) | set(ledger.get("rejected", {}))
+    candidates = []
+    for summary_path in (buffer_root / "ready" / chain_name).glob("*.jsonl.gz.summary.json"):
+        summary = read_json(summary_path)
+        rollout_path = Path(summary["output"]["path"])
+        key = str(rollout_path.resolve())
+        if key in ignored or not rollout_path.is_file():
+            continue
+        behavior_sha = str(summary["behaviorCheckpoint"]["sha256"])
+        behavior_generation = int(summary.get("behaviorGeneration", -1))
+        lag = current_generation - behavior_generation
+        if behavior_sha not in allowed or allowed[behavior_sha] != behavior_generation:
+            continue
+        if lag < 0 or lag > max_lag:
+            ledger.setdefault("rejected", {})[key] = {
+                "reason": "behavior_lag",
+                "lag": lag,
+                "recordedAt": utc_now(),
+            }
+            continue
+        if sha256_file(rollout_path) != str(summary["output"]["sha256"]):
+            ledger.setdefault("rejected", {})[key] = {
+                "reason": "sha256_mismatch",
+                "recordedAt": utc_now(),
+            }
+            continue
+        candidates.append((behavior_generation, summary_path.stat().st_mtime_ns, rollout_path, summary))
+    candidates.sort(key=lambda row: (row[0], row[1]), reverse=True)
+    return [row[2] for row in candidates], [row[3] for row in candidates]
+
+
+def deploy(
+    *,
+    args: argparse.Namespace,
+    league: dict[str, Any],
+    chain_name: str,
+    generation: int,
+    checkpoint: Path,
+    generation_root: Path,
+    env: dict[str, str],
+) -> Path:
+    chain = league["chains"][chain_name]
+    deployment = generation_root / "deployment"
+    portable = deployment / "universal_ppo.npz"
+    deck_receipt = deployment / "deck.json"
+    packages = deployment / "packages"
+    deployment.mkdir(parents=True, exist_ok=True)
+    atomic_write_json(
+        deck_receipt,
+        {
+            "schemaVersion": 1,
+            "selected": [
+                {
+                    "name": chain["deckName"],
+                    "archetypeId": chain["archetypeId"],
+                    "archetypeLabel": chain["archetypeLabel"],
+                    "deckPath": chain["deckPath"],
+                    "deckSha256": chain["deckSha256"],
+                }
+            ],
+        },
+    )
+    tool = args.worktree / "experiment7/integration/export_and_package.py"
+    subprocess.run(
+        [args.python, str(tool), "export", "--checkpoint", str(checkpoint), "--output", str(portable)],
+        check=True,
+        env=env,
+        cwd=args.worktree,
+    )
+    subprocess.run(
+        [
+            args.python,
+            str(tool),
+            "package-universal",
+            "--reference-root",
+            str(Path(league["referenceRoot"])),
+            "--sources",
+            str(Path(league["sources"])),
+            "--decks",
+            str(deck_receipt),
+            "--portable",
+            str(portable),
+            "--output-root",
+            str(packages),
+            "--name-prefix",
+            f"live_{chain_name}_g{generation:06d}",
+        ],
+        check=True,
+        env=env,
+        cwd=args.worktree,
+    )
+    return packages / "packages.json"
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Continuously train and publish one asynchronous PPO chain")
+    parser.add_argument("--league", type=Path, required=True)
+    parser.add_argument("--chain", required=True)
+    parser.add_argument("--worktree", type=Path, required=True)
+    parser.add_argument("--run-root", type=Path, required=True)
+    parser.add_argument("--buffer-root", type=Path, required=True)
+    parser.add_argument("--python", default="python3")
+    parser.add_argument("--device", default="cuda:0")
+    parser.add_argument("--max-behavior-lag", type=int, default=2)
+    parser.add_argument("--min-decisions", type=int, default=1)
+    parser.add_argument("--poll-seconds", type=float, default=10.0)
+    parser.add_argument("--bootstrap-deployment", action="store_true")
+    args = parser.parse_args()
+    ledger_path = args.run_root / args.chain / "rollout-ledger.json"
+    env = dict(os.environ)
+    env.update({"PYTHONNOUSERSITE": "1", "OMP_NUM_THREADS": "1", "MKL_NUM_THREADS": "1"})
+    while True:
+        league = read_json(args.league)
+        if args.chain not in league["chains"]:
+            raise KeyError(args.chain)
+        chain = league["chains"][args.chain]
+        current = chain["current"]
+        if args.bootstrap_deployment and not current.get("packageManifest"):
+            generation = int(current["generation"])
+            root = args.run_root / args.chain / f"generation-{generation:06d}-bootstrap"
+            manifest = deploy(
+                args=args,
+                league=league,
+                chain_name=args.chain,
+                generation=generation,
+                checkpoint=Path(current["checkpoint"]),
+                generation_root=root,
+                env=env,
+            )
+            publish_snapshot(
+                args.league,
+                args.chain,
+                generation,
+                Path(current["checkpoint"]),
+                manifest,
+            )
+            args.bootstrap_deployment = False
+            continue
+        ledger = read_ledger(ledger_path)
+        shards, summaries = eligible_shards(
+            league, args.chain, args.buffer_root, ledger, args.max_behavior_lag
+        )
+        atomic_write_json(ledger_path, ledger)
+        decision_total = 0
+        selected_paths = []
+        selected_summaries = []
+        for path, summary in zip(shards, summaries):
+            selected_paths.append(path)
+            selected_summaries.append(summary)
+            decision_total += int(summary["decisions"])
+            if decision_total >= args.min_decisions:
+                break
+        if not selected_paths:
+            time.sleep(args.poll_seconds)
+            continue
+        parent_generation = int(current["generation"])
+        generation = parent_generation + 1
+        generation_root = args.run_root / args.chain / f"generation-{generation:06d}"
+        if generation_root.exists():
+            generation_root = args.run_root / args.chain / f"generation-{generation:06d}-{time.time_ns()}"
+        generation_root.mkdir(parents=True)
+        allowed = {}
+        for summary in selected_summaries:
+            allowed[str(summary["behaviorCheckpoint"]["sha256"])] = int(summary["behaviorGeneration"])
+        behavior_manifest = generation_root / "behavior-manifest.json"
+        atomic_write_json(
+            behavior_manifest,
+            {"schemaVersion": 1, "snapshots": [{"sha256": key, "generation": value} for key, value in allowed.items()]},
+        )
+        batch = {
+            "createdAt": utc_now(),
+            "chain": args.chain,
+            "parent": current,
+            "rollouts": [str(path.resolve()) for path in selected_paths],
+            "decisions": decision_total,
+            "maxBehaviorLag": args.max_behavior_lag,
+        }
+        atomic_write_json(generation_root / "batch.json", batch)
+        checkpoint = generation_root / "checkpoint.pt"
+        metrics = generation_root / "metrics.json"
+        command = [
+            args.python,
+            str(args.worktree / "experiment7/integration/train_universal_ppo.py"),
+            "--reference-root",
+            str(Path(league["referenceRoot"])),
+            "--rollouts",
+            *[str(path) for path in selected_paths],
+            "--initialize-from",
+            str(Path(current["checkpoint"])),
+            "--teacher",
+            str(Path(chain["teacher"])),
+            "--output",
+            str(checkpoint),
+            "--metrics-output",
+            str(metrics),
+            "--generation",
+            str(generation),
+            "--current-generation",
+            str(parent_generation),
+            "--allowed-behavior-manifest",
+            str(behavior_manifest),
+            "--max-behavior-lag",
+            str(args.max_behavior_lag),
+            "--role",
+            "diversity",
+            "--seed",
+            str((time.time_ns() ^ generation) & 0x7FFFFFFF),
+            "--ppo-epochs",
+            "1",
+            "--batch-size",
+            "128",
+            "--learning-rate",
+            "1e-5",
+            "--target-kl",
+            "0.03",
+            "--max-initial-clip-fraction",
+            "0.5",
+            "--device",
+            args.device,
+        ]
+        log = generation_root / "train.log"
+        with log.open("w", encoding="utf-8") as handle:
+            completed = subprocess.run(command, stdout=handle, stderr=subprocess.STDOUT, env=env)
+        ledger = read_ledger(ledger_path)
+        destination = "consumed" if completed.returncode == 0 else "rejected"
+        for path in selected_paths:
+            ledger.setdefault(destination, {})[str(path.resolve())] = {
+                "generation": generation,
+                "recordedAt": utc_now(),
+                "reason": None if completed.returncode == 0 else "trainer_failed_or_policy_shift_gate",
+            }
+        atomic_write_json(ledger_path, ledger)
+        if completed.returncode:
+            atomic_write_json(
+                generation_root / "FAILED.json",
+                {"createdAt": utc_now(), "returnCode": completed.returncode, "log": str(log.resolve())},
+            )
+            continue
+        manifest = deploy(
+            args=args,
+            league=league,
+            chain_name=args.chain,
+            generation=generation,
+            checkpoint=checkpoint,
+            generation_root=generation_root,
+            env=env,
+        )
+        snapshot = publish_snapshot(args.league, args.chain, generation, checkpoint, manifest)
+        atomic_write_json(generation_root / "PUBLISHED.json", snapshot)
+
+
+if __name__ == "__main__":
+    main()

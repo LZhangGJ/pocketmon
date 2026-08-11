@@ -1,0 +1,243 @@
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+from contextlib import contextmanager
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Iterator
+
+
+ALIASES = {
+    "alakazam": "A03",
+    "grimmsnarl_froslass_munkidori": "A02",
+    "dragapult": "A06",
+    "mega_lucario": "LUCARIO",
+    "mega_lucario_ex": "LUCARIO",
+}
+
+
+def utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise TypeError(f"expected JSON object: {path}")
+    return payload
+
+
+def atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    temporary.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    temporary.replace(path)
+
+
+@contextmanager
+def state_lock(path: Path) -> Iterator[None]:
+    """Serialize league publication. Production callers run on shared Linux storage."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a+b") as handle:
+        try:
+            import fcntl
+
+            fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+            yield
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+        except ImportError:
+            import msvcrt
+
+            msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
+            try:
+                yield
+            finally:
+                handle.seek(0)
+                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+
+
+def canonical_archetype(row: dict[str, Any]) -> str:
+    explicit = row.get("canonical_archetype")
+    if explicit:
+        return str(explicit).upper()
+    raw = str(row.get("archetype", "unknown"))
+    return ALIASES.get(raw.lower(), raw.upper())
+
+
+def build_pool_payload(league: dict[str, Any]) -> dict[str, Any]:
+    base_path = Path(league["basePool"]["path"])
+    base = read_json(base_path)
+    base_agents = base.get("agents")
+    if not isinstance(base_agents, list) or not base_agents:
+        raise ValueError("base pool has no agents")
+    agents = [{**row, "canonical_archetype": canonical_archetype(row)} for row in base_agents]
+    dynamic = []
+    for chain_name, chain in sorted(league["chains"].items()):
+        current = chain.get("current", {})
+        manifest_path = current.get("packageManifest")
+        if not manifest_path:
+            continue
+        manifest = read_json(Path(manifest_path))
+        candidates = [
+            row
+            for row in manifest.get("packages", [])
+            if str(row.get("archetypeId", "")).upper() == str(chain["archetypeId"]).upper()
+        ]
+        if len(candidates) != 1:
+            raise ValueError(f"expected one deployable package for {chain_name}: {manifest_path}")
+        package = candidates[0]
+        agent_dir = Path(package["agentDir"])
+        for required in (agent_dir / "main.py", agent_dir / "deck.csv"):
+            if not required.is_file():
+                raise FileNotFoundError(required)
+        row = {
+            "name": str(package["name"]),
+            "agent_dir": str(agent_dir.resolve()),
+            "status": "accepted",
+            "pool_status": "live_async_ppo_snapshot",
+            "archetype": str(chain["archetypeId"]),
+            "canonical_archetype": str(chain["archetypeId"]).upper(),
+            "archetype_label": str(chain["archetypeLabel"]),
+            "deck_canonical_sha256": str(package["deckSha256"]),
+            "directory_sha256": str(package["directorySha256"]),
+            "skill_tier": "live_ppo",
+            "policy_weight_within_archetype": 1.0,
+            "ppo_chain": chain_name,
+            "ppo_generation": int(current["generation"]),
+            "behavior_checkpoint_sha256": str(current["sha256"]),
+        }
+        agents.append(row)
+        dynamic.append(row["name"])
+    result = {key: value for key, value in base.items() if key != "agents"}
+    result["agents"] = agents
+    result["asyncLeague"] = {
+        "createdAt": utc_now(),
+        "basePool": {"path": str(base_path.resolve()), "sha256": sha256_file(base_path)},
+        "dynamicAgents": dynamic,
+        "sampling": "uniform canonical archetype, then uniform agent within archetype",
+    }
+    return result
+
+
+def publish_snapshot(
+    league_path: Path,
+    chain_name: str,
+    generation: int,
+    checkpoint: Path,
+    package_manifest: Path,
+) -> dict[str, Any]:
+    checkpoint = checkpoint.resolve()
+    package_manifest = package_manifest.resolve()
+    checkpoint_sha = sha256_file(checkpoint)
+    lock_path = league_path.with_suffix(league_path.suffix + ".lock")
+    with state_lock(lock_path):
+        league = read_json(league_path)
+        if chain_name not in league["chains"]:
+            raise KeyError(chain_name)
+        chain = league["chains"][chain_name]
+        previous = chain.get("current")
+        if previous and generation < int(previous["generation"]):
+            raise ValueError(
+                f"generation cannot move backward for {chain_name}: "
+                f"{generation} < {previous['generation']}"
+            )
+        if previous and generation == int(previous["generation"]):
+            if checkpoint_sha != str(previous["sha256"]):
+                raise ValueError("same-generation bootstrap checkpoint SHA mismatch")
+            if previous.get("packageManifest"):
+                raise ValueError("same-generation snapshot is already deployed")
+            snapshot = {
+                **previous,
+                "packageManifest": str(package_manifest),
+                "publishedAt": utc_now(),
+            }
+            chain["current"] = snapshot
+            league["updatedAt"] = utc_now()
+            pool_path = Path(league["poolPath"])
+            atomic_write_json(pool_path, build_pool_payload(league))
+            league["poolSha256"] = sha256_file(pool_path)
+            atomic_write_json(league_path, league)
+            return snapshot
+        snapshot = {
+            "generation": generation,
+            "checkpoint": str(checkpoint),
+            "sha256": checkpoint_sha,
+            "snapshotId": f"{chain_name}-g{generation:06d}-{checkpoint_sha[:12]}",
+            "packageManifest": str(package_manifest),
+            "publishedAt": utc_now(),
+        }
+        history = list(chain.get("history", []))
+        if previous:
+            history.append(previous)
+        chain["history"] = history[-64:]
+        chain["current"] = snapshot
+        league["updatedAt"] = utc_now()
+        pool_path = Path(league["poolPath"])
+        atomic_write_json(pool_path, build_pool_payload(league))
+        league["poolSha256"] = sha256_file(pool_path)
+        atomic_write_json(league_path, league)
+    return snapshot
+
+
+def initialize(league_path: Path, config_path: Path) -> None:
+    if league_path.exists():
+        raise FileExistsError(league_path)
+    config = read_json(config_path)
+    chains = config.get("chains", {})
+    if len(chains) != 3:
+        raise ValueError("asynchronous league requires exactly three PPO chains")
+    for name, chain in chains.items():
+        checkpoint = Path(chain["current"]["checkpoint"])
+        chain["current"]["sha256"] = sha256_file(checkpoint)
+        chain["current"]["snapshotId"] = (
+            f"{name}-g{int(chain['current']['generation']):06d}-"
+            f"{chain['current']['sha256'][:12]}"
+        )
+        chain.setdefault("history", [])
+    config["schemaVersion"] = 1
+    config["createdAt"] = utc_now()
+    config["updatedAt"] = config["createdAt"]
+    atomic_write_json(Path(config["poolPath"]), build_pool_payload(config))
+    config["poolSha256"] = sha256_file(Path(config["poolPath"]))
+    atomic_write_json(league_path, config)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Manage an asynchronous three-policy PPO league")
+    sub = parser.add_subparsers(dest="command", required=True)
+    init = sub.add_parser("initialize")
+    init.add_argument("--league", type=Path, required=True)
+    init.add_argument("--config", type=Path, required=True)
+    publish = sub.add_parser("publish")
+    publish.add_argument("--league", type=Path, required=True)
+    publish.add_argument("--chain", required=True)
+    publish.add_argument("--generation", type=int, required=True)
+    publish.add_argument("--checkpoint", type=Path, required=True)
+    publish.add_argument("--package-manifest", type=Path, required=True)
+    args = parser.parse_args()
+    if args.command == "initialize":
+        initialize(args.league.resolve(), args.config.resolve())
+    else:
+        result = publish_snapshot(
+            args.league.resolve(),
+            args.chain,
+            args.generation,
+            args.checkpoint,
+            args.package_manifest,
+        )
+        print(json.dumps(result, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()
