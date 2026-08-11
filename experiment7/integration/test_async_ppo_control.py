@@ -12,7 +12,6 @@ if str(INTEGRATION) not in sys.path:
     sys.path.insert(0, str(INTEGRATION))
 
 from async_ppo_control import add_chain, initialize, publish_snapshot, read_json  # noqa: E402
-from common import canonical_deck_sha256, read_deck  # noqa: E402
 
 
 def write_json(path: Path, payload: dict) -> None:
@@ -118,7 +117,7 @@ class AsyncPpoControlTest(unittest.TestCase):
             checkpoint.write_bytes(b"checkpoint")
             deck = root / "deck.csv"
             deck.write_text("1\n" * 60, encoding="utf-8")
-            deck_sha = canonical_deck_sha256(read_deck(deck))
+            deck_sha = "declared-deck-identity"
             config = root / "config.json"
             pool = root / "pool.json"
             league = root / "league.json"
