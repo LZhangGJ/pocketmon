@@ -11,10 +11,10 @@ io_limit=${ARENA_IO_LIMIT_PERCENT:-70}
 poll_seconds=${ARENA_LOAD_POLL_SECONDS:-15}
 
 resource_snapshot() {
-  local cpu io cores load
+  local cpu io cores load_value
   cores=$(nproc)
-  load=$(awk '{print $1}' /proc/loadavg)
-  cpu=$(awk -v load="$load" -v cores="$cores" 'BEGIN { printf "%.2f", 100.0 * load / cores }')
+  load_value=$(awk '{print $1}' /proc/loadavg)
+  cpu=$(awk -v load_value="$load_value" -v cores="$cores" 'BEGIN { printf "%.2f", 100.0 * load_value / cores }')
   io=0
   if [[ -r /proc/pressure/io ]]; then
     io=$(awk '/^some / {for(i=1;i<=NF;i++) if($i ~ /^avg10=/){split($i,a,"="); print a[2]; exit}}' /proc/pressure/io)
