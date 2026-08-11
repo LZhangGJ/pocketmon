@@ -4,10 +4,21 @@ import argparse
 import json
 import py_compile
 import tarfile
+import tempfile
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+UNIVERSAL_PORTABLE_PAYLOAD = (
+    "deck_identity_bc.npz",
+    "deck_identity_portable.py",
+    "engine_catalog.json",
+    "features.py",
+    "features_vendor.py",
+    "portable.py",
+    "tokenizer.py",
+)
 
 
 def read_deck(path: Path) -> list[int]:
@@ -34,7 +45,14 @@ def build(agent_dir: Path, cg_dir: Path, output: Path) -> Path:
 
     read_deck(deck_csv)
     validate_cg(cg_dir)
-    py_compile.compile(str(main_py), doraise=True)
+    # Compile into a disposable directory so building from a frozen Arena
+    # package cannot create __pycache__ beside the verified source files.
+    with tempfile.TemporaryDirectory(prefix="pocketmon-submission-compile-") as directory:
+        py_compile.compile(
+            str(main_py),
+            cfile=str(Path(directory) / "main.pyc"),
+            doraise=True,
+        )
 
     manifest_path = agent_dir / "agent_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.is_file() else {}
@@ -44,6 +62,18 @@ def build(agent_dir: Path, cg_dir: Path, output: Path) -> Path:
         missing_payload = [str(item) for item in required_payload if not item.is_file()]
         if missing_payload:
             raise FileNotFoundError(f"RL package is incomplete; missing: {', '.join(missing_payload)}")
+
+    is_universal_portable = (agent_dir / "deck_identity_bc.npz").is_file()
+    if is_universal_portable:
+        missing_payload = [
+            str(agent_dir / filename)
+            for filename in UNIVERSAL_PORTABLE_PAYLOAD
+            if not (agent_dir / filename).is_file()
+        ]
+        if missing_payload:
+            raise FileNotFoundError(
+                f"Universal portable package is incomplete; missing: {', '.join(missing_payload)}"
+            )
 
     output.parent.mkdir(parents=True, exist_ok=True)
     with tarfile.open(output, "w:gz") as archive:
@@ -59,6 +89,9 @@ def build(agent_dir: Path, cg_dir: Path, output: Path) -> Path:
                 arcname="rl",
                 filter=lambda info: None if "__pycache__" in info.name or info.name.endswith(".pyc") else info,
             )
+        if is_universal_portable:
+            for filename in UNIVERSAL_PORTABLE_PAYLOAD:
+                archive.add(agent_dir / filename, arcname=filename)
         archive.add(cg_dir, arcname="cg", filter=lambda info: None if "__pycache__" in info.name else info)
 
     with tarfile.open(output, "r:gz") as archive:
@@ -66,6 +99,8 @@ def build(agent_dir: Path, cg_dir: Path, output: Path) -> Path:
     required_members = {"main.py", "deck.csv", "cg/api.py", "cg/game.py", "cg/sim.py"}
     if is_rl_package:
         required_members.update({"checkpoint.pt", "agent_manifest.json", "rl/__init__.py", "rl/agent_adapter.py"})
+    if is_universal_portable:
+        required_members.update(UNIVERSAL_PORTABLE_PAYLOAD)
     missing_members = sorted(required_members - names)
     if missing_members:
         raise RuntimeError(f"Archive validation failed; missing: {missing_members}")

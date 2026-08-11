@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.build_submission import build, read_deck
+from scripts.build_submission import UNIVERSAL_PORTABLE_PAYLOAD, build, read_deck
 from scripts.materialize_notebook_agent import extract_commented_deck, extract_literal_deck, materialize
 
 
@@ -77,6 +77,34 @@ class SubmissionSourceTests(unittest.TestCase):
             with tarfile.open(archive, "r:gz") as handle:
                 names = set(handle.getnames())
             self.assertTrue({"checkpoint.pt", "agent_manifest.json", "rl/agent_adapter.py"} <= names)
+
+    def test_universal_portable_payload_is_included_without_mutating_agent(self) -> None:
+        import tarfile
+
+        with tempfile.TemporaryDirectory() as directory:
+            temp = Path(directory)
+            agent = temp / "agent"
+            cg = temp / "cg"
+            agent.mkdir()
+            cg.mkdir()
+            (agent / "main.py").write_text("def agent(obs): return []\n", encoding="utf-8")
+            (agent / "deck.csv").write_text(
+                "".join(f"{index}\n" for index in range(60)), encoding="utf-8"
+            )
+            for filename in UNIVERSAL_PORTABLE_PAYLOAD:
+                (agent / filename).write_bytes(b"payload")
+            for filename in ("api.py", "game.py", "sim.py"):
+                (cg / filename).write_text("", encoding="utf-8")
+
+            before = sorted(path.relative_to(agent) for path in agent.rglob("*"))
+            archive = build(agent, cg, temp / "submission.tar.gz")
+            after = sorted(path.relative_to(agent) for path in agent.rglob("*"))
+            with tarfile.open(archive, "r:gz") as handle:
+                names = set(handle.getnames())
+
+            self.assertEqual(before, after)
+            self.assertTrue(set(UNIVERSAL_PORTABLE_PAYLOAD) <= names)
+            self.assertFalse((agent / "__pycache__").exists())
 
 
 if __name__ == "__main__":
