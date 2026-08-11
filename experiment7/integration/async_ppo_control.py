@@ -9,6 +9,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterator
 
+from common import canonical_deck_sha256, read_deck
+
 
 ALIASES = {
     "alakazam": "A03",
@@ -237,7 +239,7 @@ def add_chain(league_path: Path, chain_name: str, chain_path: Path) -> dict[str,
     for required_path in (deck_path, checkpoint, teacher):
         if not required_path.is_file():
             raise FileNotFoundError(required_path)
-    actual_deck_sha = sha256_file(deck_path)
+    actual_deck_sha = canonical_deck_sha256(read_deck(deck_path))
     if actual_deck_sha != str(incoming["deckSha256"]):
         raise ValueError(
             f"deck SHA mismatch for {chain_name}: {actual_deck_sha} != {incoming['deckSha256']}"
