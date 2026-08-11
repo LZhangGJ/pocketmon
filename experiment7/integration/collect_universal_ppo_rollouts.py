@@ -2,19 +2,19 @@ from __future__ import annotations
 
 import argparse
 import gzip
-import importlib.util
 import json
 import math
-import os
 import random
 import sys
 import types
 from collections import Counter, defaultdict
+from contextlib import ExitStack
 from pathlib import Path
 from typing import Any
 
 import torch
 
+from agent_isolation import call_agent, isolated_agent_workdir, load_agent
 from common import Experiment7Error, sha256_file, utc_now, write_json
 from universal_ppo import (
     ROLLOUT_FORMAT,
@@ -40,29 +40,6 @@ def install_cg(cg_dir: Path) -> None:
     package.__path__ = [str(cg_dir.resolve())]
     package.__package__ = "cg"
     sys.modules["cg"] = package
-
-
-def load_agent(path: Path, name: str) -> Any:
-    local_names = {source.stem for source in path.glob("*.py") if source.name != "main.py"}
-    for local_name in local_names:
-        sys.modules.pop(local_name, None)
-    spec = importlib.util.spec_from_file_location(name, path / "main.py")
-    if spec is None or spec.loader is None:
-        raise ImportError(path)
-    previous = Path.cwd()
-    inserted = str(path) not in sys.path
-    try:
-        os.chdir(path)
-        if inserted:
-            sys.path.insert(0, str(path))
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[name] = module
-        spec.loader.exec_module(module)
-        return module
-    finally:
-        if inserted and str(path) in sys.path:
-            sys.path.remove(str(path))
-        os.chdir(previous)
 
 
 def load_pool(path: Path) -> list[dict[str, Any]]:
@@ -129,83 +106,96 @@ def play_episode(
 
     self_play = opponent is None
     trainable = {0, 1} if self_play else {learner_seat}
-    opponent_module = None
-    opponent_name = "self_play"
-    decks = [list(learner_deck), list(learner_deck)]
-    if opponent is not None:
-        opponent_name = str(opponent["name"])
-        opponent_dir = Path(opponent["agent_dir"])
-        opponent_module = load_agent(opponent_dir, f"universal_ppo_opponent_{episode}")
-        decks[1 - learner_seat] = read_deck(opponent_dir / "deck.csv")
-    observation, start = battle_start(*decks)
-    if observation is None:
-        raise Experiment7Error(f"battle_start failed: {start.errorType}")
-    rows: list[dict[str, Any]] = []
-    histories: dict[int, list[Any]] = {0: [], 1: []}
-    try:
-        for step in range(max_decisions):
-            current = observation.get("current") or {}
-            result = int(current.get("result", -1))
-            if result != -1:
-                finish_trajectory(rows, result)
-                return rows, result, opponent_name
-            player = int(current.get("yourIndex", step % 2))
-            select = observation.get("select")
-            if not isinstance(select, dict) or not isinstance(select.get("option"), list):
-                raise Experiment7Error("engine returned a non-selection observation")
-            if player in trainable:
-                feature_row, state, option_rows = live_row(
-                    observation, decks[player], histories[player], runtime, model.config
-                )
-                option_count = len(feature_row["options"])
-                minimum = int(feature_row["min_count"])
-                maximum = int(feature_row["max_count"])
-                forced = minimum == maximum and minimum in (0, option_count)
-                if forced:
-                    action = list(range(minimum))
-                else:
-                    action, log_probability, value, entropy = sample_action(
-                        model, feature_row, device, temperature
+    with ExitStack() as stack:
+        opponent_module = None
+        opponent_workdir = None
+        opponent_name = "self_play"
+        decks = [list(learner_deck), list(learner_deck)]
+        if opponent is not None:
+            opponent_name = str(opponent["name"])
+            opponent_dir = Path(opponent["agent_dir"])
+            # Lock the match deck before importing untrusted agent code.  Some
+            # public agents rewrite deck.csv while importing their module.
+            decks[1 - learner_seat] = read_deck(opponent_dir / "deck.csv")
+            opponent_workdir = stack.enter_context(isolated_agent_workdir(opponent_dir))
+            opponent_module = load_agent(
+                opponent_dir, f"universal_ppo_opponent_{episode}", opponent_workdir
+            )
+        observation, start = battle_start(*decks)
+        if observation is None:
+            raise Experiment7Error(f"battle_start failed: {start.errorType}")
+        rows: list[dict[str, Any]] = []
+        histories: dict[int, list[Any]] = {0: [], 1: []}
+        try:
+            for step in range(max_decisions):
+                current = observation.get("current") or {}
+                result = int(current.get("result", -1))
+                if result != -1:
+                    finish_trajectory(rows, result)
+                    return rows, result, opponent_name
+                player = int(current.get("yourIndex", step % 2))
+                select = observation.get("select")
+                if not isinstance(select, dict) or not isinstance(select.get("option"), list):
+                    raise Experiment7Error("engine returned a non-selection observation")
+                if player in trainable:
+                    feature_row, state, option_rows = live_row(
+                        observation, decks[player], histories[player], runtime, model.config
                     )
-                    decision = {**feature_row, "action": action}
-                    with torch.inference_mode():
-                        teacher_log_probability, _, _ = evaluate_actions(
-                            teacher, collate_rows([decision], device)
+                    option_count = len(feature_row["options"])
+                    minimum = int(feature_row["min_count"])
+                    maximum = int(feature_row["max_count"])
+                    forced = minimum == maximum and minimum in (0, option_count)
+                    if forced:
+                        action = list(range(minimum))
+                    else:
+                        action, log_probability, value, entropy = sample_action(
+                            model, feature_row, device, temperature
                         )
-                    decision.update(
-                        {
-                            "schema_version": 1,
-                            "rollout_format": ROLLOUT_FORMAT,
-                            "episode_id": episode_id,
-                            "episode": episode,
-                            "action_step": step + 1,
-                            "observation_step": step,
-                            "player": player,
-                            "behavior_log_probability": log_probability,
-                            "teacher_log_probability": float(teacher_log_probability[0]),
-                            "behavior_value": value,
-                            "behavior_entropy": entropy,
-                            "behavior_checkpoint_sha256": checkpoint_sha256,
-                            "teacher_checkpoint_sha256": teacher_sha256,
-                            "temperature": temperature,
-                            "opponent": opponent_name,
-                            "self_play": self_play,
-                            "reward": 0.0,
-                            "outcome": 0.0,
-                        }
+                        decision = {**feature_row, "action": action}
+                        with torch.inference_mode():
+                            teacher_log_probability, _, _ = evaluate_actions(
+                                teacher, collate_rows([decision], device)
+                            )
+                        decision.update(
+                            {
+                                "schema_version": 1,
+                                "rollout_format": ROLLOUT_FORMAT,
+                                "episode_id": episode_id,
+                                "episode": episode,
+                                "action_step": step + 1,
+                                "observation_step": step,
+                                "player": player,
+                                "behavior_log_probability": log_probability,
+                                "teacher_log_probability": float(teacher_log_probability[0]),
+                                "behavior_value": value,
+                                "behavior_entropy": entropy,
+                                "behavior_checkpoint_sha256": checkpoint_sha256,
+                                "teacher_checkpoint_sha256": teacher_sha256,
+                                "temperature": temperature,
+                                "opponent": opponent_name,
+                                "self_play": self_play,
+                                "reward": 0.0,
+                                "outcome": 0.0,
+                            }
+                        )
+                        rows.append(decision)
+                    append_history(
+                        histories[player],
+                        state,
+                        option_rows,
+                        action,
+                        int(model.config.history_length),
                     )
-                    rows.append(decision)
-                append_history(
-                    histories[player], state, option_rows, action, int(model.config.history_length)
-                )
-            else:
-                if opponent_module is None:
-                    raise Experiment7Error("missing external opponent module")
-                action = opponent_module.agent(observation)
-            observation = battle_select(action)
-        raise TimeoutError(f"episode {episode_id} exceeded {max_decisions} decisions")
-    finally:
-        battle_finish()
+                else:
+                    if opponent_module is None:
+                        raise Experiment7Error("missing external opponent module")
+                    if opponent_workdir is None:
+                        raise Experiment7Error("missing isolated opponent working directory")
+                    action = call_agent(opponent_module, observation, opponent_workdir)
+                observation = battle_select(action)
+            raise TimeoutError(f"episode {episode_id} exceeded {max_decisions} decisions")
+        finally:
+            battle_finish()
 
 
 def main() -> None:
