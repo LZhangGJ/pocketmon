@@ -27,7 +27,7 @@ from universal_ppo import (  # noqa: E402
     ppo_loss,
     sample_action,
 )
-from train_universal_ppo import load_rollouts, require_clean_repository  # noqa: E402
+from train_universal_ppo import balanced_player_order, load_rollouts, require_clean_repository  # noqa: E402
 from collect_universal_ppo_rollouts import canonical_archetype  # noqa: E402
 from common import Experiment7Error  # noqa: E402
 from universal_ppo import ROLLOUT_FORMAT  # noqa: E402
@@ -126,6 +126,23 @@ class UniversalPpoTest(unittest.TestCase):
         self.assertAlmostEqual(balanced["policyLoss"], 0.0, places=5)
         self.assertAlmostEqual(weighted["policyLoss"], 1.0 / 3.0, places=5)
         self.assertEqual(weighted["seat1Weight"], 2.0)
+
+    def test_player_specific_advantage_normalization_and_balancing(self) -> None:
+        rows = [
+            {"player": 0, "advantage": 10.0},
+            {"player": 0, "advantage": 12.0},
+            {"player": 1, "advantage": -100.0},
+            {"player": 1, "advantage": -80.0},
+            {"player": 1, "advantage": -60.0},
+        ]
+        normalized = normalize_advantages(rows, by_player=True)
+        for player in (0, 1):
+            values = [row["advantage"] for row in normalized if row["player"] == player]
+            self.assertAlmostEqual(float(np.mean(values)), 0.0, places=7)
+        order = balanced_player_order(rows, np.random.default_rng(9))
+        players = [rows[int(index)]["player"] for index in order]
+        self.assertEqual(players[::2], [0, 0, 0])
+        self.assertEqual(players[1::2], [1, 1, 1])
 
     def test_repository_validation_does_not_depend_on_process_cwd(self) -> None:
         previous = Path.cwd()

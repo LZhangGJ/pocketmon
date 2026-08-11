@@ -157,6 +157,27 @@ def save_checkpoint(path: Path, model: torch.nn.Module, metadata: dict[str, Any]
     temporary.replace(path)
 
 
+def balanced_player_order(rows: list[dict[str, Any]], rng: np.random.Generator) -> np.ndarray:
+    by_player = {
+        player: np.asarray(
+            [index for index, row in enumerate(rows) if int(row["player"]) == player],
+            dtype=np.int64,
+        )
+        for player in (0, 1)
+    }
+    if not len(by_player[0]) or not len(by_player[1]):
+        return rng.permutation(len(rows))
+    target = max(len(by_player[0]), len(by_player[1]))
+    columns = []
+    for player in (0, 1):
+        source = by_player[player]
+        repeats = []
+        while sum(len(part) for part in repeats) < target:
+            repeats.append(rng.permutation(source))
+        columns.append(np.concatenate(repeats)[:target])
+    return np.column_stack(columns).reshape(-1)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Train one Deck-8 Universal PPO generation")
     parser.add_argument("--reference-root", type=Path, required=True)
@@ -183,6 +204,8 @@ def main() -> None:
     parser.add_argument("--entropy-coefficient", type=float, default=0.01)
     parser.add_argument("--teacher-anchor-coefficient", type=float, default=0.02)
     parser.add_argument("--seat1-weight", type=float, default=1.0)
+    parser.add_argument("--normalize-advantages-by-player", action="store_true")
+    parser.add_argument("--balance-player-minibatches", action="store_true")
     parser.add_argument("--gradient-clip-norm", type=float, default=0.5)
     parser.add_argument("--target-kl", type=float, default=0.03)
     parser.add_argument("--max-initial-clip-fraction", type=float, default=0.5)
@@ -219,7 +242,10 @@ def main() -> None:
         current_generation=args.current_generation,
         max_behavior_lag=args.max_behavior_lag,
     )
-    rows = normalize_advantages(compute_gae(rows, args.gamma, args.gae_lambda))
+    rows = normalize_advantages(
+        compute_gae(rows, args.gamma, args.gae_lambda),
+        by_player=args.normalize_advantages_by_player,
+    )
     initial_policy_shift = None
     if allowed_behavior_generations is not None:
         totals: Counter[str] = Counter()
@@ -266,7 +292,11 @@ def main() -> None:
     for epoch in range(1, args.ppo_epochs + 1):
         totals: Counter[str] = Counter()
         examples = 0
-        order = rng.permutation(len(rows))
+        order = (
+            balanced_player_order(rows, rng)
+            if args.balance_player_minibatches
+            else rng.permutation(len(rows))
+        )
         for begin in range(0, len(rows), args.batch_size):
             indices = order[begin : begin + args.batch_size]
             chosen = [rows[int(index)] for index in indices]
@@ -314,6 +344,8 @@ def main() -> None:
         "trainingConfig": {
             "teacherAnchorCoefficient": args.teacher_anchor_coefficient,
             "seat1Weight": args.seat1_weight,
+            "normalizeAdvantagesByPlayer": args.normalize_advantages_by_player,
+            "balancePlayerMinibatches": args.balance_player_minibatches,
         },
         "seconds": time.perf_counter() - started,
     }

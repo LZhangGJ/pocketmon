@@ -356,12 +356,27 @@ def compute_gae(
     return prepared
 
 
-def normalize_advantages(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    values = np.asarray([float(row["advantage"]) for row in rows], dtype=np.float64)
-    if not len(values):
+def normalize_advantages(
+    rows: list[dict[str, Any]], *, by_player: bool = False
+) -> list[dict[str, Any]]:
+    if not rows:
         raise ValueError("cannot normalize empty Universal PPO rows")
-    scale = max(float(values.std()), 1e-8)
-    return [{**row, "advantage": (float(row["advantage"]) - float(values.mean())) / scale} for row in rows]
+    groups: dict[int, list[int]] = defaultdict(list)
+    if by_player:
+        for index, row in enumerate(rows):
+            groups[int(row["player"])].append(index)
+    else:
+        groups[0] = list(range(len(rows)))
+    normalized = [dict(row) for row in rows]
+    for indices in groups.values():
+        values = np.asarray(
+            [float(rows[index]["advantage"]) for index in indices], dtype=np.float64
+        )
+        scale = max(float(values.std()), 1e-8)
+        mean = float(values.mean())
+        for index, value in zip(indices, values, strict=True):
+            normalized[index]["advantage"] = (float(value) - mean) / scale
+    return normalized
 
 
 def ppo_loss(

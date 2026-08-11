@@ -156,6 +156,8 @@ def main() -> None:
     parser.add_argument("--min-decisions", type=int, default=1)
     parser.add_argument("--teacher-anchor-coefficient", type=float, default=0.02)
     parser.add_argument("--seat1-weight", type=float, default=1.0)
+    parser.add_argument("--normalize-advantages-by-player", action="store_true")
+    parser.add_argument("--balance-player-minibatches", action="store_true")
     parser.add_argument("--poll-seconds", type=float, default=10.0)
     parser.add_argument("--bootstrap-deployment", action="store_true")
     args = parser.parse_args()
@@ -269,6 +271,10 @@ def main() -> None:
             "--device",
             args.device,
         ]
+        if args.normalize_advantages_by_player:
+            command.append("--normalize-advantages-by-player")
+        if args.balance_player_minibatches:
+            command.append("--balance-player-minibatches")
         log = generation_root / "train.log"
         with log.open("w", encoding="utf-8") as handle:
             completed = subprocess.run(command, stdout=handle, stderr=subprocess.STDOUT, env=env)
