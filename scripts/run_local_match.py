@@ -7,10 +7,16 @@ import os
 import random
 import sys
 import types
+from contextlib import ExitStack
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+INTEGRATION_ROOT = ROOT / "experiment7" / "integration"
+if str(INTEGRATION_ROOT) not in sys.path:
+    sys.path.insert(0, str(INTEGRATION_ROOT))
+
+from agent_isolation import call_agent, isolated_agent_workdir
 
 
 def install_cg_package(cg_dir: Path) -> None:
@@ -48,15 +54,16 @@ def purge_agent_modules(path: Path) -> None:
             del sys.modules[module_name]
 
 
-def load_agent(path: Path, module_name: str):
+def load_agent(path: Path, module_name: str, workdir: Path | None = None):
     purge_agent_modules(path)
     spec = importlib.util.spec_from_file_location(module_name, path / "main.py")
     if spec is None or spec.loader is None:
         raise ImportError(f"Cannot load agent from {path}")
     previous = Path.cwd()
+    import_cwd = path if workdir is None else workdir
     inserted = str(path) not in sys.path
     try:
-        os.chdir(path)
+        os.chdir(import_cwd)
         if inserted:
             sys.path.insert(0, str(path))
         module = importlib.util.module_from_spec(spec)
@@ -108,42 +115,49 @@ def play(agent0_dir: Path, agent1_dir: Path, cg_dir: Path, max_decisions: int, s
     install_cg_package(cg_dir)
     from cg.game import battle_finish, battle_select, battle_start
 
-    agents = [
-        load_agent(agent0_dir, "ptcg_agent_0"),
-        load_agent(agent1_dir, "ptcg_agent_1"),
-    ]
-    seed_agent_rng(seed, seed_loaded_torch=True)
+    # Read both frozen match decks before importing either agent. Some public
+    # submissions rewrite deck.csv at import time.
     decks = [
         [int(line) for line in (path / "deck.csv").read_text(encoding="utf-8").splitlines() if line.strip()]
         for path in (agent0_dir, agent1_dir)
     ]
-    observation, start = battle_start(decks[0], decks[1])
-    if observation is None:
-        raise RuntimeError(f"Battle failed to start: player={start.errorPlayer}, type={start.errorType}")
+    with ExitStack() as stack:
+        workdirs = [
+            stack.enter_context(isolated_agent_workdir(path))
+            for path in (agent0_dir, agent1_dir)
+        ]
+        agents = [
+            load_agent(agent0_dir, "ptcg_agent_0", workdirs[0]),
+            load_agent(agent1_dir, "ptcg_agent_1", workdirs[1]),
+        ]
+        seed_agent_rng(seed, seed_loaded_torch=True)
+        observation, start = battle_start(decks[0], decks[1])
+        if observation is None:
+            raise RuntimeError(f"Battle failed to start: player={start.errorPlayer}, type={start.errorType}")
 
-    decisions = 0
-    try:
-        while decisions < max_decisions:
-            current = observation.get("current")
-            if current is not None and current.get("result", -1) != -1:
-                return {
-                    "result": current["result"],
-                    "decisions": decisions,
-                    "turn": current.get("turn"),
-                    "seed": seed,
-                    "engine_seed_controlled": False,
-                    "agent_diagnostics": agent_diagnostics(agents),
-                }
-            if current is None:
-                player = decisions % 2
-            else:
-                player = current["yourIndex"]
-            action = agents[player].agent(observation)
-            observation = battle_select(action)
-            decisions += 1
-        raise TimeoutError(f"Match exceeded {max_decisions} decisions")
-    finally:
-        battle_finish()
+        decisions = 0
+        try:
+            while decisions < max_decisions:
+                current = observation.get("current")
+                if current is not None and current.get("result", -1) != -1:
+                    return {
+                        "result": current["result"],
+                        "decisions": decisions,
+                        "turn": current.get("turn"),
+                        "seed": seed,
+                        "engine_seed_controlled": False,
+                        "agent_diagnostics": agent_diagnostics(agents),
+                    }
+                if current is None:
+                    player = decisions % 2
+                else:
+                    player = current["yourIndex"]
+                action = call_agent(agents[player], observation, workdirs[player])
+                observation = battle_select(action)
+                decisions += 1
+            raise TimeoutError(f"Match exceeded {max_decisions} decisions")
+        finally:
+            battle_finish()
 
 
 def resolve(value: str) -> Path:
