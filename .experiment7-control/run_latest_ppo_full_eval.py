@@ -10,6 +10,7 @@ import subprocess
 import sys
 import traceback
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -149,6 +150,11 @@ def main() -> int:
     parser.add_argument("--games-per-frozen", type=int, default=4)
     parser.add_argument("--games-per-head-to-head", type=int, default=20)
     parser.add_argument("--shards", type=int, default=48)
+    parser.add_argument(
+        "--distributed-hosts",
+        help="comma-separated directly reachable SSH hosts; omit to run shards locally",
+    )
+    parser.add_argument("--max-shards-per-host", type=int, default=3)
     args = parser.parse_args()
 
     league_root = args.league_root.resolve()
@@ -285,13 +291,42 @@ def main() -> int:
     logs = staging / "logs"
     raw.mkdir()
     logs.mkdir()
-    shard_count = min(args.shards, len(schedule))
+    requested_hosts = [
+        host.strip() for host in (args.distributed_hosts or "").split(",") if host.strip()
+    ]
+    available_hosts: list[str] = []
+    if requested_hosts:
+        def probe(host: str) -> tuple[str, bool]:
+            try:
+                completed = subprocess.run(
+                    [
+                        "ssh", "-T", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8",
+                        "-o", "ServerAliveInterval=5", "-o", "ServerAliveCountMax=2",
+                        f"lzhang@{host}", "test -x /homes/lzhang/run_load_guarded_arena_shard.sh",
+                    ],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    timeout=20,
+                )
+                return host, completed.returncode == 0
+            except (OSError, subprocess.TimeoutExpired):
+                return host, False
+
+        with ThreadPoolExecutor(max_workers=len(requested_hosts)) as executor:
+            available_hosts = [host for host, ok in executor.map(probe, requested_hosts) if ok]
+        if not available_hosts:
+            raise RuntimeError("no distributed Arena hosts are reachable")
+        shard_capacity = len(available_hosts) * args.max_shards_per_host
+    else:
+        shard_capacity = args.shards
+    shard_count = min(args.shards, len(schedule), shard_capacity)
+    metadata["distributedHosts"] = available_hosts
+    metadata["maxShardsPerHost"] = args.max_shards_per_host if available_hosts else None
+    write(staging / "metadata.json", metadata)
     processes: list[tuple[int, subprocess.Popen[str], Any]] = []
     for shard_index in range(shard_count):
         log_handle = (logs / f"shard-{shard_index:03d}.log").open("w", encoding="utf-8")
-        command = [
-            "bash",
-            str(args.run_shard.resolve()),
+        shard_arguments = [
             str(args.worktree.resolve()),
             str(args.python.resolve()),
             str(schedule_path),
@@ -303,6 +338,16 @@ def main() -> int:
             str(shard_count),
             str(eval_root),
         ]
+        if available_hosts:
+            host = available_hosts[shard_index % len(available_hosts)]
+            command = [
+                "ssh", "-T", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8",
+                "-o", "ServerAliveInterval=5", "-o", "ServerAliveCountMax=2",
+                f"lzhang@{host}", "/homes/lzhang/run_load_guarded_arena_shard.sh",
+                *shard_arguments,
+            ]
+        else:
+            command = ["bash", str(args.run_shard.resolve()), *shard_arguments]
         processes.append(
             (shard_index, subprocess.Popen(command, stdout=log_handle, stderr=subprocess.STDOUT, text=True), log_handle)
         )
