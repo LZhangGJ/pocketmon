@@ -1,0 +1,12 @@
+{
+  "deckName": "a02_submission4_grimmsnarl_froslass_munkidori",
+  "archetypeId": "A02",
+  "archetypeLabel": "Marnie's Grimmsnarl ex / Morgrem / Froslass (submission4 deck)",
+  "deckPath": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-opponent-pool-20260810/intake-submission4-edca178182f1/static-stage/agents/team_submission_4_portable_bc/deck.csv",
+  "deckSha256": "cafa7652a6349be806d8ac2b9abfdb6c72ca3821f368e0d912e2d989f3b54cdd",
+  "teacher": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-universal-7d-scoregt900-20260810/final_7d/training/seed-20260812-doraemon16-gpu0/best_model.pt",
+  "current": {
+    "generation": 0,
+    "checkpoint": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-universal-7d-scoregt900-20260810/final_7d/training/seed-20260812-doraemon16-gpu0/best_model.pt"
+  }
+}

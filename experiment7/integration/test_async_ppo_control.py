@@ -11,7 +11,7 @@ INTEGRATION = Path(__file__).resolve().parent
 if str(INTEGRATION) not in sys.path:
     sys.path.insert(0, str(INTEGRATION))
 
-from async_ppo_control import initialize, publish_snapshot, read_json  # noqa: E402
+from async_ppo_control import add_chain, initialize, publish_snapshot, read_json  # noqa: E402
 
 
 def write_json(path: Path, payload: dict) -> None:
@@ -20,7 +20,7 @@ def write_json(path: Path, payload: dict) -> None:
 
 
 class AsyncPpoControlTest(unittest.TestCase):
-    def test_three_live_snapshots_are_added_to_canonical_pool(self) -> None:
+    def test_four_live_snapshots_are_added_to_canonical_pool(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             base = root / "base.json"
@@ -35,7 +35,13 @@ class AsyncPpoControlTest(unittest.TestCase):
             )
             chains = {}
             for index, (name, archetype) in enumerate(
-                (("a05", "A05"), ("lucario", "LUCARIO"), ("a08", "A08")), start=1
+                (
+                    ("a05", "A05"),
+                    ("lucario", "LUCARIO"),
+                    ("a08", "A08"),
+                    ("submission4", "A02"),
+                ),
+                start=1,
             ):
                 checkpoint = root / f"{name}.pt"
                 checkpoint.write_bytes(f"checkpoint-{name}".encode())
@@ -95,12 +101,69 @@ class AsyncPpoControlTest(unittest.TestCase):
                     manifest,
                 )
             pool = read_json(pool_path)
-            self.assertEqual(len(pool["agents"]), 5)
+            self.assertEqual(len(pool["agents"]), 6)
             self.assertEqual(
                 [row["canonical_archetype"] for row in pool["agents"][:2]],
                 ["A03", "A03"],
             )
-            self.assertEqual(len(pool["asyncLeague"]["dynamicAgents"]), 3)
+            self.assertEqual(len(pool["asyncLeague"]["dynamicAgents"]), 4)
+
+    def test_add_chain_updates_live_league_without_deploying_it(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            base = root / "base.json"
+            write_json(base, {"agents": [{"name": "frozen", "archetype": "A03"}]})
+            checkpoint = root / "bootstrap.pt"
+            checkpoint.write_bytes(b"checkpoint")
+            deck = root / "deck.csv"
+            deck.write_bytes(b"deck")
+            import hashlib
+
+            deck_sha = hashlib.sha256(deck.read_bytes()).hexdigest()
+            config = root / "config.json"
+            pool = root / "pool.json"
+            league = root / "league.json"
+            write_json(
+                config,
+                {
+                    "basePool": {"path": str(base)},
+                    "poolPath": str(pool),
+                    "referenceRoot": str(root),
+                    "engineCatalog": str(root / "engine.json"),
+                    "cgDir": str(root),
+                    "sources": str(root / "sources.json"),
+                    "chains": {
+                        "first": {
+                            "deckName": "first",
+                            "archetypeId": "A05",
+                            "archetypeLabel": "first",
+                            "deckPath": str(deck),
+                            "deckSha256": deck_sha,
+                            "teacher": str(checkpoint),
+                            "current": {"generation": 0, "checkpoint": str(checkpoint)},
+                        }
+                    },
+                },
+            )
+            initialize(league, config)
+            chain_config = root / "chain.json"
+            write_json(
+                chain_config,
+                {
+                    "deckName": "submission4",
+                    "archetypeId": "A02",
+                    "archetypeLabel": "submission4 deck",
+                    "deckPath": str(deck),
+                    "deckSha256": deck_sha,
+                    "teacher": str(checkpoint),
+                    "current": {"generation": 0, "checkpoint": str(checkpoint)},
+                },
+            )
+            added = add_chain(league, "submission4", chain_config)
+            self.assertEqual(added["current"]["generation"], 0)
+            self.assertNotIn("packageManifest", added["current"])
+            self.assertIn("submission4", read_json(league)["chains"])
+            self.assertEqual(len(read_json(pool)["agents"]), 1)
 
 
 if __name__ == "__main__":

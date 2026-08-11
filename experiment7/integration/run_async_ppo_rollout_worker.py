@@ -106,7 +106,7 @@ def main() -> None:
                         },
                     )
                     continue
-        # Refresh all three policy checkpoints and the dynamic pool together.
+        # Refresh every policy checkpoint and the dynamic pool together.
 
 
 if __name__ == "__main__":

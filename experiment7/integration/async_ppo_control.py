@@ -195,8 +195,8 @@ def initialize(league_path: Path, config_path: Path) -> None:
         raise FileExistsError(league_path)
     config = read_json(config_path)
     chains = config.get("chains", {})
-    if len(chains) != 3:
-        raise ValueError("asynchronous league requires exactly three PPO chains")
+    if not isinstance(chains, dict) or not chains:
+        raise ValueError("asynchronous league requires at least one PPO chain")
     for name, chain in chains.items():
         checkpoint = Path(chain["current"]["checkpoint"])
         chain["current"]["sha256"] = sha256_file(checkpoint)
@@ -213,8 +213,67 @@ def initialize(league_path: Path, config_path: Path) -> None:
     atomic_write_json(league_path, config)
 
 
+def add_chain(league_path: Path, chain_name: str, chain_path: Path) -> dict[str, Any]:
+    """Atomically add a bootstrapped-but-not-yet-deployed PPO chain to a live league."""
+    incoming = read_json(chain_path)
+    required = {
+        "deckName",
+        "archetypeId",
+        "archetypeLabel",
+        "deckPath",
+        "deckSha256",
+        "teacher",
+        "current",
+    }
+    missing = sorted(required - set(incoming))
+    if missing:
+        raise ValueError(f"chain config is missing required fields: {missing}")
+    current = incoming.get("current")
+    if not isinstance(current, dict) or "generation" not in current or "checkpoint" not in current:
+        raise ValueError("chain current must contain generation and checkpoint")
+    deck_path = Path(incoming["deckPath"]).resolve()
+    checkpoint = Path(current["checkpoint"]).resolve()
+    teacher = Path(incoming["teacher"]).resolve()
+    for required_path in (deck_path, checkpoint, teacher):
+        if not required_path.is_file():
+            raise FileNotFoundError(required_path)
+    actual_deck_sha = sha256_file(deck_path)
+    if actual_deck_sha != str(incoming["deckSha256"]):
+        raise ValueError(
+            f"deck SHA mismatch for {chain_name}: {actual_deck_sha} != {incoming['deckSha256']}"
+        )
+    checkpoint_sha = sha256_file(checkpoint)
+    normalized = {
+        **incoming,
+        "deckPath": str(deck_path),
+        "teacher": str(teacher),
+        "current": {
+            **current,
+            "generation": int(current["generation"]),
+            "checkpoint": str(checkpoint),
+            "sha256": checkpoint_sha,
+            "snapshotId": (
+                f"{chain_name}-g{int(current['generation']):06d}-{checkpoint_sha[:12]}"
+            ),
+        },
+        "history": list(incoming.get("history", [])),
+    }
+    lock_path = league_path.with_suffix(league_path.suffix + ".lock")
+    with state_lock(lock_path):
+        league = read_json(league_path)
+        if chain_name in league["chains"]:
+            raise ValueError(f"PPO chain already exists: {chain_name}")
+        league["chains"][chain_name] = normalized
+        league["updatedAt"] = utc_now()
+        pool_path = Path(league["poolPath"])
+        atomic_write_json(pool_path, build_pool_payload(league))
+        league["poolSha256"] = sha256_file(pool_path)
+        atomic_write_json(league_path, league)
+    return normalized
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Manage an asynchronous three-policy PPO league")
+    parser = argparse.ArgumentParser(description="Manage an asynchronous multi-policy PPO league")
     sub = parser.add_subparsers(dest="command", required=True)
     init = sub.add_parser("initialize")
     init.add_argument("--league", type=Path, required=True)
@@ -225,16 +284,27 @@ def main() -> None:
     publish.add_argument("--generation", type=int, required=True)
     publish.add_argument("--checkpoint", type=Path, required=True)
     publish.add_argument("--package-manifest", type=Path, required=True)
+    add = sub.add_parser("add-chain")
+    add.add_argument("--league", type=Path, required=True)
+    add.add_argument("--name", required=True)
+    add.add_argument("--chain-config", type=Path, required=True)
     args = parser.parse_args()
     if args.command == "initialize":
         initialize(args.league.resolve(), args.config.resolve())
-    else:
+    elif args.command == "publish":
         result = publish_snapshot(
             args.league.resolve(),
             args.chain,
             args.generation,
             args.checkpoint,
             args.package_manifest,
+        )
+        print(json.dumps(result, ensure_ascii=False))
+    else:
+        result = add_chain(
+            args.league.resolve(),
+            args.name,
+            args.chain_config.resolve(),
         )
         print(json.dumps(result, ensure_ascii=False))
 

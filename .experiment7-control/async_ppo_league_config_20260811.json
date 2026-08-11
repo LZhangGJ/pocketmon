@@ -1,0 +1,60 @@
+{
+  "basePool": {
+    "path": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-ppo-focus-a05-lucario-a08-20260811/opponent-pool-v3r1-plus-hardg10-diversityg20.json"
+  },
+  "poolPath": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-async-ppo-league-20260811/state/opponent-pool-live.json",
+  "referenceRoot": "/homes/lzhang/pocketmon-worktrees/experiment7-248c61b/experiment7/reference",
+  "engineCatalog": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-universal-7d-scoregt900-20260810/rebalance/2026-08-06-part-0-of-2-doraemon02/prepared/engine_catalog.json",
+  "cgDir": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-opponent-pool-20260810/official-engine/cg",
+  "sources": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-universal-7d-scoregt900-20260810/final_7d/sources.json",
+  "chains": {
+    "a05_raging_bolt_ogerpon_kangaskhan": {
+      "deckName": "a05_raging_bolt_ogerpon_kangaskhan",
+      "archetypeId": "A05",
+      "archetypeLabel": "Teal Mask Ogerpon ex / Mega Kangaskhan ex / Raging Bolt ex",
+      "deckPath": "/homes/lzhang/pocketmon/runs/experiment7-multideck-20260809/prepared/selection/decks/06_a05_3158359368bd.csv",
+      "deckSha256": "3158359368bd1252e835a4ce634b7435d28bce85706b9fd76f4f2ea5fa4abc9c",
+      "teacher": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-universal-7d-scoregt900-20260810/final_7d/training/seed-20260812-doraemon16-gpu0/best_model.pt",
+      "current": {
+        "generation": 11,
+        "checkpoint": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-ppo-focus-a05-lucario-a08-20260811/a05_raging_bolt_ogerpon_kangaskhan_champion_pool/generation-0011/checkpoint.pt"
+      }
+    },
+    "mega_lucario_ex": {
+      "deckName": "mega_lucario_ex",
+      "archetypeId": "LUCARIO",
+      "archetypeLabel": "Mega Lucario ex",
+      "deckPath": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-opponent-pool-20260810/staging-v3r1-edca178182f1/agents/public_lucario_search/deck.csv",
+      "deckSha256": "ed840b99364baa5b5cc03a3120e9d3c982d7c905e2ed8bea2b9e9d2017fa19b7",
+      "teacher": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-universal-7d-scoregt900-20260810/final_7d/training/seed-20260812-doraemon16-gpu0/best_model.pt",
+      "current": {
+        "generation": 11,
+        "checkpoint": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-ppo-focus-a05-lucario-a08-20260811/mega_lucario_ex_champion_pool/generation-0011/checkpoint.pt"
+      }
+    },
+    "a08_dipplin_seaking": {
+      "deckName": "a08_dipplin_seaking",
+      "archetypeId": "A08",
+      "archetypeLabel": "Thwackey / Dipplin / Seaking",
+      "deckPath": "/homes/lzhang/pocketmon/runs/experiment7-multideck-20260809/prepared/selection/decks/04_a08_1a88a53fe3d0.csv",
+      "deckSha256": "1a88a53fe3d02e88717177bb6df728748e038f6febff5715934c45cdc7d98f87",
+      "teacher": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-universal-7d-scoregt900-20260810/final_7d/training/seed-20260812-doraemon16-gpu0/best_model.pt",
+      "current": {
+        "generation": 15,
+        "checkpoint": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-ppo-focus-a05-lucario-a08-20260811/a08_dipplin_seaking_champion_pool/generation-0015/checkpoint.pt"
+      }
+    },
+    "a02_submission4_grimmsnarl_froslass_munkidori": {
+      "deckName": "a02_submission4_grimmsnarl_froslass_munkidori",
+      "archetypeId": "A02",
+      "archetypeLabel": "Marnie's Grimmsnarl ex / Morgrem / Froslass (submission4 deck)",
+      "deckPath": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-opponent-pool-20260810/intake-submission4-edca178182f1/static-stage/agents/team_submission_4_portable_bc/deck.csv",
+      "deckSha256": "cafa7652a6349be806d8ac2b9abfdb6c72ca3821f368e0d912e2d989f3b54cdd",
+      "teacher": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-universal-7d-scoregt900-20260810/final_7d/training/seed-20260812-doraemon16-gpu0/best_model.pt",
+      "current": {
+        "generation": 0,
+        "checkpoint": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-universal-7d-scoregt900-20260810/final_7d/training/seed-20260812-doraemon16-gpu0/best_model.pt"
+      }
+    }
+  }
+}
