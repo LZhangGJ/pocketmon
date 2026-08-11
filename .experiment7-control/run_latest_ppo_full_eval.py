@@ -16,6 +16,7 @@ from typing import Any
 
 
 FAILURE_RESULTS = {"crash", "timeout", "illegal"}
+EVALUATION_DESIGN_VERSION = 2
 
 
 def now() -> datetime:
@@ -212,6 +213,7 @@ def main() -> int:
     staging.mkdir()
     metadata = {
         "schemaVersion": 1,
+        "evaluationDesignVersion": EVALUATION_DESIGN_VERSION,
         "status": "running",
         "roundId": round_id,
         "startedAt": started.isoformat(),
@@ -244,14 +246,17 @@ def main() -> int:
     write(staging / "opponents.json", {"schemaVersion": 1, "agents": opponent_rows})
 
     schedule: list[dict[str, Any]] = []
-    seed_cursor = int(started.timestamp()) % 50_000_000
+    # Keep evaluation deals fixed across rounds.  PPO and its same-deck BC
+    # baseline also receive the same paired-seat seeds against each frozen
+    # opponent, so checkpoint deltas are not confounded by a new set of deals.
+    seed_cursor = 260_811_000
     for chain_index, selected_row in enumerate(selected):
         ppo_name = selected_row["learner"]
         bc_name = selected_row["bcLearner"]
         for opponent_index, opponent in enumerate(frozen):
             pair_seed = seed_cursor + chain_index * 10_000_000 + opponent_index * 10_000
             paired_games(schedule, ppo_name, opponent["name"], args.games_per_frozen, pair_seed)
-            paired_games(schedule, bc_name, opponent["name"], args.games_per_frozen, pair_seed + 5000)
+            paired_games(schedule, bc_name, opponent["name"], args.games_per_frozen, pair_seed)
         paired_games(
             schedule,
             ppo_name,
@@ -316,6 +321,9 @@ def main() -> int:
     frozen_names = {row["name"] for row in frozen}
     previous_path = eval_root / "latest.json"
     previous = load(previous_path) if previous_path.exists() else None
+    previous_compatible = bool(
+        previous and previous.get("evaluationDesignVersion") == EVALUATION_DESIGN_VERSION
+    )
     report: dict[str, Any] = {}
     learner_to_chain = {row["learner"]: row["chain"] for row in selected}
     for selected_row in selected:
@@ -327,7 +335,7 @@ def main() -> int:
             ppo_metric = metrics([row for row in rows if row["learner"] == ppo_name and row["opponent"] == opponent["name"]])
             bc_metric = metrics([row for row in rows if row["learner"] == bc_name and row["opponent"] == opponent["name"]])
             previous_agent = None
-            if previous:
+            if previous_compatible:
                 previous_agent = next(
                     (item for item in previous.get("chains", {}).get(chain, {}).get("agents", []) if item["agent"] == opponent["name"]),
                     None,
@@ -354,7 +362,11 @@ def main() -> int:
         bc_frozen_rows = [row for row in rows if row["learner"] == bc_name and row["opponent"] in frozen_names]
         aggregate = metrics(ppo_frozen_rows)
         bc_aggregate = metrics(bc_frozen_rows)
-        previous_aggregate = previous.get("chains", {}).get(chain, {}).get("frozenAggregate") if previous else None
+        previous_aggregate = (
+            previous.get("chains", {}).get(chain, {}).get("frozenAggregate")
+            if previous_compatible
+            else None
+        )
         delta_previous = (
             aggregate["scoreRate"] - previous_aggregate["scoreRate"]
             if previous_aggregate and aggregate["scoreRate"] is not None and previous_aggregate["scoreRate"] is not None
@@ -402,6 +414,7 @@ def main() -> int:
     write(staging / "metadata.json", metadata)
     payload = {
         "schemaVersion": 1,
+        "evaluationDesignVersion": EVALUATION_DESIGN_VERSION,
         "status": "complete",
         "busy": False,
         "updatedAt": now().isoformat(),
@@ -409,7 +422,7 @@ def main() -> int:
         "games": len(rows),
         "frozenAgentCount": len(frozen),
         "chains": report,
-        "previousRoundId": previous.get("roundId") if previous else None,
+        "previousRoundId": previous.get("roundId") if previous_compatible else None,
     }
     write(staging / "report.json", payload)
     os.replace(staging, final)
