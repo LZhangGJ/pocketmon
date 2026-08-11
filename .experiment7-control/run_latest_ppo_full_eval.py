@@ -6,6 +6,7 @@ import fcntl
 import json
 import os
 import random
+import shlex
 import subprocess
 import sys
 import traceback
@@ -306,7 +307,7 @@ def main() -> int:
                     ],
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL,
-                    timeout=20,
+                    timeout=180,
                 )
                 return host, completed.returncode == 0
             except (OSError, subprocess.TimeoutExpired):
@@ -323,10 +324,10 @@ def main() -> int:
     metadata["distributedHosts"] = available_hosts
     metadata["maxShardsPerHost"] = args.max_shards_per_host if available_hosts else None
     write(staging / "metadata.json", metadata)
-    processes: list[tuple[int, subprocess.Popen[str], Any]] = []
-    for shard_index in range(shard_count):
-        log_handle = (logs / f"shard-{shard_index:03d}.log").open("w", encoding="utf-8")
-        shard_arguments = [
+    processes: list[tuple[str, subprocess.Popen[str], Any]] = []
+
+    def shard_arguments(shard_index: int) -> list[str]:
+        return [
             str(args.worktree.resolve()),
             str(args.python.resolve()),
             str(schedule_path),
@@ -338,25 +339,46 @@ def main() -> int:
             str(shard_count),
             str(eval_root),
         ]
-        if available_hosts:
-            host = available_hosts[shard_index % len(available_hosts)]
+
+    if available_hosts:
+        for host_index, host in enumerate(available_hosts):
+            indices = list(range(host_index, shard_count, len(available_hosts)))
+            if not indices:
+                continue
+            log_handle = (logs / f"host-{host.replace('.', '-')}.log").open("w", encoding="utf-8")
+            commands = []
+            for shard_index in indices:
+                command = ["/homes/lzhang/run_load_guarded_arena_shard.sh", *shard_arguments(shard_index)]
+                commands.append(f"{shlex.join(command)} & pids=\"$pids $!\"")
+            remote_script = (
+                "set -u; pids=\"\"; " + "; ".join(commands)
+                + "; failed=0; for pid in $pids; do wait $pid || failed=1; done; exit $failed"
+            )
             command = [
-                "ssh", "-T", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8",
-                "-o", "ServerAliveInterval=5", "-o", "ServerAliveCountMax=2",
-                f"lzhang@{host}", "/homes/lzhang/run_load_guarded_arena_shard.sh",
-                *shard_arguments,
+                "ssh", "-T", "-o", "BatchMode=yes", "-o", "ConnectTimeout=20",
+                "-o", "ServerAliveInterval=15", "-o", "ServerAliveCountMax=12",
+                f"lzhang@{host}", remote_script,
             ]
-        else:
-            command = ["bash", str(args.run_shard.resolve()), *shard_arguments]
-        processes.append(
-            (shard_index, subprocess.Popen(command, stdout=log_handle, stderr=subprocess.STDOUT, text=True), log_handle)
-        )
+            processes.append(
+                (host, subprocess.Popen(command, stdout=log_handle, stderr=subprocess.STDOUT, text=True), log_handle)
+            )
+    else:
+        for shard_index in range(shard_count):
+            log_handle = (logs / f"shard-{shard_index:03d}.log").open("w", encoding="utf-8")
+            command = ["bash", str(args.run_shard.resolve()), *shard_arguments(shard_index)]
+            processes.append(
+                (
+                    str(shard_index),
+                    subprocess.Popen(command, stdout=log_handle, stderr=subprocess.STDOUT, text=True),
+                    log_handle,
+                )
+            )
     failed_shards = []
-    for shard_index, process, log_handle in processes:
+    for shard_label, process, log_handle in processes:
         return_code = process.wait()
         log_handle.close()
         if return_code:
-            failed_shards.append({"shard": shard_index, "returnCode": return_code})
+            failed_shards.append({"shardOrHost": shard_label, "returnCode": return_code})
     if failed_shards:
         raise RuntimeError(f"Arena shard failures: {failed_shards}")
 
