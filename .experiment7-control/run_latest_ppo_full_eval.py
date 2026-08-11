@@ -303,7 +303,8 @@ def main() -> int:
                     [
                         "ssh", "-T", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8",
                         "-o", "ServerAliveInterval=5", "-o", "ServerAliveCountMax=2",
-                        f"lzhang@{host}", "test -x /homes/lzhang/run_load_guarded_arena_shard.sh",
+                        f"lzhang@{host}",
+                        "test -x /homes/lzhang/run_load_guarded_arena_shard.sh && command -v bwrap >/dev/null",
                     ],
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL,
