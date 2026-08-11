@@ -383,6 +383,14 @@ def main() -> int:
             "ppoMinusBc": aggregate["scoreRate"] - bc_aggregate["scoreRate"],
             "deltaVsPrevious": delta_previous,
             "progress": progress,
+            "seatMetrics": {
+                seat: metrics([row for row in ppo_frozen_rows if row["learner_seat"] == seat])
+                for seat in ("0", "1")
+            },
+            "seatGap": abs(
+                metrics([row for row in ppo_frozen_rows if row["learner_seat"] == "0"])["scoreRate"]
+                - metrics([row for row in ppo_frozen_rows if row["learner_seat"] == "1"])["scoreRate"]
+            ),
             "directVsUniversalBc": metrics(
                 [row for row in rows if row["learner"] == ppo_name and row["opponent"] == bc_name]
             ),
