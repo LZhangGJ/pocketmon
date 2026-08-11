@@ -205,11 +205,13 @@ def main() -> int:
     log_dir.mkdir()
     processes: list[tuple[int, subprocess.Popen[str], Any]] = []
     shard_count = min(args.shards, len(schedule))
+    guarded_runner = Path("/homes/lzhang/run_load_guarded_arena_shard.sh")
+    shard_runner = guarded_runner if guarded_runner.is_file() else args.run_shard.resolve()
     for shard_index in range(shard_count):
         log_handle = (log_dir / f"shard-{shard_index:02d}.log").open("w", encoding="utf-8")
         command = [
             "bash",
-            str(args.run_shard.resolve()),
+            str(shard_runner),
             str(args.worktree.resolve()),
             str(args.python.resolve()),
             str(schedule_path),

@@ -18,7 +18,7 @@ for host in "${!addresses[@]}"; do
     continue
   fi
   pid=$(<"$pidfile")
-  ssh -T -o BatchMode=yes -o ConnectTimeout=8 -o ServerAliveInterval=5 -o ServerAliveCountMax=2 \
+  timeout 30 ssh -T -o BatchMode=yes -o ConnectTimeout=8 -o ServerAliveInterval=5 -o ServerAliveCountMax=2 \
     "lzhang@${addresses[$host]}" \
     "kill -0 $pid 2>/dev/null && renice 10 -p $pid >/dev/null && ionice -c 2 -n 7 -p $pid && echo PRIORITY_OK host=$host pid=$pid" &
   pids+=("$!")
