@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "artifactFamily": "experiment7_universal_bc",
+  "publishedDate": "2026-08-14",
+  "selectionRule": "Best completed 10-day Universal BC checkpoint by validation exactSemantic score within each capacity class.",
+  "architecture": {
+    "name": "experiment7_universal_deck8_autoregressive_stop",
+    "implementation": "experiment7/integration/universal_deck_model.py",
+    "checkpointSchemaVersion": 2
+  },
+  "validationCorpus": {
+    "replayDatesInclusive": [
+      "2026-08-02",
+      "2026-08-11"
+    ],
+    "trainDecisions": 6684422,
+    "trainPolicyDecisions": 3487239,
+    "validationDecisions": 347998,
+    "validationPolicyDecisions": 180583
+  },
+  "models": [
+    {
+      "id": "large_256x6",
+      "capacityClass": "large",
+      "file": "large_256x6_best_model.pt",
+      "bytes": 25814647,
+      "sha256": "3a81fc7d0d09bfd368500b47fb1211c8e88f790b5c23078a1232e5ad8fbcc3af",
+      "parameterCount": 6442756,
+      "bestEpoch": 4,
+      "validation": {
+        "exactSemantic": 0.7663899702629816,
+        "exactIndex": 0.7364092965561543,
+        "countAccuracy": 0.9921864184336289,
+        "valueBrier": 0.18117511513987902,
+        "illegalPredictionCount": 0
+      },
+      "config": {
+        "state_dim": 320,
+        "option_dim": 176,
+        "entity_num_dim": 12,
+        "card_vocab": 1268,
+        "d_model": 256,
+        "n_heads": 8,
+        "n_layers": 6,
+        "ff_dim": 1024,
+        "max_actions": 40,
+        "history_length": 8,
+        "deck_size": 60,
+        "deck_latents": 8,
+        "opponent_classes": 1,
+        "dropout": 0.05,
+        "layer_norm_eps": 0.00001
+      }
+    },
+    {
+      "id": "standard_1m",
+      "capacityClass": "standard",
+      "file": "standard_1m_best_model.pt",
+      "bytes": 4244130,
+      "sha256": "bb6864f11cd0a1b6f1a5338665ab857da981df7fdc0c9d57cad99c4cef727876",
+      "parameterCount": 1053188,
+      "bestEpoch": 4,
+      "validation": {
+        "exactSemantic": 0.7638758908645886,
+        "exactIndex": 0.7337900023811765,
+        "countAccuracy": 0.9922196441525504,
+        "valueBrier": 0.1752546258600103,
+        "illegalPredictionCount": 0
+      },
+      "config": {
+        "state_dim": 320,
+        "option_dim": 176,
+        "entity_num_dim": 12,
+        "card_vocab": 1268,
+        "d_model": 128,
+        "n_heads": 4,
+        "n_layers": 3,
+        "ff_dim": 384,
+        "max_actions": 40,
+        "history_length": 8,
+        "deck_size": 60,
+        "deck_latents": 8,
+        "opponent_classes": 1,
+        "dropout": 0.05,
+        "layer_norm_eps": 0.00001
+      }
+    }
+  ],
+  "supportedDeckEvidence": {
+    "scope": "Observed/training-supported deck pool; not a claim that unseen legal decks are validated.",
+    "exactVariants": 133,
+    "uniqueArchetypes": 34,
+    "variantManifest": "compatible_decks.csv",
+    "archetypeSummary": "compatible_archetypes.csv",
+    "totalSamplingWeight": 0.9999999999999998
+  }
+}
