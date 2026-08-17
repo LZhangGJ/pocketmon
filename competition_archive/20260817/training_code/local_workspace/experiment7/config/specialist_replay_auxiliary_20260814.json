@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "source": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-daily-replay-bc/current-leaderboard-scoregt1000",
+  "selectionMeaning": "leaderboard team score greater than 1000; do not reapply as a per-game score filter",
+  "policy": {
+    "policyRows": "winner actions only",
+    "valueRows": "all audited actions",
+    "validation": "chronological newest 10 percent, episode-disjoint",
+    "application": "low-coefficient supervised auxiliary teacher; retain true on-policy PPO objective",
+    "maximumAuxiliaryFraction": 0.15,
+    "promotion": "two frozen-pool rounds; aggregate non-regression and targeted ordering improvement"
+  },
+  "chains": {
+    "a02_grim_large_g9": {"deckKey": "a02_baseline", "matchedEpisodes": 1884, "status": "preparing"},
+    "a02_grim_large_g9_pokegear": {"deckKey": "a02_pokegear", "matchedEpisodes": 342, "status": "queued"},
+    "dragapult_munkidori_large_g9": {"deckKey": "dragapult_munkidori_interference", "matchedEpisodes": 916, "status": "preparing"},
+    "a08_maxbelt_large_g9": {"deckKey": "a08_maximum_belt", "matchedEpisodes": 3, "status": "held_insufficient_evidence"},
+    "lucario_gold_exact": {"deckKey": "gold_exact_lucario", "matchedEpisodes": 404, "status": "queued"}
+  }
+}

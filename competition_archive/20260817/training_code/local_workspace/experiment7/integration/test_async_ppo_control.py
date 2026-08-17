@@ -1,0 +1,274 @@
+from __future__ import annotations
+
+import json
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+
+INTEGRATION = Path(__file__).resolve().parent
+if str(INTEGRATION) not in sys.path:
+    sys.path.insert(0, str(INTEGRATION))
+
+from async_ppo_control import (  # noqa: E402
+    add_chain,
+    build_pool_payload,
+    initialize,
+    publish_snapshot,
+    read_json,
+)
+from run_async_ppo_learner import select_minimum_batch  # noqa: E402
+from common import canonical_deck_sha256, read_deck  # noqa: E402
+
+
+def write_json(path: Path, payload: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+
+class AsyncPpoControlTest(unittest.TestCase):
+    def test_universal_chain_publishes_every_deck_package(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            base = root / "base.json"
+            write_json(base, {"agents": [{"name": "base", "archetype": "A02"}]})
+            packages = []
+            for name, archetype in (("deck-a", "A03"), ("deck-b", "A06")):
+                agent = root / name
+                agent.mkdir()
+                (agent / "main.py").write_text("pass\n", encoding="utf-8")
+                (agent / "deck.csv").write_text("1\n" * 60, encoding="utf-8")
+                packages.append({
+                    "name": name, "agentDir": str(agent),
+                    "deckSha256": f"sha-{name}", "archetypeId": archetype,
+                    "archetypeLabel": archetype, "directorySha256": f"dir-{name}",
+                })
+            manifest = root / "packages.json"
+            write_json(manifest, {"packages": packages})
+            pool = build_pool_payload({
+                "basePool": {"path": str(base)},
+                "chains": {"universal": {
+                    "archetypeId": "UNIVERSAL_LARGE", "archetypeLabel": "universal",
+                    "learnerDeckPool": str(root / "decks.json"),
+                    "poolControl": {"enabled": True},
+                    "current": {"generation": 3, "sha256": "checkpoint",
+                                "packageManifest": str(manifest)},
+                }},
+            })
+            self.assertEqual([row["name"] for row in pool["agents"]],
+                             ["base", "deck-a", "deck-b"])
+            self.assertEqual([row["canonical_archetype"] for row in pool["agents"][1:]],
+                             ["A03", "A06"])
+
+    def test_pool_control_excludes_retired_chain_and_replaces_base_fallback(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            live_agent = root / "live-agent"
+            live_agent.mkdir()
+            (live_agent / "main.py").write_text("pass\n", encoding="utf-8")
+            (live_agent / "deck.csv").write_text("1\n" * 60, encoding="utf-8")
+            retired_agent = root / "retired-agent"
+            retired_agent.mkdir()
+            (retired_agent / "main.py").write_text("pass\n", encoding="utf-8")
+            (retired_agent / "deck.csv").write_text("1\n" * 60, encoding="utf-8")
+            live_manifest = root / "live.json"
+            retired_manifest = root / "retired.json"
+            write_json(live_manifest, {"packages": [{
+                "name": "live-g2", "agentDir": str(live_agent),
+                "deckSha256": "deck-live", "archetypeId": "A02",
+                "directorySha256": "policy-g2",
+            }]})
+            write_json(retired_manifest, {"packages": [{
+                "name": "retired-g9", "agentDir": str(retired_agent),
+                "deckSha256": "deck-retired", "archetypeId": "A08",
+                "directorySha256": "policy-retired",
+            }]})
+            base = root / "base.json"
+            write_json(base, {"agents": [
+                {"name": "live-fallback", "archetype": "A02",
+                 "deck_canonical_sha256": "deck-live",
+                 "directory_sha256": "policy-g1",
+                 "replacement_chain": "live"},
+                {"name": "large-deck", "archetype": "A03",
+                 "deck_canonical_sha256": "deck-large",
+                 "directory_sha256": "large-g9"},
+            ]})
+            league = {
+                "basePool": {"path": str(base)},
+                "chains": {
+                    "live": {
+                        "archetypeId": "A02", "archetypeLabel": "live",
+                        "poolControl": {"enabled": True},
+                        "current": {"generation": 2, "sha256": "checkpoint-g2",
+                                    "packageManifest": str(live_manifest)},
+                    },
+                    "retired": {
+                        "archetypeId": "A08", "archetypeLabel": "retired",
+                        "poolControl": {"enabled": False},
+                        "current": {"generation": 9, "sha256": "checkpoint-retired",
+                                    "packageManifest": str(retired_manifest)},
+                    },
+                },
+            }
+            pool = build_pool_payload(league)
+            self.assertEqual([row["name"] for row in pool["agents"]],
+                             ["large-deck", "live-g2"])
+            self.assertEqual(pool["asyncLeague"]["dynamicAgents"], ["live-g2"])
+
+    def test_minimum_batch_waits_until_decision_threshold(self) -> None:
+        paths = [Path("one"), Path("two")]
+        summaries = [{"decisions": 100}, {"decisions": 200}]
+        selected, _, decisions = select_minimum_batch(paths, summaries, 400)
+        self.assertEqual(selected, [])
+        self.assertEqual(decisions, 300)
+        selected, _, decisions = select_minimum_batch(paths, summaries, 250)
+        self.assertEqual(selected, paths)
+        self.assertEqual(decisions, 300)
+
+    def test_four_live_snapshots_are_added_to_canonical_pool(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            base = root / "base.json"
+            write_json(
+                base,
+                {
+                    "agents": [
+                        {"name": "a03", "archetype": "A03"},
+                        {"name": "alakazam", "archetype": "alakazam"},
+                    ]
+                },
+            )
+            chains = {}
+            for index, (name, archetype) in enumerate(
+                (
+                    ("a05", "A05"),
+                    ("lucario", "LUCARIO"),
+                    ("a08", "A08"),
+                    ("submission4", "A02"),
+                ),
+                start=1,
+            ):
+                checkpoint = root / f"{name}.pt"
+                checkpoint.write_bytes(f"checkpoint-{name}".encode())
+                deck = root / f"{name}.csv"
+                deck.write_text("1\n" * 60, encoding="utf-8")
+                chains[name] = {
+                    "deckName": name,
+                    "archetypeId": archetype,
+                    "archetypeLabel": name,
+                    "deckPath": str(deck),
+                    "deckSha256": f"deck-{index}",
+                    "teacher": str(checkpoint),
+                    "current": {"generation": 7, "checkpoint": str(checkpoint)},
+                }
+            config = root / "config.json"
+            league_path = root / "league.json"
+            pool_path = root / "pool.json"
+            write_json(
+                config,
+                {
+                    "basePool": {"path": str(base)},
+                    "poolPath": str(pool_path),
+                    "referenceRoot": str(root),
+                    "engineCatalog": str(root / "engine.json"),
+                    "cgDir": str(root),
+                    "sources": str(root / "sources.json"),
+                    "chains": chains,
+                },
+            )
+            initialize(league_path, config)
+            self.assertEqual(len(read_json(pool_path)["agents"]), 2)
+            for name, chain in chains.items():
+                agent = root / f"agent-{name}"
+                agent.mkdir()
+                (agent / "main.py").write_text("pass\n", encoding="utf-8")
+                (agent / "deck.csv").write_text("1\n" * 60, encoding="utf-8")
+                manifest = root / f"manifest-{name}.json"
+                write_json(
+                    manifest,
+                    {
+                        "packages": [
+                            {
+                                "name": f"live-{name}",
+                                "agentDir": str(agent),
+                                "deckSha256": chain["deckSha256"],
+                                "archetypeId": chain["archetypeId"],
+                                "directorySha256": f"directory-{name}",
+                            }
+                        ]
+                    },
+                )
+                publish_snapshot(
+                    league_path,
+                    name,
+                    7,
+                    Path(chain["current"]["checkpoint"]),
+                    manifest,
+                )
+            pool = read_json(pool_path)
+            self.assertEqual(len(pool["agents"]), 6)
+            self.assertEqual(
+                [row["canonical_archetype"] for row in pool["agents"][:2]],
+                ["A03", "A03"],
+            )
+            self.assertEqual(len(pool["asyncLeague"]["dynamicAgents"]), 4)
+
+    def test_add_chain_updates_live_league_without_deploying_it(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            base = root / "base.json"
+            write_json(base, {"agents": [{"name": "frozen", "archetype": "A03"}]})
+            checkpoint = root / "bootstrap.pt"
+            checkpoint.write_bytes(b"checkpoint")
+            deck = root / "deck.csv"
+            deck.write_text("1\n" * 60, encoding="utf-8")
+            deck_sha = canonical_deck_sha256(read_deck(deck))
+            config = root / "config.json"
+            pool = root / "pool.json"
+            league = root / "league.json"
+            write_json(
+                config,
+                {
+                    "basePool": {"path": str(base)},
+                    "poolPath": str(pool),
+                    "referenceRoot": str(root),
+                    "engineCatalog": str(root / "engine.json"),
+                    "cgDir": str(root),
+                    "sources": str(root / "sources.json"),
+                    "chains": {
+                        "first": {
+                            "deckName": "first",
+                            "archetypeId": "A05",
+                            "archetypeLabel": "first",
+                            "deckPath": str(deck),
+                            "deckSha256": deck_sha,
+                            "teacher": str(checkpoint),
+                            "current": {"generation": 0, "checkpoint": str(checkpoint)},
+                        }
+                    },
+                },
+            )
+            initialize(league, config)
+            chain_config = root / "chain.json"
+            write_json(
+                chain_config,
+                {
+                    "deckName": "submission4",
+                    "archetypeId": "A02",
+                    "archetypeLabel": "submission4 deck",
+                    "deckPath": str(deck),
+                    "deckSha256": deck_sha,
+                    "teacher": str(checkpoint),
+                    "current": {"generation": 0, "checkpoint": str(checkpoint)},
+                },
+            )
+            added = add_chain(league, "submission4", chain_config)
+            self.assertEqual(added["current"]["generation"], 0)
+            self.assertNotIn("packageManifest", added["current"])
+            self.assertIn("submission4", read_json(league)["chains"])
+            self.assertEqual(len(read_json(pool)["agents"]), 1)
+
+
+if __name__ == "__main__":
+    unittest.main()

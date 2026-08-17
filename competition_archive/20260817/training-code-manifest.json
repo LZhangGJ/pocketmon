@@ -1,6 +1,6 @@
 {
-  "createdAt": "2026-08-17T00:19:02.454943+00:00",
-  "fileCount": 355,
+  "createdAt": "2026-08-17T00:39:53.870966+00:00",
+  "fileCount": 591,
   "files": [
     {
       "bytes": 875,
@@ -1213,6 +1213,1186 @@
       "sha256": "9c18e927d70aed6f6fdab0abbcc87686ef34e9c3166e46dca5f6dd43adfc1d9b"
     },
     {
+      "bytes": 301,
+      "path": "training_code/local_workspace/agents/rl_bc_adapter/deck.csv",
+      "sha256": "780e9eb63b0736dc90c70b39b9b58d3cf7eea59db11dbc146fafc08af5e2292f"
+    },
+    {
+      "bytes": 1140,
+      "path": "training_code/local_workspace/agents/rl_bc_adapter/main.py",
+      "sha256": "d25352939c826bd7657a56135456e2296780914ff90ac930d9a41dfa343d5a53"
+    },
+    {
+      "bytes": 760,
+      "path": "training_code/local_workspace/agents/rl_bc_adapter/README.md",
+      "sha256": "15524f40112b0a2033ff66bd4641767ccf526d8b60ee2dd084016c453ee131d1"
+    },
+    {
+      "bytes": 1842,
+      "path": "training_code/local_workspace/agents/rl_bc_specialist/main.py",
+      "sha256": "fd952028571bf4f7dd81a463addfc77f9bdf7e703a0876d91fa1b9da9222e59e"
+    },
+    {
+      "bytes": 1246,
+      "path": "training_code/local_workspace/experiment7/config/specialist_replay_auxiliary_20260814.json",
+      "sha256": "dbd3496d52bbb267c6c4daf6bde93570b58721dbccbd980982ec69553cafae3e"
+    },
+    {
+      "bytes": 3886,
+      "path": "training_code/local_workspace/experiment7/config/static_deck_bc_10d_20260815.json",
+      "sha256": "1332f0db396940c67424d4adb076d30b7a896c4f6ad64cc72308490d02b51f2d"
+    },
+    {
+      "bytes": 3129,
+      "path": "training_code/local_workspace/experiment7/config/static_deck_bc_lpt_plan_20260815.json",
+      "sha256": "9c18e927d70aed6f6fdab0abbcc87686ef34e9c3166e46dca5f6dd43adfc1d9b"
+    },
+    {
+      "bytes": 75,
+      "path": "training_code/local_workspace/experiment7/integration/__init__.py",
+      "sha256": "421e6f73e5b3010c09f0f301e79e3c502769107fd095b6f13468fc9f12c5a3a5"
+    },
+    {
+      "bytes": 2937,
+      "path": "training_code/local_workspace/experiment7/integration/activate_universal_cohort_replacement.py",
+      "sha256": "46904cfd1e2927c4e3f6a2502f503232c7733e33e92382a86503b30b6ca02091"
+    },
+    {
+      "bytes": 6096,
+      "path": "training_code/local_workspace/experiment7/integration/admit_static_deck_bc.py",
+      "sha256": "e15504499f16c1825e279a9d3cbe9341bc49def5688ae022b4ed7eaba76dd6d7"
+    },
+    {
+      "bytes": 2556,
+      "path": "training_code/local_workspace/experiment7/integration/agent_isolation.py",
+      "sha256": "7aeb1ff8662b2cf082f783d35837e0a518505fbf7443c9a23e81d1e9c17861e0"
+    },
+    {
+      "bytes": 4297,
+      "path": "training_code/local_workspace/experiment7/integration/apply_current_universal_cohort.py",
+      "sha256": "850b9d7fdbcc6ee6d401e23cf07887244464414b4ce595be3090832e4e8586df"
+    },
+    {
+      "bytes": 9509,
+      "path": "training_code/local_workspace/experiment7/integration/apply_replay_diagnosis_training_controls_20260814.py",
+      "sha256": "09cb99229e992dc01b1b94889ef306edf6183a558bd53ad6362e6ee5777da525"
+    },
+    {
+      "bytes": 9556,
+      "path": "training_code/local_workspace/experiment7/integration/archive_specialist_ppo_losses.py",
+      "sha256": "12c99a17c9d62236635af304233dd252db58da6ee98769a6f5de0fcdda3fedc1"
+    },
+    {
+      "bytes": 12338,
+      "path": "training_code/local_workspace/experiment7/integration/arena.py",
+      "sha256": "5b47ac13f983affafdd00a0eeafdb9e7dfe4a69ed6634ed48c645927a8fa6630"
+    },
+    {
+      "bytes": 801,
+      "path": "training_code/local_workspace/experiment7/integration/assign_large_g9_learners_20260814.sh",
+      "sha256": "6595f8dd624de8cf521f21b56a33671f87016b316e5b8ec513090001ea3673e8"
+    },
+    {
+      "bytes": 15273,
+      "path": "training_code/local_workspace/experiment7/integration/async_ppo_control.py",
+      "sha256": "23ba9753199eff6102ad7ab42a41b4ed43af433089d3dd4c4afd07313bb74ac1"
+    },
+    {
+      "bytes": 2431,
+      "path": "training_code/local_workspace/experiment7/integration/build_engine_catalog.py",
+      "sha256": "7c2f6f65ffb9d6c9bcca51e6e790558d74a95b75c1793883249cc3791a7958a4"
+    },
+    {
+      "bytes": 21658,
+      "path": "training_code/local_workspace/experiment7/integration/build_from_pocketmon_replays.py",
+      "sha256": "3504505db6ef63413f5965c27f2d3d42e7d2b93e9915d09b7790b5c64f8948d5"
+    },
+    {
+      "bytes": 4878,
+      "path": "training_code/local_workspace/experiment7/integration/build_ppo_tactical_guardrail_evidence.py",
+      "sha256": "cc1dc81fabdd0d77a9a3a3069382775bb3e93b70f4a7eb94d48d97bb9286d822"
+    },
+    {
+      "bytes": 18305,
+      "path": "training_code/local_workspace/experiment7/integration/build_replay_catalog.py",
+      "sha256": "c3c5173030074295a253c8914911fa770eb5045040de342b12c3665cd97cc845"
+    },
+    {
+      "bytes": 11231,
+      "path": "training_code/local_workspace/experiment7/integration/build_static_deck_day_shard.py",
+      "sha256": "1cf13fa4b070eeb5824107a4ee689361010f75915f398751197b5b36f7cbffa9"
+    },
+    {
+      "bytes": 46591,
+      "path": "training_code/local_workspace/experiment7/integration/collect_universal_ppo_rollouts.py",
+      "sha256": "8186a45e20c66d78532a88d1e7df1510edc766e694bfdc921d2c9d7b25c94127"
+    },
+    {
+      "bytes": 10130,
+      "path": "training_code/local_workspace/experiment7/integration/common.py",
+      "sha256": "abf0a14a2c19b49d2b120f1c97700e8caf5f48803cbe10e5663c89d714e2c4ae"
+    },
+    {
+      "bytes": 1463,
+      "path": "training_code/local_workspace/experiment7/integration/compare_compact_snapshots.py",
+      "sha256": "8f3fb7ad06f3f6708bb564aecc15b1c1784a9ec231a78008be26df2dcada70f0"
+    },
+    {
+      "bytes": 1035,
+      "path": "training_code/local_workspace/experiment7/integration/convert_features_to_tensordict.py",
+      "sha256": "f410367af9e61af0af08b5b76539b8a367cae817303b2bf3ae456c8774bf30b0"
+    },
+    {
+      "bytes": 675,
+      "path": "training_code/local_workspace/experiment7/integration/copy_ppo_runtime_from_d20.sh",
+      "sha256": "b365efc2919a12d59b39899d54197d0f25e83f3f4835b0a975cc8692021347f1"
+    },
+    {
+      "bytes": 364,
+      "path": "training_code/local_workspace/experiment7/integration/copy_python_stdlib_from_d20.sh",
+      "sha256": "a0a5096ff029c953c384dd2f401913e002cd08fd74ca095ebf8605cde70c3876"
+    },
+    {
+      "bytes": 1490,
+      "path": "training_code/local_workspace/experiment7/integration/count_static_deck_bc_matches.py",
+      "sha256": "4ce6428a7e9b5de7f2585b476f2283f04bd37f5997023eec45ac4ef8ab3ec231"
+    },
+    {
+      "bytes": 1818,
+      "path": "training_code/local_workspace/experiment7/integration/ensure_allchain_workers_cpu70_20260815.sh",
+      "sha256": "6f37fbc99550f7fca9abaa096a185d2aea0f2b69c954ed8aebd31ed2e7b95c51"
+    },
+    {
+      "bytes": 21880,
+      "path": "training_code/local_workspace/experiment7/integration/export_and_package.py",
+      "sha256": "de9dbe2daf90e4aa6ea26e7ade54e0e898e84b3a4018f366b8b2e19fd808eeee"
+    },
+    {
+      "bytes": 2672,
+      "path": "training_code/local_workspace/experiment7/integration/feature_tensor_store.py",
+      "sha256": "e59839bf5db476db4a2818385d6f1438cac39804e3e02b91361184bf83125f87"
+    },
+    {
+      "bytes": 870,
+      "path": "training_code/local_workspace/experiment7/integration/install_and_restart_promotion_loop.sh",
+      "sha256": "fc96b5f9c18e10b155e46c032d30d9ffb8a3fe2edc78e90d9ab8a5934cbf08c8"
+    },
+    {
+      "bytes": 2804,
+      "path": "training_code/local_workspace/experiment7/integration/launch_post_strict_31m_auto_resume_doraemon14.sh",
+      "sha256": "9af98ad2e0ac4fc8a7a6dced1f60a4c702767a570492b08904935ec78e5cfabc"
+    },
+    {
+      "bytes": 2438,
+      "path": "training_code/local_workspace/experiment7/integration/launch_post_strict_31m_local_authority.sh",
+      "sha256": "1f18b3fe4c292a2257d4f7c7a9164b0fd24ea9dc908cfe973d704b2827b0518a"
+    },
+    {
+      "bytes": 1631,
+      "path": "training_code/local_workspace/experiment7/integration/launch_scaled_universal_bc_doraemon10.sh",
+      "sha256": "77b1957f00b627ed539d9146ffd1e5b1fff1fb166081731aa11b0a5a78ffd1d5"
+    },
+    {
+      "bytes": 1766,
+      "path": "training_code/local_workspace/experiment7/integration/launch_scaled_universal_bc_doraemon13.sh",
+      "sha256": "29ef52bc258df2d9d710f6dfecd200c81436db83cb9303535df45728e19d533f"
+    },
+    {
+      "bytes": 1912,
+      "path": "training_code/local_workspace/experiment7/integration/launch_scaled_universal_bc_doraemon14.sh",
+      "sha256": "c1cbb782a41e35e4d2632f73f9e1d2d1592860ec452ceaab0cf245be3d591d72"
+    },
+    {
+      "bytes": 264,
+      "path": "training_code/local_workspace/experiment7/integration/launch_specialist_replay_auxiliary.sh",
+      "sha256": "9e1a08db63fc0eea8ecc752b18adc4d81700e56d3c2b8e9895489b5d5eb733ff"
+    },
+    {
+      "bytes": 2623,
+      "path": "training_code/local_workspace/experiment7/integration/launch_static_deck_bc_cluster.sh",
+      "sha256": "44b38f46033c80eb53957496f881c5b084ae00e81950296c5e35ff1309df0800"
+    },
+    {
+      "bytes": 596,
+      "path": "training_code/local_workspace/experiment7/integration/launch_static_deck_bc_d17_authority.sh",
+      "sha256": "0be254d65c67bc4371b5e93af3ea282ee6e3ab9954028a3631d338625f277352"
+    },
+    {
+      "bytes": 2234,
+      "path": "training_code/local_workspace/experiment7/integration/launch_static_deck_bc_d17_builders.sh",
+      "sha256": "5e9dae0219f31aaf45377be30dcb7736ab6fcfd5d4c515d8c118bdd66e7fcbef"
+    },
+    {
+      "bytes": 1531,
+      "path": "training_code/local_workspace/experiment7/integration/launch_static_deck_bc_local_authority_controller.sh",
+      "sha256": "12dcd766339fcdcacb34ebca58f5a53076d97167f3c3654a6a72c7942a4ef7b9"
+    },
+    {
+      "bytes": 573,
+      "path": "training_code/local_workspace/experiment7/integration/launch_static_deck_bc_stream_controller.sh",
+      "sha256": "e4df6c8c123bb9e4cea521e594810e24dd07a65dd19993f3e873181a3748d118"
+    },
+    {
+      "bytes": 1054,
+      "path": "training_code/local_workspace/experiment7/integration/linux_bootstrap.sh",
+      "sha256": "28cff5c63b0aac422bd0f3658e68785ddc093c972f7ee9d18b40ab14ccf309e1"
+    },
+    {
+      "bytes": 1071,
+      "path": "training_code/local_workspace/experiment7/integration/localize_static_deck_bc_initializer.sh",
+      "sha256": "6b385c296bdc089d0b5ce7ea7232014986ab634226b30ca217d7dba905a08484"
+    },
+    {
+      "bytes": 3331,
+      "path": "training_code/local_workspace/experiment7/integration/materialize_reference.py",
+      "sha256": "31c8317500c29b05f476519b342a195ef367eef1bb157521de145c6ed50ec17d"
+    },
+    {
+      "bytes": 4228,
+      "path": "training_code/local_workspace/experiment7/integration/materialize_reference_from_branch.py",
+      "sha256": "1fd6d9b9dcb84f1a47254072bb7c28206d1bd5c84171d73173b09062197152c1"
+    },
+    {
+      "bytes": 8665,
+      "path": "training_code/local_workspace/experiment7/integration/materialize_tensordict_sources.py",
+      "sha256": "e41a026cf4ed6b97179d650d8b5ee5dfc1aed7f90085bd72db780aaaeecbcb07"
+    },
+    {
+      "bytes": 15618,
+      "path": "training_code/local_workspace/experiment7/integration/multi_gpu_scheduler.py",
+      "sha256": "aaaf0c78a7b01e5831db80f130b35abcd0811e144d416f1ed80afee62248b0c1"
+    },
+    {
+      "bytes": 5386,
+      "path": "training_code/local_workspace/experiment7/integration/package_large_g9_133_fast.py",
+      "sha256": "3a79b129a78b8cea107c53c9c2f0b21869690e1c2d7c8843b971eaacf43bcde5"
+    },
+    {
+      "bytes": 2855,
+      "path": "training_code/local_workspace/experiment7/integration/persist_frozen_policy_pool.py",
+      "sha256": "1737ebb16be7e7ed7ab1eca04a55a54599c0e07f67d7ecacb3a0585c64b8087e"
+    },
+    {
+      "bytes": 2690,
+      "path": "training_code/local_workspace/experiment7/integration/persist_static_deck_bc_pool.py",
+      "sha256": "249d80956308ed3d99dbc7004a7cd75dce5aae40de403908f16c610dbb895520"
+    },
+    {
+      "bytes": 10755,
+      "path": "training_code/local_workspace/experiment7/integration/pool_reconciler.py",
+      "sha256": "cbc1a36a1e69c18d24317119853d34a691fe3d446ee2dfe27291fcc159ea36b3"
+    },
+    {
+      "bytes": 14589,
+      "path": "training_code/local_workspace/experiment7/integration/post_strict_31m_auto_resume.py",
+      "sha256": "2451bc48c106f5c30846fadf4ae8ebdd233c59ccc146a5a20957c80c74a0c1ee"
+    },
+    {
+      "bytes": 67055,
+      "path": "training_code/local_workspace/experiment7/integration/ppo_tactical_shaping.py",
+      "sha256": "24bb375f59a325a63355831396b5f82cef906dd817f60b3986056693c80c8164"
+    },
+    {
+      "bytes": 1318,
+      "path": "training_code/local_workspace/experiment7/integration/prepare_specialist_replay_auxiliary.sh",
+      "sha256": "b5d40319a0d83cf36c3e19dfdb9732563569f7f111d4361c5bc1abf64ffb1b81"
+    },
+    {
+      "bytes": 15352,
+      "path": "training_code/local_workspace/experiment7/integration/prepare_training_data.py",
+      "sha256": "4e8f19bfb253f1605494ee40a4937ceab91c32b8a87f59137ebf01383c51076c"
+    },
+    {
+      "bytes": 8094,
+      "path": "training_code/local_workspace/experiment7/integration/prepare_universal_training_data.py",
+      "sha256": "6970e5982db434bef899663b1785b5987430fec5a758f8d2f65b5bdbf2a128be"
+    },
+    {
+      "bytes": 536,
+      "path": "training_code/local_workspace/experiment7/integration/probe_ppo_resources_20260814.sh",
+      "sha256": "1aabf76f70c1ddd49ca328d4d1330331d5bc85ed87e4e5da79c693adf12091b2"
+    },
+    {
+      "bytes": 24734,
+      "path": "training_code/local_workspace/experiment7/integration/promote_ppo_to_frozen_pool.py",
+      "sha256": "a3c4ba5972bb0a40149a6862b2594e3432b13eb26768b5aa601880e237b6ea33"
+    },
+    {
+      "bytes": 651,
+      "path": "training_code/local_workspace/experiment7/integration/queue_specialist_replay_auxiliary.sh",
+      "sha256": "d9471cbe27e2c48f8cffd7183f70a8e43cd26954ca9fe5a3f411c8934561c24b"
+    },
+    {
+      "bytes": 11414,
+      "path": "training_code/local_workspace/experiment7/integration/reconfigure_large_g9_pool_and_specialists_20260814.py",
+      "sha256": "e1224293c6a0d245ccb20c681d7df23736a7616e8e669e8b9f3870938ceecae0"
+    },
+    {
+      "bytes": 6238,
+      "path": "training_code/local_workspace/experiment7/integration/record_cohort20_reconfiguration.py",
+      "sha256": "47c3577ce2a7519b34afe3f44ec8baffd3c0065965c9448185d7eccfd5dc0669"
+    },
+    {
+      "bytes": 1792,
+      "path": "training_code/local_workspace/experiment7/integration/record_gold_monitor_heartbeat.py",
+      "sha256": "314fbf6df86a125e5c9d4392a95d2653c596265f40bcd98b1a887ddcf93c0cbb"
+    },
+    {
+      "bytes": 7286,
+      "path": "training_code/local_workspace/experiment7/integration/remote_worker.py",
+      "sha256": "d81b7c358c3dfcef7b8562e7fb793f8bdcab30155641f4a474b0d0e329772822"
+    },
+    {
+      "bytes": 2862,
+      "path": "training_code/local_workspace/experiment7/integration/repair_async_bc_raw_best.py",
+      "sha256": "69cb4e0c63caba4065c3555fe44def30d6f80652aa12225a0131783524c45bb8"
+    },
+    {
+      "bytes": 1305,
+      "path": "training_code/local_workspace/experiment7/integration/restart_bc_incremental_watcher_20260814.sh",
+      "sha256": "089449d38f536173fa2baad80c98aa0c7a9952ed33d6e3401beb9c1a3c3c13ae"
+    },
+    {
+      "bytes": 2485,
+      "path": "training_code/local_workspace/experiment7/integration/restart_rollout_workers_at_shard_boundary_20260814.sh",
+      "sha256": "3b1fea7753e69fc577dc893e08620ab05b0eded9d4bbd22fede110ac7a76213f"
+    },
+    {
+      "bytes": 1922,
+      "path": "training_code/local_workspace/experiment7/integration/restart_stopped_rollout_workers_immediately_20260814.sh",
+      "sha256": "bba1496d8100d55a5bffb1276290cb2c9425d1bc81ea64276621846d920079dc"
+    },
+    {
+      "bytes": 2626,
+      "path": "training_code/local_workspace/experiment7/integration/restore_transient_failed_rollouts.py",
+      "sha256": "dec0ac69964c6bc16d39c5a0126649447fdf698b92ddf2cdf29b41b4c9f5b37f"
+    },
+    {
+      "bytes": 513,
+      "path": "training_code/local_workspace/experiment7/integration/roll_workers_to_cpu70_20260815.sh",
+      "sha256": "93d667620470cd6293fbefc23c67a7a08619556d0d9a973d9b3763d2daa51b6e"
+    },
+    {
+      "bytes": 15903,
+      "path": "training_code/local_workspace/experiment7/integration/run_async_ppo_learner.py",
+      "sha256": "f7f8b7759373b7e9245820d45451c735f5b8c04640a64bbf5e765ee486b31e97"
+    },
+    {
+      "bytes": 18063,
+      "path": "training_code/local_workspace/experiment7/integration/run_async_ppo_rollout_worker.py",
+      "sha256": "27572b9aeb0637ecc4ecb3d466d20d6d2ea0d435cfb0f8cdf9a6fd15ea51459b"
+    },
+    {
+      "bytes": 2170,
+      "path": "training_code/local_workspace/experiment7/integration/run_cohort20_verification_worker.sh",
+      "sha256": "c68bb3ae867f4588f01a77822e1ba61948e5bf556ddcff6687995814ec5c9e87"
+    },
+    {
+      "bytes": 603,
+      "path": "training_code/local_workspace/experiment7/integration/run_compact_gold_snapshot.sh",
+      "sha256": "5a7ec6de09b79427793e53b093b4f156a3195710b174f3f8166ad682636353e1"
+    },
+    {
+      "bytes": 28845,
+      "path": "training_code/local_workspace/experiment7/integration/run_hourly_cache_pool_eval_v4_image_whitelist.py",
+      "sha256": "cbb372e07b62ba96b17cf8e0414e15b5201c42371bde0f3f154da87294b9931b"
+    },
+    {
+      "bytes": 457,
+      "path": "training_code/local_workspace/experiment7/integration/run_hourly_cache_pool_eval_v5_image_whitelist.py",
+      "sha256": "33a5eb1a96de2a390468b87dc39eef1924ce87723e98fdc3d13734bab82b02d1"
+    },
+    {
+      "bytes": 1478,
+      "path": "training_code/local_workspace/experiment7/integration/run_isolated_arena_shard_v4_retry.sh",
+      "sha256": "febb113295278f42d6cda29e00d2beb145117456b2dfca135bc4066cba7303e5"
+    },
+    {
+      "bytes": 1478,
+      "path": "training_code/local_workspace/experiment7/integration/run_isolated_arena_shard_v5_retry.sh",
+      "sha256": "febb113295278f42d6cda29e00d2beb145117456b2dfca135bc4066cba7303e5"
+    },
+    {
+      "bytes": 932,
+      "path": "training_code/local_workspace/experiment7/integration/run_load_guarded_arena_shard_v4_retry.sh",
+      "sha256": "0f8bbc63e917470eaa739399275b2f5c8249c3ada462e20f1e66bf46364a7adf"
+    },
+    {
+      "bytes": 932,
+      "path": "training_code/local_workspace/experiment7/integration/run_load_guarded_arena_shard_v5_retry.sh",
+      "sha256": "5325c23381699e5784094118a02b8218220be9f89b2d2d32560160efb97fe015"
+    },
+    {
+      "bytes": 27182,
+      "path": "training_code/local_workspace/experiment7/integration/run_ppo_frozen_promotion_eval.py",
+      "sha256": "08d669972baf534c846e5231dfc6d164b7f8a007b15baa872efed6b422ad9535"
+    },
+    {
+      "bytes": 1352,
+      "path": "training_code/local_workspace/experiment7/integration/run_ppo_frozen_promotion_loop.sh",
+      "sha256": "1a6578ffb7310e3e72a6f9aac872062cbd34cf9ff5836151104d063a7134944a"
+    },
+    {
+      "bytes": 3054,
+      "path": "training_code/local_workspace/experiment7/integration/run_ppo_frozen_promotion_rounds.sh",
+      "sha256": "72001d01377310dc50fa03f152d6cf47614b3624bd5ed077e8c041edf4988669"
+    },
+    {
+      "bytes": 928,
+      "path": "training_code/local_workspace/experiment7/integration/run_promotion_once_repaired.sh",
+      "sha256": "18ff89c1384fb2a6b22294875ff3cd9a3eaf11fe981df26459665d5d278c5cdc"
+    },
+    {
+      "bytes": 3024,
+      "path": "training_code/local_workspace/experiment7/integration/run_reference_token_cache.py",
+      "sha256": "86e22c87d3dbd623c6025bf3b1a117dd4bfcdcd64f2a4e5faa7e942e8b0ac8a7"
+    },
+    {
+      "bytes": 1734,
+      "path": "training_code/local_workspace/experiment7/integration/run_specialist_loss_archive_loop.sh",
+      "sha256": "58a34c973fb69c5fc965016fddbd624272aa5af9c9903ebf56974b5121e6066f"
+    },
+    {
+      "bytes": 9003,
+      "path": "training_code/local_workspace/experiment7/integration/run_static_deck_bc_profile.py",
+      "sha256": "4ebf806cec75f547ca8d08b2e9423f37a6f788e5f381a4febc17385cf0b9ccab"
+    },
+    {
+      "bytes": 1929,
+      "path": "training_code/local_workspace/experiment7/integration/safe_features.py",
+      "sha256": "58a34a4dcabfd59122e4dcd028b89d55af00433a7add2233f99432d73e33c60e"
+    },
+    {
+      "bytes": 596,
+      "path": "training_code/local_workspace/experiment7/integration/scale_allchain_workers_cpu70_20260815.sh",
+      "sha256": "f7e1b5ad664ef4b284198edef7b79df9d693c7996989d3bb2cd6afe1e912f301"
+    },
+    {
+      "bytes": 14159,
+      "path": "training_code/local_workspace/experiment7/integration/select_initial_decks.py",
+      "sha256": "bb70cf9907ccb07548ea896f72147eff43716fbd2ad36bcb93c25472f80aa157"
+    },
+    {
+      "bytes": 543,
+      "path": "training_code/local_workspace/experiment7/integration/smoke_static_bc_runtime.py",
+      "sha256": "e1b8ee6f531ecbedd8c85ea21a569892f295b4f4086eaa0e4fa31c3ee7f9249a"
+    },
+    {
+      "bytes": 3760,
+      "path": "training_code/local_workspace/experiment7/integration/smoke_static_deck_bc_batch.py",
+      "sha256": "d4095d3f17196f2285dc7020bf80667e37759d5f92dff9bae4a614dd3bc9c68e"
+    },
+    {
+      "bytes": 11084,
+      "path": "training_code/local_workspace/experiment7/integration/stage_and_run_scaled_universal_bc.py",
+      "sha256": "ef7fa9da9f9f1c3813ab5d0ac0b805f23d671eb96acc95b8f6efb5f24c2b3579"
+    },
+    {
+      "bytes": 44187,
+      "path": "training_code/local_workspace/experiment7/integration/stage_opponent_pool.py",
+      "sha256": "2889d6159cf0be8e70da98bcab9dc0a1d5851160194c5b9c3811fe84baf2f5ca"
+    },
+    {
+      "bytes": 1044,
+      "path": "training_code/local_workspace/experiment7/integration/stage_strict_d17_to_d14.sh",
+      "sha256": "67cae9a41c916350933403f60623b7f3ed0592ed4c6f22302ab8b33840efedfd"
+    },
+    {
+      "bytes": 2030,
+      "path": "training_code/local_workspace/experiment7/integration/start_hourly_cache_pool_v4_image_whitelist_d16.sh",
+      "sha256": "6d3658f99fe5f36755fdea41666638abe6fbaeb93ce1ef53bd43432ffb30696c"
+    },
+    {
+      "bytes": 2032,
+      "path": "training_code/local_workspace/experiment7/integration/start_hourly_cache_pool_v5_image_whitelist_d16.sh",
+      "sha256": "bcc997f372fb20aec3f8d1eb55f931858567818f74f20ccdf57043eea9a9f86a"
+    },
+    {
+      "bytes": 1950,
+      "path": "training_code/local_workspace/experiment7/integration/start_localized_ppo_learner.sh",
+      "sha256": "79287ea4043388542ad77d6e6b590468827c7f43756a037565eecddaa523e774"
+    },
+    {
+      "bytes": 549,
+      "path": "training_code/local_workspace/experiment7/integration/start_ppo_frozen_promotion_loop.sh",
+      "sha256": "9e6937067dbd7e6b963188371f599ccc45183b7a3cf3e66af6f6142b86fc62a3"
+    },
+    {
+      "bytes": 7400,
+      "path": "training_code/local_workspace/experiment7/integration/static_deck_bc_common.py",
+      "sha256": "ee38003762ca54fdb6633f103df5fa534b2e42f053e5eaee2af5b0d6ea3b2f4c"
+    },
+    {
+      "bytes": 8437,
+      "path": "training_code/local_workspace/experiment7/integration/static_deck_bc_post_strict_controller.py",
+      "sha256": "22d574642afe0c992ae8fed5463ec899111a1e5e37133d22420d8ec6d133c0e6"
+    },
+    {
+      "bytes": 3397,
+      "path": "training_code/local_workspace/experiment7/integration/static_deck_bc_windows_post_strict_watcher.py",
+      "sha256": "0049db830d11dc4fcd154b93dced7a2fb4833a922542fe96519700e69fadfeb9"
+    },
+    {
+      "bytes": 1084,
+      "path": "training_code/local_workspace/experiment7/integration/stop_stalled_ppo_batch.sh",
+      "sha256": "4183e1d64564aeb9ff36e580736150363f81d4c361edfee4d099cab627754bf2"
+    },
+    {
+      "bytes": 3194,
+      "path": "training_code/local_workspace/experiment7/integration/stream_static_deck_bc_d17_to_workers.sh",
+      "sha256": "2696413d8522bc0c3d27895d0f5a04954c6c7c4db026dc83b6582bb3f5bda783"
+    },
+    {
+      "bytes": 12831,
+      "path": "training_code/local_workspace/experiment7/integration/summarize_compact.py",
+      "sha256": "48d46af440ed1a946e63be87220a810b162f79da0a184fc03c84365e13c05dfe"
+    },
+    {
+      "bytes": 1977,
+      "path": "training_code/local_workspace/experiment7/integration/summarize_promotion_compact.py",
+      "sha256": "8f1c9899ef8f46a05b678b8f231de87ef65559e5df0f1ebe43a141ba070afe55"
+    },
+    {
+      "bytes": 886,
+      "path": "training_code/local_workspace/experiment7/integration/summarize_promotion_state.py",
+      "sha256": "a579ea1a024eceb597e2549cc251d5632279b0e7581c92a49596808e763adbf9"
+    },
+    {
+      "bytes": 5149,
+      "path": "training_code/local_workspace/experiment7/integration/switch_rollout_workers_revision7.py",
+      "sha256": "041aa3f6e1f359d0ec734cf316339a42b4103f3074b1ad7a174640a9879d7f76"
+    },
+    {
+      "bytes": 2880,
+      "path": "training_code/local_workspace/experiment7/integration/target_receipt.py",
+      "sha256": "bb12ddc45ca2f358ff0cd4a4ca478fbe87bb1b208084d007e158fbfc5ed4e939"
+    },
+    {
+      "bytes": 2385,
+      "path": "training_code/local_workspace/experiment7/integration/terminate_exact_promotion_round.py",
+      "sha256": "7a5e9a57398ca53d812b49b15b86154ed0c6fe2f4578fa570c5bfe87efd580dc"
+    },
+    {
+      "bytes": 11896,
+      "path": "training_code/local_workspace/experiment7/integration/test_async_ppo_control.py",
+      "sha256": "32b7faa90e4fe99ccc9608d45e721393ed09fc766bd502dafcbd2159bf541843"
+    },
+    {
+      "bytes": 5328,
+      "path": "training_code/local_workspace/experiment7/integration/test_pool_reconciler.py",
+      "sha256": "cf4bfb3ca1de76f9e295103e91d025fe4f111cabae8502f973b392647d217c20"
+    },
+    {
+      "bytes": 35509,
+      "path": "training_code/local_workspace/experiment7/integration/test_ppo_tactical_shaping.py",
+      "sha256": "dbf4f97c62be6aaae27bf0f50c44c1b192662e8cfd96faaab1779778e55d3360"
+    },
+    {
+      "bytes": 11153,
+      "path": "training_code/local_workspace/experiment7/integration/test_promote_ppo_to_frozen_pool.py",
+      "sha256": "66f90d0f7fbfdd902020a413b40e551d84e14432b76b880985df37830e6fcfcf"
+    },
+    {
+      "bytes": 20248,
+      "path": "training_code/local_workspace/experiment7/integration/test_stage_opponent_pool.py",
+      "sha256": "e2890c45bb480779d3a8bd0708b5f9c3efbc6e6aa263847d89a499778760aa66"
+    },
+    {
+      "bytes": 10632,
+      "path": "training_code/local_workspace/experiment7/integration/test_static_deck_bc.py",
+      "sha256": "8d677b3f9a75c198ff416d0577038a7012016f02e96bbdd76975e4524808659e"
+    },
+    {
+      "bytes": 4063,
+      "path": "training_code/local_workspace/experiment7/integration/test_train_universal_bc_async_scaled.py",
+      "sha256": "62f7c96e95ed177212def87af4a018241f0b8b487a87076d318dffc75465ddd3"
+    },
+    {
+      "bytes": 3369,
+      "path": "training_code/local_workspace/experiment7/integration/test_train_universal_bc_multishard.py",
+      "sha256": "e95bce769804f743b4edd7ab04fd5d1f22f9122df40e2b33a6752dd6e287a53d"
+    },
+    {
+      "bytes": 1476,
+      "path": "training_code/local_workspace/experiment7/integration/test_universal_deck_cohort.py",
+      "sha256": "eaca457644dbd06e2e1d4e8273f861d4f676f4b8a5bd4717111dc3e5359faf30"
+    },
+    {
+      "bytes": 20371,
+      "path": "training_code/local_workspace/experiment7/integration/test_universal_ppo.py",
+      "sha256": "5c4d76d88de0fbd412fc3a1fc89d5685b8e55f31a44cf9b95b4f7c38d19eb72a"
+    },
+    {
+      "bytes": 1643,
+      "path": "training_code/local_workspace/experiment7/integration/test_zip_replay_source.py",
+      "sha256": "c66f44035b3d7562240139fcfbc8edc7011c5e1f64dcec10c22f5e447148feee"
+    },
+    {
+      "bytes": 33762,
+      "path": "training_code/local_workspace/experiment7/integration/train_driver.py",
+      "sha256": "c570f12ecc392599957783455dd11c6fbb431806d2e0a200d6c3ae9be40fc057"
+    },
+    {
+      "bytes": 4658,
+      "path": "training_code/local_workspace/experiment7/integration/train_static_deck_bc_async.py",
+      "sha256": "b6d516182b0718793551f42efd041cac27ccb926cb99be1195cc1bd6f97a4a0a"
+    },
+    {
+      "bytes": 31837,
+      "path": "training_code/local_workspace/experiment7/integration/train_universal_bc.py",
+      "sha256": "d6f175a2f4e170be9e8ec348fcc8584f9ad44cf87f48117d11d8f5e343a16262"
+    },
+    {
+      "bytes": 10091,
+      "path": "training_code/local_workspace/experiment7/integration/train_universal_bc_async.py",
+      "sha256": "695673801f1f5d8ee41ffaef63674b1dabaf225a1dca165c6378060752b00e52"
+    },
+    {
+      "bytes": 8324,
+      "path": "training_code/local_workspace/experiment7/integration/train_universal_bc_async_scaled.py",
+      "sha256": "ff2b4eedac89b6aee7cd83d26fab6214736ffa2d074e2d45b5b530bca8cfb6d4"
+    },
+    {
+      "bytes": 16917,
+      "path": "training_code/local_workspace/experiment7/integration/train_universal_ppo.py",
+      "sha256": "dbcac27a218f2b7ddc2be07d02f2fda9088b0142add8001a9da3ff53fcad0639"
+    },
+    {
+      "bytes": 1259,
+      "path": "training_code/local_workspace/experiment7/integration/transfer_static_bc_min_runtime_d13_to_d07.sh",
+      "sha256": "760a902f4d604b18b5cfc782d07a1d047eaf7ca7ddb0106aa6f4270b1afca090"
+    },
+    {
+      "bytes": 2246,
+      "path": "training_code/local_workspace/experiment7/integration/transfer_static_bc_runtime_d03_to_d15.sh",
+      "sha256": "c918dda9562a3e85a1df37e9ed367f701d0f069764ab5514318beba83d27e7e2"
+    },
+    {
+      "bytes": 543,
+      "path": "training_code/local_workspace/experiment7/integration/transfer_static_bc_runtime_d13_to_d07.sh",
+      "sha256": "1f670738d2bba69e393a2890153f425a3478c76d2bcb7ded9f099b2f7d2d2482"
+    },
+    {
+      "bytes": 2927,
+      "path": "training_code/local_workspace/experiment7/integration/transition_ppo_learner_20260814.sh",
+      "sha256": "566e45c3ac188aa2b62448b31f4d2734403e3bc409178fa59456700d2f9b1530"
+    },
+    {
+      "bytes": 5949,
+      "path": "training_code/local_workspace/experiment7/integration/universal_deck_cohort.py",
+      "sha256": "12de6c400b8556c1bd739203acc7e27d2f8172cf7ccd0880031a4f42b77dbfc8"
+    },
+    {
+      "bytes": 14042,
+      "path": "training_code/local_workspace/experiment7/integration/universal_deck_model.py",
+      "sha256": "99507975cf9cb10cfdf80d75e14caeb1261e4587e526f07f04d5a110fa9f9668"
+    },
+    {
+      "bytes": 14976,
+      "path": "training_code/local_workspace/experiment7/integration/universal_deck_portable.py",
+      "sha256": "f511d62eb20fa632b83d51398c565360ef17cee814e41c5e5bccdec0540b69d3"
+    },
+    {
+      "bytes": 21274,
+      "path": "training_code/local_workspace/experiment7/integration/universal_ppo.py",
+      "sha256": "0e937aceb58a1c9cf72375e3ba526cb41bb82df8f69b160a43a766fd5318764d"
+    },
+    {
+      "bytes": 1421,
+      "path": "training_code/local_workspace/experiment7/integration/universal_ppo_bc_pause_20260814.json",
+      "sha256": "7d355ea8ab3b2483ff2ebf19e38c69964fa2e85a7169cec38d96ad62ad9969b0"
+    },
+    {
+      "bytes": 6087,
+      "path": "training_code/local_workspace/experiment7/integration/validate_static_deck_bc_async.py",
+      "sha256": "70f3088d3a11f7533e2382bd5019b157814ea88602a9e7fe3336506de2853f0f"
+    },
+    {
+      "bytes": 7596,
+      "path": "training_code/local_workspace/experiment7/integration/validate_universal_bc_async.py",
+      "sha256": "2500fa1354eb4ecac7e3de6d2e1a09ba423e6abdf6d02ee1177e3bb0db53839b"
+    },
+    {
+      "bytes": 6393,
+      "path": "training_code/local_workspace/experiment7/integration/validate_universal_bc_async_scaled.py",
+      "sha256": "7ad70781e8052733f26ddaa19f9a3461d0239407c91d560ebe47b13f921a17ba"
+    },
+    {
+      "bytes": 13941,
+      "path": "training_code/local_workspace/experiment7/integration/verify_universal_portable.py",
+      "sha256": "e1bdc244c60abf2dc9f6cb9f6f25dcb36ddade2f79248ebb80cca2cc5cc6697d"
+    },
+    {
+      "bytes": 418,
+      "path": "training_code/local_workspace/experiment7/integration/wait_learner_transition_20260814.sh",
+      "sha256": "b1c12e00acf553143827e209679138427865490bb8abe7fc6993dfb52baa2d2f"
+    },
+    {
+      "bytes": 5070,
+      "path": "training_code/local_workspace/experiment7/integration/watch_bc_validator_rescue.py",
+      "sha256": "ce347f0a277d60a0058d935f71f5df1e751246497e0ed45b1fe7ec626185f74f"
+    },
+    {
+      "bytes": 9790,
+      "path": "training_code/local_workspace/experiment7/integration/watch_replay_then_train_bc_from_ppo.py",
+      "sha256": "2a75fd4cbe10c40049d3878a83cf5da225daa74b08e2c5216776a0ca7b145667"
+    },
+    {
+      "bytes": 8527,
+      "path": "training_code/local_workspace/experiment7/integration/windows_static_deck_bc_disaster.py",
+      "sha256": "e1140c162d4375b7910bf9ab46e9a32f6015a572cdb4a8ae0cf4bd73abe1a2ca"
+    },
+    {
+      "bytes": 12155,
+      "path": "training_code/local_workspace/experiment7/integration/windows_static_deck_bc_launch.py",
+      "sha256": "a7585327323d4027f7257ba318a363b31a4e2c31daddf9d27898c18f26c06c2d"
+    },
+    {
+      "bytes": 67,
+      "path": "training_code/local_workspace/experiment7/reference/training/__init__.py",
+      "sha256": "a49011077f4c002da63accdbb8ef58b59933cb0a719053a5c306ae2cd33ead36"
+    },
+    {
+      "bytes": 6049,
+      "path": "training_code/local_workspace/experiment7/reference/training/deck_identity_model.py",
+      "sha256": "3011ba6941fca8565c95fdca0f3130e85d5686561d43c3b049489547ad6d6538"
+    },
+    {
+      "bytes": 9284,
+      "path": "training_code/local_workspace/experiment7/reference/training/deck_identity_portable.py",
+      "sha256": "bda5935b98fac33e277ba589572bd3c4d0736a1672ccfe319edaa8b59c981738"
+    },
+    {
+      "bytes": 5280,
+      "path": "training_code/local_workspace/experiment7/reference/training/deck_knowledge_model.py",
+      "sha256": "c1de55c89d23a3307a54f211af01a7118452f3d6901141e47c00908c8626091b"
+    },
+    {
+      "bytes": 4895,
+      "path": "training_code/local_workspace/experiment7/reference/training/evaluate_multideck_identity.py",
+      "sha256": "41970b1918b13d358b35cb4214cc1f77cf52151ff6395ed06dc26dad90334f81"
+    },
+    {
+      "bytes": 5879,
+      "path": "training_code/local_workspace/experiment7/reference/training/model.py",
+      "sha256": "44675eafd5625d351cdca1d4d0e43b8fa9aab2ac6cac301285f533b1ce60cff3"
+    },
+    {
+      "bytes": 6624,
+      "path": "training_code/local_workspace/experiment7/reference/training/portable.py",
+      "sha256": "e180cf555322d78789ba62c4e8c26baa7172b9cc1dc24968766a596ce5a59fd1"
+    },
+    {
+      "bytes": 7572,
+      "path": "training_code/local_workspace/experiment7/reference/training/public_event_model.py",
+      "sha256": "a1320cc801b719092e1ee722d5c2c64c59d4fead88f953db815ac6bef7215b1a"
+    },
+    {
+      "bytes": 4799,
+      "path": "training_code/local_workspace/experiment7/reference/training/sequence_model.py",
+      "sha256": "728d61536649f900c33ceab0ac22bddeb2045a4431faaae70a63b67bbc535679"
+    },
+    {
+      "bytes": 21715,
+      "path": "training_code/local_workspace/experiment7/reference/training/train.py",
+      "sha256": "25bad50778881116ea92334bf002408603c996b6cf835c302ef39be1e1d3b405"
+    },
+    {
+      "bytes": 30523,
+      "path": "training_code/local_workspace/experiment7/reference/training/train_multideck_identity.py",
+      "sha256": "8c33dfcff850f11b447f2d68ed97289bce84f6bbcddee061c526d6941b0df3f5"
+    },
+    {
+      "bytes": 24162,
+      "path": "training_code/local_workspace/experiment7/reference/training/train_sequence.py",
+      "sha256": "8c0bd3441ea05c654809d90b49c358358170d3a95e7de3d04eb676af86786ac1"
+    },
+    {
+      "bytes": 5801,
+      "path": "training_code/local_workspace/experiment7/reference/training/verify_deck_identity_portable.py",
+      "sha256": "07c205e5a3d86433c909bd89471226f8ba8c065effa1a58db608d0ea89bc17d7"
+    },
+    {
+      "bytes": 14714,
+      "path": "training_code/local_workspace/scripts/analyze_kaggle_intelligence.py",
+      "sha256": "a3cc7a50445f8118e2bb0f6447346bfe126a5b41d0915b63514bceae3cdbaa5e"
+    },
+    {
+      "bytes": 3513,
+      "path": "training_code/local_workspace/scripts/audit_replay_alignment.py",
+      "sha256": "6990b568d0dd4620e2c5112ff4d7d25a95fbe612195cd0d21c17773a7759241d"
+    },
+    {
+      "bytes": 1448,
+      "path": "training_code/local_workspace/scripts/audit_rl_trajectory.py",
+      "sha256": "6b27d24c8ecdf255f864c8dea39eb55dd7a640d35232e398e973fdabf5a4cf7d"
+    },
+    {
+      "bytes": 8307,
+      "path": "training_code/local_workspace/scripts/build_deck_specialist_dataset.py",
+      "sha256": "4db4ba061bd09dec846e5731bc3cb7db13b892d94ea3a475104b8ae8df9ad0ae"
+    },
+    {
+      "bytes": 12664,
+      "path": "training_code/local_workspace/scripts/build_gold_strategy_artifact.py",
+      "sha256": "2905befe53712baa5ead212ed26ea60a972db5741313a534d7c7f9c359de7bee"
+    },
+    {
+      "bytes": 4171,
+      "path": "training_code/local_workspace/scripts/build_replay_deck_map.py",
+      "sha256": "ce9c472e4660031a2e1f91b8d9fbd235c26c4704b49dd68641eb42d5753f44b2"
+    },
+    {
+      "bytes": 5874,
+      "path": "training_code/local_workspace/scripts/build_submission.py",
+      "sha256": "13c22f00a27648739353063ae035671aabf46a58b409239a51f5537f4a7314dd"
+    },
+    {
+      "bytes": 16156,
+      "path": "training_code/local_workspace/scripts/collect_ppo_rollouts.py",
+      "sha256": "ff845bc535f493797a4c8a95d8e38b987a2076ce95822b23bf3d65957debd069"
+    },
+    {
+      "bytes": 6619,
+      "path": "training_code/local_workspace/scripts/collect_rl_trajectories.py",
+      "sha256": "303665bd33267dae14983e0d05af49873b4a9eadebb1e3a91a1d71e6e56bcd3c"
+    },
+    {
+      "bytes": 35046,
+      "path": "training_code/local_workspace/scripts/continuous_rl_pipeline.py",
+      "sha256": "695252642ebdfd3853e61368e2ecd8717558fb2496d3d1191ccf1dbdefbceead"
+    },
+    {
+      "bytes": 9635,
+      "path": "training_code/local_workspace/scripts/convert_public_replays.py",
+      "sha256": "bb3ec8e8d94804b5a45627ffd6f0285d06b0d2167f0b78374943ec0f7e4e23b3"
+    },
+    {
+      "bytes": 3072,
+      "path": "training_code/local_workspace/scripts/correct_eval_unseeded_001_summary.py",
+      "sha256": "a2d63c835226215c24dde032c5c9efa93bbfc36e58445fbfe2d444139428e19f"
+    },
+    {
+      "bytes": 3646,
+      "path": "training_code/local_workspace/scripts/diagnose_replay_action_positions.py",
+      "sha256": "c46999233a67368c99dcd2ea87e4145f7ef4076a8722cf01b68524f4ad18d901"
+    },
+    {
+      "bytes": 17089,
+      "path": "training_code/local_workspace/scripts/download_kaggle_intelligence.py",
+      "sha256": "ee03f8ec55580236ac53f564e9d19b80f06923af39aece932db9d8bc0632949b"
+    },
+    {
+      "bytes": 10097,
+      "path": "training_code/local_workspace/scripts/download_missing_current_replays.py",
+      "sha256": "e65f3021bc5c154588d557b5b317ff5a19adc81a7784550f1e75989a3189a77c"
+    },
+    {
+      "bytes": 8129,
+      "path": "training_code/local_workspace/scripts/download_ptcg_data.py",
+      "sha256": "14a44e129ef1b5420f76e4110e8a90f334bf68e88c29f317c0fa0ab682a3b25a"
+    },
+    {
+      "bytes": 3185,
+      "path": "training_code/local_workspace/scripts/download_submission_replays.py",
+      "sha256": "65a40c0ff95161dce5012502493e5030fe43607e3f65286eda7740ba696a0b8e"
+    },
+    {
+      "bytes": 4378,
+      "path": "training_code/local_workspace/scripts/enumerate_current_leaderboard_episodes.py",
+      "sha256": "500fba2baf60f0d812f31e8e2f0bef0363aed2169bf9ac8df1b08a65d979bbd1"
+    },
+    {
+      "bytes": 2969,
+      "path": "training_code/local_workspace/scripts/evaluate_rl_checkpoint.py",
+      "sha256": "13dc5afe3aad3093f56db36bc94305cab5fe3a4b2309031026f8a747c10364e2"
+    },
+    {
+      "bytes": 7689,
+      "path": "training_code/local_workspace/scripts/evaluate_unseeded_game_worker.py",
+      "sha256": "b8bd1beab08e6eabf6e78e41923c1bad7dd290ad17c9adb7e5226bc0921206df"
+    },
+    {
+      "bytes": 4972,
+      "path": "training_code/local_workspace/scripts/evaluate_unseeded_model_smoke.py",
+      "sha256": "736d36a8365726530b661a9c86851d85f4be040fc9fc61ccc9aad56953af09a8"
+    },
+    {
+      "bytes": 7335,
+      "path": "training_code/local_workspace/scripts/evaluate_unseeded_runtime.py",
+      "sha256": "b2aafc6c15b490b2942e6630cfb5b4daa5465b3935c07820b0ac03b57d217190"
+    },
+    {
+      "bytes": 1788,
+      "path": "training_code/local_workspace/scripts/extract_specialist_deck.py",
+      "sha256": "006d3f28a171491d09697bfb3aff38ee7420814c93a11134076817bcb7e03841"
+    },
+    {
+      "bytes": 11249,
+      "path": "training_code/local_workspace/scripts/generate_multibase_deck_population.py",
+      "sha256": "71bf0b551aaf07bf338aa2051a09fc49bf9e35285e9b2c702c12dcd09b430b8e"
+    },
+    {
+      "bytes": 5739,
+      "path": "training_code/local_workspace/scripts/league_v1.py",
+      "sha256": "f13c23525ad1f67d2765811c66a85d0eb598edbce455723d2bb1783f7d48de5e"
+    },
+    {
+      "bytes": 11021,
+      "path": "training_code/local_workspace/scripts/materialize_current_leaderboard_target_replays.py",
+      "sha256": "7e313d70026c210efc1cdc279e7d442388ffc73dc34a6fdc4f1ba26a0f54c44f"
+    },
+    {
+      "bytes": 8534,
+      "path": "training_code/local_workspace/scripts/materialize_notebook_agent.py",
+      "sha256": "ae62fced0304e96df4cda3cccfcdb74f818bcf587921aee4bcefff7a71129c1e"
+    },
+    {
+      "bytes": 3335,
+      "path": "training_code/local_workspace/scripts/materialize_rl_specialist_agent.py",
+      "sha256": "0aecc9314c1642f188cf0304c443c05531e3000ec4268723d258e430293ad324"
+    },
+    {
+      "bytes": 7709,
+      "path": "training_code/local_workspace/scripts/mutate_legal_decks.py",
+      "sha256": "e5ff5e871448c096fdf2222c5bd9c8521a8922f76e7d95030447284f6078262a"
+    },
+    {
+      "bytes": 1812,
+      "path": "training_code/local_workspace/scripts/predict_with_majority_baseline.py",
+      "sha256": "be329f6e3ffa8fbf24251db5b1402b204f47b34b7e420bcf21a27e354eb6f2b1"
+    },
+    {
+      "bytes": 6971,
+      "path": "training_code/local_workspace/scripts/preflight_eval_isolation.py",
+      "sha256": "50a12dc80779ae8910722436334c85201e51bf78ad040989d67a085664b6a276"
+    },
+    {
+      "bytes": 4014,
+      "path": "training_code/local_workspace/scripts/prepare_baseline_dataset.py",
+      "sha256": "322d67df4cb376542cf8519cda14f4e53e4af176b30b730b701e68cc5b342396"
+    },
+    {
+      "bytes": 3758,
+      "path": "training_code/local_workspace/scripts/probe_current_leaderboard.py",
+      "sha256": "fd7f769336fcbcad80e68458da4de68625a231e58f08ee5be277cfa5a54cf8a1"
+    },
+    {
+      "bytes": 3301,
+      "path": "training_code/local_workspace/scripts/refresh_opponent_pool.py",
+      "sha256": "4575a1215cd7f8b6025a297a9ef2dfedc98e3dbf8ca4639e0c4addf3ea5b4226"
+    },
+    {
+      "bytes": 6959,
+      "path": "training_code/local_workspace/scripts/refresh_recent_public_agents.py",
+      "sha256": "33cdd78444425d48da2206b893389cbb630104127380f2059862e4f6fc1c3907"
+    },
+    {
+      "bytes": 19739,
+      "path": "training_code/local_workspace/scripts/refresh_target_scoregt1000_replays.py",
+      "sha256": "63d7df3aafe5d2d6a299ef3c03e30b32c3e626246fc18b12d651bc4953f01d27"
+    },
+    {
+      "bytes": 7728,
+      "path": "training_code/local_workspace/scripts/run_league_schedule.py",
+      "sha256": "9bf436f88ebf5c4d05090508c21a8cd5b778babbcc8aea5d019ea8a772c885d7"
+    },
+    {
+      "bytes": 8177,
+      "path": "training_code/local_workspace/scripts/run_league_schedule_v4_retry.py",
+      "sha256": "3f286c94f0befa651a29a8af849c16963947299a28aeff34514a22202a7dfe4b"
+    },
+    {
+      "bytes": 7030,
+      "path": "training_code/local_workspace/scripts/run_local_match.py",
+      "sha256": "f9f5b8f24553fb53aae11c24cfae83731f25b33a9dea74875760ef72b0921208"
+    },
+    {
+      "bytes": 3295,
+      "path": "training_code/local_workspace/scripts/run_opponent_pool.py",
+      "sha256": "3f8b95459e2d3e867a4fc09f92fb08d00c96385ad5be84e74865541b2803d4fc"
+    },
+    {
+      "bytes": 6904,
+      "path": "training_code/local_workspace/scripts/scan_uncataloged_current_episodes.py",
+      "sha256": "502f39f73b6ac06e6b537a5b880087367753cecbd9691a842fbf39c84917ca40"
+    },
+    {
+      "bytes": 5652,
+      "path": "training_code/local_workspace/scripts/summarize_league_round.py",
+      "sha256": "524d323707ce2df0baff3ed5e3ba3209ce06e870b0eef7134388d2ca5b8f9478"
+    },
+    {
+      "bytes": 7441,
+      "path": "training_code/local_workspace/scripts/summarize_rl_bc_experiment.py",
+      "sha256": "65eea64249fccfffc9e4fc5a051e124be7c1cad8922668027fee2b2a40d95fa5"
+    },
+    {
+      "bytes": 8757,
+      "path": "training_code/local_workspace/scripts/train_action_q.py",
+      "sha256": "61b96e45fb83e6f4c4249bb8937db80cd375da38f76f592b4841fb1d78453a7d"
+    },
+    {
+      "bytes": 2001,
+      "path": "training_code/local_workspace/scripts/train_majority_baseline.py",
+      "sha256": "7cb4b2571a680f74e29f1f0763981218f5056a4295a21faeeba3b1efb9df6a96"
+    },
+    {
+      "bytes": 10964,
+      "path": "training_code/local_workspace/scripts/train_masked_ppo.py",
+      "sha256": "736fa64d4e8884a0501442f5feb84c5f075168c08159250c1bf97e61686f1923"
+    },
+    {
+      "bytes": 30018,
+      "path": "training_code/local_workspace/scripts/train_rl_policy.py",
+      "sha256": "9fb70a5e4d632b55e8494bdabc2cca19c992eccfa6f597d25def6e72bba6b7fb"
+    },
+    {
+      "bytes": 3605,
+      "path": "training_code/local_workspace/scripts/write_deck_specialist_config.py",
+      "sha256": "8d79c2cb0b78a6f0f85b14f1a059e9f6c50450d208935da0a08a71267bf1c656"
+    },
+    {
+      "bytes": 2983,
+      "path": "training_code/local_workspace/tests/test_action_q.py",
+      "sha256": "422b1efb0e43d91fb505fd80ed54ab937c752adb9d62a211e369c9f9fd0e1a6f"
+    },
+    {
+      "bytes": 1597,
+      "path": "training_code/local_workspace/tests/test_collect_universal_ppo_rollouts.py",
+      "sha256": "800ab51f075dc2830fb9f2581c37cc91750b2f03d14c574d7fa3e03abeca4de7"
+    },
+    {
+      "bytes": 2546,
+      "path": "training_code/local_workspace/tests/test_continuous_rl_pipeline.py",
+      "sha256": "b6c732f896c194274b63015c4309503bfb7b3378ab09ab1e8dcb41c15d11d330"
+    },
+    {
+      "bytes": 2621,
+      "path": "training_code/local_workspace/tests/test_convert_public_replays.py",
+      "sha256": "46739e2813c75a0c36f102047f0b3327a48cee280f52117f98981a168b53c15a"
+    },
+    {
+      "bytes": 1575,
+      "path": "training_code/local_workspace/tests/test_download_kaggle_intelligence.py",
+      "sha256": "c168c751c0ac759e8bbc3b72ff5a2e2d20d45894cea377e72b197f026e36acae"
+    },
+    {
+      "bytes": 1961,
+      "path": "training_code/local_workspace/tests/test_download_ptcg_data.py",
+      "sha256": "906222f7b2a223a6d494a66128885e912224f1968489c0631b33f5e283389373"
+    },
+    {
+      "bytes": 20392,
+      "path": "training_code/local_workspace/tests/test_experiment7_integration.py",
+      "sha256": "4548770e71a4445af213e6df2ec90ffb05c68a6f0dc9ac4a3c1307988cabc595"
+    },
+    {
+      "bytes": 2513,
+      "path": "training_code/local_workspace/tests/test_experiment7_summarize_compact.py",
+      "sha256": "f5fe53d494a832eef5e9d2106287ca24c9bdbebf3cc96283fe09997941f4e5c6"
+    },
+    {
+      "bytes": 6717,
+      "path": "training_code/local_workspace/tests/test_experiment7_tensordict_memmap.py",
+      "sha256": "a5937511153066843a4a2f07247c2fedbaed181d927032ab7042d712b59b0185"
+    },
+    {
+      "bytes": 1435,
+      "path": "training_code/local_workspace/tests/test_experiment7_token_cache_adapter.py",
+      "sha256": "8750cc479b85a7b92c973d45cf741378b09ec365fb6b38dc139e2a5b449ec38c"
+    },
+    {
+      "bytes": 2189,
+      "path": "training_code/local_workspace/tests/test_generate_multibase_deck_population.py",
+      "sha256": "4f558c44d6be761ac7e9c291524cc935c78701b1e1eff96db676d6896783ccef"
+    },
+    {
+      "bytes": 1542,
+      "path": "training_code/local_workspace/tests/test_league_v1.py",
+      "sha256": "967058fc0cc24ccf93a9ea1e14e84c5a3ff56ee007c72caf27f530dfea15298f"
+    },
+    {
+      "bytes": 1416,
+      "path": "training_code/local_workspace/tests/test_materialize_notebook_agent.py",
+      "sha256": "9124350403121e44318802e10a7ef78345a2146462554811dbbc153741e28f6f"
+    },
+    {
+      "bytes": 1352,
+      "path": "training_code/local_workspace/tests/test_mutate_legal_decks.py",
+      "sha256": "0ed53c68ae511bded745c995481c50be959ef423cbed89ba8c52bc6ffe4bdc83"
+    },
+    {
+      "bytes": 1615,
+      "path": "training_code/local_workspace/tests/test_prepare_baseline_dataset.py",
+      "sha256": "ba2a7e1733f3c2682d08ca9acbe9d4eb2892dab4201090560f11deaf71564866"
+    },
+    {
+      "bytes": 10604,
+      "path": "training_code/local_workspace/tests/test_public_replay.py",
+      "sha256": "724ec5213c32ee83550e43dedee743186152d6d70401b9699b816550b7bf32a3"
+    },
+    {
+      "bytes": 19361,
+      "path": "training_code/local_workspace/tests/test_rl_bc.py",
+      "sha256": "6368c929762d4146dbadb72765ad69c8a927226263119c6b71ea93d4df29cc99"
+    },
+    {
+      "bytes": 4772,
+      "path": "training_code/local_workspace/tests/test_rl_bc_adapter.py",
+      "sha256": "08298ab29b0377a02be0d86206cdad3d30200326052e566461a408eb1f7614bd"
+    },
+    {
+      "bytes": 1567,
+      "path": "training_code/local_workspace/tests/test_rl_features.py",
+      "sha256": "60f9bd1527605684d4719cd18dde8d9925d93f745cf8c1ccca54f9f9b3681995"
+    },
+    {
+      "bytes": 4992,
+      "path": "training_code/local_workspace/tests/test_rl_ppo.py",
+      "sha256": "8c88a975f5f7d614902663e9efc817c46f6b3f3b298bf6e792d77c882589076f"
+    },
+    {
+      "bytes": 3921,
+      "path": "training_code/local_workspace/tests/test_rl_promotion.py",
+      "sha256": "326c7be5425ef3ee62db9e7d4c30758ce736d8ebed7a0fd86a8ff541275729f7"
+    },
+    {
+      "bytes": 1261,
+      "path": "training_code/local_workspace/tests/test_rl_specialist_package.py",
+      "sha256": "98376e9456367108a6f75db7363af5334f731eeb85606c6fccb424aa74bab940"
+    },
+    {
+      "bytes": 4604,
+      "path": "training_code/local_workspace/tests/test_rl_structured.py",
+      "sha256": "ff17f69e49f4098dcf7e720f142439873de1e2bb649142d3bba4c68b4ccaa2ad"
+    },
+    {
+      "bytes": 1713,
+      "path": "training_code/local_workspace/tests/test_run_league_schedule.py",
+      "sha256": "3709b2e72e501cbd5ea133dbdfef9d2a61b386e7231bcba089fc954695cdb94f"
+    },
+    {
+      "bytes": 3333,
+      "path": "training_code/local_workspace/tests/test_run_local_match.py",
+      "sha256": "c2701d08bbfa3a0ddb222436bbe3423449cc2d176fe3d6ea20f5ec4f97c119fe"
+    },
+    {
+      "bytes": 5684,
+      "path": "training_code/local_workspace/tests/test_submission_build.py",
+      "sha256": "928812b984914b69ea90acd8626ad5b696403122b7fc177cea1beaff76b1d591"
+    },
+    {
+      "bytes": 1016,
+      "path": "training_code/local_workspace/tests/test_summarize_league_round.py",
+      "sha256": "e4081d05ea954fdb2a9364ff71f29ee088d57ac60042579666bd576de8559f97"
+    },
+    {
+      "bytes": 12426,
+      "path": "training_code/local_workspace/tests/test_unseeded_eval.py",
+      "sha256": "ef77f6c7ec878fe8418971621fcb176352350e764e3474c0037bdc9b9e1a1ff3"
+    },
+    {
       "bytes": 241,
       "path": "training_code/production_worktree/agents/rl_bc_adapter/deck.csv",
       "sha256": "2a541d7bf3d9e6b36037123f53f4dfef6348223f79fd27095dafc602a5357c19"
@@ -1779,5 +2959,5 @@
     }
   ],
   "schemaVersion": 1,
-  "totalBytes": 1930018
+  "totalBytes": 3663127
 }

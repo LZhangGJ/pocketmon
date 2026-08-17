@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "status": "ppo_gradient_updates_paused_bc_refresh_pending",
+  "requestedAt": "2026-08-14T01:08:00+00:00",
+  "reason": "Train the 2026-08-13 replay window as incremental BC from the current Universal PPO weights",
+  "behaviorDuringPause": {
+    "packagesRemainInOpponentPools": true,
+    "arenaAndOpponentUseAllowed": true,
+    "ppoLearnersStopped": true,
+    "rolloutFilesMayContinueButWillNotBeConsumedDuringPause": true
+  },
+  "profiles": {
+    "standard_1m": {
+      "chain": "universal_ppo_standard_1m",
+      "generation": 11,
+      "snapshotId": "universal_ppo_standard_1m-g000011-c64d2e509412",
+      "checkpoint": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-async-ppo-league-20260811/learners/universal_ppo_standard_1m/generation-000011/checkpoint.pt",
+      "formerLearnerHost": "doraemon14",
+      "formerLearnerPid": 2136801
+    },
+    "large_256x6": {
+      "chain": "universal_ppo_large_256x6",
+      "generation": 9,
+      "snapshotId": "universal_ppo_large_256x6-g000009-dc532288f191",
+      "checkpoint": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-async-ppo-league-20260811/learners/universal_ppo_large_256x6/generation-000009/checkpoint.pt",
+      "formerLearnerHost": "doraemon13",
+      "formerLearnerPid": 5847
+    }
+  },
+  "resumeCondition": "Both incremental BC profiles finish validation/parity/screening; explicit controller restart from selected checkpoints"
+}

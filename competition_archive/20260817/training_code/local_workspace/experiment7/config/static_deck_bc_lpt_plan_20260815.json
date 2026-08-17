@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "kind": "experiment7_static_deck_bc_lpt_plan",
+  "profilePrefix": "10d-deck-specialist-static-bc",
+  "status": "waiting_strict_10_of_10_success_and_parity",
+  "strictPredicate": "is_clean == 1 and float(min_score) > 1000.0",
+  "expectedDays": 10,
+  "algorithm": "LPT_by_policy_decisions_over_measured_device_throughput",
+  "validatorMode": "separate_process_same_gpu_with_max_pending_validations_1",
+  "formalTrainingStarted": false,
+  "postStrictController": {
+    "host": "doraemon02",
+    "pid": 1507874,
+    "state": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-static-deck-bc-10d-20260815/control/post-strict/state.json"
+  },
+  "assignments": [
+    {"archetype": "grimmsnarl_froslass_munkidori", "policyDecisions": 1063046, "allSeatDecisions": 2047804, "host": "windows-rtx5070ti", "gpu": 0, "batchSize": 512, "scratch": "G:\\pocketmon-cache\\experiment7-static-deck-bc-10d-20260815", "persistent": "D:\\pocketmon-runs\\experiment7-static-deck-bc-10d-20260815"},
+    {"archetype": "dragapult_munkidori", "policyDecisions": 772493, "allSeatDecisions": 1338514, "host": "doraemon03", "gpu": 0, "batchSize": 512},
+    {"archetype": "alakazam_dudunsparce", "policyDecisions": 600301, "allSeatDecisions": 1228305, "host": "doraemon03", "gpu": 1, "batchSize": 512},
+    {"archetype": "mega_lopunny_mega_froslass", "policyDecisions": 469133, "allSeatDecisions": 999300, "host": "doraemon15", "gpu": 0, "batchSize": 512},
+    {"archetype": "hydrapple_dipplin_ogerpon", "policyDecisions": 213885, "allSeatDecisions": 448528, "host": "doraemon15", "gpu": 1, "batchSize": 512},
+    {"archetype": "ogerpon_only", "policyDecisions": 186099, "allSeatDecisions": 375260, "host": "doraemon15", "gpu": 3, "batchSize": 512},
+    {"archetype": "crustle_mega_kangaskhan", "policyDecisions": 158348, "allSeatDecisions": 440763, "host": "doraemon15", "gpu": 2, "batchSize": 512},
+    {"archetype": "mega_lucario_hariyama", "policyDecisions": 163481, "allSeatDecisions": 355245, "host": "doraemon12", "gpu": 0, "batchSize": 512},
+    {"archetype": "festival_dipplin", "policyDecisions": 119115, "allSeatDecisions": 232096, "host": "doraemon12", "gpu": 1, "batchSize": 512},
+    {"archetype": "slowking_mega_kangaskhan", "policyDecisions": 89637, "allSeatDecisions": 170462, "host": "doraemon12", "gpu": 2, "batchSize": 512},
+    {"archetype": "raging_bolt_ogerpon_kangaskhan", "policyDecisions": 59873, "allSeatDecisions": 120990, "host": "doraemon04", "gpu": 0, "batchSize": 256}
+  ],
+  "guards": {
+    "gpuIdleSamples": 2,
+    "gpuIdleSampleGapSeconds": 10,
+    "maximumIdleMemoryMiB": 64,
+    "maximumIdleUtilizationPercent": 5,
+    "profileProcessDedupe": true,
+    "excludedTrainingHosts": ["doraemon16"],
+    "preemptionAllowed": false,
+    "ppoAttachmentAllowed": false,
+    "standardDataAllowed": false
+  },
+  "windowsStorage": {
+    "benchmarkReceipt": "D:\\pocketmon-runs\\experiment7-static-deck-bc-10d-20260815\\control\\windows-storage-selection.json",
+    "scratchDrive": "G:",
+    "fallbackScratchDrive": "I:",
+    "persistentDrive": "D:",
+    "finalArtifactCopies": 2,
+    "cDriveAllowed": false
+  }
+}

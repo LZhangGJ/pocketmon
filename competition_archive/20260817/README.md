@@ -8,6 +8,7 @@ This directory is the recoverable final snapshot retained after stopping the com
 - `weights/`: 56 unique, deduplicated checkpoint/portable weight files (1,640,495,729 bytes).
 - `training_code/production_worktree/`: exact training and packaging code copied from the production worktree after shutdown.
 - `training_code/local_control/`: local Experiment 7 configuration and control scripts needed to reproduce the orchestration.
+- `training_code/local_workspace/`: current local training, packaging, adapter, and test source snapshot, including uncommitted source files that were not present in the production worktree.
 - `training-code-manifest.json`: SHA-256 and size for each retained source/configuration file.
 - `state/`: final frozen league and pool indexes; these contain metadata only, not replay or rollout data.
 - `VALIDATION.json`: archive completeness result. `valid: true` means every weight exists and matches its recorded SHA-256 and byte size.
