@@ -1,0 +1,1783 @@
+{
+  "createdAt": "2026-08-17T00:19:02.454943+00:00",
+  "fileCount": 355,
+  "files": [
+    {
+      "bytes": 875,
+      "path": "training_code/local_control/.experiment7-control/a08_control_receipt_compact.py",
+      "sha256": "792e3daa7cf90e07950a50597b85e1ac31460f97bfad6b9c15e5ca5f03f1d653"
+    },
+    {
+      "bytes": 10356,
+      "path": "training_code/local_control/.experiment7-control/adaptive_ppo_training_controller-current.py",
+      "sha256": "32ce4bf8e04f76df9feeba8c27253f14e60544d5d3b4ab3eb35f834782194b6d"
+    },
+    {
+      "bytes": 11302,
+      "path": "training_code/local_control/.experiment7-control/adaptive_ppo_training_controller.py",
+      "sha256": "5094a3001266b60aef62565b5244539c9124067c6eb52cbf69d0733b9acbc40b"
+    },
+    {
+      "bytes": 5297,
+      "path": "training_code/local_control/.experiment7-control/admit_dual_universal_bc_20260814.py",
+      "sha256": "a2da122e1f6ecc20a8253f14ed344ee8299e1cb62d41b054d82c97e0e58635c8"
+    },
+    {
+      "bytes": 8966,
+      "path": "training_code/local_control/.experiment7-control/admit_external_to_pool.py",
+      "sha256": "86dbcd3b0e2073c5d1bcd05c9e6e14b8508801f6012d9e89bd6bb31085b7e4ed"
+    },
+    {
+      "bytes": 4317,
+      "path": "training_code/local_control/.experiment7-control/admit_universal_bc_to_frozen_pool_20260813.py",
+      "sha256": "55672fddf7e626e60c99419d21e547e2f21710f296eb7fcad014db32a4061f86"
+    },
+    {
+      "bytes": 1421,
+      "path": "training_code/local_control/.experiment7-control/aggregate_eval_diagnostics.py",
+      "sha256": "fb0b3a0c57d38e3b8048bae5fcd1dd7d9dcb0e1abac221388696b2c709b47ddc"
+    },
+    {
+      "bytes": 3325,
+      "path": "training_code/local_control/.experiment7-control/analyze_a02_bc_direct.py",
+      "sha256": "7d4c7bcadb3ffa9a712d36b9478b56b4523831eeac0a6fba9594b38e7f01d586"
+    },
+    {
+      "bytes": 1415,
+      "path": "training_code/local_control/.experiment7-control/analyze_dragapult_weaknesses.py",
+      "sha256": "5c37b5b71b644cb43710097724cf78d12759b682efd412e94a37ce5e0682142e"
+    },
+    {
+      "bytes": 1792,
+      "path": "training_code/local_control/.experiment7-control/analyze_legacy_frozen_agents.py",
+      "sha256": "b852f5beaf3318b5557debdddc71fc2e4fa6d27f684ec323c96248c0a4ee3215"
+    },
+    {
+      "bytes": 3340,
+      "path": "training_code/local_control/.experiment7-control/apply_a08_training_tuning_20260813.py",
+      "sha256": "e9427fe84e7899d3771b2f32087447515646a8cff0853ba86762ea3e50930e14"
+    },
+    {
+      "bytes": 1198,
+      "path": "training_code/local_control/.experiment7-control/apply_async_ppo_worker_priorities.sh",
+      "sha256": "5ab5706e516362814aa1c944f79791a17f79e86062446bf75431610551a880ab"
+    },
+    {
+      "bytes": 2225,
+      "path": "training_code/local_control/.experiment7-control/attach_bootstrap_packages_20260814.py",
+      "sha256": "c6f0e8b0f0fe65bbd1371b66c5ce8179dcd03d053c415a9622f5a8f7d283fe34"
+    },
+    {
+      "bytes": 2708,
+      "path": "training_code/local_control/.experiment7-control/audit_frozen_pool.py",
+      "sha256": "bfa92f99aa84567fe38fbb4a4e30958a875febd4e4b8b0b1f6765b90dfc654ee"
+    },
+    {
+      "bytes": 2018,
+      "path": "training_code/local_control/.experiment7-control/build_0812_hybrid_ram_manifest.py",
+      "sha256": "f502262e89aa9a40669d020df3bc10171bfad293ee7ac23b1859c850c8e3e127"
+    },
+    {
+      "bytes": 3906,
+      "path": "training_code/local_control/.experiment7-control/build_augmented_ppo_training_pool.py",
+      "sha256": "f38068786ba77aed074145383e89647d9bf879ed06e80f0fe78c59c2315d6648"
+    },
+    {
+      "bytes": 7922,
+      "path": "training_code/local_control/.experiment7-control/build_daily_tensordict_window.py",
+      "sha256": "176cd07b7143c0dc18f88960dc25b33a8b678ede1fc40c28ce0f97b38f220a1a"
+    },
+    {
+      "bytes": 7127,
+      "path": "training_code/local_control/.experiment7-control/build_ppo_arena_manifest.py",
+      "sha256": "99b07e34b0f1ac081bd270114eb6c77f8080ad9de80393471d7f5dfd450ba10b"
+    },
+    {
+      "bytes": 3768,
+      "path": "training_code/local_control/.experiment7-control/build_rolling_universal_sources_20260812.py",
+      "sha256": "3b6499558ee2bf792eb6bcaea30d2e987713ea99a39979f3c1fce77589a6a544"
+    },
+    {
+      "bytes": 2615,
+      "path": "training_code/local_control/.experiment7-control/build_universal_capacity_sources_20260812.py",
+      "sha256": "73f76beedd1f9d5b0a3fdcd1b4d223c8f61856d87dfc0864c2f7c229ad2202e5"
+    },
+    {
+      "bytes": 508,
+      "path": "training_code/local_control/.experiment7-control/check_a08_extra_receipts_20260812.sh",
+      "sha256": "cdd9a1dd503f5818647f81206efeb569cd5e8a040d91606052c24da684d1ec7e"
+    },
+    {
+      "bytes": 472,
+      "path": "training_code/local_control/.experiment7-control/check_a100_fasttrack_20260812.sh",
+      "sha256": "d3d78589aebb51343ad733cf3888332c6ab30e2774a2c5b23c17556064fa1868"
+    },
+    {
+      "bytes": 361,
+      "path": "training_code/local_control/.experiment7-control/check_bc_candidate_gpus_20260812.sh",
+      "sha256": "297c8adb7549719a482acfe7e9b30e3292b403a7269d81e8571e6b13b145d5ea"
+    },
+    {
+      "bytes": 309,
+      "path": "training_code/local_control/.experiment7-control/check_bc_processes_20260812.sh",
+      "sha256": "e5944469c05f6718ac271d3ef55d2f1500eb0c960847c0be8d984712186b62cc"
+    },
+    {
+      "bytes": 1907,
+      "path": "training_code/local_control/.experiment7-control/check_bc_training_now_20260812.py",
+      "sha256": "53f4e52d5f469bab8305f4abf12f811cf8ff8a30b78f6282eacff07625f86d27"
+    },
+    {
+      "bytes": 615,
+      "path": "training_code/local_control/.experiment7-control/check_exact_trainers_20260812.sh",
+      "sha256": "01e3b0a20cca44781aa18a53fe3426fd7bd2973d414937d1875387ab58b9710c"
+    },
+    {
+      "bytes": 682,
+      "path": "training_code/local_control/.experiment7-control/check_gold_exact_status_20260813.sh",
+      "sha256": "8bea0aeba9ec6825c9216a0b500d680aaed85d35d0346db55e85c8ed329d14c9"
+    },
+    {
+      "bytes": 2634,
+      "path": "training_code/local_control/.experiment7-control/cleanup_early_replay_cache_20260812.sh",
+      "sha256": "2a287f808d611813a0dee456ca6f7064903429f3c7ccb0b658b5c3aa51525831"
+    },
+    {
+      "bytes": 1522,
+      "path": "training_code/local_control/.experiment7-control/cleanup_replay_before_window.sh",
+      "sha256": "b356d3c3eba1e998eb5d24a4ce80ae18971378746ed193f1bbe627d9bd769ac3"
+    },
+    {
+      "bytes": 999,
+      "path": "training_code/local_control/.experiment7-control/compact_dynamic_control_20260813.py",
+      "sha256": "bf2f8ceeef51363522fdcdacb2e426fca83e1cad6b79167e27db82065e18fa63"
+    },
+    {
+      "bytes": 2920,
+      "path": "training_code/local_control/.experiment7-control/compact_ppo40_report.py",
+      "sha256": "ac8a81884785613eab9b936d6b613d808475595b0b2702949a36454654844d9f"
+    },
+    {
+      "bytes": 1648,
+      "path": "training_code/local_control/.experiment7-control/compact_ppo_status.py",
+      "sha256": "d203837c7aa59efff3c55656d4c4d41bdf5612a821d3eb528fffeac0ffed6286"
+    },
+    {
+      "bytes": 1952,
+      "path": "training_code/local_control/.experiment7-control/compact_remote_status_20260814.py",
+      "sha256": "b5241a2d8375976e51ba01063e3e8d41092302d6683382c68fd6c9241a6fa9a4"
+    },
+    {
+      "bytes": 2095,
+      "path": "training_code/local_control/.experiment7-control/compare_a02_a08_iteration_20260812.py",
+      "sha256": "5062a6e45c6444248dce0928d4a98e91ea17d27dd5e3c0b232ab043c74fd5820"
+    },
+    {
+      "bytes": 914,
+      "path": "training_code/local_control/.experiment7-control/compare_dragapult_generations.py",
+      "sha256": "36d438b57b43061dba09d0afca57f32731596c354894f87f96d60b1de868d867"
+    },
+    {
+      "bytes": 5529,
+      "path": "training_code/local_control/.experiment7-control/configure_seven_ppo_chains_20260814.py",
+      "sha256": "e39bf7d43928874d593b22127609d794e2940381aae9bfc10bed080e1502662f"
+    },
+    {
+      "bytes": 6092,
+      "path": "training_code/local_control/.experiment7-control/continue_a100_bc_persistent_20260813.py",
+      "sha256": "c5357daa6affdbb3642c6939fc42574fb5a99b7aad3b7c85811a89c274242037"
+    },
+    {
+      "bytes": 8365,
+      "path": "training_code/local_control/.experiment7-control/continue_a100_large_bc_20260813.py",
+      "sha256": "5f36a53ba6cb4881fdecac02ea119ab4b78480f04c80cceabcaf269234b244a3"
+    },
+    {
+      "bytes": 3244,
+      "path": "training_code/local_control/.experiment7-control/continue_universal_ppo_role.sh",
+      "sha256": "80945e87ea92400d13a7610e24b1525caebbb969ff8dfd4d8ef5f1323d664a46"
+    },
+    {
+      "bytes": 1200,
+      "path": "training_code/local_control/.experiment7-control/count_current_rollout_seats.py",
+      "sha256": "38c2dfb472dc69bfa333c7e18bc8b073e7131011a89b36b33c068a3996a6051f"
+    },
+    {
+      "bytes": 1711,
+      "path": "training_code/local_control/.experiment7-control/deploy_a08_only_workers_20260812.sh",
+      "sha256": "df6f4c15f9d1791ac185ff01fc6381f9e487a2c6050242043dc9349ca840e85e"
+    },
+    {
+      "bytes": 1858,
+      "path": "training_code/local_control/.experiment7-control/deploy_adaptive_ppo_code_20260812.sh",
+      "sha256": "d9740788f0a01306d07c39781171100aaad8b0b93f7c735b93e1e014ef1dbb76"
+    },
+    {
+      "bytes": 910,
+      "path": "training_code/local_control/.experiment7-control/deploy_filter_and_restart_learners_20260812.sh",
+      "sha256": "4e4c79ecbb47c195de940b2c20071107fe1a7ae9e7a08e125f3c57a78fd591a0"
+    },
+    {
+      "bytes": 3918,
+      "path": "training_code/local_control/.experiment7-control/deploy_gold_exact_ppo_20260813.py",
+      "sha256": "53d8a820defabfe20aea715f1d31ee234672ba54611bb944499456f1979e86df"
+    },
+    {
+      "bytes": 812,
+      "path": "training_code/local_control/.experiment7-control/diagnose_bc_slow_20260812.sh",
+      "sha256": "2f473f19936c917dfb28dc3222cb475e33e29ad5f439ed174f3357af5cb54ac9"
+    },
+    {
+      "bytes": 1283,
+      "path": "training_code/local_control/.experiment7-control/ensure_full_eval_20260812.sh",
+      "sha256": "464294f64fec6391d81dc000620f4bc9311559bc7193990a78c0113c7c24954f"
+    },
+    {
+      "bytes": 2262,
+      "path": "training_code/local_control/.experiment7-control/estimate_bc_eta_20260812.py",
+      "sha256": "172ac6f221fe0536d06616d2d98e89650424ad0081752dc63a19033c065d9886"
+    },
+    {
+      "bytes": 1950,
+      "path": "training_code/local_control/.experiment7-control/export_verify_package_bc_fixed.sh",
+      "sha256": "26b0821cecaa3f5022b280528422760099cd313a3e32daa270dd439d891e180c"
+    },
+    {
+      "bytes": 2667,
+      "path": "training_code/local_control/.experiment7-control/export_verify_package_ppo.sh",
+      "sha256": "0a776e4d68619cbda5cc15363cd6736f5df216b4928e474ae63198aa42880fbc"
+    },
+    {
+      "bytes": 1521,
+      "path": "training_code/local_control/.experiment7-control/extract_latest_ppo.py",
+      "sha256": "5d2d6ea0caa1d33cf204f2637c07c14f8345776065d9f4eb374e9d9c3dd0c351"
+    },
+    {
+      "bytes": 1524,
+      "path": "training_code/local_control/.experiment7-control/extract_target_eval.py",
+      "sha256": "ff6cf4cbd12331d465aa47b07d57c1755ddc1c351dd3251ba350843f8a50739f"
+    },
+    {
+      "bytes": 9643,
+      "path": "training_code/local_control/.experiment7-control/finalize_repaired_full_matrix_20260814.py",
+      "sha256": "d08987e9752317f178bf3333788cc0b53bc45f31002f5fcf96b5b428362e610e"
+    },
+    {
+      "bytes": 3662,
+      "path": "training_code/local_control/.experiment7-control/finalize_selected_agents_frozen100.py",
+      "sha256": "f032516d1a3fe4419fce546f87b52e1defc6a609864c32594ff783455036dd4c"
+    },
+    {
+      "bytes": 694,
+      "path": "training_code/local_control/.experiment7-control/find_a100_20260812.sh",
+      "sha256": "d57c7005313d2787e95979be36f3d051a0ff9dbdbd1ed928809aec91be1e1228"
+    },
+    {
+      "bytes": 263,
+      "path": "training_code/local_control/.experiment7-control/find_tensordict_trainer_20260813.sh",
+      "sha256": "971788a7606c95d5393a078249213b85271d7057853f6cd7022a415e704379a4"
+    },
+    {
+      "bytes": 297,
+      "path": "training_code/local_control/.experiment7-control/fix_noninteractive_bashrc.sh",
+      "sha256": "38e8493d80ebde0ae67ca0a04f34cfb11f99ce79db136729830be4c3f04d7f8c"
+    },
+    {
+      "bytes": 748,
+      "path": "training_code/local_control/.experiment7-control/gpu_probe_one_20260812.sh",
+      "sha256": "7462dfb25afeccf59474ab50e2a6bcdaca91648aeb214510dc2d4f4549886209"
+    },
+    {
+      "bytes": 2657,
+      "path": "training_code/local_control/.experiment7-control/handover_tuned_ppo_learners.sh",
+      "sha256": "1fbf56102ead2ab1f347ab3cdc5b41d4b5be7a83c11c893e2cce67a4fc0a1f3c"
+    },
+    {
+      "bytes": 195,
+      "path": "training_code/local_control/.experiment7-control/handover_universal_ppo_role.sh",
+      "sha256": "88c800d4135e2e87ae0a7690a9b037e7354fda73a414adf762bafff4cb17309f"
+    },
+    {
+      "bytes": 1192,
+      "path": "training_code/local_control/.experiment7-control/heartbeat_bc_compact_20260813.py",
+      "sha256": "c148e3698af15c0d9816be93fbbd22f2bf50e49fa18ea3b79fef504bd9df5f70"
+    },
+    {
+      "bytes": 6701,
+      "path": "training_code/local_control/.experiment7-control/heartbeat_compact_20260812.py",
+      "sha256": "c40244aadab8ee917a1243f291663950b1ec24f60a64e4de16033c42bc1414e9"
+    },
+    {
+      "bytes": 1498,
+      "path": "training_code/local_control/.experiment7-control/heartbeat_compact_status_20260813.py",
+      "sha256": "3616c3ffdcb2078775cf7f3836a953ebbc54bdba2b78e8340674278f45a88558"
+    },
+    {
+      "bytes": 2378,
+      "path": "training_code/local_control/.experiment7-control/heartbeat_dynamic_receipts_20260812.py",
+      "sha256": "373cd59b5d518120dba3a11d7f4a1e205c96d3dc80a96413e06acd717f8ffdba"
+    },
+    {
+      "bytes": 1720,
+      "path": "training_code/local_control/.experiment7-control/heartbeat_extras_20260812.py",
+      "sha256": "b46d52cc6722a828e99fd7610336e3f9977b6533205592dc34b2e2d1091e61ca"
+    },
+    {
+      "bytes": 883,
+      "path": "training_code/local_control/.experiment7-control/heartbeat_failure_tails_20260812.sh",
+      "sha256": "55c8133886be4b132cf395cdddc28cb2af2265fbac643c1fd4cd8b0da1cafaa5"
+    },
+    {
+      "bytes": 1350,
+      "path": "training_code/local_control/.experiment7-control/heartbeat_matrix_compact_20260813.py",
+      "sha256": "29b9b6acb602bd04f941de125a88f97338c609fa925444cffe9a85d269e344cb"
+    },
+    {
+      "bytes": 832,
+      "path": "training_code/local_control/.experiment7-control/heartbeat_matrix_weak.py",
+      "sha256": "dea413ae83180f5250f2ad8a255bfe8ea6059419e9d7660fca2333b9dc5d1e84"
+    },
+    {
+      "bytes": 513,
+      "path": "training_code/local_control/.experiment7-control/heartbeat_process_check_20260812.sh",
+      "sha256": "94723b6f9cfe8877913d70826b35e30dd07528e8101eb2fd6407a18982f8835e"
+    },
+    {
+      "bytes": 768,
+      "path": "training_code/local_control/.experiment7-control/heartbeat_remote_processes_20260812.sh",
+      "sha256": "ed36cc7fa8e4ec7a896c676fc122b1f30dbd7f6a62ed9b05089c2f7cd8381679"
+    },
+    {
+      "bytes": 3187,
+      "path": "training_code/local_control/.experiment7-control/heartbeat_snapshot_20260813.py",
+      "sha256": "003e227ba20f94a1b839ff412a70a7b9f5edd2c69ac41e8c98820b8f9fd188b8"
+    },
+    {
+      "bytes": 1295,
+      "path": "training_code/local_control/.experiment7-control/heartbeat_start_full_eval_20260812.sh",
+      "sha256": "db90d9bb893bacd6e31edf4acd0216578744cb28677f98c54ee31c84fe55a380"
+    },
+    {
+      "bytes": 936,
+      "path": "training_code/local_control/.experiment7-control/heartbeat_start_submission4_eval_20260812.sh",
+      "sha256": "17cd28ebcd34243acf4db72c8529c95ecdaf94899d8909a5ae2dfb65e06b28ba"
+    },
+    {
+      "bytes": 1035,
+      "path": "training_code/local_control/.experiment7-control/inspect_a08_bc_agents.py",
+      "sha256": "af6282c56cc08edb4dff003519f2cdd9672c4e87238d6d522c847540d3eadbed"
+    },
+    {
+      "bytes": 3033,
+      "path": "training_code/local_control/.experiment7-control/inspect_bc_epoch_a02_history_20260813.py",
+      "sha256": "5bfd4c9b6299c81b5ffd6c609cb444ff7b35260e6d188a6badd77e26c7d217a0"
+    },
+    {
+      "bytes": 263,
+      "path": "training_code/local_control/.experiment7-control/inspect_bc_sources_20260812.py",
+      "sha256": "188ea0a9e2e11d4b750e2e076cb2926f85df61127eed74369e9e924fd1112d14"
+    },
+    {
+      "bytes": 1417,
+      "path": "training_code/local_control/.experiment7-control/inspect_checkpoint_capacity_20260812.py",
+      "sha256": "9facf626e3fc8ba4ee999ea1db3e67ae95a4d66cb76bdd5d1149ae33f58ad33a"
+    },
+    {
+      "bytes": 413,
+      "path": "training_code/local_control/.experiment7-control/inspect_completed_eval.sh",
+      "sha256": "c61045668c37eeb98fcd9b9378810fd1bd137c798e197a3579440d69df30d788"
+    },
+    {
+      "bytes": 3297,
+      "path": "training_code/local_control/.experiment7-control/inspect_experiment7_current_20260813.py",
+      "sha256": "b765eafb56ab6d68967cc5f4b899406b6bc244fb6714218f79e64bdd7eb70fc7"
+    },
+    {
+      "bytes": 463,
+      "path": "training_code/local_control/.experiment7-control/inspect_one_metrics.py",
+      "sha256": "dfdd9e54ff671d79bfe4f4b7d5f247ab38fda1eaf9fb31b5ec4e701bc806384b"
+    },
+    {
+      "bytes": 3645,
+      "path": "training_code/local_control/.experiment7-control/inspect_package_and_replay_20260812.sh",
+      "sha256": "4bb7acea7caa4a700574c12dcc16066865f8a9e433768793a7c06bb4ba3ca89f"
+    },
+    {
+      "bytes": 1239,
+      "path": "training_code/local_control/.experiment7-control/inspect_recovery_state.py",
+      "sha256": "c5ce171f9ff134fb6f5e1aef155ff96e780a6bec75d4778b98c8f85c0148d962"
+    },
+    {
+      "bytes": 1377,
+      "path": "training_code/local_control/.experiment7-control/inspect_remote_state_20260814.py",
+      "sha256": "f193bad29f1387865c321e5fde0c97c4847a453ecf3d79fdeb3762095d3f1100"
+    },
+    {
+      "bytes": 662,
+      "path": "training_code/local_control/.experiment7-control/inspect_rolling_bc_logs_20260812.sh",
+      "sha256": "20664311856a1d0cea43550b199c9b0395162e17aaad969ed3702145f1f68c3b"
+    },
+    {
+      "bytes": 1757,
+      "path": "training_code/local_control/.experiment7-control/inspect_tensordict_window.py",
+      "sha256": "c433f36b2a13e4c7a428fe0e6a893d66e34a6b00aab4e6e459b6340c19cd61a2"
+    },
+    {
+      "bytes": 5284,
+      "path": "training_code/local_control/.experiment7-control/install_async_ppo_champions.py",
+      "sha256": "8f0bbf759c1cf2c50b5a321db38a408d95ef9af0d5b3892e8cdfff3a11731fcf"
+    },
+    {
+      "bytes": 5318,
+      "path": "training_code/local_control/.experiment7-control/install_persistent_ppo_branch.py",
+      "sha256": "3972927b950470f478ecab4884788424cbc7a305114d0c69b15ad37fa8f2bdc1"
+    },
+    {
+      "bytes": 709,
+      "path": "training_code/local_control/.experiment7-control/install_reserve_d16.sh",
+      "sha256": "24d9c5f35f388485d000274c513b03efedab3f617cc7571653b996bbd8e9b1ea"
+    },
+    {
+      "bytes": 1509,
+      "path": "training_code/local_control/.experiment7-control/inventory_active_training_20260812.sh",
+      "sha256": "9185a86e6b58eb81adf0b3d2d4e4b2f935e8f90965ddf497f88192a47195da57"
+    },
+    {
+      "bytes": 881,
+      "path": "training_code/local_control/.experiment7-control/inventory_experiment_gpus_20260812.sh",
+      "sha256": "0544ac4ded0998ef5a055621c1a78942d1223a704192e29e69ec9ee15eb2375f"
+    },
+    {
+      "bytes": 1207,
+      "path": "training_code/local_control/.experiment7-control/inventory_trainers_compact_20260812.sh",
+      "sha256": "07f25135e418b8fc945b85283c6f13ac361bfeaa35bfabc7361e654540973350"
+    },
+    {
+      "bytes": 1118,
+      "path": "training_code/local_control/.experiment7-control/launch_a08_deck_variant_branch_20260812.sh",
+      "sha256": "3137355aa19db12f136f0fe5a93432c32c6610ba8e358d8f8362e80100cf35ff"
+    },
+    {
+      "bytes": 871,
+      "path": "training_code/local_control/.experiment7-control/launch_a100_bc_continuations_20260813.sh",
+      "sha256": "4f74fdbd498b588c6254afb3fcd4e963645894d41a127148f5fb101fdc66424b"
+    },
+    {
+      "bytes": 4367,
+      "path": "training_code/local_control/.experiment7-control/launch_a100_capacity_fasttrack_20260812.sh",
+      "sha256": "75f27ea862d74661ae629114d89e6168f957ea24daea64d8f92096600990a09c"
+    },
+    {
+      "bytes": 3697,
+      "path": "training_code/local_control/.experiment7-control/launch_a100_ram_prefetch_bc_20260812.sh",
+      "sha256": "9f602ee81f7f3524a3bb712be172325907d0d7d9ee8057213000e9e1426b4976"
+    },
+    {
+      "bytes": 1197,
+      "path": "training_code/local_control/.experiment7-control/launch_async_ppo_rollout_workers.sh",
+      "sha256": "99d7d04bbb7e1f970218418c66fa454c850cf55930150e6582b61e6a2a6547c7"
+    },
+    {
+      "bytes": 3625,
+      "path": "training_code/local_control/.experiment7-control/launch_bc_0812_a100_hybrid.sh",
+      "sha256": "ff5a90d1172f5d8e1c5f2b343d0ce5d41a21c6c86b7ac8ac1198f8f6988d5853"
+    },
+    {
+      "bytes": 1223,
+      "path": "training_code/local_control/.experiment7-control/launch_bc_0812_d13.sh",
+      "sha256": "abbbfe59a6773cb23bead9244488362f03e2b7f39b498f5cbbf9caa0059f25bd"
+    },
+    {
+      "bytes": 936,
+      "path": "training_code/local_control/.experiment7-control/launch_bc_validator_rescue.sh",
+      "sha256": "02c5f7ff550743a2149b86a7b6daffc8cb7ced5e7bccb0161468a551f845ec8f"
+    },
+    {
+      "bytes": 5566,
+      "path": "training_code/local_control/.experiment7-control/launch_urgent_targeted_d16.py",
+      "sha256": "f43ba0eff2a16762cd296fdf1da6acdef202aa34c9d098df2725d4de80283fd2"
+    },
+    {
+      "bytes": 366,
+      "path": "training_code/local_control/.experiment7-control/list_current_league.py",
+      "sha256": "0dd938f6a3075ca86531d727886c7b0e0dcb478133cd877d5ea5440066f4385e"
+    },
+    {
+      "bytes": 638,
+      "path": "training_code/local_control/.experiment7-control/list_seat_training_controls.py",
+      "sha256": "a51154549b52853333f05a533cc3cabc3491ec2ac35b83ddeac1b90fcac64386"
+    },
+    {
+      "bytes": 1275,
+      "path": "training_code/local_control/.experiment7-control/localize_bc_sources_reference.py",
+      "sha256": "3eda5a4562ea5054b07e05de08800bdad5a0eaf58e05bfed89def30f52f7c329"
+    },
+    {
+      "bytes": 5181,
+      "path": "training_code/local_control/.experiment7-control/make_arena_resume_schedule.py",
+      "sha256": "00d90c1a0f7bdb5836195a3e4673d961f658cdd3ef6ec3f8abce6c544e53abae"
+    },
+    {
+      "bytes": 391,
+      "path": "training_code/local_control/.experiment7-control/make_bc_smoke_sources_20260812.py",
+      "sha256": "80fc1f9ccdde38094626c7eeebe25f35dd585a52cced754004c6060dd8fd4854"
+    },
+    {
+      "bytes": 9037,
+      "path": "training_code/local_control/.experiment7-control/manage_additive_arena_round.py",
+      "sha256": "ee64cbdac28d5dc064246734788dac6d37c2c7c2dfa8fc3fce6894b609b1fd40"
+    },
+    {
+      "bytes": 4330,
+      "path": "training_code/local_control/.experiment7-control/migrate_a100_bc_to_async_validation_20260813.py",
+      "sha256": "9e254d9cef1c7dd79725d9153a1e253005e829acd6caa1d87e4efcec36439147"
+    },
+    {
+      "bytes": 2939,
+      "path": "training_code/local_control/.experiment7-control/migrate_incremental_bc_cache_to_homes_20260812.sh",
+      "sha256": "0a4c2a6ab4483763c1e65538558977c8e843a4dfcea1150bebf69a4cae521f8d"
+    },
+    {
+      "bytes": 1721,
+      "path": "training_code/local_control/.experiment7-control/package_bootstrap_from_d14_cache_20260814.sh",
+      "sha256": "5ed346d1320d5b92c2e234b7e65355aa0fd3d811393be4383e59045ce1638a31"
+    },
+    {
+      "bytes": 5628,
+      "path": "training_code/local_control/.experiment7-control/package_current_a08_snapshot.py",
+      "sha256": "9434be71f90eeac0e6e8516e7b6935e12bf6399ac5a604b1d5bbb98f8e0d0c12"
+    },
+    {
+      "bytes": 5096,
+      "path": "training_code/local_control/.experiment7-control/package_current_kaggle_agents_unpacked.py",
+      "sha256": "ab961edaf5ab6a244b3b62189f38a792f7525d2d415e7bd1c55492c6284963ac"
+    },
+    {
+      "bytes": 1329,
+      "path": "training_code/local_control/.experiment7-control/pause_async_ppo_learners_at_boundary.sh",
+      "sha256": "b8cfd77fe018cda1288c484b55b2cd9075fba495b4e904dd72f3ac5703a0ace1"
+    },
+    {
+      "bytes": 1592,
+      "path": "training_code/local_control/.experiment7-control/prepare_a08_branch_arch_extra_20260813.py",
+      "sha256": "b1577af73eeafb119ba95f5530c8991eaf48228dc869835a2bd47f2b1046079a"
+    },
+    {
+      "bytes": 2997,
+      "path": "training_code/local_control/.experiment7-control/prepare_a08_checkpoint_challengers_20260812.py",
+      "sha256": "1bc4109cbc10d0932f4cfdf3e6aaad974bcb06d860f607a4d856c6c5ad2f30ec"
+    },
+    {
+      "bytes": 4221,
+      "path": "training_code/local_control/.experiment7-control/prepare_a08_deck_branch_evals_20260813.py",
+      "sha256": "c53d4716ff88fb3a22e174680c630d4c8ba10fc1ac867c7ffaf771655ef2cac3"
+    },
+    {
+      "bytes": 3821,
+      "path": "training_code/local_control/.experiment7-control/prepare_a08_deck_variants_20260812.py",
+      "sha256": "10f91fa9e28c5e3733af1803c03e81f55a3d8d74c08b20af47a641acc5773041"
+    },
+    {
+      "bytes": 1207,
+      "path": "training_code/local_control/.experiment7-control/prepare_bc_d13_local.sh",
+      "sha256": "2bcbf489be81b157984fac124b63dc77952f26f7809059d2c5b29041c786a61b"
+    },
+    {
+      "bytes": 5382,
+      "path": "training_code/local_control/.experiment7-control/prepare_deck_search_round.py",
+      "sha256": "14242116284cf10ed934b1ed174293459df3946656db0df2990165f8d25ef7e1"
+    },
+    {
+      "bytes": 5616,
+      "path": "training_code/local_control/.experiment7-control/prepare_incremental_universal_sources.py",
+      "sha256": "873f48d7e7f59044a9d56acd3846515cf4597ec19bb81cb242e25ede7d686ce2"
+    },
+    {
+      "bytes": 7042,
+      "path": "training_code/local_control/.experiment7-control/prepare_ppo_confirmation.py",
+      "sha256": "7ecb89e4fe81d6c2b4f726ab39dc3455cfc0b56cb804ddcf39fbd7259a0df67c"
+    },
+    {
+      "bytes": 4857,
+      "path": "training_code/local_control/.experiment7-control/prepare_ppo_confirmation_repair.py",
+      "sha256": "ae5411787684cefb88c6a3d6edf50e25d2c08b7c23c953a26f7008323575f7c9"
+    },
+    {
+      "bytes": 7799,
+      "path": "training_code/local_control/.experiment7-control/prepare_ppo_screening.py",
+      "sha256": "3f590884e7b80e2b31ab83a01299f6417a38cfa22ce95188220bc54e9a5ff948"
+    },
+    {
+      "bytes": 2073,
+      "path": "training_code/local_control/.experiment7-control/prepare_submission4_full_pool_supplement.py",
+      "sha256": "fcc730b5742955715fef6d0f8daba842257903034c6e5ec22843f00a07a4392b"
+    },
+    {
+      "bytes": 592,
+      "path": "training_code/local_control/.experiment7-control/print_bc_reports2.py",
+      "sha256": "bccc485fc7028a731aa220ac5faf7617c0f6aefdcb47b5eb443299d353c8b577"
+    },
+    {
+      "bytes": 1103,
+      "path": "training_code/local_control/.experiment7-control/print_bc_status_now.py",
+      "sha256": "058ef11adf4b2a4e61ebaaf21ece9fcec36b36912de87534538acba2abca9c83"
+    },
+    {
+      "bytes": 469,
+      "path": "training_code/local_control/.experiment7-control/print_deck_cards.py",
+      "sha256": "b44323a86f154fbba8ebb9d21cfd6ccef5a42586608c8be344c871a45808ce09"
+    },
+    {
+      "bytes": 3177,
+      "path": "training_code/local_control/.experiment7-control/print_heartbeat_1136_summary.py",
+      "sha256": "4b8ef83cb4ca99d36d90129cf7e5ed955644b0de4951ccd14ad1bdcd1d9efb4f"
+    },
+    {
+      "bytes": 3159,
+      "path": "training_code/local_control/.experiment7-control/prioritize_large_bc_screening_20260813.py",
+      "sha256": "988000e70d9f1e7358c67110dfab968872bbc396704a553d99c9c47dd7bd92da"
+    },
+    {
+      "bytes": 1123,
+      "path": "training_code/local_control/.experiment7-control/probe_d20_a100_stage_20260812.sh",
+      "sha256": "fe4966fb2f760e80f80852ee281744f6b12576902b52711f20b3ab8b9d1ed9f8"
+    },
+    {
+      "bytes": 2790,
+      "path": "training_code/local_control/.experiment7-control/probe_doraemon_capacity.py",
+      "sha256": "59f5790566a5919b1a92b006a6bd687c082dd113f4d149cf015ab538f66e4a22"
+    },
+    {
+      "bytes": 1781,
+      "path": "training_code/local_control/.experiment7-control/probe_hb_20260814.py",
+      "sha256": "b8be87ecbf6bd47cb07de01fd37b0d955ecc137c4d97d44752eb10fc2d98043d"
+    },
+    {
+      "bytes": 3297,
+      "path": "training_code/local_control/.experiment7-control/probe_hourly_cache_pool_live.py",
+      "sha256": "96a12d34191ff077483c04ae10fcf76b30ebb206d69668e496454f07bb09ac19"
+    },
+    {
+      "bytes": 360,
+      "path": "training_code/local_control/.experiment7-control/query_active_seat_metrics.sh",
+      "sha256": "056eec4dc21fca8bc821141daecdeb8904dd5d8b38415e75fc94daf72ddce699"
+    },
+    {
+      "bytes": 1760,
+      "path": "training_code/local_control/.experiment7-control/query_d03_aux.sh",
+      "sha256": "1254684f3b914e5359e4173cc5971d59e0d0a8e9616ef45bd72e0597f4f30c48"
+    },
+    {
+      "bytes": 1590,
+      "path": "training_code/local_control/.experiment7-control/query_d14_bc.sh",
+      "sha256": "c5f1ac55298c6ecc705228bf4cdb439446ab369e8f84385f268ee708da12fdfc"
+    },
+    {
+      "bytes": 1032,
+      "path": "training_code/local_control/.experiment7-control/read_latest_seat_metrics.py",
+      "sha256": "6e735f5ff2f1c9e8d55356a4486dd32ab67f713d3cb43b12cac03943edd20798"
+    },
+    {
+      "bytes": 1446,
+      "path": "training_code/local_control/.experiment7-control/rebalance_aug06_remote.sh",
+      "sha256": "43dce751bb3f5024575b1689e16208699fcb9ca89991786573ccb0a6dc620235"
+    },
+    {
+      "bytes": 3494,
+      "path": "training_code/local_control/.experiment7-control/rebuild_public_candidate.py",
+      "sha256": "bc80ece8894e2dc9d93de87ffc9cd198f562a784062d858d16f98d09199ea4a6"
+    },
+    {
+      "bytes": 3464,
+      "path": "training_code/local_control/.experiment7-control/recover_async_ppo_learners_clean_worktree_20260813.sh",
+      "sha256": "b1439202f30ea556378e663615ca77777af2214069b1006bcb76196839626013"
+    },
+    {
+      "bytes": 4226,
+      "path": "training_code/local_control/.experiment7-control/recover_bc_0812_a100.sh",
+      "sha256": "b91858949806180c440efa87e8ee185a578265a368cf9b15743efbbf9c6a78f2"
+    },
+    {
+      "bytes": 3761,
+      "path": "training_code/local_control/.experiment7-control/recover_bc_0812_d16.sh",
+      "sha256": "eafc2d6e7945d0185b16bd6ffe3856d88cb1dea5af3619cd155de9958d2f66c8"
+    },
+    {
+      "bytes": 27789,
+      "path": "training_code/local_control/.experiment7-control/remote_run_latest_ppo_full_eval.py",
+      "sha256": "ce8cc2efe6809db48b82012beed3e895224814f5b8be9c25093b8d9200753a87"
+    },
+    {
+      "bytes": 1037,
+      "path": "training_code/local_control/.experiment7-control/repair_full_matrix_shard12_20260814.sh",
+      "sha256": "60ba90a9cfd41c19832ede6639cfcd54eaecefc35e0aa0626f663e1e39b8a2d8"
+    },
+    {
+      "bytes": 1617,
+      "path": "training_code/local_control/.experiment7-control/repair_full_matrix_shards_20260814.sh",
+      "sha256": "236e69a85a477bc3053f685be11ed6e827a94c1a8ff707a54cc334431e47d753"
+    },
+    {
+      "bytes": 4779,
+      "path": "training_code/local_control/.experiment7-control/repoint_frozen_agent.py",
+      "sha256": "20f68aa3913351ad9d9dcb0ae303b7aca329bd0754d56736d8996d1786a85829"
+    },
+    {
+      "bytes": 8944,
+      "path": "training_code/local_control/.experiment7-control/report_a08_status_now.py",
+      "sha256": "889e50bdbcf1f380ddffe3246724844ffd26c319677f94cefffc9180c8d06807"
+    },
+    {
+      "bytes": 2760,
+      "path": "training_code/local_control/.experiment7-control/report_bc_screening.py",
+      "sha256": "bc16396a4b4d2fd318b12a1aea59b6829e511acefcd7ce7156ee9cd16610c11c"
+    },
+    {
+      "bytes": 3054,
+      "path": "training_code/local_control/.experiment7-control/rescue_bc_validator_gpu2.py",
+      "sha256": "4b71dbaeb759345fccec658a062fd59de93be91130d0f1af54f0ffeb9488597d"
+    },
+    {
+      "bytes": 3021,
+      "path": "training_code/local_control/.experiment7-control/reserve_d16_test.py",
+      "sha256": "0069dd4717d8906d45464525de2d2966205ef1d2f4635fdddba949a155d111bc"
+    },
+    {
+      "bytes": 1286,
+      "path": "training_code/local_control/.experiment7-control/restart_a08_branch_after_guard_fix_20260812.sh",
+      "sha256": "b623afb5929fb74f0cff933875d477f27be39394e02c288c237bcec3bce17428"
+    },
+    {
+      "bytes": 1099,
+      "path": "training_code/local_control/.experiment7-control/restart_adaptive_controller_20260813.sh",
+      "sha256": "e434c2369322e170566248f492088cef48c5f00aafe0adf0f1ff95fefeb1ea02"
+    },
+    {
+      "bytes": 968,
+      "path": "training_code/local_control/.experiment7-control/restart_adaptive_controller_five_chain_20260813.sh",
+      "sha256": "4b3ea5e3ce225325f49ae4746b7ec0948656eeb7a63704342631a1da6e202bef"
+    },
+    {
+      "bytes": 1753,
+      "path": "training_code/local_control/.experiment7-control/restart_adaptive_learners_20260812.sh",
+      "sha256": "f5ab8bd2cafc09b96aba56b7d26ca10e2fdc0b32e4d9226a3c34a8c8748abe3f"
+    },
+    {
+      "bytes": 1145,
+      "path": "training_code/local_control/.experiment7-control/restart_adaptive_rollout_worker_20260812.sh",
+      "sha256": "57600bd1d9f709388e1aaa3a562118385e4aa09b11fc7b157fd35cf6d1fe6da2"
+    },
+    {
+      "bytes": 2822,
+      "path": "training_code/local_control/.experiment7-control/resume_ppo_arena_matrix.sh",
+      "sha256": "db6911965dbd6f8f9fdc61aaf6ac98ae0bc8a432ebc970db5d109f4cb5a76da9"
+    },
+    {
+      "bytes": 3679,
+      "path": "training_code/local_control/.experiment7-control/resume_ppo_screening100.sh",
+      "sha256": "f0a6882120b4976b8f51780e3638276b8550483594bc3130c216dc5d7e6589a6"
+    },
+    {
+      "bytes": 1358,
+      "path": "training_code/local_control/.experiment7-control/resume_selected_frozen100_missing.sh",
+      "sha256": "0736e15f3e8f1e4f60b77a9575375bbb324e29709f4932a3bad73d084d4ac5ed"
+    },
+    {
+      "bytes": 2563,
+      "path": "training_code/local_control/.experiment7-control/resume_universal_ppo_after_isolation_fix.sh",
+      "sha256": "5239c3b72f2053ddac065c52455dde105af86a2fb0c617c773b0da1f5954ae43"
+    },
+    {
+      "bytes": 1670,
+      "path": "training_code/local_control/.experiment7-control/retire_a08_non_maxbelt_20260813.py",
+      "sha256": "0ef7c30b613586d72263bb358a44501ffbc47314da67da6b8d184d9e6bdde19c"
+    },
+    {
+      "bytes": 3727,
+      "path": "training_code/local_control/.experiment7-control/reuse_admitted_bc_packages_20260814.py",
+      "sha256": "508573d08e483231751d8f909bdc3bae7a790ad779ba3d932d50baa91131bc68"
+    },
+    {
+      "bytes": 3839,
+      "path": "training_code/local_control/.experiment7-control/roll_distributed_workers_v7_20260814.py",
+      "sha256": "0876fe4a468d7a656ddadf379955b32631b0a994b18a9ff0f56ce16cf72ff49a"
+    },
+    {
+      "bytes": 6390,
+      "path": "training_code/local_control/.experiment7-control/run_7d_training_when_ready.ps1",
+      "sha256": "62fe1ed7abdcba18598410a7cce6246321a9be20fa3a6bb801b75f7777f96acd"
+    },
+    {
+      "bytes": 2254,
+      "path": "training_code/local_control/.experiment7-control/run_a08_branch_arch_extra_20260813.sh",
+      "sha256": "cfba7f923ce1e34d6228492f0c407281b03978aea5d006e6351997f726406f5c"
+    },
+    {
+      "bytes": 2165,
+      "path": "training_code/local_control/.experiment7-control/run_a08_branch_arch_extra_v2_20260813.sh",
+      "sha256": "ff70aee703562e055cc0a12a341b8c0ab3c8618bf90815b0212b17fc10971c22"
+    },
+    {
+      "bytes": 2264,
+      "path": "training_code/local_control/.experiment7-control/run_a08_checkpoint_challengers_20260812.sh",
+      "sha256": "02fe275b0e4f50afc51e104815e96fa523bfd7d0bff4dd6bd2a01caa76e5d4a8"
+    },
+    {
+      "bytes": 3464,
+      "path": "training_code/local_control/.experiment7-control/run_a08_deck_branch_evals_20260813.sh",
+      "sha256": "e26611b366bef1049557e37419d9d315a31bdb5faecfcaa6a56751302867b1cb"
+    },
+    {
+      "bytes": 8030,
+      "path": "training_code/local_control/.experiment7-control/run_a08_deck_variant_branch_20260812.sh",
+      "sha256": "82904530e30dd076095cf56ff15b70254a7424b4672fd4442059e2f6267ebf61"
+    },
+    {
+      "bytes": 4044,
+      "path": "training_code/local_control/.experiment7-control/run_a08_targeted_rollout_worker.sh",
+      "sha256": "9d98fa3049f8310736747c7d049d8ab8f0723955094b3030e2d18c6575083f87"
+    },
+    {
+      "bytes": 6583,
+      "path": "training_code/local_control/.experiment7-control/run_async_bc_profile_controller_20260813.py",
+      "sha256": "74f645e40adba1ee4fe6ab8cf3ea90d0c15e541c57d694bd865a1b6f0e34190e"
+    },
+    {
+      "bytes": 2646,
+      "path": "training_code/local_control/.experiment7-control/run_bc_capacity_screening_20260813.sh",
+      "sha256": "2c226256c3f44437e115215a55d0c73f7f35164619f404fbbe2c58e4ad13612d"
+    },
+    {
+      "bytes": 10526,
+      "path": "training_code/local_control/.experiment7-control/run_bc_direct_replacement_gate_20260814.py",
+      "sha256": "54a2b8de29069857826c808892ef7f469c9c473053f96309533290604e90d4e8"
+    },
+    {
+      "bytes": 4577,
+      "path": "training_code/local_control/.experiment7-control/run_daily_replay_cache_worker.sh",
+      "sha256": "43192f8716637c2fc13542d7b9b0024870d3925f9da6d298724150c16fbdbf82"
+    },
+    {
+      "bytes": 3515,
+      "path": "training_code/local_control/.experiment7-control/run_deck_search_additive_round.sh",
+      "sha256": "ac2cd52400e0b178dd4f80ce985cd309a83c9dacd669dd8909f28428c424789e"
+    },
+    {
+      "bytes": 2851,
+      "path": "training_code/local_control/.experiment7-control/run_deck_search_round100.sh",
+      "sha256": "7193aa2bd596bf5dc58bfa1d46e215f9228974af74f4a9468c77b3f81222dc79"
+    },
+    {
+      "bytes": 2398,
+      "path": "training_code/local_control/.experiment7-control/run_deck_search_round20.sh",
+      "sha256": "e41cf38d20a982f509c8c917dfe4cc5ed1312ae30e388f9777ae8b23bbc0c58f"
+    },
+    {
+      "bytes": 11402,
+      "path": "training_code/local_control/.experiment7-control/run_fast_latest_ppo_gate_20260814.py",
+      "sha256": "66498e86fe5ecb2856419a482daf95468b946df05f119ab6123012e137d77c09"
+    },
+    {
+      "bytes": 3239,
+      "path": "training_code/local_control/.experiment7-control/run_frozen_pool_arena.sh",
+      "sha256": "eb19d45d7ae8623323fad793e50173c02e62a394492556ba33f11c570cf16892"
+    },
+    {
+      "bytes": 2607,
+      "path": "training_code/local_control/.experiment7-control/run_guarded_tensordict_migration.sh",
+      "sha256": "76a68d4ba514e4be18feb14c09e4d5ba881ce5952e5a80d3cf236086f624c6a6"
+    },
+    {
+      "bytes": 6832,
+      "path": "training_code/local_control/.experiment7-control/run_incremental_a100_bc_profile_20260813.py",
+      "sha256": "9a688964730d7b7dd2d2bc38b0188092a9836061e89de545d18815a0dc8a92c1"
+    },
+    {
+      "bytes": 4159,
+      "path": "training_code/local_control/.experiment7-control/run_incremental_replay_day_20260812.sh",
+      "sha256": "d04fde58820998fe1680e4f2bb680e0788b1b7446065908657cc4856244a9c88"
+    },
+    {
+      "bytes": 4237,
+      "path": "training_code/local_control/.experiment7-control/run_incremental_replay_refresh_20260812.sh",
+      "sha256": "11fc04241ca6de9e803042dbaca69d08522959568cd982919536274b162f7539"
+    },
+    {
+      "bytes": 2473,
+      "path": "training_code/local_control/.experiment7-control/run_incremental_universal_bc_seed.sh",
+      "sha256": "d90731d8f322d23e8e1a7817d74ec294b0f8a82072e28e112312cb062c16c3ee"
+    },
+    {
+      "bytes": 1733,
+      "path": "training_code/local_control/.experiment7-control/run_incremental_universal_bc_seed_nohash.sh",
+      "sha256": "a9eaa908ad3ba7154774ec36bde600648ce9533d4790ef5ad490d44a5e4e704a"
+    },
+    {
+      "bytes": 1793,
+      "path": "training_code/local_control/.experiment7-control/run_isolated_arena_shard.sh",
+      "sha256": "b2e7b5191a322759f6e98af1a54f8abee307a535620757da65ec43d563d1a8b9"
+    },
+    {
+      "bytes": 21925,
+      "path": "training_code/local_control/.experiment7-control/run_latest_ppo_full_eval.py",
+      "sha256": "34dcdcc0204e7aaf2bb7d9b17bf8d788305aed528b1579e1a3abd21ab723c54b"
+    },
+    {
+      "bytes": 12034,
+      "path": "training_code/local_control/.experiment7-control/run_latest_ppo_submission4_eval.py",
+      "sha256": "4a9cd7869efed77d2ae33e59ae59cf3d31db6bf723429b2a0ae5e20764bf9749"
+    },
+    {
+      "bytes": 916,
+      "path": "training_code/local_control/.experiment7-control/run_load_guarded_arena_shard.remote.sh",
+      "sha256": "fd564316d365d8a89441187606bb67bee040d43ac932549c32a76b8874d81b64"
+    },
+    {
+      "bytes": 916,
+      "path": "training_code/local_control/.experiment7-control/run_load_guarded_arena_shard.sh",
+      "sha256": "fd564316d365d8a89441187606bb67bee040d43ac932549c32a76b8874d81b64"
+    },
+    {
+      "bytes": 2779,
+      "path": "training_code/local_control/.experiment7-control/run_post_cache_bc_controller_20260812.sh",
+      "sha256": "f0267eae62c23877fe49edeb8f9ea2b78704a5d41d38f3bbb076116914f01bc0"
+    },
+    {
+      "bytes": 4406,
+      "path": "training_code/local_control/.experiment7-control/run_ppo_arena_matrix.sh",
+      "sha256": "2d1cbd6752d75175f1375bc69796fa7dfc9f8651b6a36dde5f38348fcec10cfe"
+    },
+    {
+      "bytes": 3278,
+      "path": "training_code/local_control/.experiment7-control/run_ppo_confirmation300.sh",
+      "sha256": "daeffbf6a66e76979f8ff8f53ede4243aadf4abbd5a2cf5275305f113ba0263e"
+    },
+    {
+      "bytes": 3224,
+      "path": "training_code/local_control/.experiment7-control/run_ppo_confirmation_repair.sh",
+      "sha256": "6c26dfaae3e2983bf74fc27cfe260002ba7a25c027fb58edb24174e76c91a770"
+    },
+    {
+      "bytes": 3530,
+      "path": "training_code/local_control/.experiment7-control/run_ppo_screening100.sh",
+      "sha256": "63ed2ae27df1374dd2b4359c90c46bfee82b4ac945bed592c01a3e3f688e201e"
+    },
+    {
+      "bytes": 10543,
+      "path": "training_code/local_control/.experiment7-control/run_selected_agents_frozen100.py",
+      "sha256": "55d0bc750f60e852a65ea0e869266d0e0587ad5a0834a9d385e461614adb0a5a"
+    },
+    {
+      "bytes": 1117,
+      "path": "training_code/local_control/.experiment7-control/run_standard_bc_screening_now_20260813.py",
+      "sha256": "6148d0daae733a1d813ef7f00cc1d2d61b6542ea79013ea89f74fd9cb2060032"
+    },
+    {
+      "bytes": 4433,
+      "path": "training_code/local_control/.experiment7-control/run_universal_capacity_comparison_20260812.sh",
+      "sha256": "4e9ebf9223a76a9053069cd655683a0468a991d70b6d4c9bece1d7a5d806836a"
+    },
+    {
+      "bytes": 4116,
+      "path": "training_code/local_control/.experiment7-control/run_universal_ppo_role.sh",
+      "sha256": "9278d2d493700c49ef47c9c867a4134715ffb4e2edccdde847aeaea31b017327"
+    },
+    {
+      "bytes": 746,
+      "path": "training_code/local_control/.experiment7-control/scan_project_memory_20260812.sh",
+      "sha256": "c74cc0afef167fa4f22cc43182862b2faa3fb030baea89fe593ed135be4d50c1"
+    },
+    {
+      "bytes": 2053,
+      "path": "training_code/local_control/.experiment7-control/scan_project_memory_node_20260812.py",
+      "sha256": "96d6006358f81b014190e7efb678a8977f5a228ba8931f28b3a198ab33f553b1"
+    },
+    {
+      "bytes": 1165,
+      "path": "training_code/local_control/.experiment7-control/scan_rollout_capacity_20260812.sh",
+      "sha256": "ea73f9ef7fdefdf708123fc7b615ef0c8472d4f6cd77adc25ed807ba266d75b6"
+    },
+    {
+      "bytes": 1336,
+      "path": "training_code/local_control/.experiment7-control/schedule_adaptive_restarts_20260812.sh",
+      "sha256": "13cd9adb45a6491cb2bae7609f55678a80a24c86418689371ab476ebbbe230ec"
+    },
+    {
+      "bytes": 4026,
+      "path": "training_code/local_control/.experiment7-control/select_arena_manifest.py",
+      "sha256": "6d447b4079f53a4531b8e3457a43d394e90e106dd04e992694409d828434d3a3"
+    },
+    {
+      "bytes": 2552,
+      "path": "training_code/local_control/.experiment7-control/select_best_ppo_full_matrix.py",
+      "sha256": "8f7b233ccbe950d612b1f1f8a8c21c9d292b5ceeccbcf3372110f03eb76da825"
+    },
+    {
+      "bytes": 13666,
+      "path": "training_code/local_control/.experiment7-control/select_deck_search_round20.py",
+      "sha256": "ef9d2688e6524dfda4552b729fade9748c919eaa3325a361594d2dc7ee89ef53"
+    },
+    {
+      "bytes": 8297,
+      "path": "training_code/local_control/.experiment7-control/select_ppo_pair.py",
+      "sha256": "c7b739ed483bcd0d1569860bf85c2ce04b6addab30ac9a4b5b03afc346c2c452"
+    },
+    {
+      "bytes": 676,
+      "path": "training_code/local_control/.experiment7-control/show_dragapult_deck.py",
+      "sha256": "477252ebf18e63ab99f6a5fd6d4ee74438d0e0f40d3464b4d994d9bd8e9fdf14"
+    },
+    {
+      "bytes": 3579,
+      "path": "training_code/local_control/.experiment7-control/stage_and_launch_0812_bc_a100.sh",
+      "sha256": "ee6bbe5cae5a8f2fd425202ecdf9fe27d848f3a0f8efed3ccea037e0b6e5030c"
+    },
+    {
+      "bytes": 3909,
+      "path": "training_code/local_control/.experiment7-control/stage_launch_bc_0812_d14.sh",
+      "sha256": "f14aea5902e238cf435db1eb58785cfab1077373e37886383fa0e6956a791ff4"
+    },
+    {
+      "bytes": 2821,
+      "path": "training_code/local_control/.experiment7-control/start_adjusted_async_ppo_learners.sh",
+      "sha256": "1a8c294e1e62d845f9152fa4bf1aa08a075807035580f6ba9c14126b3a54ac47"
+    },
+    {
+      "bytes": 1296,
+      "path": "training_code/local_control/.experiment7-control/start_allchain_rollout_worker_v7_20260814.sh",
+      "sha256": "b67b04085bd18ec50e6dad87811d1ed74b83e9b0b372bf6a21e07b6d039e018c"
+    },
+    {
+      "bytes": 1307,
+      "path": "training_code/local_control/.experiment7-control/start_async_ppo_rollout_worker.sh",
+      "sha256": "b5973da486694200f5fd46311efa19e4ddd63eefc12dcc4680c4974fd73ec0b9"
+    },
+    {
+      "bytes": 598,
+      "path": "training_code/local_control/.experiment7-control/start_bc_admission_increment_watcher_20260813.sh",
+      "sha256": "0181bca5631cfef146ee57379dbe53cf11e61f4b87cd835317eae7a21b905b65"
+    },
+    {
+      "bytes": 1144,
+      "path": "training_code/local_control/.experiment7-control/start_full_eval_if_idle_20260813.sh",
+      "sha256": "2b25d63901f687a39839207c8664fdf2d3fcecc54c0c7def4444e8c65406ae50"
+    },
+    {
+      "bytes": 1137,
+      "path": "training_code/local_control/.experiment7-control/start_full_matrix_20260814.sh",
+      "sha256": "3a4084f773c86638d53f7523342a5a1488e0ed3543e7e441a1c878171021973f"
+    },
+    {
+      "bytes": 1710,
+      "path": "training_code/local_control/.experiment7-control/start_gold_exact_ppo_20260813.sh",
+      "sha256": "af74c5a397034f197f10b95b1ddf9b1a7c1d49846e334a568a8a230dc028b552"
+    },
+    {
+      "bytes": 1265,
+      "path": "training_code/local_control/.experiment7-control/start_gold_exact_rollout_worker_20260813.sh",
+      "sha256": "14fdca7f8c26f880a84369400e66071eb9c969345211980e818582d098c32a05"
+    },
+    {
+      "bytes": 3466,
+      "path": "training_code/local_control/.experiment7-control/start_hourly_cache_pool_d16_20260814.sh",
+      "sha256": "3253705471ed0f086090fb5680f76017f079d366b01947768eada7d67c934157"
+    },
+    {
+      "bytes": 2146,
+      "path": "training_code/local_control/.experiment7-control/start_hourly_cache_pool_v2_d16_20260815.sh",
+      "sha256": "7ad835c774475717af799c2f8c1b67c82189ca5f720b87363564841f3510f910"
+    },
+    {
+      "bytes": 1669,
+      "path": "training_code/local_control/.experiment7-control/start_ppo_learner_v7_20260814.sh",
+      "sha256": "15e297d63026b2e6c0bfe699466b82f7655a03463a61b5de150fa886ad013f7f"
+    },
+    {
+      "bytes": 1769,
+      "path": "training_code/local_control/.experiment7-control/start_second_allchain_cohort_20260814.py",
+      "sha256": "892c4f0514c88f1b93af6661b5fe564947529fca62a625946663a2040a260bb4"
+    },
+    {
+      "bytes": 1445,
+      "path": "training_code/local_control/.experiment7-control/start_targeted_rollout_worker_v7_20260814.sh",
+      "sha256": "1fecd111a30c2aa5caa65b8ccb8278b786dcaca740622a196de3c2a37811d81f"
+    },
+    {
+      "bytes": 2568,
+      "path": "training_code/local_control/.experiment7-control/stop_legacy_ppo_after_current_generation.sh",
+      "sha256": "27268655ce0e085cee9b546adccdbdaeed998100c21dcd29d12e56aafa94457f"
+    },
+    {
+      "bytes": 2041,
+      "path": "training_code/local_control/.experiment7-control/stop_urgent_targeted_d16.py",
+      "sha256": "59db9e2794765333bf27f368aafc55647e2b98ee5e1268c28b96929bd5ae4049"
+    },
+    {
+      "bytes": 1466,
+      "path": "training_code/local_control/.experiment7-control/summarize_a08_branch_arch_extra_20260813.py",
+      "sha256": "a7edb6d7eb1292f58c7d816a5da7a0bc0c990e77cbb3dc661005d6cc7752f344"
+    },
+    {
+      "bytes": 1259,
+      "path": "training_code/local_control/.experiment7-control/summarize_a08_branch_evals_20260813.py",
+      "sha256": "e0429f9695ad3034812b9818f64a49029d035774c8de90967d0f761ac9d805db"
+    },
+    {
+      "bytes": 2646,
+      "path": "training_code/local_control/.experiment7-control/summarize_a08_matrix_history_20260812.py",
+      "sha256": "2e0537f21d5bbca5107ef1661abd8f59e4a4b27ab67c6d2bd0e58f031908933d"
+    },
+    {
+      "bytes": 11187,
+      "path": "training_code/local_control/.experiment7-control/summarize_arena_matrix.py",
+      "sha256": "4e574340d5f44ae7d777d7fb9795a6756ad8c6a3b3df1f844af3240860e29325"
+    },
+    {
+      "bytes": 4489,
+      "path": "training_code/local_control/.experiment7-control/summarize_async_ppo_league.py",
+      "sha256": "b1624a6c8ee67e83912336a40e7c9d7ed26cdfe4a3a2b93d269fdbdebe1f8d56"
+    },
+    {
+      "bytes": 1288,
+      "path": "training_code/local_control/.experiment7-control/summarize_latest_eval.py",
+      "sha256": "96e729cf7abaee23be58a77d102865270c48519f63eb2085164e4fe6602a0608"
+    },
+    {
+      "bytes": 1701,
+      "path": "training_code/local_control/.experiment7-control/summarize_opponent_cache_20260813.py",
+      "sha256": "049c5b16a2806d64a5a2454248d85b642d651b5723e080ef87ac41ffb31bfe4e"
+    },
+    {
+      "bytes": 1766,
+      "path": "training_code/local_control/.experiment7-control/terminate_exact_eval_tree.py",
+      "sha256": "acb477e525aa8b715972407ccf5474489153ed92213a75275eb213cef6af52c0"
+    },
+    {
+      "bytes": 535,
+      "path": "training_code/local_control/.experiment7-control/test_async_ppo_minimum_batch.py",
+      "sha256": "22d82a001f76b3ef3edc4371de16fe5eb54742939957e40359d2838dee3ab73d"
+    },
+    {
+      "bytes": 1956,
+      "path": "training_code/local_control/.experiment7-control/transfer_completed_daily_cache_to_datat0.sh",
+      "sha256": "25eb862d8033c539f501ee241e6fd97466e0b059b3c1cc63ba64a351766297f8"
+    },
+    {
+      "bytes": 7422,
+      "path": "training_code/local_control/.experiment7-control/update_gold_acceleration_20260814.py",
+      "sha256": "debc465fd08d302849ccb5a300822d4cc6b266176103429d6ffaa16eab3727f3"
+    },
+    {
+      "bytes": 6589,
+      "path": "training_code/local_control/.experiment7-control/update_hb_snapshot.py",
+      "sha256": "28240055bf7529bfba83018fba7d970cd30f6d37b8ebd49d253a9158c737a51f"
+    },
+    {
+      "bytes": 6771,
+      "path": "training_code/local_control/.experiment7-control/update_heartbeat_20260814.py",
+      "sha256": "1e0846833914fad63a12814cc33a3ff559a2a08cba708104fc40e5b9afd2b495"
+    },
+    {
+      "bytes": 1068,
+      "path": "training_code/local_control/.experiment7-control/verify_a08_tuning_receipts.py",
+      "sha256": "3264b78cfe4bd5b3228c1a16fbfba436eb825e6f0b5a35d4ba255e64e28ca418"
+    },
+    {
+      "bytes": 1115,
+      "path": "training_code/local_control/.experiment7-control/wait_export_ppo_generation.sh",
+      "sha256": "02b8a9456e000918ffaabb320ba4bc46da9e845ebe90c28e3774cde18874c335"
+    },
+    {
+      "bytes": 4562,
+      "path": "training_code/local_control/.experiment7-control/watch_bc_admission_then_increment_20260813.py",
+      "sha256": "3d6c7618ef9c9e33b1872e06043c01ef14af5f1f7ef82ede0d206bfbd17c5d86"
+    },
+    {
+      "bytes": 2495,
+      "path": "training_code/local_control/.experiment7-control/watch_direct_then_frozen_round2_20260814.py",
+      "sha256": "de49441b1edcc10ee7653d2d07024774faea1122f37f0fcccfff731e4b6b0154"
+    },
+    {
+      "bytes": 1246,
+      "path": "training_code/local_control/config/specialist_replay_auxiliary_20260814.json",
+      "sha256": "dbd3496d52bbb267c6c4daf6bde93570b58721dbccbd980982ec69553cafae3e"
+    },
+    {
+      "bytes": 3886,
+      "path": "training_code/local_control/config/static_deck_bc_10d_20260815.json",
+      "sha256": "1332f0db396940c67424d4adb076d30b7a896c4f6ad64cc72308490d02b51f2d"
+    },
+    {
+      "bytes": 3129,
+      "path": "training_code/local_control/config/static_deck_bc_lpt_plan_20260815.json",
+      "sha256": "9c18e927d70aed6f6fdab0abbcc87686ef34e9c3166e46dca5f6dd43adfc1d9b"
+    },
+    {
+      "bytes": 241,
+      "path": "training_code/production_worktree/agents/rl_bc_adapter/deck.csv",
+      "sha256": "2a541d7bf3d9e6b36037123f53f4dfef6348223f79fd27095dafc602a5357c19"
+    },
+    {
+      "bytes": 1103,
+      "path": "training_code/production_worktree/agents/rl_bc_adapter/main.py",
+      "sha256": "58d0ec7884e60fe734fc64dee96a3dfb414995ef44ed0204fa7029510d2fe3be"
+    },
+    {
+      "bytes": 753,
+      "path": "training_code/production_worktree/agents/rl_bc_adapter/README.md",
+      "sha256": "d8df465d8ada308830b60e6e47387a7eb3aaf029981a97e53b3ca71bb363c322"
+    },
+    {
+      "bytes": 1792,
+      "path": "training_code/production_worktree/agents/rl_bc_specialist/main.py",
+      "sha256": "bfa150cb0205601f8a9073fce32a55e0de5644806d09022028fcebfc28fe0912"
+    },
+    {
+      "bytes": 74,
+      "path": "training_code/production_worktree/experiment7/integration/__init__.py",
+      "sha256": "2f18bbb9e62f4431f57a5ccc702747a36cbe430217b0f458f01ffc9bf76f8f79"
+    },
+    {
+      "bytes": 2556,
+      "path": "training_code/production_worktree/experiment7/integration/agent_isolation.py",
+      "sha256": "7aeb1ff8662b2cf082f783d35837e0a518505fbf7443c9a23e81d1e9c17861e0"
+    },
+    {
+      "bytes": 7884,
+      "path": "training_code/production_worktree/experiment7/integration/apply_replay_diagnosis_training_controls_20260814.py",
+      "sha256": "e1020aef308942d914d2a888f6bd1e17092b758fa6febdcbbca1b6e3a5ede36a"
+    },
+    {
+      "bytes": 12120,
+      "path": "training_code/production_worktree/experiment7/integration/arena.py",
+      "sha256": "aacd1482f7973faf6fb5404e0992d52b9978adbedf7e7b3c082635c4786f211e"
+    },
+    {
+      "bytes": 14692,
+      "path": "training_code/production_worktree/experiment7/integration/async_ppo_control.py",
+      "sha256": "05b651d4aa362a6950d9c58feb35ea5a960268585540e80b4bf6e7580e1dcc4b"
+    },
+    {
+      "bytes": 14358,
+      "path": "training_code/production_worktree/experiment7/integration/async_ppo_control.py.pre-cohort20-20260815",
+      "sha256": "1de8bd0767f0f62a9b1a1f228ed5cbea95325caacef31f8b8672ddf16c397a2b"
+    },
+    {
+      "bytes": 2374,
+      "path": "training_code/production_worktree/experiment7/integration/build_engine_catalog.py",
+      "sha256": "4d6a52f80059de384c27b33fb474dd22ce83551276af849328ce0ff5a13abf21"
+    },
+    {
+      "bytes": 18509,
+      "path": "training_code/production_worktree/experiment7/integration/build_from_pocketmon_replays.py",
+      "sha256": "16eb83c77f2faca7c501d6a5cf381b4c5a2385a1864fda5fcb909b1ff37abae1"
+    },
+    {
+      "bytes": 4878,
+      "path": "training_code/production_worktree/experiment7/integration/build_ppo_tactical_guardrail_evidence.py",
+      "sha256": "cc1dc81fabdd0d77a9a3a3069382775bb3e93b70f4a7eb94d48d97bb9286d822"
+    },
+    {
+      "bytes": 15209,
+      "path": "training_code/production_worktree/experiment7/integration/build_replay_catalog.py",
+      "sha256": "1986de4810a0701350e4df2f7fc6ad9180ca539d4445e0a108b9d6faed3ec5e4"
+    },
+    {
+      "bytes": 46591,
+      "path": "training_code/production_worktree/experiment7/integration/collect_universal_ppo_rollouts.py",
+      "sha256": "8186a45e20c66d78532a88d1e7df1510edc766e694bfdc921d2c9d7b25c94127"
+    },
+    {
+      "bytes": 9859,
+      "path": "training_code/production_worktree/experiment7/integration/common.py",
+      "sha256": "14e940b104cca2bc69d1478266adfe497a184f71c3f8b7e3c377b2644e633806"
+    },
+    {
+      "bytes": 21880,
+      "path": "training_code/production_worktree/experiment7/integration/export_and_package.py",
+      "sha256": "de9dbe2daf90e4aa6ea26e7ade54e0e898e84b3a4018f366b8b2e19fd808eeee"
+    },
+    {
+      "bytes": 2672,
+      "path": "training_code/production_worktree/experiment7/integration/feature_tensor_store.py",
+      "sha256": "e59839bf5db476db4a2818385d6f1438cac39804e3e02b91361184bf83125f87"
+    },
+    {
+      "bytes": 1024,
+      "path": "training_code/production_worktree/experiment7/integration/linux_bootstrap.sh",
+      "sha256": "c783637dd540c9becc586e159055c51b5df27a5dbe55660d140e95e2ba2ee051"
+    },
+    {
+      "bytes": 3242,
+      "path": "training_code/production_worktree/experiment7/integration/materialize_reference.py",
+      "sha256": "7f38d6164fb2b4316b841ad2e466fed8247b429d9b5bf5098e083ffe58edc552"
+    },
+    {
+      "bytes": 4110,
+      "path": "training_code/production_worktree/experiment7/integration/materialize_reference_from_branch.py",
+      "sha256": "32e693db39bca99f5d0f29ec5d85ad0d1f9e5fb1c9c32c5f7233483892ae1845"
+    },
+    {
+      "bytes": 15483,
+      "path": "training_code/production_worktree/experiment7/integration/multi_gpu_scheduler.py",
+      "sha256": "24d2f80ea85cbdd6de0bc5818462d66b39d7ce6bb5da7680a19ecdfeb702bad9"
+    },
+    {
+      "bytes": 2855,
+      "path": "training_code/production_worktree/experiment7/integration/persist_frozen_policy_pool.py",
+      "sha256": "1737ebb16be7e7ed7ab1eca04a55a54599c0e07f67d7ecacb3a0585c64b8087e"
+    },
+    {
+      "bytes": 2690,
+      "path": "training_code/production_worktree/experiment7/integration/persist_static_deck_bc_pool.py",
+      "sha256": "249d80956308ed3d99dbc7004a7cd75dce5aae40de403908f16c610dbb895520"
+    },
+    {
+      "bytes": 10755,
+      "path": "training_code/production_worktree/experiment7/integration/pool_reconciler.py",
+      "sha256": "cbc1a36a1e69c18d24317119853d34a691fe3d446ee2dfe27291fcc159ea36b3"
+    },
+    {
+      "bytes": 67055,
+      "path": "training_code/production_worktree/experiment7/integration/ppo_tactical_shaping.py",
+      "sha256": "24bb375f59a325a63355831396b5f82cef906dd817f60b3986056693c80c8164"
+    },
+    {
+      "bytes": 14968,
+      "path": "training_code/production_worktree/experiment7/integration/prepare_training_data.py",
+      "sha256": "691c787713b72a1d92a60f27ddbeb9f2c38304d116a10e62cee050aa720e62d5"
+    },
+    {
+      "bytes": 8024,
+      "path": "training_code/production_worktree/experiment7/integration/prepare_universal_training_data.py",
+      "sha256": "b1efb958609cc4752a5c1d438958a3a1f3aeee438eda85b0ed749714dc7d8ccb"
+    },
+    {
+      "bytes": 24734,
+      "path": "training_code/production_worktree/experiment7/integration/promote_ppo_to_frozen_pool.py",
+      "sha256": "a3c4ba5972bb0a40149a6862b2594e3432b13eb26768b5aa601880e237b6ea33"
+    },
+    {
+      "bytes": 7109,
+      "path": "training_code/production_worktree/experiment7/integration/remote_worker.py",
+      "sha256": "54c98fc2cec3005430aa92c6076b769a9a7a29c8dd66a9726f1b6588ce2bb4e0"
+    },
+    {
+      "bytes": 15453,
+      "path": "training_code/production_worktree/experiment7/integration/run_async_ppo_learner.py",
+      "sha256": "b52debc4b375849298fce2e83c9b7b92f913f6e935b0368d8df477e489adb55f"
+    },
+    {
+      "bytes": 11811,
+      "path": "training_code/production_worktree/experiment7/integration/run_async_ppo_learner.py.pre-adaptive-20260812",
+      "sha256": "ea24232f99f980533337d175bf5e086d4a5f83ff1f058e6d63b878e24d6a650d"
+    },
+    {
+      "bytes": 14533,
+      "path": "training_code/production_worktree/experiment7/integration/run_async_ppo_learner.py.pre-cohort20-20260815",
+      "sha256": "aca90586050ff27a4ddccf3d02a1efa0ce265ab7f6826a22911f2a303e7cb511"
+    },
+    {
+      "bytes": 18063,
+      "path": "training_code/production_worktree/experiment7/integration/run_async_ppo_rollout_worker.py",
+      "sha256": "27572b9aeb0637ecc4ecb3d466d20d6d2ea0d435cfb0f8cdf9a6fd15ea51459b"
+    },
+    {
+      "bytes": 15269,
+      "path": "training_code/production_worktree/experiment7/integration/run_async_ppo_rollout_worker.py.pre-cohort20-20260815",
+      "sha256": "60e28d4f01014749ea9ac249e96cd7695fb6df8cc98e08657b390725b7ba221f"
+    },
+    {
+      "bytes": 1147,
+      "path": "training_code/production_worktree/experiment7/integration/run_ppo_frozen_promotion_loop.sh",
+      "sha256": "fb0db45b691ad33e656d874c6228d0342907f6f43bae4c00f9c2e05bb81f456a"
+    },
+    {
+      "bytes": 2589,
+      "path": "training_code/production_worktree/experiment7/integration/run_ppo_frozen_promotion_rounds.sh",
+      "sha256": "d98e1a2f9a99a997726ca9acd7236a6f8de25ffd71dc1d72e7ec719530c19b4f"
+    },
+    {
+      "bytes": 3024,
+      "path": "training_code/production_worktree/experiment7/integration/run_reference_token_cache.py",
+      "sha256": "86e22c87d3dbd623c6025bf3b1a117dd4bfcdcd64f2a4e5faa7e942e8b0ac8a7"
+    },
+    {
+      "bytes": 1871,
+      "path": "training_code/production_worktree/experiment7/integration/safe_features.py",
+      "sha256": "242bdc4fdc49cc4681c497a69546c2fede0b755ae75606f505197fd250d900e8"
+    },
+    {
+      "bytes": 13805,
+      "path": "training_code/production_worktree/experiment7/integration/select_initial_decks.py",
+      "sha256": "bdff51857ac8582ccb7fc67684a66661d6f7fb4a99149d5a5e75801063d839e7"
+    },
+    {
+      "bytes": 44187,
+      "path": "training_code/production_worktree/experiment7/integration/stage_opponent_pool.py",
+      "sha256": "2889d6159cf0be8e70da98bcab9dc0a1d5851160194c5b9c3811fe84baf2f5ca"
+    },
+    {
+      "bytes": 5149,
+      "path": "training_code/production_worktree/experiment7/integration/switch_rollout_workers_revision7.py",
+      "sha256": "041aa3f6e1f359d0ec734cf316339a42b4103f3074b1ad7a174640a9879d7f76"
+    },
+    {
+      "bytes": 2805,
+      "path": "training_code/production_worktree/experiment7/integration/target_receipt.py",
+      "sha256": "5bc7f9bd588b86e5b1b2271a4c421a19bfd59e333b8596975713c41fc7bf81bd"
+    },
+    {
+      "bytes": 11896,
+      "path": "training_code/production_worktree/experiment7/integration/test_async_ppo_control.py",
+      "sha256": "32b7faa90e4fe99ccc9608d45e721393ed09fc766bd502dafcbd2159bf541843"
+    },
+    {
+      "bytes": 22101,
+      "path": "training_code/production_worktree/experiment7/integration/test_ppo_tactical_shaping.py",
+      "sha256": "5fcdd292f219484ce6920ba671e6ef2f7dd34125585783fdd9c931da32f2175a"
+    },
+    {
+      "bytes": 7084,
+      "path": "training_code/production_worktree/experiment7/integration/test_promote_ppo_to_frozen_pool.py",
+      "sha256": "a6eb040bea15fdd93995679e8ddcffd65a6a40a367bb3297b78f7df7a06ef60f"
+    },
+    {
+      "bytes": 20248,
+      "path": "training_code/production_worktree/experiment7/integration/test_stage_opponent_pool.py",
+      "sha256": "e2890c45bb480779d3a8bd0708b5f9c3efbc6e6aa263847d89a499778760aa66"
+    },
+    {
+      "bytes": 3369,
+      "path": "training_code/production_worktree/experiment7/integration/test_train_universal_bc_multishard.py",
+      "sha256": "e95bce769804f743b4edd7ab04fd5d1f22f9122df40e2b33a6752dd6e287a53d"
+    },
+    {
+      "bytes": 1476,
+      "path": "training_code/production_worktree/experiment7/integration/test_universal_deck_cohort.py",
+      "sha256": "eaca457644dbd06e2e1d4e8273f861d4f676f4b8a5bd4717111dc3e5359faf30"
+    },
+    {
+      "bytes": 15570,
+      "path": "training_code/production_worktree/experiment7/integration/test_universal_ppo.py",
+      "sha256": "5f11f6e5a5c79fbc0979979f37f767529fedffbb8be4332045772acc22b21567"
+    },
+    {
+      "bytes": 33154,
+      "path": "training_code/production_worktree/experiment7/integration/train_driver.py",
+      "sha256": "c19b55ba3a6785e3ecfa9035ef872f448fdb74a6dc209cafc58d0a781f55bdf6"
+    },
+    {
+      "bytes": 23547,
+      "path": "training_code/production_worktree/experiment7/integration/train_universal_bc.py",
+      "sha256": "7ef02b78f5f379b5715cb6ed8d4205b9052d2158ddeee38884027471399a22d5"
+    },
+    {
+      "bytes": 16906,
+      "path": "training_code/production_worktree/experiment7/integration/train_universal_ppo.py",
+      "sha256": "85695b07b3e1cbb8c21473d39c547c503ff97c4828ac4be4f58fbb0cf428faa1"
+    },
+    {
+      "bytes": 5949,
+      "path": "training_code/production_worktree/experiment7/integration/universal_deck_cohort.py",
+      "sha256": "12de6c400b8556c1bd739203acc7e27d2f8172cf7ccd0880031a4f42b77dbfc8"
+    },
+    {
+      "bytes": 14042,
+      "path": "training_code/production_worktree/experiment7/integration/universal_deck_model.py",
+      "sha256": "99507975cf9cb10cfdf80d75e14caeb1261e4587e526f07f04d5a110fa9f9668"
+    },
+    {
+      "bytes": 14976,
+      "path": "training_code/production_worktree/experiment7/integration/universal_deck_portable.py",
+      "sha256": "f511d62eb20fa632b83d51398c565360ef17cee814e41c5e5bccdec0540b69d3"
+    },
+    {
+      "bytes": 21274,
+      "path": "training_code/production_worktree/experiment7/integration/universal_ppo.py",
+      "sha256": "0e937aceb58a1c9cf72375e3ba526cb41bb82df8f69b160a43a766fd5318764d"
+    },
+    {
+      "bytes": 7596,
+      "path": "training_code/production_worktree/experiment7/integration/validate_universal_bc_async.py",
+      "sha256": "2500fa1354eb4ecac7e3de6d2e1a09ba423e6abdf6d02ee1177e3bb0db53839b"
+    },
+    {
+      "bytes": 13941,
+      "path": "training_code/production_worktree/experiment7/integration/verify_universal_portable.py",
+      "sha256": "e1bdc244c60abf2dc9f6cb9f6f25dcb36ddade2f79248ebb80cca2cc5cc6697d"
+    },
+    {
+      "bytes": 67,
+      "path": "training_code/production_worktree/experiment7/reference/training/__init__.py",
+      "sha256": "a49011077f4c002da63accdbb8ef58b59933cb0a719053a5c306ae2cd33ead36"
+    },
+    {
+      "bytes": 6049,
+      "path": "training_code/production_worktree/experiment7/reference/training/deck_identity_model.py",
+      "sha256": "3011ba6941fca8565c95fdca0f3130e85d5686561d43c3b049489547ad6d6538"
+    },
+    {
+      "bytes": 9284,
+      "path": "training_code/production_worktree/experiment7/reference/training/deck_identity_portable.py",
+      "sha256": "bda5935b98fac33e277ba589572bd3c4d0736a1672ccfe319edaa8b59c981738"
+    },
+    {
+      "bytes": 5280,
+      "path": "training_code/production_worktree/experiment7/reference/training/deck_knowledge_model.py",
+      "sha256": "c1de55c89d23a3307a54f211af01a7118452f3d6901141e47c00908c8626091b"
+    },
+    {
+      "bytes": 4895,
+      "path": "training_code/production_worktree/experiment7/reference/training/evaluate_multideck_identity.py",
+      "sha256": "41970b1918b13d358b35cb4214cc1f77cf52151ff6395ed06dc26dad90334f81"
+    },
+    {
+      "bytes": 5253,
+      "path": "training_code/production_worktree/experiment7/reference/training/model.py",
+      "sha256": "5644a9b6f6a7eed31c418f70e066099158c33f3f075a798d36605e355e6f5d0b"
+    },
+    {
+      "bytes": 6624,
+      "path": "training_code/production_worktree/experiment7/reference/training/portable.py",
+      "sha256": "e180cf555322d78789ba62c4e8c26baa7172b9cc1dc24968766a596ce5a59fd1"
+    },
+    {
+      "bytes": 7572,
+      "path": "training_code/production_worktree/experiment7/reference/training/public_event_model.py",
+      "sha256": "a1320cc801b719092e1ee722d5c2c64c59d4fead88f953db815ac6bef7215b1a"
+    },
+    {
+      "bytes": 4799,
+      "path": "training_code/production_worktree/experiment7/reference/training/sequence_model.py",
+      "sha256": "728d61536649f900c33ceab0ac22bddeb2045a4431faaae70a63b67bbc535679"
+    },
+    {
+      "bytes": 21715,
+      "path": "training_code/production_worktree/experiment7/reference/training/train.py",
+      "sha256": "25bad50778881116ea92334bf002408603c996b6cf835c302ef39be1e1d3b405"
+    },
+    {
+      "bytes": 30523,
+      "path": "training_code/production_worktree/experiment7/reference/training/train_multideck_identity.py",
+      "sha256": "8c33dfcff850f11b447f2d68ed97289bce84f6bbcddee061c526d6941b0df3f5"
+    },
+    {
+      "bytes": 24162,
+      "path": "training_code/production_worktree/experiment7/reference/training/train_sequence.py",
+      "sha256": "8c0bd3441ea05c654809d90b49c358358170d3a95e7de3d04eb676af86786ac1"
+    },
+    {
+      "bytes": 5801,
+      "path": "training_code/production_worktree/experiment7/reference/training/verify_deck_identity_portable.py",
+      "sha256": "07c205e5a3d86433c909bd89471226f8ba8c065effa1a58db608d0ea89bc17d7"
+    },
+    {
+      "bytes": 14414,
+      "path": "training_code/production_worktree/scripts/analyze_kaggle_intelligence.py",
+      "sha256": "f72f18f2556faa451501b67fbc932361a03c11e363555f85daeffbf9cfc96243"
+    },
+    {
+      "bytes": 3428,
+      "path": "training_code/production_worktree/scripts/audit_replay_alignment.py",
+      "sha256": "47a9264242ae8c6a1ff391546806bbc611730340a60f6168c131c90b92d51d5e"
+    },
+    {
+      "bytes": 1402,
+      "path": "training_code/production_worktree/scripts/audit_rl_trajectory.py",
+      "sha256": "1e2a120511a3027694628a3569715e02096e6c86838249fd7777af6c2f48947e"
+    },
+    {
+      "bytes": 8110,
+      "path": "training_code/production_worktree/scripts/build_deck_specialist_dataset.py",
+      "sha256": "717f00c4e769be1f40a75b80591d7138bcb402646261e4d9e3d5ed29eb036497"
+    },
+    {
+      "bytes": 12423,
+      "path": "training_code/production_worktree/scripts/build_gold_strategy_artifact.py",
+      "sha256": "044d1831a15745de29c70fa83ccf3045bf7fd0dabf875ede5e3e85499cd518bc"
+    },
+    {
+      "bytes": 4068,
+      "path": "training_code/production_worktree/scripts/build_replay_deck_map.py",
+      "sha256": "ee27724fc0e61b52f73cdf0e2a7e97db446080ba087e5fadc692378d40492107"
+    },
+    {
+      "bytes": 5092,
+      "path": "training_code/production_worktree/scripts/build_submission.py",
+      "sha256": "823236115653e9a4b2d620bc0ea08c5794425e9fb079a029e059582f4010d2db"
+    },
+    {
+      "bytes": 15810,
+      "path": "training_code/production_worktree/scripts/collect_ppo_rollouts.py",
+      "sha256": "edfe59c5193d53b0ba31d2d084b928c2606922c79d1834e630f6be5ed3b43eff"
+    },
+    {
+      "bytes": 6463,
+      "path": "training_code/production_worktree/scripts/collect_rl_trajectories.py",
+      "sha256": "99d177b2688af54ae012fdea484fe4b954ebd76254fac1de7f883368efcdd024"
+    },
+    {
+      "bytes": 34226,
+      "path": "training_code/production_worktree/scripts/continuous_rl_pipeline.py",
+      "sha256": "0b4fe41cdd46d394a36b0b3b9c95422b858b7c33945bff8b6888dc5f88095cd6"
+    },
+    {
+      "bytes": 9431,
+      "path": "training_code/production_worktree/scripts/convert_public_replays.py",
+      "sha256": "1717446795ab30945d7ff66b1dcfbc993ea047c7153094fd5280a31052ecb88e"
+    },
+    {
+      "bytes": 3023,
+      "path": "training_code/production_worktree/scripts/correct_eval_unseeded_001_summary.py",
+      "sha256": "a8381f29dced2c91112596f239e9df4018571c44afedf1516d075820093ae552"
+    },
+    {
+      "bytes": 3551,
+      "path": "training_code/production_worktree/scripts/diagnose_replay_action_positions.py",
+      "sha256": "977c225b61ed2d8af70f5c824735b3f41ca381da80cb4c7e71fc9a26639bb87a"
+    },
+    {
+      "bytes": 16669,
+      "path": "training_code/production_worktree/scripts/download_kaggle_intelligence.py",
+      "sha256": "2fff938e53dba4c4b465815edc1bfa45b24bf3480457215a946c228580ea73a1"
+    },
+    {
+      "bytes": 7233,
+      "path": "training_code/production_worktree/scripts/download_ptcg_data.py",
+      "sha256": "e09addbb6c7e567ef6385c4d1b698b8dfc95a278098f9633fa170b8c8e377bac"
+    },
+    {
+      "bytes": 3185,
+      "path": "training_code/production_worktree/scripts/download_submission_replays.py",
+      "sha256": "65a40c0ff95161dce5012502493e5030fe43607e3f65286eda7740ba696a0b8e"
+    },
+    {
+      "bytes": 2907,
+      "path": "training_code/production_worktree/scripts/evaluate_rl_checkpoint.py",
+      "sha256": "cc935a12a1abdc17fdb5eaa9c2b784f8819d823ff3853e843448ccb582341782"
+    },
+    {
+      "bytes": 7532,
+      "path": "training_code/production_worktree/scripts/evaluate_unseeded_game_worker.py",
+      "sha256": "039422fca5883acff7d8fb25c2b1018f624aa73a2591300b85268467112fa5ed"
+    },
+    {
+      "bytes": 4898,
+      "path": "training_code/production_worktree/scripts/evaluate_unseeded_model_smoke.py",
+      "sha256": "5d1a5b254a2b127ab3e5e513496660ca4b03e466f2bcaf5168700a2691801333"
+    },
+    {
+      "bytes": 7194,
+      "path": "training_code/production_worktree/scripts/evaluate_unseeded_runtime.py",
+      "sha256": "9740dda8afb3c319678dfbd367920c57d7b249f5739d1d158254402cc117dcb6"
+    },
+    {
+      "bytes": 1740,
+      "path": "training_code/production_worktree/scripts/extract_specialist_deck.py",
+      "sha256": "6dede475a5419edeaea7ce7b4c6f4b5b4400e9a211e9f8ed6680769b6d9b6abc"
+    },
+    {
+      "bytes": 11249,
+      "path": "training_code/production_worktree/scripts/generate_multibase_deck_population.py",
+      "sha256": "71bf0b551aaf07bf338aa2051a09fc49bf9e35285e9b2c702c12dcd09b430b8e"
+    },
+    {
+      "bytes": 5618,
+      "path": "training_code/production_worktree/scripts/league_v1.py",
+      "sha256": "740a7abe2bf7146f56fc978e334c9bcb24b28a6772154b14191cc7deeaaeda5a"
+    },
+    {
+      "bytes": 8334,
+      "path": "training_code/production_worktree/scripts/materialize_notebook_agent.py",
+      "sha256": "8fe020c31189af2046b4f5d941764cbfd52f7c1735b2db0d8e644d4cad3bd1bc"
+    },
+    {
+      "bytes": 3251,
+      "path": "training_code/production_worktree/scripts/materialize_rl_specialist_agent.py",
+      "sha256": "da1ded5c093b863525066bf430b841b5397a75dfbe6162e7b6813e847d4cdf83"
+    },
+    {
+      "bytes": 7514,
+      "path": "training_code/production_worktree/scripts/mutate_legal_decks.py",
+      "sha256": "1f127f835ff11b502ef338740b4c5d02ec442a30e1a671a9fc111c5599fd08a4"
+    },
+    {
+      "bytes": 1769,
+      "path": "training_code/production_worktree/scripts/predict_with_majority_baseline.py",
+      "sha256": "7536fa3a80abdebfe3d04ffa4c6f534c20e0812c660e098dfd42771706208f4b"
+    },
+    {
+      "bytes": 6866,
+      "path": "training_code/production_worktree/scripts/preflight_eval_isolation.py",
+      "sha256": "ef510518dfcaa4000e1ad1774af6eb62ae1c53d336338d97c2956ba4ed90bdd7"
+    },
+    {
+      "bytes": 3906,
+      "path": "training_code/production_worktree/scripts/prepare_baseline_dataset.py",
+      "sha256": "8562327eb3c1ab765accabcc939bd3c394d47b104e25711c2b25f3b006e0665f"
+    },
+    {
+      "bytes": 3233,
+      "path": "training_code/production_worktree/scripts/refresh_opponent_pool.py",
+      "sha256": "d301e3488cf9a5ad524ffd8967f3cedf2d41e83cd75e31d3530b9ee2aa8144f7"
+    },
+    {
+      "bytes": 7530,
+      "path": "training_code/production_worktree/scripts/run_league_schedule.py",
+      "sha256": "9506daace3aaf3ddf1ede0e81f8a610a08a776ecf39da150afc203a5a7bed213"
+    },
+    {
+      "bytes": 8177,
+      "path": "training_code/production_worktree/scripts/run_league_schedule_v4_retry.py",
+      "sha256": "3f286c94f0befa651a29a8af849c16963947299a28aeff34514a22202a7dfe4b"
+    },
+    {
+      "bytes": 6912,
+      "path": "training_code/production_worktree/scripts/run_local_match.py",
+      "sha256": "ff5c6a782af134b79a86c484b578c8fac5dc30e54151c22971b0d00ff794f6b7"
+    },
+    {
+      "bytes": 3205,
+      "path": "training_code/production_worktree/scripts/run_opponent_pool.py",
+      "sha256": "ba5f9511159680967ed5702c0403d81089f6f696b558574131659373e06a33cd"
+    },
+    {
+      "bytes": 5510,
+      "path": "training_code/production_worktree/scripts/summarize_league_round.py",
+      "sha256": "989a690953610f6edc8660fcecfc2e428a494e296bcbf75c99170fe5eeef363c"
+    },
+    {
+      "bytes": 7272,
+      "path": "training_code/production_worktree/scripts/summarize_rl_bc_experiment.py",
+      "sha256": "329856aaeb49e2370587141d1bc39e66ec43159449267a62df2e03c12ea00c1d"
+    },
+    {
+      "bytes": 8569,
+      "path": "training_code/production_worktree/scripts/train_action_q.py",
+      "sha256": "ef85b953f21df27bd7cd6f1a66476fa365f5d136c02c9ee335894b0496a0911f"
+    },
+    {
+      "bytes": 1943,
+      "path": "training_code/production_worktree/scripts/train_majority_baseline.py",
+      "sha256": "00f8ade3403b2477cb41207e012615b25808210b5a2807e8470702184be8072e"
+    },
+    {
+      "bytes": 10710,
+      "path": "training_code/production_worktree/scripts/train_masked_ppo.py",
+      "sha256": "373c236add829c7067312d385ab6c449dea7bd159a2ef4839957bcbbc0467dd1"
+    },
+    {
+      "bytes": 29453,
+      "path": "training_code/production_worktree/scripts/train_rl_policy.py",
+      "sha256": "fa265a39c07b101aefecc17c39455a23581c67b9abd48d83e9f3c2b6d0447496"
+    },
+    {
+      "bytes": 3513,
+      "path": "training_code/production_worktree/scripts/write_deck_specialist_config.py",
+      "sha256": "6e151fbbb0f6d6b4014490bb0494829651f1fca4101cd0f408d1ed04c7c4a381"
+    }
+  ],
+  "schemaVersion": 1,
+  "totalBytes": 1930018
+}

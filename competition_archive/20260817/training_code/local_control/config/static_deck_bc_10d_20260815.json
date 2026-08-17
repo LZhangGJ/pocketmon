@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "kind": "experiment7_static_deck_bc_10d",
+  "profilePrefix": "10d-deck-specialist-static-bc",
+  "sourceManifest": "/suedata1/Free/lzhang/pocketmon-runs/experiment7-daily-replay-bc/windows/2026-08-14/tensordict-sources.json",
+  "strictWindow": "/suedata1/Free/lzhang/pocketmon-runs/experiment7-daily-replay-bc/windows/2026-08-14-scoregt1000-20260815T1200Z",
+  "strictPredicate": "is_clean == 1 and float(min_score) > 1000.0",
+  "minScoreExclusive": 1000.0,
+  "expectedDays": 10,
+  "episodeDedupe": true,
+  "stableSplit": {
+    "key": "episode_id",
+    "validationModulo": 20,
+    "validationResidue": 0
+  },
+  "policyWeights": {
+    "targetWinner": 1.0,
+    "targetLossOrDraw": 0.35,
+    "nonTargetSeat": 0.0,
+    "valueAllSeats": true
+  },
+  "training": {
+    "initializer": "/dataT0/Free/lzhang/pocketmon-runs/experiment7-async-ppo-league-20260811/learners/universal_ppo_large_256x6/generation-000051/checkpoint.pt",
+    "initializerLabel": "Universal Large g51 frozen 6.44M",
+    "batchSize": 512,
+    "fallbackBatchSize": 256,
+    "minEpochs": 1,
+    "maxEpochs": 10,
+    "validateEveryEpoch": true,
+    "asynchronousValidation": true,
+    "patience": 1,
+    "selectionMetric": "exactSemantic",
+    "minimumSemanticDelta": 0.0,
+    "staticFrozen": true,
+    "ppoUpdatesAllowed": false,
+    "replacementSource": "future_replay_pipeline_only"
+  },
+  "windows": {
+    "enabled": true,
+    "root": "D:\\pocketmon-runs\\experiment7-static-deck-bc-10d-20260815",
+    "persistentRoot": "D:\\pocketmon-runs\\experiment7-static-deck-bc-10d-20260815",
+    "scratchRoot": "G:\\pocketmon-cache\\experiment7-static-deck-bc-10d-20260815",
+    "scratchKinds": ["datasets", "cache", "tmp"],
+    "persistentKinds": ["runtime", "profiles", "checkpoints", "validation", "frozen", "control"],
+    "finalArtifactCopies": 2,
+    "gpu": 0,
+    "pytorchIndexUrl": "https://download.pytorch.org/whl/cu128",
+    "largeFilesAllowedDrives": ["D:", "G:", "I:"]
+  },
+  "scheduler": {
+    "algorithm": "LPT_by_policy_decisions_over_measured_throughput",
+    "windowsJobLimit": 1,
+    "excludedLinuxTrainingHosts": ["doraemon16"],
+    "requireTwoIdleSamples": true,
+    "idleSampleGapSeconds": 10,
+    "forbidProfileDuplication": true,
+    "doNotPreempt": true
+  },
+  "archetypes": [
+    {"id": "dragapult_munkidori", "label": "Dragapult/Munkidori", "requireAll": ["Dragapult", "Munkidori"], "priority": 100},
+    {"id": "grimmsnarl_froslass_munkidori", "label": "Grimmsnarl/Froslass/Munkidori", "requireAll": ["Grimmsnarl", "Froslass", "Munkidori"], "priority": 100},
+    {"id": "alakazam_dudunsparce", "label": "Alakazam/Dudunsparce", "requireAll": ["Alakazam", "Dudunsparce"], "priority": 100},
+    {"id": "mega_lopunny_mega_froslass", "label": "Mega Lopunny/Mega Froslass", "requireAll": ["Mega Lopunny", "Mega Froslass"], "priority": 100},
+    {"id": "hydrapple_dipplin_ogerpon", "label": "Hydrapple/Dipplin/Ogerpon", "requireAll": ["Hydrapple", "Dipplin", "Ogerpon"], "priority": 120},
+    {"id": "crustle_mega_kangaskhan", "label": "Crustle/Mega Kangaskhan", "requireAll": ["Crustle", "Mega Kangaskhan"], "priority": 100},
+    {"id": "slowking_mega_kangaskhan", "label": "Slowking/Mega Kangaskhan", "requireAll": ["Slowking", "Mega Kangaskhan"], "priority": 100},
+    {"id": "mega_lucario_hariyama", "label": "Mega Lucario/Hariyama", "requireAll": ["Mega Lucario", "Hariyama"], "priority": 100},
+    {"id": "ogerpon_only", "label": "Ogerpon-only", "requireAll": ["Ogerpon"], "excludeAny": ["Hydrapple", "Dipplin", "Raging Bolt", "Kangaskhan"], "priority": 10},
+    {"id": "festival_dipplin", "label": "Festival/Dipplin", "requireAll": ["Festival Grounds", "Dipplin"], "excludeAny": ["Hydrapple"], "priority": 110},
+    {"id": "raging_bolt_ogerpon_kangaskhan", "label": "Raging Bolt/Ogerpon/Kangaskhan", "requireAll": ["Raging Bolt", "Ogerpon", "Kangaskhan"], "priority": 120}
+  ]
+}
